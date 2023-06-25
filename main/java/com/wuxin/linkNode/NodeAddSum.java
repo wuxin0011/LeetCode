@@ -41,6 +41,8 @@ public class NodeAddSum {
             }
             // 进位数
             c = (int) Math.floor((double) val / 10);
+
+            // 当前位的余数
             val = val % 10;
 
             // 当前指针位置后移动一位

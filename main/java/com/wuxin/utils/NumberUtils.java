@@ -1,4 +1,4 @@
-package com.wuxin.sort;
+package com.wuxin.utils;
 
 import java.util.Arrays;
 import java.util.Random;
