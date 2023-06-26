@@ -1,6 +1,6 @@
 package com.wuxin.utils;
 
-import com.wuxin.sort.ArraySort;
+import com.wuxin.sort.array.ArraySort;
 
 import java.util.Arrays;
 import java.util.Random;
@@ -49,6 +49,12 @@ public class NumberUtils {
         int[] ints = new int[arr.length];
         System.arraycopy(arr, 0, ints, 0, arr.length);
         return ints;
+    }
+
+    public static void clone(int[] src, int[] dist) {
+        for (int i = 0; i < dist.length; i++) {
+            src[i] = dist[i];
+        }
     }
 
     public static boolean isEqual(int[] alreadySort, int[] noSort) {
@@ -120,8 +126,8 @@ public class NumberUtils {
             }
         }
         // 平均耗时
-        time = time / testCount;
-        message += "测试:" + testCount + " 次，平均耗时:" + time + "ms ";
+        double t = (double) (time / testCount);
+        message += "测试:" + testCount + " 次，平均耗时:" + t + "ms ";
         NumberUtils.printArray(flag, message, arr1, arr2);
     }
 

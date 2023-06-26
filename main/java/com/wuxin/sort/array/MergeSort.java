@@ -1,4 +1,4 @@
-package com.wuxin.sort;
+package com.wuxin.sort.array;
 
 import com.wuxin.annotation.Description;
 

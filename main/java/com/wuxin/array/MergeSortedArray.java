@@ -1,6 +1,6 @@
 package com.wuxin.array;
 
-import com.wuxin.sort.BubbleSort;
+import com.wuxin.annotation.Description;
 import com.wuxin.utils.InvocationHandlerMethodTime;
 import com.wuxin.utils.LogarithmicDevice;
 import com.wuxin.utils.NumberUtils;
@@ -13,72 +13,68 @@ import java.util.Random;
  * @Description: 合并有序数组
  * @see https://leetcode.cn/problems/merge-sorted-array/
  */
+@Description("合并有序数组 https://leetcode.cn/problems/merge-sorted-array/")
 public class MergeSortedArray implements LogarithmicDevice {
 
     public static void main(String[] args) {
         InvocationHandlerMethodTime.getRunTime(MergeSortedArray.class);
     }
 
-    public void merge(int[] nums1, int m, int[] nums2, int n) {
 
+    public void merge(int[] nums1, int m, int[] nums2, int n) {
         // n == 0 不做任何处理
         if (n == 0) {
             return;
         }
-
         // 走到这一步 n != 0 n==0 直接将 nums2内容拷贝到num1 中就ok
         if (m == 0) {
-            while (n >= 0) {
-                nums1[n] = nums2[n];
+            while (n >= 1) {
+                nums1[n-1] = nums2[n-1];
                 n--;
             }
             return;
         }
         // 如果 num2 的最小值都比 num1 最大值大 直接拷贝
-        if (nums1[m - 1] < nums2[0]) {
+        if (nums1[m - 1] <= nums2[0]) {
             int index = 0;
-            while (index > n) {
-                nums1[m + index] = nums2[index++];
+            while (index < n) {
+                nums1[m + index] = nums2[index];
+                index++;
             }
             return;
         }
-
         int[] ints = new int[m + n];
         int p1 = 0, p2 = 0;
         int index = ints.length - 1;
         int i = 0;
-
-        while (i <= index && p1 < m && p2 < n) {
-            if (p1 == m - 1) {
-                while (p2 < n && i <= index) {
-                    ints[i++] = nums2[p2++];
+        while (i <= index && (p1 != m || p2 != n)) {
+            // 当 p1 == m 时候 p2 ！= n
+            // p1 遍历 nums1 完毕 p2 没有遍历完毕 说明 p2 剩下直接拷贝到 ints中就 OK
+            if (p1 == m) {
+                while (p2 != n) {
+                    ints[i] = nums2[p2];
+                    p2++;
+                    i++;
+                }
+                break;
+            } else if (p2 == n) { // 如上面相反
+                while (p1 != m) {
+                    ints[i] = nums1[p1];
+                    p1++;
+                    i++;
                 }
                 break;
             }
-            if (p2 == n - 1) {
-                while (p1 < m && i <= index) {
-                    ints[i++] = nums1[p1++];
-                }
-                break;
-            }
-
-            // p1 指向位置大 将p2 指向内容拷贝到 ints
             if (nums1[p1] > nums2[p2]) {
-                ints[i++] = nums2[p2++];
-                // p2 指向位置大 将p1 指向内容拷贝到 ints
-            } else if (nums1[p1] < nums2[p2]) {
-                ints[i++] = nums1[p1++];
+                ints[i] = nums2[p2];
+                p2++;
+            } else if (nums1[p1] <= nums2[p2]) {
+                ints[i] = nums1[p1];
+                p1++;
             }
 
-            // 由于上面最后一次 p1 或者 p2 没有比较
-            // p2 指向位置大 将p1 指向内容拷贝到 ints
-            if (p1 == m - 1 && p2 < n || (p2 == n - 1 && p1 < m)) {
-                if (nums1[p1] > nums2[p2]) {
-                    ints[i++] = nums2[p2];
-                } else if (nums1[p1] < nums2[p2]) {
-                    ints[i++] = nums1[p1];
-                }
-            }
+            i++;
+
         }
 
         // 拷贝
@@ -86,20 +82,24 @@ public class MergeSortedArray implements LogarithmicDevice {
             nums1[index] = ints[index];
             index--;
         }
-
     }
 
     @Override
     public void logarithmicDevice() {
-        MergeSortedArray sortedArray = new MergeSortedArray();
 
         boolean success = true;
+        int[] numsFail1 = null;
+        int[] numsFail2 = null;
+        int[] numsExpect = null;
         int fail1 = 0;
-        int randomCount = 100;
+        int randomCount = 109;
         int randomArrSize = 100;
         int randomSize = 100;
 
         for (int i = 0; i < new Random().nextInt(randomCount); i++) {
+            if (!success) {
+                break;
+            }
             // 随机长度
             int len = new Random().nextInt(randomArrSize) + 1;
 
@@ -112,52 +112,29 @@ public class MergeSortedArray implements LogarithmicDevice {
             int[] nums1 = new int[len];
             int[] nums2 = new int[n];
 
+            int[] temp = new int[m];
 
             if (m >= 1) {
                 // 数组初始化
-                for (int j = 0; j < m; j++) {
-                    nums1[j] = megerArrayBefore[j];
-                }
+                System.arraycopy(megerArrayBefore, 0, temp, 0, m);
+                Arrays.sort(temp);
+                // copy
+                NumberUtils.clone(nums1, temp);
             }
             if (n >= 1) {
-                for (int j = m; j < len; j++) {
-                    nums2[j - m] = megerArrayBefore[j];
-                }
+                if (len - m >= 0) System.arraycopy(megerArrayBefore, m, nums2, 0, len - m);
+                Arrays.sort(nums2);
             }
+            Arrays.sort(megerArrayBefore);
 
-            // 排序
-
-            new BubbleSort().sort(nums1);
-            new BubbleSort().sort(nums2);
-
-            System.out.println("测试案例");
-            System.out.println(Arrays.toString(nums1));
-            System.out.println(Arrays.toString(nums2));
-
-            // 合并
-            sortedArray.merge(nums1, m, nums2, n);
-            System.out.println("合并之后结果:");
-            System.out.println(Arrays.toString(nums1));
-
-            // 测试
-            if (nums1.length >= 2) {
-                for (int i1 = 1; i1 < nums1.length; i1++) {
-                    if (nums1[i1 - 1] > nums1[i1]) {
-                        success = false;
-                        fail1 = i1;
-                        break;
-                    }
-                }
+            this.merge(nums1, m, nums2, n);
+            success = NumberUtils.isEqual(megerArrayBefore, nums1);
+            if (!success) {
+                numsFail1 = nums1;
+                numsExpect = megerArrayBefore;
             }
-
         }
-
-        if (success) {
-            System.out.println("测试全部通过！");
-        } else {
-            System.err.println("测试失败！");
-            System.out.println("失败用例:" + fail1);
-        }
+        NumberUtils.printArray(success, "测试", numsFail1, numsExpect);
     }
 }
 

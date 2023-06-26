@@ -28,10 +28,10 @@ public class InvocationHandlerMethodTime implements InvocationHandler {
             long l1 = System.currentTimeMillis();
             result = method.invoke(target, args);
             long l2 = System.currentTimeMillis();
-            System.out.println(info + "  测试通过！执行耗时 :" + (l2 - l1) + "ms");
+            System.out.println(info + " 执行耗时 :" + (l2 - l1) + "ms");
         } catch (Exception e) {
-            System.out.println("[" + info + "]测试失败");
-            System.out.println(e.getMessage());
+            System.out.println(info + " 测试失败！");
+            e.printStackTrace();
         }
         return result;
     }

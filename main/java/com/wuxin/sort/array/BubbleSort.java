@@ -1,11 +1,8 @@
-package com.wuxin.sort;
+package com.wuxin.sort.array;
 
 import com.wuxin.annotation.Description;
 import com.wuxin.utils.InvocationHandlerMethodTime;
-import com.wuxin.utils.LogarithmicDevice;
 import com.wuxin.utils.NumberUtils;
-
-import java.util.Arrays;
 
 /**
  * @author: wuxin001

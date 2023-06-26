@@ -1,9 +1,7 @@
-package com.wuxin.sort;
+package com.wuxin.sort.array;
 
 import com.wuxin.annotation.Description;
 import com.wuxin.utils.InvocationHandlerMethodTime;
-
-import java.util.Arrays;
 
 /**
  * @author: wuxin0011
