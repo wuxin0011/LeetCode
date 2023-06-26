@@ -1,10 +1,18 @@
 package com.wuxin.array;
 
+import com.wuxin.utils.LogarithmicDevice;
+
 /**
  * @author: wuxin0011
  * @Description:
  */
-public class AddBinary {
+public class AddBinary implements LogarithmicDevice {
+
+    @Override
+    public void logarithmicDevice() {
+        String[] s1s = {"Java","javaScript","12","110","3000"};
+        String[] s2s = {};
+    }
 
     public String addBinary(String a, String b) {
 

@@ -1,6 +1,8 @@
 package com.wuxin.linkNode;
 
+import com.wuxin.utils.InvocationHandlerMethodTime;
 import com.wuxin.utils.ListNode;
+import com.wuxin.utils.LogarithmicDevice;
 
 import java.util.HashSet;
 
@@ -8,38 +10,10 @@ import java.util.HashSet;
  * @author: wuxin0011
  * @Description: 判断单链表是否存在环
  */
-public class CheckNodeHasRing {
+public class CheckNodeHasRing implements LogarithmicDevice {
 
     public static void main(String[] args) {
-
-        //  测试一个环形链表
-        ListNode l1 = ListNode.createListNode(1, 2, 3, 5, 6, 7, 8, 9);
-
-        // 获取 l1 一个节点 这里是 6
-        ListNode temp = l1.next.next.next.next;
-
-        // 获取末尾 节点
-        ListNode cur = l1;
-        while (cur.next != null) {
-            cur = cur.next;
-        }
-        // 得到最后一个节点 让他指向 temp 节点就成了一个有环链表
-        cur.next = temp;
-
-
-        //  测试一个普通单链表 输出结果应该是
-        ListNode l2 = ListNode.createListNode(1, 2, 3, 5);
-
-        // 测试结果
-        System.out.println("===============方案一==============");
-        printHasRing(l1, 1);
-        printHasRing(l2, 1);
-
-
-        System.out.println("===============方案二==============");
-        printHasRing(l1, 2);
-        printHasRing(l2, 2);
-
+        InvocationHandlerMethodTime.getRunTime(CheckNodeHasRing.class);
     }
 
     public static void printHasRing(ListNode node, int strategy) {
@@ -115,5 +89,36 @@ public class CheckNodeHasRing {
         }
 
         return null;
+    }
+
+    @Override
+    public void logarithmicDevice() {
+        //  测试一个环形链表
+        ListNode l1 = ListNode.createListNode(1, 2, 3, 5, 6, 7, 8, 9);
+
+        // 获取 l1 一个节点 这里是 6
+        ListNode temp = l1.next.next.next.next;
+
+        // 获取末尾 节点
+        ListNode cur = l1;
+        while (cur.next != null) {
+            cur = cur.next;
+        }
+        // 得到最后一个节点 让他指向 temp 节点就成了一个有环链表
+        cur.next = temp;
+
+
+        //  测试一个普通单链表 输出结果应该是
+        ListNode l2 = ListNode.createListNode(1, 2, 3, 5);
+
+        // 测试结果
+        System.out.println("===============方案一==============");
+        printHasRing(l1, 1);
+        printHasRing(l2, 1);
+
+
+        System.out.println("===============方案二==============");
+        printHasRing(l1, 2);
+        printHasRing(l2, 2);
     }
 }

@@ -1,5 +1,8 @@
 package com.wuxin.sort;
 
+import com.wuxin.annotation.Description;
+import com.wuxin.utils.InvocationHandlerMethodTime;
+import com.wuxin.utils.LogarithmicDevice;
 import com.wuxin.utils.NumberUtils;
 
 import java.util.Arrays;
@@ -8,24 +11,31 @@ import java.util.Arrays;
  * @author: wuxin001
  * @Description:
  */
-public class QuickSort {
+@Description("快速排序")
+public class QuickSort implements LogarithmicDevice, ArraySort {
 
     public static void main(String[] args) {
-        for (int i = 0; i < 10; i++) {
-            System.out.printf("快速排序第%d次遍历\n", i);
-            int[] arr = NumberUtils.getInt();
-            sort(arr);
-            System.out.println(Arrays.toString(arr));
-        }
+        InvocationHandlerMethodTime.getRunTime(QuickSort.class);
     }
 
-    public static void sort(int[] arr) {
+    @Override
+    public void sort(int[] arr) {
         for (int i = 0; i < arr.length; i++) {
-            for (int i1 = i; i1 < arr.length; i1++) {
+            for (int i1 = i + 1; i1 < arr.length; i1++) {
                 if (arr[i] > arr[i1]) {
                     NumberUtils.swap(arr, i, i1);
                 }
             }
         }
+    }
+
+    @Override
+    public void sortOptimize(int[] arr) {
+        ArraySort.super.sortOptimize(arr);
+    }
+
+    @Override
+    public void logarithmicDevice() {
+        NumberUtils.printArray("快速排序", new QuickSort());
     }
 }

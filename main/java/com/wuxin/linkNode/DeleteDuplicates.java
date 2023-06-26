@@ -1,19 +1,18 @@
 package com.wuxin.linkNode;
 
 
+import com.wuxin.utils.InvocationHandlerMethodTime;
 import com.wuxin.utils.ListNode;
+import com.wuxin.utils.LogarithmicDevice;
 
 /**
  * @author: wuxin0011
  * @Description: 删除排序链表中的重复元素
  */
-public class DeleteDuplicates {
+public class DeleteDuplicates implements LogarithmicDevice {
 
     public static void main(String[] args) {
-        ListNode l1 = ListNode.createListNode(1, 2, 2, 3, 3, 4, 5, 6, 7, 8);
-        ListNode listNode = new DeleteDuplicates().deleteDuplicates2(l1);
-        ListNode.print(listNode);
-
+        InvocationHandlerMethodTime.getRunTime(DeleteDuplicates.class);
     }
 
     public ListNode deleteDuplicates(ListNode head) {
@@ -51,7 +50,7 @@ public class DeleteDuplicates {
 
             if (cur.next.val == cur.next.next.val) {
                 int x = cur.next.val;
-                while (cur.next!= null && cur.next.val == x) {
+                while (cur.next != null && cur.next.val == x) {
                     cur.next = cur.next.next;
                 }
             } else {
@@ -61,5 +60,13 @@ public class DeleteDuplicates {
 
         }
         return result.next;
+    }
+
+    @Override
+    public void logarithmicDevice() {
+        ListNode l1 = ListNode.createListNode(1, 2, 2, 3, 3, 4, 5, 6, 7, 8);
+        ListNode listNode = new DeleteDuplicates().deleteDuplicates2(l1);
+        ListNode.print(listNode);
+
     }
 }

@@ -1,4 +1,4 @@
-package com.wuxin.isHappy;
+package com.wuxin.simple_other;
 
 /**
  * @author: wuxin0011

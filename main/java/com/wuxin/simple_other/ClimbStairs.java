@@ -1,11 +1,14 @@
-package com.wuxin.climbStairs;
+package com.wuxin.simple_other;
+
+import com.wuxin.utils.InvocationHandlerMethodTime;
+import com.wuxin.utils.LogarithmicDevice;
 
 /**
  * @author: wuxin0011
  * @Description: 爬楼梯
  * @see https://leetcode.cn/problems/climbing-stairs/
  */
-public class ClimbStairs {
+public class ClimbStairs implements LogarithmicDevice {
 
 
     int[] visited = new int[50];
@@ -25,7 +28,11 @@ public class ClimbStairs {
 
 
     public static void main(String[] args) {
+        InvocationHandlerMethodTime.getRunTime(new ClimbStairs());
+    }
 
+    @Override
+    public void logarithmicDevice() {
         System.out.println(new ClimbStairs().climbStairs(4));
     }
 }
