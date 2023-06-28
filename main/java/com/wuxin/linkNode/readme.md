@@ -1,3 +1,10 @@
+# 单链表
+- 反转链表
+- 合并链表
+- 相交链表
+- 环形链表
+
+
 ## 两个链表对应位置相加
 
 ### 思路分析
@@ -59,15 +66,15 @@
 方案一
 
 ```java
-  public static SingleNode hasRingNode2(SingleNode node){
+  public static SingleNode hasRingNode2(SingleNode treeNode){
         // 两个节点的链表不能成环
-        if(node==null||node.next==null){
+        if(treeNode==null||treeNode.next==null){
             return null;
         }
         // hash 映射
         HashSet<SingleNode> set=new HashSet<>();
         // 临时变量 代替 头结点遍历
-        SingleNode temp=node;
+        SingleNode temp=treeNode;
         
         while(temp!=null){
            if(set.contains(temp)){
@@ -84,14 +91,14 @@
 方案二
 
 ``` java 
-       public static SingleNode hasRingNode(SingleNode node) {
+       public static SingleNode hasRingNode(SingleNode treeNode) {
         // 两个节点的链表不能成环
-        if (node == null || node.next == null || node.next.next == null) {
+        if (treeNode == null || treeNode.next == null || treeNode.next.next == null) {
             return null;
         }
         // 创建一个款
-        SingleNode slow = node.next;
-        SingleNode fast = node.next.next;
+        SingleNode slow = treeNode.next;
+        SingleNode fast = treeNode.next.next;
         // 如果存在环形  快慢节点指针一定会相遇
         while (slow.next != null && fast.next.next != null) {
             // 快慢指针相遇
@@ -101,7 +108,7 @@
             slow = slow.next;
             fast = fast.next.next;
         }
-        fast = node;
+        fast = treeNode;
         while (slow != null && fast != slow) {
             fast = fast.next;
             slow = slow.next;

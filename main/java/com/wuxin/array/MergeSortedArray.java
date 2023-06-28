@@ -107,7 +107,6 @@ public class MergeSortedArray implements LogarithmicDevice {
             int n = len - m;
             // 合并值之前数组
             int[] megerArrayBefore = NumberUtils.getInt(randomSize, len);
-
             // 生成数组
             int[] nums1 = new int[len];
             int[] nums2 = new int[n];

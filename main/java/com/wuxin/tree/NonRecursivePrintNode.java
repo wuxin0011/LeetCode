@@ -2,7 +2,7 @@ package com.wuxin.tree;
 
 import com.wuxin.annotation.Description;
 import com.wuxin.utils.LogarithmicDevice;
-import com.wuxin.utils.Node;
+import com.wuxin.utils.TreeNode;
 import com.wuxin.utils.InvocationHandlerMethodTime;
 
 import java.util.Stack;
@@ -24,21 +24,21 @@ public class NonRecursivePrintNode implements LogarithmicDevice {
      *
      * @param head 头结点
      */
-    public void preOrder(Node head) {
+    public void preOrder(TreeNode head) {
         if (head == null) {
             return;
         }
-        Stack<Node> stack = new Stack<>();
+        Stack<TreeNode> stack = new Stack<>();
         stack.push(head);
         while (!stack.isEmpty()) {
-            Node popNode = stack.pop();
-            System.out.print(popNode.val + " ");
+            TreeNode popTreeNode = stack.pop();
+            System.out.print(popTreeNode.val + " ");
 
-            if (popNode.right != null) {
-                stack.push(popNode.right);
+            if (popTreeNode.right != null) {
+                stack.push(popTreeNode.right);
             }
-            if (popNode.left != null) {
-                stack.push(popNode.left);
+            if (popTreeNode.left != null) {
+                stack.push(popTreeNode.left);
             }
         }
         System.out.println();
@@ -49,11 +49,11 @@ public class NonRecursivePrintNode implements LogarithmicDevice {
      *
      * @param head 头结点
      */
-    public void inOrder(Node head) {
+    public void inOrder(TreeNode head) {
         if (head == null) {
             return;
         }
-        Stack<Node> stack = new Stack<>();
+        Stack<TreeNode> stack = new Stack<>();
         while (head != null || !stack.isEmpty()) {
             if (head != null) {
                 stack.push(head);
@@ -73,32 +73,32 @@ public class NonRecursivePrintNode implements LogarithmicDevice {
      *
      * @param head 头结点
      */
-    public void postOrder(Node head) {
+    public void postOrder(TreeNode head) {
         if (head == null) {
             return;
         }
-        Stack<Node> s1 = new Stack<>();
-        Stack<Node> s2 = new Stack<>();
+        Stack<TreeNode> s1 = new Stack<>();
+        Stack<TreeNode> s2 = new Stack<>();
         // 先压入头节点
         s1.push(head);
         while (!s1.isEmpty()) {
             // 弹出栈一
-            Node popNode = s1.pop();
+            TreeNode popTreeNode = s1.pop();
             // 放入栈二中
-            s2.push(popNode);
+            s2.push(popTreeNode);
             // 弹出的节点有右节点
-            if (popNode.right != null) {
-                s1.push(popNode.left);
+            if (popTreeNode.right != null) {
+                s1.push(popTreeNode.left);
             }
             // 弹出的节点有左节点
-            if (popNode.left != null) {
-                s1.push(popNode.left);
+            if (popTreeNode.left != null) {
+                s1.push(popTreeNode.left);
             }
         }
 
         // 输出 s2 栈节点内容
         while (!s2.isEmpty()) {
-            Node pop = s2.pop();
+            TreeNode pop = s2.pop();
             System.out.print(pop.val + " ");
 
         }
@@ -110,25 +110,25 @@ public class NonRecursivePrintNode implements LogarithmicDevice {
         RecursionPrintTreeNode recursionPrintTreeNode = new RecursionPrintTreeNode();
         NonRecursivePrintNode nonRecursivePrintNode = new NonRecursivePrintNode();
 
-        Node node = Node.fullTreeNode();
+        TreeNode treeNode = TreeNode.fullTreeNode();
 
         System.out.println("==================先序遍历====================");
         System.out.println("递归方式");
-        recursionPrintTreeNode.preOrder(node);
+        recursionPrintTreeNode.preOrder(treeNode);
         System.out.println("\n非递归方式");
-        nonRecursivePrintNode.preOrder(node);
+        nonRecursivePrintNode.preOrder(treeNode);
 
 
         System.out.println("======================中序遍历==================");
         System.out.println("递归方式");
-        recursionPrintTreeNode.inOrder(node);
+        recursionPrintTreeNode.inOrder(treeNode);
         System.out.println("\n非递归方式");
-        nonRecursivePrintNode.inOrder(node);
+        nonRecursivePrintNode.inOrder(treeNode);
 
         System.out.println("======================后续遍历==================");
         System.out.println("递归方式");
-        recursionPrintTreeNode.postOrder(node);
+        recursionPrintTreeNode.postOrder(treeNode);
         System.out.println("\n非递归方式");
-        recursionPrintTreeNode.postOrder(node);
+        recursionPrintTreeNode.postOrder(treeNode);
     }
 }

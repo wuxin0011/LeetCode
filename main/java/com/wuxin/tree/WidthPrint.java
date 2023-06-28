@@ -2,7 +2,7 @@ package com.wuxin.tree;
 
 import com.wuxin.annotation.Description;
 import com.wuxin.utils.LogarithmicDevice;
-import com.wuxin.utils.Node;
+import com.wuxin.utils.TreeNode;
 import com.wuxin.utils.InvocationHandlerMethodTime;
 
 import java.util.HashMap;
@@ -26,20 +26,20 @@ public class WidthPrint implements LogarithmicDevice {
      *
      * @param head 头结点
      */
-    public void widthPrint(Node head) {
+    public void widthPrint(TreeNode head) {
         if (head == null) {
             return;
         }
-        LinkedList<Node> queue = new LinkedList<>();
+        LinkedList<TreeNode> queue = new LinkedList<>();
         queue.add(head);
         while (!queue.isEmpty()) {
-            Node pollNode = queue.poll();
-            System.out.print(pollNode.val + " ");
-            if (pollNode.left != null) {
-                queue.add(pollNode.left);
+            TreeNode pollTreeNode = queue.poll();
+            System.out.print(pollTreeNode.val + " ");
+            if (pollTreeNode.left != null) {
+                queue.add(pollTreeNode.left);
             }
-            if (pollNode.right != null) {
-                queue.add(pollNode.right);
+            if (pollTreeNode.right != null) {
+                queue.add(pollTreeNode.right);
             }
         }
 
@@ -51,14 +51,14 @@ public class WidthPrint implements LogarithmicDevice {
      * @param head 头结点
      * @return 最大宽度
      */
-    public int getMaxWidth(Node head) {
+    public int getMaxWidth(TreeNode head) {
         if (head == null) {
             return 0;
         }
         // 存放节点的队列
-        LinkedList<Node> queue = new LinkedList<>();
+        LinkedList<TreeNode> queue = new LinkedList<>();
         // 使用hash表记录当前几点层级
-        HashMap<Node, Integer> map = new HashMap<>();
+        HashMap<TreeNode, Integer> map = new HashMap<>();
 
         int max = 0;
         int curLevel = 1;
@@ -66,9 +66,9 @@ public class WidthPrint implements LogarithmicDevice {
         queue.add(head);
         map.put(head, curLevel);
         while (!queue.isEmpty()) {
-            Node pollNode = queue.poll();
+            TreeNode pollTreeNode = queue.poll();
             // 获取当前几点层级
-            Integer level = map.get(pollNode);
+            Integer level = map.get(pollTreeNode);
             // 判断和当前层级是否一致
             if (level == curLevel) {
                 // 当前节点nodes++
@@ -83,13 +83,13 @@ public class WidthPrint implements LogarithmicDevice {
             }
 
             // 存入节点 记录当前节点左右子树的节点层级
-            if (pollNode.left != null) {
-                map.put(pollNode.left, curLevel + 1);
-                queue.add(pollNode.left);
+            if (pollTreeNode.left != null) {
+                map.put(pollTreeNode.left, curLevel + 1);
+                queue.add(pollTreeNode.left);
             }
-            if (pollNode.right != null) {
-                map.put(pollNode.right, curLevel + 1);
-                queue.add(pollNode.right);
+            if (pollTreeNode.right != null) {
+                map.put(pollTreeNode.right, curLevel + 1);
+                queue.add(pollTreeNode.right);
             }
         }
         return Math.max(max, curLevelNodes);
@@ -102,42 +102,42 @@ public class WidthPrint implements LogarithmicDevice {
      * @param head 头结点
      * @return 最大宽度
      */
-    public int getMaxWidth2(Node head) {
+    public int getMaxWidth2(TreeNode head) {
         if (head == null) {
             return 0;
         }
-        LinkedList<Node> queue = new LinkedList<>();
+        LinkedList<TreeNode> queue = new LinkedList<>();
         int max = 1;
         int curLevelNodes = 0;
         // 下一个一个节点
-        Node nextEndNode = head;
+        TreeNode nextEndTreeNode = head;
         // 当前节点最后一个节点
-        Node curEndNode = head;
+        TreeNode curEndTreeNode = head;
         queue.add(head);
         while (!queue.isEmpty()) {
             // 弹窗当前节点
-            Node pollNode = queue.poll();
+            TreeNode pollTreeNode = queue.poll();
             // 最后一个入栈节点
-            if (pollNode.left != null) {
-                nextEndNode = pollNode.left;
-                queue.add(pollNode.left);
+            if (pollTreeNode.left != null) {
+                nextEndTreeNode = pollTreeNode.left;
+                queue.add(pollTreeNode.left);
             }
             // 最后一个入栈节点
-            if (pollNode.right != null) {
-                nextEndNode = pollNode.right;
-                queue.add(pollNode.right);
+            if (pollTreeNode.right != null) {
+                nextEndTreeNode = pollTreeNode.right;
+                queue.add(pollTreeNode.right);
             }
             // 取出的节点是否为末尾节点
             // 如果为末尾节点更新节点
-            if (pollNode == curEndNode) {
+            if (pollTreeNode == curEndTreeNode) {
                 // 更新max
                 max = Math.max(max, curLevelNodes);
                 // 更新末尾节点
-                curEndNode = nextEndNode;
+                curEndTreeNode = nextEndTreeNode;
                 // 更新节点数
                 curLevelNodes = 1;
                 // null
-                nextEndNode = null;
+                nextEndTreeNode = null;
             } else {
                 // 没有到达尾节点
                 curLevelNodes++;
@@ -149,33 +149,33 @@ public class WidthPrint implements LogarithmicDevice {
 
 
     // 计算二叉树的高度
-    private int getHeight(Node node) {
-        if (node == null) {
+    private int getHeight(TreeNode treeNode) {
+        if (treeNode == null) {
             return 0;
         } else {
-            int leftHeight = getHeight(node.left);
-            int rightHeight = getHeight(node.right);
+            int leftHeight = getHeight(treeNode.left);
+            int rightHeight = getHeight(treeNode.right);
 
             return Math.max(leftHeight, rightHeight) + 1;
         }
     }
 
     // 打印指定层级的节点值
-    private void printLevel(Node node, int level) {
-        if (node == null) {
+    private void printLevel(TreeNode treeNode, int level) {
+        if (treeNode == null) {
             return;
         }
         if (level == 1) {
-            System.out.print(node.val + " ");
+            System.out.print(treeNode.val + " ");
         } else if (level > 1) {
-            printLevel(node.left, level - 1);
-            printLevel(node.right, level - 1);
+            printLevel(treeNode.left, level - 1);
+            printLevel(treeNode.right, level - 1);
         }
     }
 
     // 宽度优先遍历
     public void bfsTraversal() {
-        Node root = Node.fullTreeNode();
+        TreeNode root = TreeNode.fullTreeNode();
         int height = getHeight(root);
 
         for (int i = 1; i <= height; i++) {
@@ -186,15 +186,15 @@ public class WidthPrint implements LogarithmicDevice {
     @Description("二叉树宽度优先遍历")
     @Override
     public void logarithmicDevice() {
-        Node node = Node.fullTreeNode();
+        TreeNode treeNode = TreeNode.fullTreeNode();
         WidthPrint widthPrint = new WidthPrint();
         System.out.println("使用队列实现宽度优先遍历");
-        widthPrint.widthPrint(node);
+        widthPrint.widthPrint(treeNode);
         System.out.println("\n不使用任何数据结构打印的宽度优先遍历");
         widthPrint.bfsTraversal();
         System.out.println("\n使用队列和hashmap实现求最大宽度");
-        System.out.println(widthPrint.getMaxWidth(node));
+        System.out.println(widthPrint.getMaxWidth(treeNode));
         System.out.println("\n只使用队列实现求最大宽度");
-        System.out.println(widthPrint.getMaxWidth2(node));
+        System.out.println(widthPrint.getMaxWidth2(treeNode));
     }
 }

@@ -3,7 +3,7 @@ package com.wuxin.tree;
 import com.wuxin.annotation.Description;
 import com.wuxin.utils.InvocationHandlerMethodTime;
 import com.wuxin.utils.LogarithmicDevice;
-import com.wuxin.utils.Node;
+import com.wuxin.utils.TreeNode;
 
 /**
  * @author: wuxin0011
@@ -21,7 +21,7 @@ public class RecursionPrintTreeNode implements LogarithmicDevice {
      *
      * @param head 头结点
      */
-    public void preOrder(Node head) {
+    public void preOrder(TreeNode head) {
         if (head == null) {
             return;
         }
@@ -35,7 +35,7 @@ public class RecursionPrintTreeNode implements LogarithmicDevice {
      *
      * @param head 头结点
      */
-    public void inOrder(Node head) {
+    public void inOrder(TreeNode head) {
         if (head == null) {
             return;
         }
@@ -49,7 +49,7 @@ public class RecursionPrintTreeNode implements LogarithmicDevice {
      *
      * @param head 头结点
      */
-    public void postOrder(Node head) {
+    public void postOrder(TreeNode head) {
         if (head == null) {
             return;
         }
@@ -61,13 +61,13 @@ public class RecursionPrintTreeNode implements LogarithmicDevice {
 
     @Override
     public void logarithmicDevice() {
-        Node node = Node.fullTreeNode();
+        TreeNode treeNode = TreeNode.fullTreeNode();
         RecursionPrintTreeNode recursionPrintTreeNode = new RecursionPrintTreeNode();
         System.out.println("前序遍历");
-        recursionPrintTreeNode.preOrder(node);
+        recursionPrintTreeNode.preOrder(treeNode);
         System.out.println("\n中序遍历");
-        recursionPrintTreeNode.inOrder(node);
+        recursionPrintTreeNode.inOrder(treeNode);
         System.out.println("\n后续遍历");
-        recursionPrintTreeNode.postOrder(node);
+        recursionPrintTreeNode.postOrder(treeNode);
     }
 }
