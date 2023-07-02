@@ -5,6 +5,10 @@ import com.wuxin.utils.Bean.Difficulty;
 import com.wuxin.utils.Bean.Tag;
 import com.wuxin.utils.InvocationHandlerMethodTime;
 import com.wuxin.utils.LogarithmicDevice;
+import com.wuxin.utils.TestUtils;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author: wuxin0011
@@ -17,8 +21,33 @@ public class LengthOfLongestSubstring implements LogarithmicDevice {
         InvocationHandlerMethodTime.getRunTime(LengthOfLongestSubstring.class);
     }
 
+    /**
+     * 解法是 利用 set 去重 如果遇到重复 删除元素 ， 同时指针向后移动
+     *
+     * @param s
+     * @return
+     */
+    public int lengthOfLongestSubstring(String s) {
+        Set<Character> ss = new HashSet<>();
+        int i = 0, ans = 0;
+        for (int j = 0; j < s.length(); ++j) {
+            char c = s.charAt(j);
+            while (ss.contains(c)) {
+                ss.remove(s.charAt(i++));
+            }
+            ss.add(c);
+            ans = Math.max(ans, j - i + 1);
+        }
+        return ans;
+    }
+
     @Override
     public void logarithmicDevice() {
-
+        String str = "bbbbb";
+        TestUtils.testBoolean(1, lengthOfLongestSubstring(str));
+        str = "pwwkew";
+        TestUtils.testBoolean(3, lengthOfLongestSubstring(str));
+        str = "abcabcbbv";
+        TestUtils.testBoolean(3, lengthOfLongestSubstring(str));
     }
 }

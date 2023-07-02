@@ -9,14 +9,10 @@ import com.wuxin.function.Expect;
  */
 public class TestUtils {
 
-    public static void main(String[] args) {
 
 
-    }
-
-    @Test
-    public void test01() {
-
+    public static void testBoolean(Object real, Object exp) {
+        testBoolean(real, exp, System.currentTimeMillis() + " 测试通过！");
     }
 
     public static void testBoolean(Object real, Object exp, String message) {
@@ -24,7 +20,7 @@ public class TestUtils {
             if (v1 != null && v1.equals(v2)) {
                 System.out.println(msg);
             } else {
-                System.out.println("测试失败！");
+                System.err.println(System.currentTimeMillis() + " 测试失败！" + "v1 = " + v1 + ", V2 = " + v2);
             }
         };
         expect.expect(real, exp, message);

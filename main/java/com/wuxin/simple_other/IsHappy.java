@@ -1,11 +1,14 @@
 package com.wuxin.simple_other;
 
+import com.wuxin.annotation.Description;
+
 /**
  * @author: wuxin0011
  * @Description: 判断一个数是不是快乐数
- * @see https://leetcode.cn/problems/happy-number/
+ * @link https://leetcode.cn/problems/happy-number/
  *
  */
+@Description(value = "判断一个数是不是快乐数",url = "https://leetcode.cn/problems/happy-number/" )
 public class IsHappy {
 
     public static void main(String[] args) {

@@ -1,6 +1,8 @@
 package com.wuxin.array;
 
 import com.wuxin.annotation.Description;
+import com.wuxin.utils.Bean.Difficulty;
+import com.wuxin.utils.Bean.Tag;
 import com.wuxin.utils.InvocationHandlerMethodTime;
 import com.wuxin.utils.LogarithmicDevice;
 import com.wuxin.utils.NumberUtils;
@@ -13,7 +15,7 @@ import java.util.Random;
  * @Description: 合并有序数组
  * @see https://leetcode.cn/problems/merge-sorted-array/
  */
-@Description("合并有序数组 https://leetcode.cn/problems/merge-sorted-array/")
+@Description(value = "合并有序数组", url = " https://leetcode.cn/problems/merge-sorted-array/", tag = Tag.ARRAY, diff = Difficulty.MEDIUM)
 public class MergeSortedArray implements LogarithmicDevice {
 
     public static void main(String[] args) {

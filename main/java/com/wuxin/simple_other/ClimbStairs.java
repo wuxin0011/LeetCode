@@ -1,5 +1,6 @@
 package com.wuxin.simple_other;
 
+import com.wuxin.annotation.Description;
 import com.wuxin.utils.InvocationHandlerMethodTime;
 import com.wuxin.utils.LogarithmicDevice;
 
@@ -8,6 +9,7 @@ import com.wuxin.utils.LogarithmicDevice;
  * @Description: 爬楼梯
  * @see https://leetcode.cn/problems/climbing-stairs/
  */
+@Description(value = "爬楼梯",url = "https://leetcode.cn/problems/climbing-stairs/" )
 public class ClimbStairs implements LogarithmicDevice {
 
 

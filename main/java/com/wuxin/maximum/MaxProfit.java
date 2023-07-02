@@ -1,11 +1,14 @@
 package com.wuxin.maximum;
 
+import com.wuxin.annotation.Description;
+import com.wuxin.utils.Bean.Difficulty;
+
 /**
  * @author: wuxin0011
  * @Description: 买股票 本题其实是最小值与至最大值为题 其中最小值不能在最大值之后
- * @see https://leetcode.cn/problems/best-time-to-buy-and-sell-stock/
- * @test TODO 本题测试结果超时！！！ 但是测试结果是正确的哈哈哈哈哈！！！
+ * @test TODO 本题测试结果超时！！！
  */
+@Description(value = "获取股票最大利润", url = "leetcode.cn/problems/best-time-to-buy-and-sell-stock/", diff = Difficulty.SIMPLE)
 public class MaxProfit {
 
     public static void main(String[] args) {

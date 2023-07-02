@@ -1,5 +1,6 @@
 package com.wuxin.simple_other;
 
+import com.wuxin.annotation.Description;
 import com.wuxin.utils.InvocationHandlerMethodTime;
 import com.wuxin.utils.LogarithmicDevice;
 import com.wuxin.utils.TestUtils;
@@ -8,6 +9,7 @@ import com.wuxin.utils.TestUtils;
  * @author: wuxin0011
  * @Description:
  */
+@Description
 public class IsPalindrome implements LogarithmicDevice {
 
     public static void main(String[] args) {
@@ -51,9 +53,6 @@ public class IsPalindrome implements LogarithmicDevice {
         if ('0' <= c1 && c1 <= '9' || '0' <= c2 && c2 <= '9') {
             return c1 == c2;
         }
-
-
-
         return c1 == c2 || Math.abs((c1 - c2)) == 32;
     }
 }
