@@ -1,22 +1,22 @@
 package com.wuxin.linkNode;
 
+import com.wuxin.annotation.Description;
+import com.wuxin.utils.Bean.Difficulty;
+import com.wuxin.utils.Bean.Tag;
+import com.wuxin.utils.InvocationHandlerMethodTime;
 import com.wuxin.utils.ListNode;
+import com.wuxin.utils.LogarithmicDevice;
 
 /**
  * @author: wuxin001
  * @Description:
  */
-public class NodeAddSum {
+@Description(value = "进为", tag = Tag.LINKLIST, diff = Difficulty.MEDIUM)
+public class NodeAddSum implements LogarithmicDevice {
 
 
     public static void main(String[] args) {
-        ListNode listp1 = ListNode.createListNode(9, 9, 9, 9, 9, 9, 9);
-        ListNode listp2 = ListNode.createListNode(9, 9, 9, 9);
-        ListNode.print(listp1);
-        ListNode.print(listp2);
-
-        ListNode listNode = twoNodeAddSum(listp1, listp2);
-        ListNode.print(listNode);
+        InvocationHandlerMethodTime.getRunTime(NodeAddSum.class);
     }
 
     public static ListNode twoNodeAddSum(ListNode p1, ListNode p2) {
@@ -55,6 +55,14 @@ public class NodeAddSum {
     }
 
 
+    @Override
+    public void logarithmicDevice() {
+        ListNode listp1 = ListNode.createListNode(9, 9, 9, 9, 9, 9, 9);
+        ListNode listp2 = ListNode.createListNode(9, 9, 9, 9);
+        ListNode.print(listp1);
+        ListNode.print(listp2);
 
-
+        ListNode listNode = twoNodeAddSum(listp1, listp2);
+        ListNode.print(listNode);
+    }
 }

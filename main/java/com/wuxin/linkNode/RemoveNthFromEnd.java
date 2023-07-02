@@ -1,11 +1,15 @@
 package com.wuxin.linkNode;
 
+import com.wuxin.annotation.Description;
+import com.wuxin.utils.Bean.Difficulty;
+import com.wuxin.utils.Bean.Tag;
 import com.wuxin.utils.ListNode;
 
 /**
  * @author: wuxin0011
  * @Description:
  */
+@Description(value = "删除链表倒数第n个节点", tag = Tag.LINKLIST, diff = Difficulty.MEDIUM)
 public class RemoveNthFromEnd {
     public static void main(String[] args) {
         ListNode listNode = ListNode.createListNode(1, 2, 3, 4, 5);

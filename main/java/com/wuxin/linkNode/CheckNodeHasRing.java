@@ -1,5 +1,8 @@
 package com.wuxin.linkNode;
 
+import com.wuxin.annotation.Description;
+import com.wuxin.utils.Bean.Difficulty;
+import com.wuxin.utils.Bean.Tag;
 import com.wuxin.utils.InvocationHandlerMethodTime;
 import com.wuxin.utils.ListNode;
 import com.wuxin.utils.LogarithmicDevice;
@@ -10,6 +13,8 @@ import java.util.HashSet;
  * @author: wuxin0011
  * @Description: 判断单链表是否存在环
  */
+
+@Description(value = "判断单链表是否存在环", diff = Difficulty.MEDIUM, tag = Tag.LINKLIST)
 public class CheckNodeHasRing implements LogarithmicDevice {
 
     public static void main(String[] args) {

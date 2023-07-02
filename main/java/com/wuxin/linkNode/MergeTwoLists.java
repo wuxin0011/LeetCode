@@ -1,21 +1,22 @@
 package com.wuxin.linkNode;
 
+import com.wuxin.annotation.Description;
+import com.wuxin.utils.Bean.Difficulty;
+import com.wuxin.utils.Bean.Tag;
+import com.wuxin.utils.InvocationHandlerMethodTime;
 import com.wuxin.utils.ListNode;
+import com.wuxin.utils.LogarithmicDevice;
 
 /**
  * @author: wuxin0011
  * @Description: 合并两个升序单链表
  */
-public class MergeTwoLists {
+
+@Description(value = "合并两个升序单链表", tag = Tag.LINKLIST, diff = Difficulty.MEDIUM)
+public class MergeTwoLists implements LogarithmicDevice {
 
     public static void main(String[] args) {
-
-        ListNode l1 = ListNode.createListNode(1, 3, 5, 7, 9);
-        ListNode l2 = ListNode.createListNode(1, 2, 4, 8, 10);
-
-        ListNode listNode1 = new MergeTwoLists().mergeTwoLists(l1, l2);
-        ListNode.print(listNode1);
-
+        InvocationHandlerMethodTime.getRunTime(MergeTwoLists.class);
     }
 
     public ListNode mergeTwoLists(ListNode list1, ListNode list2) {
@@ -45,5 +46,18 @@ public class MergeTwoLists {
         }
 
         return pre.next;
+    }
+
+    @Override
+    public void logarithmicDevice() {
+        ListNode l1 = ListNode.createListNode(1, 3, 5, 7, 9);
+        ListNode.print(l1);
+
+        ListNode l2 = ListNode.createListNode(1, 2, 4, 8, 10);
+        ListNode.print(l2);
+
+        ListNode listNode1 = new MergeTwoLists().mergeTwoLists(l1, l2);
+        ListNode.print(listNode1);
+
     }
 }

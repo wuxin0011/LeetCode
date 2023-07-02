@@ -1,5 +1,13 @@
-.idea
-*.iml
-out
 
+# filter file
+*.iml
+*.html
+
+# filter folder
+out
+.idea
+
+# not filter folder
 !main
+
+# not filter file

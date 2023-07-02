@@ -1,20 +1,22 @@
 package com.wuxin.linkNode;
 
+import com.wuxin.annotation.Description;
+import com.wuxin.utils.Bean.Difficulty;
+import com.wuxin.utils.Bean.Tag;
+import com.wuxin.utils.InvocationHandlerMethodTime;
 import com.wuxin.utils.ListNode;
-
-import java.security.Principal;
+import com.wuxin.utils.LogarithmicDevice;
 
 /**
  * @author: wuxin0011
  * @Description: 反转链表
  */
-public class ReverseList {
+
+@Description(value = "反转链表", diff = Difficulty.MEDIUM, tag = Tag.LINKLIST)
+public class ReverseList implements LogarithmicDevice {
 
     public static void main(String[] args) {
-        ListNode listNode = ListNode.createListNode(1, 2, 3, 4, 5);
-        ListNode.print(listNode);
-        ListNode listNode1 = new ReverseList().reverseList(listNode);
-        ListNode.print(listNode1);
+        InvocationHandlerMethodTime.getRunTime(ReverseList.class);
 
     }
 
@@ -37,5 +39,13 @@ public class ReverseList {
             temp = next;
         }
         return cur;
+    }
+
+    @Override
+    public void logarithmicDevice() {
+        ListNode listNode = ListNode.createListNode(1, 2, 3, 4, 5);
+        ListNode.print(listNode);
+        ListNode listNode1 = new ReverseList().reverseList(listNode);
+        ListNode.print(listNode1);
     }
 }

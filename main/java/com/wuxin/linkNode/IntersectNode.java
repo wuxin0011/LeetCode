@@ -1,5 +1,8 @@
 package com.wuxin.linkNode;
 
+import com.wuxin.annotation.Description;
+import com.wuxin.utils.Bean.Difficulty;
+import com.wuxin.utils.Bean.Tag;
 import com.wuxin.utils.InvocationHandlerMethodTime;
 import com.wuxin.utils.ListNode;
 import com.wuxin.utils.LogarithmicDevice;
@@ -10,6 +13,7 @@ import java.util.HashSet;
  * @author: wuxin0011
  * @Description: 判断两个链表是否相交
  */
+@Description(value = "判断两个链表是否相交", diff = Difficulty.MEDIUM, tag = Tag.LINKLIST)
 public class IntersectNode implements LogarithmicDevice {
     public static void main(String[] args) {
         InvocationHandlerMethodTime.getRunTime(IntersectNode.class);

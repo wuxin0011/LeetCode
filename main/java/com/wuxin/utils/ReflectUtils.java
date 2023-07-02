@@ -1,7 +1,9 @@
 package com.wuxin.utils;
 
 import com.wuxin.annotation.Description;
+import com.wuxin.annotation.Test;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 /**
@@ -18,8 +20,7 @@ public class ReflectUtils {
         if (c == null) {
             return null;
         }
-        Description annotation = c.getAnnotation(Description.class);
-        return annotation != null ? annotation.value() : c.getSimpleName();
+        return getDescriptionInfo(c.getAnnotation(Description.class), c);
     }
 
     public static <T> String getMethodInfo(Class<T> c, String methodName) {
@@ -30,11 +31,48 @@ public class ReflectUtils {
         }
     }
 
+
     public static <T> String getMethodInfo(Method method) {
         if (method == null) {
             return null;
         }
         Description annotation = method.getAnnotation(Description.class);
-        return annotation != null ? annotation.value() : null;
+        return getDescriptionInfo(annotation, method.getClass());
     }
+
+    public static <T> String getDescriptionInfo(Description description, Class<T> c) {
+        if (description == null) {
+            return null;
+        }
+        String tag = description.tag().getTag();
+        String difficulty = description.diff().getDesc();
+        String url = description.url();
+        String desc = description.value();
+        return "======================================题目信息=======================" +
+                "\n简介: " + desc +
+                "\n标签: " + tag +
+                "\n难度: " + difficulty +
+                "\n地址: " + url +
+                "\n======================================输出结果=========================";
+    }
+
+    @Test
+    public void test01() {
+
+    }
+
+
+    public static void runTests(Class<?> testClass) {
+        Method[] methods = testClass.getDeclaredMethods();
+        for (Method method : methods) {
+            if (method.isAnnotationPresent(Test.class)) {
+                try {
+                    method.invoke(testClass);
+                } catch (IllegalAccessException | InvocationTargetException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
 }

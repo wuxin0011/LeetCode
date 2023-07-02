@@ -1,19 +1,25 @@
 package com.wuxin.utils;
 
+import com.wuxin.annotation.Test;
 import com.wuxin.function.Expect;
 
 /**
  * @author: wuxin0011
  * @Description:
  */
-public class TestFun {
+public class TestUtils {
 
     public static void main(String[] args) {
 
 
     }
 
-    public static void testBoolean(Object value, Object value2, String message) {
+    @Test
+    public void test01() {
+
+    }
+
+    public static void testBoolean(Object real, Object exp, String message) {
         Expect<Object, String> expect = (v1, v2, msg) -> {
             if (v1 != null && v1.equals(v2)) {
                 System.out.println(msg);
@@ -21,7 +27,7 @@ public class TestFun {
                 System.out.println("测试失败！");
             }
         };
-        expect.expect(value, value2, message);
+        expect.expect(real, exp, message);
     }
 
     public static void testArray(int[] arr1, int[] arr2, String message) {

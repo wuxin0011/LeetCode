@@ -3,7 +3,7 @@ package com.wuxin.tree;
 import com.wuxin.annotation.Description;
 import com.wuxin.utils.InvocationHandlerMethodTime;
 import com.wuxin.utils.LogarithmicDevice;
-import com.wuxin.utils.TestFun;
+import com.wuxin.utils.TestUtils;
 import com.wuxin.utils.TreeNode;
 
 /**
@@ -45,7 +45,7 @@ public class IsBST implements LogarithmicDevice {
         TreeNode treeNode = TreeNode.fullTreeNode();
 
         // test
-        TestFun.testBoolean(isBst(treeNode), false, "ok");
+        TestUtils.testBoolean(isBst(treeNode), false, "ok");
 
 
         TreeNode treeNode1 = new TreeNode(5);
@@ -58,7 +58,7 @@ public class IsBST implements LogarithmicDevice {
         treeNode1.right.right = new TreeNode(8);
 
         // test2
-        TestFun.testBoolean(isBst(treeNode1), true, "ok");
+        TestUtils.testBoolean(isBst(treeNode1), true, "ok");
 
         System.out.println("是否是搜索二叉树测试！");
     }
