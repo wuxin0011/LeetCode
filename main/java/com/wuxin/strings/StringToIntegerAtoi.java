@@ -13,7 +13,6 @@ import com.wuxin.utils.TestUtils;
  */
 
 @Description(value = "字符串转换整数 (atoi) 注意：除前导空格或数字后的其余字符串外，请勿忽略 任何其他字符 ！！", url = "https://leetcode.cn/problems/string-to-integer-atoi/", diff = Difficulty.MEDIUM, tag = Tag.STRING)
-
 public class StringToIntegerAtoi implements LogarithmicDevice {
 
     public static void main(String[] args) {
