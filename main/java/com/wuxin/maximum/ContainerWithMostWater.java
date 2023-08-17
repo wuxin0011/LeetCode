@@ -4,6 +4,7 @@ import com.wuxin.annotation.Description;
 import com.wuxin.utils.Bean.Difficulty;
 import com.wuxin.utils.InvocationHandlerMethodTime;
 import com.wuxin.utils.LogarithmicDevice;
+import com.wuxin.utils.TestUtils;
 
 /**
  * @author: wuxin0011
@@ -43,6 +44,7 @@ public class ContainerWithMostWater implements LogarithmicDevice {
 
     @Override
     public void logarithmicDevice() {
-
+        int ints[] = new int[]{1, 2, 3, 4, 5};
+        TestUtils.testBoolean(6,maxArea(ints));
     }
 }
