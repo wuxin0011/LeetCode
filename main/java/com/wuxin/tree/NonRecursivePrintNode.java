@@ -11,7 +11,7 @@ import java.util.Stack;
  * @author: wuxin0011
  * @Description: 非递归的方式输出二叉树的前序遍历 中序遍历，后续遍历
  */
-@Description("\n非递归的方式输出二叉树的前序遍历 中序遍历，后续遍历")
+@Description("非递归的方式输出二叉树的前序遍历 中序遍历，后续遍历")
 public class NonRecursivePrintNode implements LogarithmicDevice {
 
     public static void main(String[] args) {
