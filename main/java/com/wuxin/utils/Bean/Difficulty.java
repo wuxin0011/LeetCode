@@ -20,9 +20,15 @@ public enum Difficulty {
     /**
      * 困难
      */
-    HARD("困难");
+    HARD("困难"),
 
-    String desc;
+    /**
+     * null
+     */
+    NULL("");
+
+
+    final String desc;
 
     Difficulty(String desc) {
         this.desc = desc;

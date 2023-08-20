@@ -36,8 +36,13 @@ public enum Tag {
     /**
      * 图
      */
-    GRAPHICAl("图");
+    GRAPHICAl("图"),
 
+
+    /**
+     * 空标签
+     */
+    NULL("");
 
 
     // TODO 补充其他类型

@@ -12,8 +12,7 @@ import java.lang.reflect.Method;
 public class ReflectUtils {
 
     public static void main(String[] args) {
-        StringBuilder stringBuilder = new StringBuilder();
-        System.out.println(stringBuilder);
+       // test ...
     }
 
     public static <T> String getClassInfo(Class<T> c) {
@@ -44,21 +43,23 @@ public class ReflectUtils {
         if (description == null) {
             return null;
         }
-        String tag = description.tag().getTag();
-        String difficulty = description.diff().getDesc();
+        // tag
+        String tag = description.tag() != null ? description.tag().getTag() : "";
+        tag = isEmpty(description.customTag()) ? tag : description.customTag();
+        // diff
+        String difficulty = description.diff() != null ? description.diff().getDesc() : "";
+        // url
         String url = description.url();
+        // desc
         String desc = description.value();
-        // 自定义标签
-        String s = description.customTag();
-        tag = isEmpty(s) ? tag : s;
-        // 自定义题目类型
-        String typeString = getTypes(description);
+        // types
+        String types = getTypes(description);
         return "======================================题目信息=======================" +
-                "\n简介: " + desc +
-                "\n标签: " + tag +
-                (!isEmpty(typeString) ? "\n类型:" + typeString : "") +
-                "\n难度: " + difficulty +
-                "\n地址: " + url +
+                (!isEmpty(desc) ? "\n简介: " + desc : "") +
+                (!isEmpty(tag) ? "\n标签: " + tag : "") +
+                (!isEmpty(types) ? "\n类型: " + types : "") +
+                (!isEmpty(difficulty) ? "\n难度: " + difficulty : "") +
+                (!isEmpty(url) ? "\n地址: " + url : "") +
                 "\n======================================输出结果=========================";
     }
 

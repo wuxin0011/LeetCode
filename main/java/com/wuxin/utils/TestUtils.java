@@ -28,17 +28,23 @@ public class TestUtils {
         expect.expect(real, exp, successMsg);
     }
 
-    public static void testArray(int[] arr1, int[] arr2, String message) {
-        Expect<int[], String> expect = (v1, v2, msg) -> {
-            if (arr1 == arr2) {
+    public static <T> void testArray(T[] arr1, T[] arr2, String message) {
+        Expect<T[], String> expect = (v1, v2, msg) -> {
+            if (v1 == v2) {
                 System.out.println("测试通过");
-            } else if (arr1 != null && arr2 != null && arr2.length != arr1.length) {
+            } else if (v1 != null && v2 != null && v2.length != v1.length) {
                 System.out.println("test error");
-            } else if (arr1 != null && arr2 != null) {
-                int len = arr2.length;
+            } else if (v1 != null && v2 != null) {
+                int len = v2.length;
                 boolean flag = true;
                 for (int i = 0; i < len; i++) {
-                    if (arr1[i] != arr2[i]) {
+
+                    // 判断为 null 情况
+                    if (v1[i] == null && v2[i] != null || v1[i] != null && v2[i] == null) {
+                        flag = false;
+                        break;
+                    }
+                    if (v1[i] != null && !v1[i].equals(v2[i])) {
                         flag = false;
                         break;
                     }

@@ -26,13 +26,13 @@ public @interface Description {
     /**
      * 题目地址
      */
-    String url() default "https://leetcode.cn/";
+    String url() default "";
 
 
     /**
-     * 题目标签类型
+     * 题目标签类型 默认为NULL
      */
-    Tag tag() default Tag.OTHER;
+    Tag tag() default Tag.NULL;
 
     /**
      * 自定义题目类型
@@ -41,9 +41,9 @@ public @interface Description {
 
 
     /**
-     * 题目难度
+     * 题目难度 默认为NULL
      */
-    Difficulty diff() default Difficulty.SIMPLE;
+    Difficulty diff() default Difficulty.NULL;
 
 
     /**
