@@ -1,4 +1,4 @@
-package com.wuxin.simple_other;
+package com.wuxin.other.simple;
 
 import com.wuxin.annotation.Description;
 

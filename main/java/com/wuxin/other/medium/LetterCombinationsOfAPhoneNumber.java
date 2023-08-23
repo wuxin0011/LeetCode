@@ -1,4 +1,4 @@
-package com.wuxin.medium_other;
+package com.wuxin.other.medium;
 
 import com.wuxin.annotation.Description;
 import com.wuxin.utils.Bean.Difficulty;

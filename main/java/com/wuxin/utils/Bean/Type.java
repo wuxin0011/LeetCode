@@ -22,11 +22,11 @@ public enum Type {
     DATABASE("数据库"),
     ITERATOR("迭代器"),
     GAME("博弈"),
-    Prefix_and("前缀和"),
+    PREFIX_AND("前缀和"),
     MAP("图"),
     Topology_Map("拓扑图"),
-    Segment_tree("线段树"),
-    geometry("几何"),
+    SEGMENT_TREE("线段树"),
+    GEOMETRY("几何"),
     MATH("数学"),
     MEMORY_BASE_SEARCH("记忆化搜索"),
     TREE("树"),
@@ -40,8 +40,7 @@ public enum Type {
     QUEUE("队列"),
     PILE_UP("堆"),
     PRIORITY_QUEUE("优先队列"),
-    BACKTRACk("回溯"),
-    A("哈希表");
+    BACKTRACk("回溯");
 
 
     final String type;

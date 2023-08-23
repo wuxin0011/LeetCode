@@ -58,4 +58,10 @@ public @interface Description {
     String[] customType() default {};
 
 
+
+
+    /**
+     * 参考链接
+     */
+    String[] views() default {};
 }
