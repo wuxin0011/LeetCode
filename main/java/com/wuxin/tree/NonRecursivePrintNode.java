@@ -1,9 +1,9 @@
 package com.wuxin.tree;
 
 import com.wuxin.annotation.Description;
+import com.wuxin.utils.InvocationHandlerMethodTime;
 import com.wuxin.utils.LogarithmicDevice;
 import com.wuxin.utils.TreeNode;
-import com.wuxin.utils.InvocationHandlerMethodTime;
 
 import java.util.Stack;
 
@@ -69,7 +69,7 @@ public class NonRecursivePrintNode implements LogarithmicDevice {
 
 
     /**
-     * 非递归方式后序遍历 使用一个栈
+     * 非递归方式后序遍历
      *
      * @param head 头结点
      */
@@ -80,19 +80,16 @@ public class NonRecursivePrintNode implements LogarithmicDevice {
         Stack<TreeNode> s1 = new Stack<>();
         Stack<TreeNode> s2 = new Stack<>();
         // 先压入头节点
-        s1.push(head);
-        while (!s1.isEmpty()) {
-            // 弹出栈一
-            TreeNode popTreeNode = s1.pop();
-            // 放入栈二中
-            s2.push(popTreeNode);
-            // 弹出的节点有右节点
-            if (popTreeNode.right != null) {
-                s1.push(popTreeNode.left);
-            }
-            // 弹出的节点有左节点
-            if (popTreeNode.left != null) {
-                s1.push(popTreeNode.left);
+        while (!s1.isEmpty() || head != null) {
+            // 整棵树右边先进入栈
+            if (head != null) {
+                s1.add(head);
+                s2.add(head);
+                head = head.right;
+            } else {
+                // 弹出节点 左移
+                head = s1.pop();
+                head = head.left;
             }
         }
 
@@ -129,6 +126,6 @@ public class NonRecursivePrintNode implements LogarithmicDevice {
         System.out.println("递归方式");
         recursionPrintTreeNode.postOrder(treeNode);
         System.out.println("\n非递归方式");
-        recursionPrintTreeNode.postOrder(treeNode);
+        nonRecursivePrintNode.postOrder(treeNode);
     }
 }

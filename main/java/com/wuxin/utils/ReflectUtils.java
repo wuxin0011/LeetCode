@@ -59,14 +59,14 @@ public class ReflectUtils {
         String types = getTypes(description);
         // views
         String views = getViews(description);
-        return "======================================题目信息=======================" +
+        return CustomColor.success("======================================题目信息=======================" +
                 (!isEmpty(desc) ? "\n简介: " + desc : "") +
                 (!isEmpty(tag) ? "\n标签: " + tag : "") +
                 (!isEmpty(types) ? "\n类型: " + types : "") +
                 (!isEmpty(difficulty) ? "\n难度: " + difficulty : "") +
                 (!isEmpty(url) ? "\n题目地址: " + url : "") +
                 (!isEmpty(views) ? "\n参考链接: " + views : "") +
-                "\n======================================输出结果=========================";
+                "\n======================================输出结果=========================");
     }
 
 
