@@ -4,6 +4,7 @@ import com.wuxin.function.Expect;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author: wuxin0011
@@ -59,6 +60,33 @@ public class TestUtils {
             }
         };
         expect.expect(arr1, arr2, message);
+    }
+
+
+    public static <T> void testList(List<T> a, List<T> b) {
+        if (a == b) {
+            System.out.println("ok");
+            return;
+        }
+        if (a == null || b == null || a.size() != b.size()) {
+            System.out.println("error");
+            return;
+        }
+        int n = a.size();
+        boolean f = true;
+        for (int i = 0; i < n; i++) {
+            if (!a.get(i).equals(b.get(i))) {
+                f = false;
+                break;
+            }
+        }
+        if (f) {
+            System.out.println("ok");
+        } else {
+            System.out.println("error");
+            System.out.println("a:" + a);
+            System.out.println("b:" + b);
+        }
     }
 
 

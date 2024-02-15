@@ -1,9 +1,9 @@
 package com.wuxin.tree;
 
 import com.wuxin.annotation.Description;
+import com.wuxin.utils.InvocationHandlerMethodTime;
 import com.wuxin.utils.LogarithmicDevice;
 import com.wuxin.utils.TreeNode;
-import com.wuxin.utils.InvocationHandlerMethodTime;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -144,6 +144,34 @@ public class WidthPrint implements LogarithmicDevice {
             }
         }
         return Math.max(max, curLevelNodes);
+
+    }
+
+    /**
+     * 获取最大宽度 （ LinkedList）最值得推荐！！！！
+     *
+     * @param head 头结点
+     * @return 最大宽度
+     */
+    public int getMaxWidth3(TreeNode head) {
+        if (head == null) {
+            return 0;
+        }
+        LinkedList<TreeNode> queue = new LinkedList<>();
+        int max = 1;
+        queue.add(head);
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            max = Math.max(max, size);
+            while (size > 0) {
+                size--;
+                TreeNode node = queue.poll();
+                if (node == null) continue;
+                if (node.left != null) queue.add(node.left);
+                if (node.right != null) queue.add(node.right);
+            }
+        }
+        return max;
 
     }
 
