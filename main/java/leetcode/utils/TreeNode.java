@@ -1,5 +1,7 @@
 package leetcode.utils;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.StringJoiner;
 
 /**
@@ -62,5 +64,55 @@ public class TreeNode {
     }
 
 
-   
+    /**
+     * 通过宽度遍历方式构建二叉树
+     *
+     * @param ls
+     * @return
+     */
+    public static TreeNode widthBuildTreeNode(String[] ls) {
+        if (ls == null || ls.length == 0 || ls[0] == null || "null".equals(ls[0])) {
+            return null;
+        }
+        Deque<TreeNode> q = new ArrayDeque<>();
+        TreeNode root = new TreeNode(Integer.parseInt(ls[0]));
+        q.add(root);
+        int i = 1;
+        while (i < ls.length && !q.isEmpty()) {
+            int s = q.size();
+            while (s > 0) {
+                s--;
+                TreeNode node = q.poll();
+                if (node == null) continue;
+                if (!"null".equals(ls[i])) {
+                    TreeNode left = new TreeNode(Integer.parseInt(ls[i]));
+                    node.left = left;
+                    q.add(left);
+                }
+                i++;
+                if (!"null".equals(ls[i])) {
+                    TreeNode right = new TreeNode(Integer.parseInt(ls[i]));
+                    node.right = right;
+                    q.add(right);
+                }
+                i++;
+            }
+        }
+        return root;
+    }
+
+
+
+    public static TreeNode widthBuildTreeNode(Integer[] ls) {
+        if (ls == null || ls.length == 0 || ls[0] == null || "null".equals(String.valueOf(ls[0]))) {
+            return null;
+        }
+        String[] s = new String[ls.length];
+        for(int i = 0;i<ls.length;i++){
+            s[i] = String.valueOf(ls[i]);
+        }
+        return widthBuildTreeNode(s);
+    }
+
+
 }

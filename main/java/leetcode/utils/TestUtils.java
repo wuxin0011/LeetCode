@@ -3,6 +3,7 @@ package leetcode.utils;
 import leetcode.function.Expect;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -63,14 +64,14 @@ public class TestUtils {
     }
 
 
-    public static <T> void testList(List<T> a, List<T> b) {
+    public static <T> boolean deepEqual(List<T> a, List<T> b) {
         if (a == b) {
             System.out.println("ok");
-            return;
+            return true;
         }
         if (a == null || b == null || a.size() != b.size()) {
             System.out.println("error");
-            return;
+            return false;
         }
         int n = a.size();
         int idx = -1;
@@ -82,53 +83,183 @@ public class TestUtils {
         }
         if (idx == -1) {
             System.out.println("ok");
+            return true;
         } else {
             System.out.println("error");
             System.out.println("index = " + idx + ",a:" + a.get(idx) + ",b = " + b.get(idx));
+            return false;
         }
     }
 
+    public static <T> boolean deepEqual(T[] a, T[] b) {
+        if (a == b) {
+            return true;
+        }
+        if (a == null || b == null || a.length != b.length) {
+            return false;
+        }
+        int n = a.length, x = -1;
+        for (int i = 0; i < n; i++) {
+            if (a[i] != null && a[i].equals(b[i])) {
+                x = i;
+                break;
+            }
+        }
+        if (x != -1) {
+            System.out.println("error index =" + x);
+            return false;
+        }
+        return true;
 
-    public static <T> void deepEqual(T[][] a, T[][] b) {
+    }
+
+
+    public static <T> boolean deepEqual(T[][] a, T[][] b) {
         if (a == b) {
             System.out.println("ok");
-            return;
+            return true;
         }
         if (a == null || b == null || a.length != b.length || a[0].length != b[0].length) {
             System.out.println("error length not equal!" + "a.length = " + a.length + ",a[0].length=" + a[0].length + "b.length = " + b.length + ",b[0].length=" + b[0].length);
-            return;
+            return false;
         }
         int m = a.length, n = a[0].length, x = -1, y = -1;
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
-                if (a[i][j] != null && a[i][j].equals(b[i][j])) {
+                if (a[i][j] != null && !a[i][j].equals(b[i][j])) {
                     x = i;
                     y = j;
                     break;
                 }
             }
         }
-        if (x == -1 && y == -1) {
-            System.out.println("ok");
+        if (x == -1) {
+            return true;
         } else {
             System.out.println("error");
             System.out.println("index row= " + x + ",col = " + y + ":" + a[x][y] + ",b = " + b[x][y]);
+            return false;
         }
 
     }
 
-    public static <T> void deepEqual(T[][][] a, T[][][] b) {
+    public static <T> boolean deepEqual(T[][][] a, T[][][] b) {
         if (a == b) {
             System.out.println("ok");
-            return;
+            return true;
         }
         if (a == null || b == null || a.length != b.length || a[0].length != b[0].length || a[0][0].length != b[0][0].length) {
             System.out.println("error");
-            return;
+            return false;
         }
-        // TODO ...
+        int m = a.length, n = a[0].length, z = a[0][0].length;
+        boolean f = true;
+        int x = -1, y = -1, o = -1;
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                for (int k = 0; k < z; k++) {
+                    if (a[i][j][k] == b[i][j][k]) {
+                        continue;
+                    }
+                    if (a[i][j][k] != null && !a[i][j][k].equals(b[i][j][k])) {
+                        x = i;
+                        y = j;
+                        o = k;
+                        break;
+                    }
+                }
+            }
+        }
+        if (x == -1) {
+            System.out.println("ok");
+            return true;
+        } else {
+            System.out.println("error" + "index = (" + x + "," + y + "," + o + ")");
+            return false;
+        }
 
 
+    }
+
+
+    public static boolean valid(Object result, Object expect, String returnType) {
+        if (returnType == null) {
+            System.out.println("error!!!");
+            return false;
+        }
+        try {
+            switch (returnType) {
+                case "int":
+                case "Integer":
+                    if (!result.equals(expect)) {
+                        System.out.println("error");
+                        return false;
+                    }
+                    return true;
+                case "int[]": {
+                    Integer[] e = covert((int[]) expect);
+                    Integer[] r = covert((int[]) result);
+                    return deepEqual(r, e);
+                }
+                case "int[][]": {
+                    Integer[][] e = covert((int[][]) expect);
+                    Integer[][] r = covert((int[][]) result);
+                    return deepEqual(r, e);
+                }
+                case "int[][][]": {
+                    Integer[][][] e = covert((int[][][]) expect);
+                    Integer[][][] r = covert((int[][][]) result);
+                    return deepEqual(r, e);
+                }
+                case "string[]": {
+                    String[] r = (String[]) result;
+                    String[] e = (String[]) expect;
+                    return deepEqual(r, e);
+                }
+                case "string[][]":
+                    return deepEqual((String[][]) result, (String[][]) expect);
+                case "string[][][]":
+                    return deepEqual((String[][][]) result, (String[][][]) expect);
+                case "ArrayList":
+                    return deepEqual((ArrayList<Object>) result, (ArrayList<Object>) expect);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        return false;
+    }
+
+    public static Integer[] covert(int[] a) {
+        Integer[] t = new Integer[a.length];
+        for (int i = 0; i < a.length; i++) {
+            t[i] = a[i];
+        }
+        return t;
+    }
+
+    public static Integer[][] covert(int[][] a) {
+        int m = a.length, n = a[0].length;
+        Integer[][] t = new Integer[m][n];
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                t[i][j] = a[i][j];
+            }
+        }
+        return t;
+    }
+
+    public static Integer[][][] covert(int[][][] a) {
+        int m = a.length, n = a[0].length, z = a[0][0].length;
+        Integer[][][] t = new Integer[m][n][z];
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                for (int k = 0; k < z; k++) {
+                    t[i][j][k] = a[i][j][k];
+                }
+            }
+        }
+        return t;
     }
 
 

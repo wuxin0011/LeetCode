@@ -16,7 +16,7 @@ public class KMP {
         String pattern = "ab";
 //        System.out.println(search(text, pattern));
 //        System.out.println(kmp(text, pattern));
-        TestUtils.testList(search(text, pattern), kmp(text, pattern));
+        TestUtils.deepEqual(search(text, pattern), kmp(text, pattern));
     }
 
     public static List<Integer> search(String text, String pattern) {

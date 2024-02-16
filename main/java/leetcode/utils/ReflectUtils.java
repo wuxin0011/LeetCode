@@ -4,6 +4,9 @@ import leetcode.annotation.Description;
 import leetcode.utils.Bean.Type;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author: wuxin0011
@@ -16,6 +19,8 @@ public class ReflectUtils {
 
     public static void main(String[] args) {
         // test ...
+        List<Integer> ans = new ArrayList<>();
+        System.out.println(ans.getClass().getSimpleName());
     }
 
     public static <T> String getClassInfo(Class<T> c) {
@@ -127,4 +132,153 @@ public class ReflectUtils {
     }
 
 
+
+    public static <T> Object parseArg(Class<T> c, String input) {
+        return parseArg(c.getSimpleName(), input);
+    }
+
+    public static Object parseArg(String type, String input) {
+        if (String.valueOf(type).equals("null") || "".equals(input) || input.length() == 0) {
+            System.out.println("input or type is null");
+            return null;
+        }
+        // System.out.println("simpleName:" + type);
+        StringBuilder sb = null;
+        if ("int".equals(type) || "Integer".equals(type)) {
+            return Integer.parseInt(input);
+        } else if ("int[]".equals(type)) {
+            return oneIntArray(input);
+        } else if ("int[][]".equals(type)) {
+            return doubleIntArray(input);
+        } else if ("int[][][]".equals(type)) {
+            return threeIntArray(input);
+        } else if ("String[]".equals(type)) {
+            return oneStringArray(input);
+        } else if ("String[][]".equals(type)) {
+            return doubleStringArray(input);
+        }
+        return input;
+    }
+
+
+    public static int[] oneIntArray(String input) {
+        List<Integer> ls = new ArrayList<>();
+        StringBuilder sb = null;
+        char[] cs = input.toCharArray();
+        // [1,2,3,4,45,5,5,100]
+        for (char c : cs) {
+            if (c == ' ') continue;
+            if (c == '[') {
+                sb = new StringBuilder();
+            } else if (c == ']' || c == ',') {
+                assert sb != null;
+                try {
+                    ls.add(Integer.parseInt(sb.toString()));
+                } catch (NumberFormatException e) {
+                    // ignore ...
+                }
+                sb = new StringBuilder();
+            } else {
+                assert sb != null;
+                sb.append(c);
+            }
+        }
+
+        int[] ans = new int[ls.size()];
+        for (int i = 0; i < ls.size(); i++) {
+            ans[i] = ls.get(i);
+        }
+        return ans;
+    }
+
+    public static int[][] doubleIntArray(String input) {
+//        System.out.println("is int[][]" + ",input = " + input);
+        StringBuilder sb = null;
+        List<List<Integer>> ls = new ArrayList<>();
+        List<Integer> temp = new ArrayList<>();
+        char[] cs = input.toCharArray();
+        for (int i = 1; i < cs.length; i++) {
+            char c = cs[i];
+            if (c == ' ') continue;
+
+            if (c == '[') {
+                sb = new StringBuilder();
+                temp = new ArrayList<>();
+            } else if (c == ',') {
+                assert sb != null;
+                try {
+                    temp.add(Integer.parseInt(sb.toString()));
+
+                } catch (NumberFormatException e) {
+                    // ignore
+                } finally {
+                    sb = new StringBuilder();
+                }
+            } else if (c == ']') {
+                assert sb != null;
+                temp.add(Integer.parseInt(sb.toString()));
+                ls.add(temp);
+                if (i == cs.length - 2 || cs[i + 1] == ']') break;
+                sb = new StringBuilder();
+                temp = new ArrayList<>();
+            } else {
+                assert sb != null;
+                sb.append(c);
+            }
+        }
+
+        int row = ls.size(), col = ls.get(0).size();
+        int[][] ans = new int[row][col];
+        for (int i = 0; i < row; i++) {
+            List<Integer> t = ls.get(i);
+            for (int j = 0; j < col; j++) {
+                ans[i][j] = t.get(j);
+            }
+        }
+       //  System.out.println("int[][] convert=>" + Arrays.deepToString(ans));
+        return ans;
+    }
+
+    public static int[][][] threeIntArray(String input) {
+//        System.out.println("is int[][][]" + ",input = " + input);
+        StringBuilder sb = null;
+        List<List<List<Integer>>> ls = new ArrayList<>();
+        List<Integer> temp = new ArrayList<>();
+        // TODO ...
+        // System.out.println("int[][][] convert=>" + Arrays.deepToString(ans));
+        return null;
+    }
+
+    public static String[] oneStringArray(String input) {
+        List<String> ls = new ArrayList<>();
+        StringBuilder sb = null;
+        char[] cs = input.toCharArray();
+        for (char c : cs) {
+            if (c == '\'' || c == '\"') continue;
+            if (c == '[') {
+                sb = new StringBuilder();
+                continue;
+            }
+            if (sb == null) break;
+            if (c == ']') {
+                ls.add(sb.toString());
+                break;
+            } else if (c == ',') {
+                ls.add(sb.toString());
+                sb = new StringBuilder();
+            } else {
+                sb.append(c);
+            }
+        }
+        String[] ans = new String[ls.size()];
+        for (int i = 0; i < ls.size(); i++) {
+            ans[i] = ls.get(i);
+        }
+//        System.out.println("parse args =>" + Arrays.toString(ans));
+        return ans;
+    }
+
+    public static String[][] doubleStringArray(String input) {
+        return null;
+    }
 }
