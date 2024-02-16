@@ -76,7 +76,9 @@ public class TestUtils {
         int n = a.size();
         int idx = -1;
         for (int i = 0; i < n; i++) {
-            if (!a.get(i).equals(b.get(i))) {
+            T t1 = a.get(i);
+            T t2 = b.get(i);
+            if(t1 == null || !valid(t1,t2,t1.getClass().getSimpleName())){
                 idx = i;
                 break;
             }
@@ -184,7 +186,7 @@ public class TestUtils {
 
     public static boolean valid(Object result, Object expect, String returnType) {
         if (returnType == null) {
-            System.out.println("error!!!");
+            System.out.println("returnType is null error!!!");
             return false;
         }
         try {
