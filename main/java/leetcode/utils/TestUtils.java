@@ -222,6 +222,16 @@ public class TestUtils {
                     return deepEqual((String[][]) result, (String[][]) expect);
                 case "string[][][]":
                     return deepEqual((String[][][]) result, (String[][][]) expect);
+                case "char[]": {
+                    Character[] e = covert((char[]) expect);
+                    Character[] r = covert((char[]) result);
+                    return deepEqual(r, e);
+                }
+                case "char[][]": {
+                    Character[][] e = covert((char[][]) expect);
+                    Character[][] r = covert((char[][]) result);
+                    return deepEqual(r, e);
+                }
                 case "ArrayList":
                     return deepEqual((ArrayList<Object>) result, (ArrayList<Object>) expect);
             }
@@ -240,9 +250,28 @@ public class TestUtils {
         return t;
     }
 
+    public static Character[] covert(char[] a) {
+        Character[] t = new Character[a.length];
+        for (int i = 0; i < a.length; i++) {
+            t[i] = a[i];
+        }
+        return t;
+    }
+
     public static Integer[][] covert(int[][] a) {
         int m = a.length, n = a[0].length;
         Integer[][] t = new Integer[m][n];
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                t[i][j] = a[i][j];
+            }
+        }
+        return t;
+    }
+
+    public static Character[][] covert(char[][] a) {
+        int m = a.length, n = a[0].length;
+        Character[][] t = new Character[m][n];
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
                 t[i][j] = a[i][j];

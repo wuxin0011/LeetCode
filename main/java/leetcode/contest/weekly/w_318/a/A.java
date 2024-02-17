@@ -1,4 +1,4 @@
-package leetcode.contest.biweekly.bi_124;
+package leetcode.contest.weekly.w_318.a;
 
 /**
  * @author: wuxin0011

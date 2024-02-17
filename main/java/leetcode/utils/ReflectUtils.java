@@ -5,7 +5,6 @@ import leetcode.utils.Bean.Type;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -19,7 +18,7 @@ public class ReflectUtils {
 
     public static void main(String[] args) {
         // test ...
-        List<Integer> ans = new ArrayList<>();
+        List<List<Integer>> ans = new ArrayList<>();
         System.out.println(ans.getClass().getSimpleName());
     }
 
@@ -143,9 +142,20 @@ public class ReflectUtils {
             return null;
         }
         // System.out.println("simpleName:" + type);
-        StringBuilder sb = null;
         if ("int".equals(type) || "Integer".equals(type)) {
             return Integer.parseInt(input);
+        } else if ("long".equals(type) || "Long".equals(type)) {
+            return Long.parseLong(input);
+        } else if ("boolean".equals(type) || "Boolean".equals(type)) {
+            return Boolean.parseBoolean(input);
+        } else if ("double".equals(type) || "Double".equals(type)) {
+            return Double.parseDouble(input);
+        } else if ("float".equals(type) || "Float".equals(type)) {
+            return Float.parseFloat(input);
+        } else if ("char".equals(type) || "Char".equals(type)) {
+            return input.toCharArray()[0];
+        } else if ("String".equals(type)) {
+            return input;
         } else if ("int[]".equals(type)) {
             return oneIntArray(input);
         } else if ("int[][]".equals(type)) {
@@ -156,7 +166,12 @@ public class ReflectUtils {
             return oneStringArray(input);
         } else if ("String[][]".equals(type)) {
             return doubleStringArray(input);
+        } else if ("char[]".equals(type)) {
+            return oneCharArray(input);
+        } else if ("char[][]".equals(type)) {
+            return doubleCharArray(input);
         }
+        // todo more type
         return input;
     }
 
@@ -280,5 +295,55 @@ public class ReflectUtils {
 
     public static String[][] doubleStringArray(String input) {
         return null;
+    }
+
+
+    public static char[] oneCharArray(String input) {
+        // ["a","b","c"]
+        List<Character> ls = new ArrayList<>();
+        StringBuilder sb = null;
+        char[] charArray = input.toCharArray();
+        for (char c : charArray) {
+            if (c == '[' || c == ']' || c == ',' || c == '\'' || c == '\"') {
+                continue;
+            }
+            ls.add(c);
+        }
+        char[] cs = new char[ls.size()];
+        for (int i = 0; i < ls.size(); i++) {
+            cs[i] = ls.get(i);
+        }
+        return cs;
+    }
+
+    public static char[][] doubleCharArray(String input) {
+        // [["a","b","c"],["a","b","c"]]
+        List<List<Character>> ls = new ArrayList<>();
+        char[] charArray = input.toCharArray();
+        List<Character> temp = null;
+        for (char c : charArray) {
+            if (c == ' ' || c == '\'' || c == '\"' || c == '\n' || c == '\t' || c == '\b' || c == ',') continue;
+            if (c == '[') {
+                temp = new ArrayList<>();
+            } else if (c == ']') {
+                if (temp != null) {
+                    ls.add(temp);
+                }
+                temp = null;
+            } else {
+                if (temp != null) {
+                    temp.add(c);
+                }
+            }
+        }
+        int row = ls.size(), col = ls.get(0).size();
+        char[][] cs = new char[row][col];
+        for (int i = 0; i < row; i++) {
+            List<Character> cc = ls.get(i);
+            for (int j = 0; j < cc.size(); j++) {
+                cs[i][j] = cc.get(j);
+            }
+        }
+        return cs;
     }
 }

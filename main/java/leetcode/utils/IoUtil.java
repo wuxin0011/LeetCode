@@ -21,14 +21,18 @@ public class IoUtil {
 
 
     public static <T> void testUtil(Class<T> c, String methodName, String fileName) {
-        valid(c, methodName, fileName);
+        check(c, methodName, fileName);
         try {
             T obj = c.newInstance();
+
             Method[] methods = c.getDeclaredMethods();
+            boolean find = false;
             for (Method method : methods) {
                 if (!method.getName().equals(methodName)) {
                     continue;
                 }
+                find = true;
+                method.setAccessible(true);
                 List<String> inputList = readFile(c, fileName);
                 if (inputList == null) {
                     // System.out.println("read content is null");
@@ -36,6 +40,9 @@ public class IoUtil {
                     break;
                 }
                 startValid(obj, method, inputList);
+            }
+            if (!find) {
+                System.err.println("check methodName ,not found " + methodName + " method !");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -56,8 +63,7 @@ public class IoUtil {
 
             // 填充参数信息
             for (int i = 0; i < parameterTypes.length && idx < size; i++, idx++) {
-                Object arg = ReflectUtils.parseArg(parameterTypes[i], inputList.get(idx));
-                args[i] = arg;
+                args[i] = ReflectUtils.parseArg(parameterTypes[i], inputList.get(idx));
             }
 
 
@@ -69,15 +75,21 @@ public class IoUtil {
             // 分析该方法执行参数信息
             Object result = null;
             try {
+                method.setAccessible(true);
                 result = method.invoke(obj, args);
                 // 对比预期结果和实际结果
                 String returnName = method.getReturnType().getSimpleName();
                 // System.out.println("return simpleName = " + returnName);
-                Object expect = ReflectUtils.parseArg(returnName, inputList.get(idx));
-                if (expect != null && !expect.equals(result) && !TestUtils.valid(result, expect, returnName)) {
-                    f = false;
-                    break;
+                if ("void".equals(returnName)) {
+                    // todo 没有返回值时候如何处理呢 ？
+                } else {
+                    Object expect = ReflectUtils.parseArg(returnName, inputList.get(idx));
+                    if (expect != null && !expect.equals(result) && !TestUtils.valid(result, expect, returnName)) {
+                        f = false;
+                        break;
+                    }
                 }
+
             } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
                 e.printStackTrace();
                 f = false;
@@ -93,9 +105,6 @@ public class IoUtil {
 
     }
 
-    public static <T> List<String> readFile(Class<T> c) {
-        return readFile(c, "in.txt");
-    }
 
     public static <T> List<String> readFile(Class<T> c, String filename) {
         return readFile(buildAbsolutePath(c), filename);
@@ -176,7 +185,7 @@ public class IoUtil {
     }
 
 
-    public static <T> void valid(Class<T> c, String methodName, String fileName) {
+    public static <T> void check(Class<T> c, String methodName, String fileName) {
         Objects.requireNonNull(c, "className not null");
         Objects.requireNonNull(methodName, "methodName not null");
         Objects.requireNonNull(fileName, "fileName  not null");
