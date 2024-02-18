@@ -1,5 +1,7 @@
 package leetcode.contest.weekly.w_384.c;
 
+import leetcode.utils.IoUtil;
+
 import java.util.Arrays;
 
 /**
@@ -7,6 +9,10 @@ import java.util.Arrays;
  * @Description:
  */
 public class C {
+
+    public static void main(String[] args) {
+        IoUtil.testUtil(C.class);
+    }
     public int maxPalindromesAfterOperations(String[] words) {
         int[] h = new int[26];
         for (String w : words) {

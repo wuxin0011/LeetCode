@@ -60,44 +60,44 @@ public class CustomColor {
         return (int) Math.floor(Math.random() * RGB_VALUE_MAX);
     }
 
-    public static String fontColor(String... content) {
+    public static String fontColor(Object... content) {
         int R = randomColorValue();
         int G = randomColorValue();
         int L = randomColorValue();
         return fontColor(R, G, L, content);
     }
 
-    public static String fontColor(MyColor myColor, String... content) {
+    public static String fontColor(MyColor myColor, Object... content) {
         return fontColor(myColor.R, myColor.G, myColor.L, content);
     }
 
-    public static String fontColor(int R, int G, int L, String... content) {
+    public static String fontColor(int R, int G, int L, Object... content) {
         return colorTemplate(FONT_COLOR, R, G, L, content);
     }
 
-    public static String backgroundColor(String... content) {
+    public static String backgroundColor(Object... content) {
         int R = randomColorValue();
         int G = randomColorValue();
         int L = randomColorValue();
         return backgroundColor(R, G, L, content);
     }
 
-    public static String backgroundColor(MyColor myColor, String... content) {
+    public static String backgroundColor(MyColor myColor, Object... content) {
         return backgroundColor(myColor.R, myColor.G, myColor.L, content);
     }
 
-    public static String backgroundColor(int R, int G, int L, String... content) {
+    public static String backgroundColor(int R, int G, int L, Object... content) {
         return colorTemplate(BACKGROUND_COLOR, R, G, L, content);
     }
 
 
-    public static String colorTemplate(int type, int R, int G, int L, String... content) {
+    public static String colorTemplate(int type, int R, int G, int L, Object... content) {
         valid(R, G, L);
         StringBuilder s = new StringBuilder();
-        for (String s1 : content) {
+        for (Object s1 : content) {
             s.append(s1);
         }
-        return String.format("\u001B[%d;2;%d;%d;%dm%s\u001B[0m", type, R, G, L, s.toString());
+        return String.format("\u001B[%d;2;%d;%d;%dm%s\u001B[0m", type, R, G, L, s);
     }
 
     public static String colorTemplate(int R1, int G1, int L1, int R2, int G2, int L2, String... content) {
@@ -129,20 +129,20 @@ public class CustomColor {
     }
 
 
-    public static String success(String... content) {
-        return fontColor(66, 211, 146, content);
+    public static String success(Object... content) {
+        return fontColor(89, 168, 105, content);
     }
 
-    public static String pink(String... content) {
+    public static String pink(Object... content) {
         return fontColor(253, 54, 110, content);
     }
 
-    public static String error(String... content) {
+    public static String error(Object... content) {
         return fontColor(253, 54, 110, content);
     }
 
 
-    public static void printSuccess(String... content) {
+    public static void printSuccess(Object... content) {
         System.out.println(success(content));
     }
 

@@ -1,10 +1,16 @@
 package leetcode.contest.weekly.w_384.a;
 
+import leetcode.utils.IoUtil;
+
 /**
  * @author: wuxin0011
  * @Description:
  */
 public class A {
+
+    public static void main(String[] args) {
+        IoUtil.testUtil(A.class,"modifiedMatrix");
+    }
     public int[][] modifiedMatrix(int[][] matrix) {
         int m = matrix.length, n = matrix[0].length;
         int[][] ans = new int[m][n];
@@ -24,8 +30,8 @@ public class A {
 
     public static int max(int[][] matrix, int row, int col) {
         int mx = -1;
-        for (int i = 0; i < matrix.length; i++) {
-            mx = Math.max(mx, matrix[i][col]);
+        for (int[] ints : matrix) {
+            mx = Math.max(mx, ints[col]);
         }
         return mx;
     }

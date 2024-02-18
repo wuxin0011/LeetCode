@@ -137,10 +137,11 @@ public class ReflectUtils {
     }
 
     public static Object parseArg(String type, String input) {
-        if (String.valueOf(type).equals("null") || "".equals(input) || input.length() == 0) {
-            System.out.println("input or type is null");
+        if ("".equals(input) || input.length() == 0) {
+            System.out.println("read content is null");
             return null;
         }
+
         // System.out.println("simpleName:" + type);
         if ("int".equals(type) || "Integer".equals(type)) {
             return Integer.parseInt(input);
@@ -154,7 +155,7 @@ public class ReflectUtils {
             return Float.parseFloat(input);
         } else if ("char".equals(type) || "Char".equals(type)) {
             return input.toCharArray()[0];
-        } else if ("String".equals(type)) {
+        } else if ("string".equals(type) || "String".equals(type)) {
             return input;
         } else if ("int[]".equals(type)) {
             return oneIntArray(input);
@@ -171,8 +172,9 @@ public class ReflectUtils {
         } else if ("char[][]".equals(type)) {
             return doubleCharArray(input);
         }
-        // todo more type
-        return input;
+
+        System.out.println("not support !  " + type);
+        return null;
     }
 
 

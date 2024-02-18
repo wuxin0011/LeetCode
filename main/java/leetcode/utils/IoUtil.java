@@ -15,11 +15,47 @@ import java.util.Objects;
  * @Description: 处理输入输出
  */
 public class IoUtil {
+
+
+    /**
+     * 必须文件名为 in.txt
+     * 如果没有传入方法名将使用 class 中除main方法外的一个方法 如果只有一个或者两个方法名
+     * 将会调用默认方法
+     *
+     * @param c
+     * @param <T>
+     */
+    public static <T> void testUtil(Class<T> c) {
+        testUtil(c, "null", "in.txt");
+    }
+
+
+    /**
+     * 传入类型和方法名
+     * 对拍文件为in.txt
+     *
+     * @param c
+     * @param methodName
+     * @param <T>
+     */
+
     public static <T> void testUtil(Class<T> c, String methodName) {
         testUtil(c, methodName, "in.txt");
     }
 
+    public static void check1() {
 
+    }
+
+
+    /**
+     * 指定类和类的方法名和对拍文件名
+     *
+     * @param c
+     * @param methodName
+     * @param fileName
+     * @param <T>
+     */
     public static <T> void testUtil(Class<T> c, String methodName, String fileName) {
         check(c, methodName, fileName);
         try {
@@ -27,8 +63,26 @@ public class IoUtil {
 
             Method[] methods = c.getDeclaredMethods();
             boolean find = false;
+            List<String> names = new ArrayList<>();
             for (Method method : methods) {
+                names.add(method.getName());
+            }
+            // System.out.println("names = " + names);
+            if (names.size() > 0 && methodName == null || "null".equals(methodName)) {
+                for (String name : names) {
+                    if (name.equals("main") || name.startsWith("lambda$") || "f".equals(name) || "dfs".equals(name)) {
+                        continue;
+                    }
+                    methodName = name;
+                }
+            }
+
+            for (Method method : methods) {
+
                 if (!method.getName().equals(methodName)) {
+                    continue;
+                }
+                if ("main".equals(method.getName())) {
                     continue;
                 }
                 find = true;
@@ -75,19 +129,20 @@ public class IoUtil {
             // 分析该方法执行参数信息
             Object result = null;
             try {
-                method.setAccessible(true);
                 result = method.invoke(obj, args);
                 // 对比预期结果和实际结果
                 String returnName = method.getReturnType().getSimpleName();
                 // System.out.println("return simpleName = " + returnName);
                 if ("void".equals(returnName)) {
+                    // System.out.println("result type is void place implement this valid method\n");
                     // todo 没有返回值时候如何处理呢 ？
-                } else {
-                    Object expect = ReflectUtils.parseArg(returnName, inputList.get(idx));
-                    if (expect != null && !expect.equals(result) && !TestUtils.valid(result, expect, returnName)) {
-                        f = false;
-                        break;
-                    }
+                    // 暂时处理成如果是 void 类型，将转换成第一个参数类型然后比较
+                    returnName = parameterTypes[0].getSimpleName();
+                }
+                Object expect = ReflectUtils.parseArg(returnName, inputList.get(idx));
+                if (expect != null && !TestUtils.valid(result, expect, returnName)) {
+                    f = false;
+                    // break;
                 }
 
             } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
@@ -98,9 +153,10 @@ public class IoUtil {
             idx++;
         }
         if (f) {
-            System.out.println("ok");
+            System.out.println("success");
         } else {
-            System.out.println("error!");
+            System.err.println("fail");
+            ;
         }
 
     }
@@ -126,7 +182,7 @@ public class IoUtil {
                 ans.add(t);
             }
         } catch (Exception e) {
-            // System.out.println("parse failed " + e.getMessage());
+             System.err.println("parse failed " + e.getMessage());
         } finally {
             close(breder);
         }
@@ -135,12 +191,6 @@ public class IoUtil {
     }
 
 
-    /**
-     * @param args
-     */
-    public static void v(int args) {
-
-    }
 
     public static <T> String buildAbsolutePath(Class<T> c) {
         return buildAbsolutePath() + getPackagePath(c) + File.separator;

@@ -102,13 +102,13 @@ public class TestUtils {
         }
         int n = a.length, x = -1;
         for (int i = 0; i < n; i++) {
-            if (a[i] != null && a[i].equals(b[i])) {
+            if (!valid(a[i], b[i], b[i].getClass().getSimpleName())) {
                 x = i;
                 break;
             }
         }
         if (x != -1) {
-            System.out.println("error index =" + x);
+            System.err.println("error:(  idx = " + x + " expect result = " + b[x] + ",but result =  " + a[x]);
             return false;
         }
         return true;
@@ -128,7 +128,7 @@ public class TestUtils {
         int m = a.length, n = a[0].length, x = -1, y = -1;
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
-                if (a[i][j] != null && !a[i][j].equals(b[i][j])) {
+                if (!valid(a[i][j], b[i][j], b[i][j].getClass().getSimpleName())) {
                     x = i;
                     y = j;
                     break;
@@ -138,8 +138,7 @@ public class TestUtils {
         if (x == -1) {
             return true;
         } else {
-            System.out.println("error");
-            System.out.println("index row= " + x + ",col = " + y + ":" + a[x][y] + ",b = " + b[x][y]);
+            System.err.println("error : (" + x + "," + y + " ) expect result = " + b[x][y] + ",but result =  " + a[x][y]);
             return false;
         }
 
@@ -151,7 +150,7 @@ public class TestUtils {
             return true;
         }
         if (a == null || b == null || a.length != b.length || a[0].length != b[0].length || a[0][0].length != b[0][0].length) {
-            System.out.println("error");
+            System.out.println("error length not equal");
             return false;
         }
         int m = a.length, n = a[0].length, z = a[0][0].length;
@@ -163,7 +162,7 @@ public class TestUtils {
                     if (a[i][j][k] == b[i][j][k]) {
                         continue;
                     }
-                    if (a[i][j][k] != null && !a[i][j][k].equals(b[i][j][k])) {
+                    if (!valid(a[i][j][k], b[i][j][k], b[i][j][k].getClass().getSimpleName())) {
                         x = i;
                         y = j;
                         o = k;
@@ -173,10 +172,10 @@ public class TestUtils {
             }
         }
         if (x == -1) {
-            System.out.println("ok");
+            // System.out.println("ok");
             return true;
         } else {
-            System.out.println("error" + "index = (" + x + "," + y + "," + o + ")");
+            System.out.println("error" + "index = (" + x + "," + y + "," + o + "),expect result = " + b[x][y][o] + ",but result = " + a[x][y][0]);
             return false;
         }
 
@@ -186,18 +185,11 @@ public class TestUtils {
 
     public static boolean valid(Object result, Object expect, String returnType) {
         if (returnType == null) {
-            System.out.println("returnType is null error!!!");
+            System.out.println("not support result is null");
             return false;
         }
         try {
             switch (returnType) {
-                case "int":
-                case "Integer":
-                    if (!result.equals(expect)) {
-                        System.out.println("error");
-                        return false;
-                    }
-                    return true;
                 case "int[]": {
                     Integer[] e = covert((int[]) expect);
                     Integer[] r = covert((int[]) result);
@@ -234,12 +226,17 @@ public class TestUtils {
                 }
                 case "ArrayList":
                     return deepEqual((ArrayList<Object>) result, (ArrayList<Object>) expect);
+                default:
+                    boolean t = expect != null && expect.equals(result);
+                    if(!t){
+                        System.err.println("expect result = " + expect + ",but result = " + result);
+                    }
+                    return t;
             }
         } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
-        return false;
     }
 
     public static Integer[] covert(int[] a) {

@@ -1,0 +1,8 @@
+["a","aba","ababa","aa"]
+4
+["pa","papa","ma","mama"]
+2
+["abab","ab"]
+0
+["bb","bb"]
+1
