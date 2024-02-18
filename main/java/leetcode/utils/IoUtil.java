@@ -1,20 +1,49 @@
 package leetcode.utils;
 
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
+import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Stack;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author: wuxin0011
  * @Description: 处理输入输出
  */
 public class IoUtil {
+
+
+    /**
+     * 默认方法名
+     */
+    public static final String DEFAULT_METHOD_NAME = "null";
+
+    /**
+     * 默认文件名
+     */
+    public static final String DEFAULT_READ_FILE = "in.txt";
+
+
+    /**
+     * 默认是否开启 ## 解析文件
+     */
+    public static final boolean DEFAULT_SUPPORT_LONG_CONTENT = false;
+
+    /**
+     * 默认路径 如果是 main/java 请用 {“main”，“java”}
+     */
+    public static final String[] DEFAULT_ROOTS = {"main", "java"};
+
+
+    public static void main(String[] args) {
+        //IoUtil.testUtil(IoUtil.class, "t1", "test.txt", true);
+    }
 
 
     /**
@@ -26,37 +55,44 @@ public class IoUtil {
      * @param <T>
      */
     public static <T> void testUtil(Class<T> c) {
-        testUtil(c, "null", "in.txt");
+        testUtil(c, DEFAULT_METHOD_NAME, DEFAULT_READ_FILE);
+    }
+
+    public String t1(String a) {
+        return a;
     }
 
 
-    /**
-     * 传入类型和方法名
-     * 对拍文件为in.txt
-     *
-     * @param c
-     * @param methodName
-     * @param <T>
-     */
+    public static <T> void testUtil(Class<T> c, String fileName, boolean openLongContent) {
+        testUtil(c, DEFAULT_METHOD_NAME, fileName, openLongContent);
+    }
+
+
+    public static <T> void testUtil(Class<T> c, boolean openLongContent) {
+        testUtil(c, DEFAULT_METHOD_NAME, DEFAULT_READ_FILE, openLongContent);
+    }
+
 
     public static <T> void testUtil(Class<T> c, String methodName) {
-        testUtil(c, methodName, "in.txt");
+        testUtil(c, methodName, DEFAULT_READ_FILE);
     }
 
-    public static void check1() {
 
+    public static <T> void testUtil(Class<T> c, String methodName, String fileName) {
+        testUtil(c, methodName, fileName, DEFAULT_SUPPORT_LONG_CONTENT);
     }
 
 
     /**
-     * 指定类和类的方法名和对拍文件名
+     * 对拍核心方法
      *
-     * @param c
-     * @param methodName
-     * @param fileName
-     * @param <T>
+     * @param c               反射的类
+     * @param methodName      方法名 但传入默认的时候 自动调用 除 "main" 方法外的一个方法，唯有只有一个其他方法适用
+     * @param fileName        读取文件名
+     * @param openLongContent 开启##解析
+     * @param <T>             T
      */
-    public static <T> void testUtil(Class<T> c, String methodName, String fileName) {
+    public static <T> void testUtil(Class<T> c, String methodName, String fileName, boolean openLongContent) {
         check(c, methodName, fileName);
         try {
             T obj = c.newInstance();
@@ -68,7 +104,7 @@ public class IoUtil {
                 names.add(method.getName());
             }
             // System.out.println("names = " + names);
-            if (names.size() > 0 && methodName == null || "null".equals(methodName)) {
+            if (names.size() > 0 && DEFAULT_READ_FILE.equals(methodName)) {
                 for (String name : names) {
                     if (name.equals("main") || name.startsWith("lambda$") || "f".equals(name) || "dfs".equals(name)) {
                         continue;
@@ -87,7 +123,7 @@ public class IoUtil {
                 }
                 find = true;
                 method.setAccessible(true);
-                List<String> inputList = readFile(c, fileName);
+                List<String> inputList = readFile(c, fileName, openLongContent);
                 if (inputList == null) {
                     // System.out.println("read content is null");
                     System.exit(0);
@@ -102,7 +138,6 @@ public class IoUtil {
             e.printStackTrace();
         }
     }
-
 
     public static <T> void startValid(Object obj, Method method, List<String> inputList) {
         Class<?>[] parameterTypes = method.getParameterTypes();
@@ -133,11 +168,13 @@ public class IoUtil {
                 // 对比预期结果和实际结果
                 String returnName = method.getReturnType().getSimpleName();
                 // System.out.println("return simpleName = " + returnName);
-                if ("void".equals(returnName)) {
+                if ("void".equals(returnName) && result == null) {
                     // System.out.println("result type is void place implement this valid method\n");
                     // todo 没有返回值时候如何处理呢 ？
                     // 暂时处理成如果是 void 类型，将转换成第一个参数类型然后比较
                     returnName = parameterTypes[0].getSimpleName();
+                    result = args[0];
+
                 }
                 Object expect = ReflectUtils.parseArg(returnName, inputList.get(idx));
                 if (expect != null && !TestUtils.valid(result, expect, returnName)) {
@@ -156,40 +193,56 @@ public class IoUtil {
             System.out.println("success");
         } else {
             System.err.println("fail");
-            ;
         }
 
     }
 
 
+    public static <T> List<String> readFile(Class<T> c, String filename, boolean openLongContent) {
+        return readFile(buildAbsolutePath(c), filename, openLongContent);
+    }
+
     public static <T> List<String> readFile(Class<T> c, String filename) {
-        return readFile(buildAbsolutePath(c), filename);
+        return readFile(buildAbsolutePath(c), filename, false);
     }
 
     public static List<String> readFile(String path, String fileName) {
+        return readFile(path, fileName, false);
+    }
+
+
+    public static List<String> readFile(String path, String fileName, boolean openLongContent) {
         File file = new File(path + fileName);
         if (!file.exists()) {
             System.out.println(fileName + " not found!");
             return null;
         }
-        // System.out.println("read fileName  = " + file.getAbsolutePath());
+
         BufferedReader breder = null;
+        BufferedInputStream bis = null;
         List<String> ans = new ArrayList<>();
         try {
-            breder = new BufferedReader(new FileReader(file));
-            String t = null;
-            while ((t = breder.readLine()) != null) {
-                ans.add(t);
+            if (openLongContent) {
+
+                return parseShpInfo(file);
+
+            } else {
+                breder = new BufferedReader(new FileReader(file));
+                String t = null;
+                while ((t = breder.readLine()) != null) {
+                    ans.add(t);
+                }
             }
+
         } catch (Exception e) {
-             System.err.println("parse failed " + e.getMessage());
+            System.err.println("parse failed " + e.getMessage());
         } finally {
             close(breder);
+            close(bis);
         }
         // System.out.println("read content = >" + ans);
         return ans;
     }
-
 
 
     public static <T> String buildAbsolutePath(Class<T> c) {
@@ -200,10 +253,10 @@ public class IoUtil {
     public static String buildAbsolutePath() {
         StringBuilder sb = new StringBuilder();
         sb.append(File.separator);
-        sb.append("main");
-        sb.append(File.separator);
-        sb.append("java");
-        sb.append(File.separator);
+        for (String defaultRoot : DEFAULT_ROOTS) {
+            sb.append(defaultRoot);
+            sb.append(File.separator);
+        }
         return buildAbsolutePath(sb.toString());
     }
 
@@ -252,4 +305,78 @@ public class IoUtil {
             }
         }
     }
+
+
+    public static List<String> parseShpInfo(File file) {
+        if (file == null || !file.exists()) {
+            if (file != null) System.out.println(file.getName() + " is null ,place check exist !");
+            return null;
+        }
+        List<String> ans = new ArrayList<>();
+        BufferedInputStream bis = null;
+        try {
+            byte[] buff = new byte[1024 * 1024];
+            StringBuilder sb = new StringBuilder();
+            bis = new BufferedInputStream(Files.newInputStream(file.toPath()));
+            while ((bis.read(buff)) != -1) {
+                sb.append(new String(buff));
+            }
+
+            String input = sb.toString();
+
+            Pattern pattern = Pattern.compile("#([^#]+)#", Pattern.DOTALL);
+            Matcher matcher = pattern.matcher(input);
+            boolean find = false;
+            while (matcher.find()) {
+                // System.out.println(times + " @@@@=>" + matcher.group(1));
+                ans.add(matcher.group(1));
+                find = true;
+            }
+            if (!find) {
+                System.out.println("find error place use #content# package your content ");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            close(bis);
+        }
+
+
+        return ans;
+
+    }
+
+
+    public static void parseShpBackup(File file) {
+        List<String> ans = new ArrayList<>();
+        byte[] bf = new byte[1];
+        BufferedInputStream bis = null;
+        try {
+            bis = new BufferedInputStream(Files.newInputStream(file.toPath()));
+            Stack<String> sk = new Stack<>();
+            StringBuilder sb = new StringBuilder();
+            while ((bis.read(bf) != -1)) {
+                String s = new String(bf);
+                if (s.equals("\n") || s.equals("\t") || s.equals("\r") || s.equals("\b") || s.equals(" ") || s.equals("'") || s.equals("\"")) {
+                    continue;
+                }
+                if ("#".equals(s)) {
+                    if (!sk.isEmpty()) {
+                        sk.clear();
+                        ans.add(sb.toString());
+                    } else {
+                        sk.push("#");
+                        sb = new StringBuilder();
+                    }
+                } else {
+                    sb.append(new String(bf));
+                }
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } finally {
+        }
+    }
+
+
 }

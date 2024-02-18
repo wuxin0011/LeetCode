@@ -1,7 +1,7 @@
 package leetcode.sort.array;
 
 import leetcode.annotation.Description;
-import leetcode.utils.InvocationHandlerMethodTime;
+import leetcode.utils.IoUtil;
 import leetcode.utils.NumberUtils;
 
 /**
@@ -12,7 +12,8 @@ import leetcode.utils.NumberUtils;
 public class BubbleSort implements  ArraySort {
 
     public static void main(String[] args) {
-        InvocationHandlerMethodTime.getRunTime(BubbleSort.class);
+        // InvocationHandlerMethodTime.getRunTime(BubbleSort.class);
+        IoUtil.testUtil(BubbleSort.class, "sort");
     }
 
 

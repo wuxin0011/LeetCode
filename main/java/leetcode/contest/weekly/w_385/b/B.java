@@ -13,6 +13,7 @@ public class B {
     // 使用前缀树或者hashmap 构建
     public static void main(String[] args) {
         IoUtil.testUtil(B.class, "longestCommonPrefix1");
+        IoUtil.testUtil(B.class, "longestCommonPrefix");
     }
 
     static class Trie {

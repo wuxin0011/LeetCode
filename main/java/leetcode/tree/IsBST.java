@@ -1,30 +1,49 @@
 package leetcode.tree;
 
 import leetcode.annotation.Description;
-import leetcode.utils.InvocationHandlerMethodTime;
-import leetcode.utils.LogarithmicDevice;
-import leetcode.utils.TestUtils;
-import leetcode.utils.TreeNode;
+import leetcode.utils.*;
 
 /**
  * @author: wuxin0011
  * @Description: 是否是搜索二叉树
  */
-@Description("搜索二叉树")
+@Description("搜索二叉树和平衡二叉树")
 public class IsBST implements LogarithmicDevice {
 
     public static void main(String[] args) {
-        InvocationHandlerMethodTime.getRunTime(IsBST.class);
+         // InvocationHandlerMethodTime.getRunTime(IsBST.class);
+        IoUtil.testUtil(IsBST.class, "isBalanced");
+//        System.out.println("===========================");
+//        IoUtil.testUtil(IsBST.class, "isBst");
+    }
+
+    public boolean isBalanced(TreeNode root) {
+        if (root == null) {
+            return true;
+        }
+        int l = getHeight(root.left);
+        int r = getHeight(root.right);
+        if (Math.abs(l - r) > 1) {
+            return false;
+        }
+        return isBalanced(root.left) && isBalanced(root.right);
+    }
+
+    public int getHeight(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        return Math.max(getHeight(root.right), getHeight(root.left)) + 1;
     }
 
     public static int pre = Integer.MIN_VALUE;
 
-    public boolean isBst(TreeNode root) {
+    public boolean isSearch(TreeNode root) {
 
         if (root == null) {
             return true;
         }
-        boolean isLeftIsBst = isBst(root.left);
+        boolean isLeftIsBst = isSearch(root.left);
         if (!isLeftIsBst) {
             return false;
         }
@@ -35,7 +54,25 @@ public class IsBST implements LogarithmicDevice {
             pre = root.val;
         }
 
-        return isBst(root.right);
+        return isSearch(root.right);
+    }
+
+
+    public boolean isSearch1(TreeNode root) {
+        if( root == null ){
+            return true;
+        }
+        return f(root,Long.MAX_VALUE,Long.MIN_VALUE);
+
+    }
+
+    public boolean f(TreeNode node, long min, long max) {
+        if( node == null)
+            return true;
+        if( node.val <= min && node.val >= max){
+            return false;
+        }
+        return f(node.left,max,node.val) && f(node.right,node.val,min);
     }
 
 
@@ -45,7 +82,7 @@ public class IsBST implements LogarithmicDevice {
         TreeNode treeNode = TreeNode.fullTreeNode();
 
         // test
-        TestUtils.testBoolean(isBst(treeNode), false, "ok");
+        TestUtils.testBoolean(isSearch(treeNode), false, "ok");
 
 
         TreeNode treeNode1 = new TreeNode(5);
@@ -58,7 +95,8 @@ public class IsBST implements LogarithmicDevice {
         treeNode1.right.right = new TreeNode(8);
 
         // test2
-        TestUtils.testBoolean(isBst(treeNode1), true, "ok");
+        TestUtils.testBoolean(isSearch(treeNode1), true, "ok");
+        TestUtils.testBoolean(isSearch1(treeNode1), true, "ok");
 
         System.out.println("是否是搜索二叉树测试！");
     }

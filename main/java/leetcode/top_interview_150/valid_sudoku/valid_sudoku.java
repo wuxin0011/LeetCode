@@ -1,6 +1,5 @@
 package leetcode.top_interview_150.valid_sudoku;
 
-import leetcode.top_interview_150.trapping_rain_water.trapping_rain_water;
 import leetcode.utils.IoUtil;
 
 import java.util.Arrays;
@@ -12,10 +11,11 @@ import java.util.Arrays;
 public class valid_sudoku {
 
     public static void main(String[] args) {
-        IoUtil.testUtil(valid_sudoku.class, "isValidSudoku");
+        IoUtil.testUtil(valid_sudoku.class, "isValidSudoku", "in.txt", true);
     }
 
     public boolean isValidSudoku(char[][] board) {
+        System.out.println(Arrays.deepToString(board));
         int[] helps1 = new int[10];
         int[] helps2 = new int[10];
         for (int i = 0; i < 9; i++) {

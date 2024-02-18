@@ -1,7 +1,7 @@
 package leetcode.sort.array;
 
 import leetcode.annotation.Description;
-import leetcode.utils.InvocationHandlerMethodTime;
+import leetcode.utils.IoUtil;
 
 import java.util.ArrayList;
 
@@ -12,7 +12,8 @@ import java.util.ArrayList;
 @Description("桶排序")
 public class BucketSort implements ArraySort {
     public static void main(String[] args) {
-        InvocationHandlerMethodTime.getRunTime(BucketSort.class);
+        // InvocationHandlerMethodTime.getRunTime(BucketSort.class);
+        IoUtil.testUtil(BucketSort.class, "sort","1.txt", true);
     }
 
     @Override

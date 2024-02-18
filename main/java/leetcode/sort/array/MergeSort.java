@@ -1,7 +1,7 @@
 package leetcode.sort.array;
 
 import leetcode.annotation.Description;
-import leetcode.utils.InvocationHandlerMethodTime;
+import leetcode.utils.IoUtil;
 
 /**
  * @author: wuxin0011
@@ -11,7 +11,8 @@ import leetcode.utils.InvocationHandlerMethodTime;
 public class MergeSort implements ArraySort {
 
     public static void main(String[] args) {
-        InvocationHandlerMethodTime.getRunTime(MergeSort.class);
+        // InvocationHandlerMethodTime.getRunTime(MergeSort.class);
+        IoUtil.testUtil(MergeSort.class, "sort");
     }
 
     @Override

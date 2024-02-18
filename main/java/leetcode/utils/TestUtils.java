@@ -112,7 +112,6 @@ public class TestUtils {
             return false;
         }
         return true;
-
     }
 
 
@@ -184,6 +183,13 @@ public class TestUtils {
 
 
     public static boolean valid(Object result, Object expect, String returnType) {
+        if (result == expect) {
+            return true;
+        }
+        if (result == null) {
+            System.out.println("result = null expect =" + expect);
+            return false;
+        }
         if (returnType == null) {
             System.out.println("not support result is null");
             return false;
@@ -224,11 +230,12 @@ public class TestUtils {
                     Character[][] r = covert((char[][]) result);
                     return deepEqual(r, e);
                 }
+
                 case "ArrayList":
                     return deepEqual((ArrayList<Object>) result, (ArrayList<Object>) expect);
                 default:
                     boolean t = expect != null && expect.equals(result);
-                    if(!t){
+                    if (!t) {
                         System.err.println("expect result = " + expect + ",but result = " + result);
                     }
                     return t;

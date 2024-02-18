@@ -1,4 +1,4 @@
-package leetcode.contest.weekly.w_384.b;
+package leetcode.contest.weekly.w_384.d;
 
 import leetcode.utils.IoUtil;
 
@@ -6,11 +6,12 @@ import leetcode.utils.IoUtil;
  * @author: wuxin0011
  * @Description:
  */
-public class B {
+public class D {
 
     public static void main(String[] args) {
-        IoUtil.testUtil(B.class,"countMatchingSubarrays");
+        IoUtil.testUtil(D.class,"countMatchingSubarrays");
     }
+
     public int countMatchingSubarrays(int[] nums, int[] pattern) {
         if (pattern == null || nums == null || pattern.length > nums.length) {
             return 0;
@@ -33,7 +34,7 @@ public class B {
         }
         count = 0;
         int cnt = 0;
-        for (int i = 1; i < text.length ; i++) {
+        for (int i = 1; i < text.length ; i++) { // 注意要-1因为是使用  nums 作为文本串
             int v = Integer.compare(text[i], text[i - 1]);
             while (count > 0 && v != pattern[count]) {
                 count = nexts[count - 1];
@@ -49,5 +50,4 @@ public class B {
         }
         return cnt;
     }
-
 }

@@ -18,8 +18,13 @@ public class ReflectUtils {
 
     public static void main(String[] args) {
         // test ...
-        List<List<Integer>> ans = new ArrayList<>();
-        System.out.println(ans.getClass().getSimpleName());
+        System.out.println(TreeNode.class.getSimpleName());
+//        List<List<Integer>> ans = new ArrayList<>();
+//        ArrayList<Integer> integers = new ArrayList<>();
+//        integers.add(100);
+//        ans.add(integers);
+//        System.out.println(ans.getClass().getSimpleName());
+//        System.out.println(ans.get(0).getClass().getSimpleName());
     }
 
     public static <T> String getClassInfo(Class<T> c) {
@@ -141,39 +146,67 @@ public class ReflectUtils {
             System.out.println("read content is null");
             return null;
         }
-
-        // System.out.println("simpleName:" + type);
-        if ("int".equals(type) || "Integer".equals(type)) {
-            return Integer.parseInt(input);
-        } else if ("long".equals(type) || "Long".equals(type)) {
-            return Long.parseLong(input);
-        } else if ("boolean".equals(type) || "Boolean".equals(type)) {
-            return Boolean.parseBoolean(input);
-        } else if ("double".equals(type) || "Double".equals(type)) {
-            return Double.parseDouble(input);
-        } else if ("float".equals(type) || "Float".equals(type)) {
-            return Float.parseFloat(input);
-        } else if ("char".equals(type) || "Char".equals(type)) {
-            return input.toCharArray()[0];
-        } else if ("string".equals(type) || "String".equals(type)) {
-            return input;
-        } else if ("int[]".equals(type)) {
-            return oneIntArray(input);
-        } else if ("int[][]".equals(type)) {
-            return doubleIntArray(input);
-        } else if ("int[][][]".equals(type)) {
-            return threeIntArray(input);
-        } else if ("String[]".equals(type)) {
-            return oneStringArray(input);
-        } else if ("String[][]".equals(type)) {
-            return doubleStringArray(input);
-        } else if ("char[]".equals(type)) {
-            return oneCharArray(input);
-        } else if ("char[][]".equals(type)) {
-            return doubleCharArray(input);
+        if ("void".equals(type)) {
+            System.out.println("void type not support place check type !");
+            return null;
+        }
+        try {
+            switch (type) {
+                case "int":
+                case "Integer":
+                    return Integer.parseInt(input);
+                case "long":
+                case "Long":
+                    return Long.parseLong(input);
+                case "boolean":
+                case "Boolean":
+                    return input.contains("t");
+                case "double":
+                    return Double.parseDouble(input);
+                case "float":
+                    return Float.parseFloat(input);
+                case "int[]":
+                    return oneIntArray(input);
+                case "int[][]":
+                    return doubleIntArray(input);
+                case "int[][][]":
+                    return threeIntArray(input);
+                case "char":
+                    return input.toCharArray()[0];
+                case "char[]":
+                    return oneCharArray(input);
+                case "char[][]":
+                    return doubleCharArray(input);
+                case "char[][][]":
+                    return threeCharArray(input);
+                case "string":
+                case "String":
+                    return input;
+                case "string[]":
+                case "String[]":
+                    return oneStringArray(input);
+                case "string[][]":
+                case "String[][]":
+                    return doubleStringArray(input);
+                case "string[][][]":
+                case "String[][][]":
+                    return threeStringArray(input);
+                case "TreeNode":
+                    return TreeNode.widthBuildTreeNode(oneStringArray(input));
+                default:
+                    System.out.println(type + " not implement ,place implement!");
+                    return null;
+            }
+        } catch (NumberFormatException e) {
+            // e.printStackTrace();
+            info(type);
+            return null;
         }
 
-        System.out.println("not support !  " + type);
+    }
+
+    private static Object threeStringArray(String input) {
+        System.out.println("string[][][] format not implement");
         return null;
     }
 
@@ -184,20 +217,22 @@ public class ReflectUtils {
         char[] cs = input.toCharArray();
         // [1,2,3,4,45,5,5,100]
         for (char c : cs) {
-            if (c == ' ') continue;
+            if (isIgnore(c)) continue;
             if (c == '[') {
                 sb = new StringBuilder();
             } else if (c == ']' || c == ',') {
-                assert sb != null;
-                try {
-                    ls.add(Integer.parseInt(sb.toString()));
-                } catch (NumberFormatException e) {
-                    // ignore ...
+                if (sb != null) {
+                    try {
+                        ls.add(Integer.parseInt(sb.toString()));
+                    } catch (NumberFormatException e) {
+                        // ignore ...
+                    }
                 }
                 sb = new StringBuilder();
             } else {
-                assert sb != null;
-                sb.append(c);
+                if (sb != null) {
+                    sb.append(c);
+                }
             }
         }
 
@@ -216,21 +251,23 @@ public class ReflectUtils {
         char[] cs = input.toCharArray();
         for (int i = 1; i < cs.length; i++) {
             char c = cs[i];
-            if (c == ' ') continue;
+            if (isIgnore(c)) continue;
 
             if (c == '[') {
                 sb = new StringBuilder();
                 temp = new ArrayList<>();
             } else if (c == ',') {
-                assert sb != null;
-                try {
-                    temp.add(Integer.parseInt(sb.toString()));
+                if (sb != null) {
+                    try {
+                        temp.add(Integer.parseInt(sb.toString()));
 
-                } catch (NumberFormatException e) {
-                    // ignore
-                } finally {
-                    sb = new StringBuilder();
+                    } catch (NumberFormatException e) {
+                        // ignore
+                    } finally {
+                        sb = new StringBuilder();
+                    }
                 }
+
             } else if (c == ']') {
                 assert sb != null;
                 temp.add(Integer.parseInt(sb.toString()));
@@ -239,8 +276,9 @@ public class ReflectUtils {
                 sb = new StringBuilder();
                 temp = new ArrayList<>();
             } else {
-                assert sb != null;
-                sb.append(c);
+                if (sb != null) {
+                    sb.append(c);
+                }
             }
         }
 
@@ -257,6 +295,7 @@ public class ReflectUtils {
     }
 
     public static int[][][] threeIntArray(String input) {
+        System.out.println("int[][][] format data not implement!");
 //        System.out.println("is int[][][]" + ",input = " + input);
         StringBuilder sb = null;
         List<List<List<Integer>>> ls = new ArrayList<>();
@@ -271,7 +310,7 @@ public class ReflectUtils {
         StringBuilder sb = null;
         char[] cs = input.toCharArray();
         for (char c : cs) {
-            if (c == '\'' || c == '\"') continue;
+            if (isIgnore(c)) continue;
             if (c == '[') {
                 sb = new StringBuilder();
                 continue;
@@ -306,7 +345,7 @@ public class ReflectUtils {
         StringBuilder sb = null;
         char[] charArray = input.toCharArray();
         for (char c : charArray) {
-            if (c == '[' || c == ']' || c == ',' || c == '\'' || c == '\"') {
+            if (c == '[' || c == ']' || isIgnore(c)) {
                 continue;
             }
             ls.add(c);
@@ -324,7 +363,8 @@ public class ReflectUtils {
         char[] charArray = input.toCharArray();
         List<Character> temp = null;
         for (char c : charArray) {
-            if (c == ' ' || c == '\'' || c == '\"' || c == '\n' || c == '\t' || c == '\b' || c == ',') continue;
+            if (isIgnore(c) || c == ',')
+                continue;
             if (c == '[') {
                 temp = new ArrayList<>();
             } else if (c == ']') {
@@ -347,5 +387,65 @@ public class ReflectUtils {
             }
         }
         return cs;
+    }
+
+
+    public static char[][][] threeCharArray(String input) {
+        // [["a","b","c"],["a","b","c"]]
+        System.out.println("char[][][] content not implement");
+        return null;
+    }
+
+
+    public static void info(String argType) {
+        switch (argType) {
+            case "boolean":
+                System.out.println("place input a valid boolean content , example true ");
+                break;
+            case "long":
+                System.out.println("place input a valid long number , example 100000000 ");
+                break;
+            case "double":
+                System.out.println("place input a valid double number , example 100.0");
+                break;
+            case "float":
+                System.out.println("place input a valid float number , example 1.1");
+                break;
+            case "int":
+                System.out.println("place input a valid number , example 100,-1 , 0");
+                break;
+            case "int[]":
+                System.out.println("place input this format int[] ,example [1,5,4,2,9,9,9]");
+                break;
+            case "int[][]":
+                System.out.println("place input this format int[][] ,example [[1,2,-1],[4,-1,6],[7,8,9]]");
+                break;
+            case "char":
+                System.out.println("lace input this format char example a ");
+                break;
+            case "char[]":
+                System.out.println("place input this format char[] ,example [\"8\",\"3\",\".\",\".\",\"7\",\".\",\".\",\".\",\".\"]");
+                break;
+            case "char[][]":
+                System.out.println("place input this format char[][] ,example [[\"8\",\"3\",\".\",\".\",\"7\",\".\",\".\",\".\",\".\"],[\".\",\".\",\".\",\".\",\"8\",\".\",\".\",\"7\",\"9\"]]\n");
+                break;
+            case "string[]":
+                System.out.println("place input this format strign[] ,example [\"abbb\",\"ba\",\"aa\"]");
+                break;
+            case "string[][]":
+                System.out.println("place input this format string[][],example [[\"abbb\",\"ba\",\"aa\"],[\"ee\",\"dd\",\"cc\"]");
+                break;
+            case "TreeNode":
+                System.out.println("place input this format TreeNode,example [3,9,20,null,null,15,7]");
+                break;
+            default:
+                System.out.println("unknown support type");
+                break;
+        }
+    }
+
+
+    public static boolean isIgnore(char c) {
+        return c == '\r' || c == '\n' || c == '\t' || c == '\b' || c == '\f' || c == '\0' || c == '\\' || c == ' ' || c == '\'' || c == '\"' || c == '#';
     }
 }

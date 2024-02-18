@@ -80,7 +80,7 @@ public class TreeNode {
         int i = 1;
         while (i < ls.length && !q.isEmpty()) {
             int s = q.size();
-            while (s > 0) {
+            while (s > 0 && i<ls.length) {
                 s--;
                 TreeNode node = q.poll();
                 if (node == null) continue;
@@ -90,6 +90,7 @@ public class TreeNode {
                     q.add(left);
                 }
                 i++;
+                if( i >= ls.length)break;
                 if (!"null".equals(ls[i])) {
                     TreeNode right = new TreeNode(Integer.parseInt(ls[i]));
                     node.right = right;
