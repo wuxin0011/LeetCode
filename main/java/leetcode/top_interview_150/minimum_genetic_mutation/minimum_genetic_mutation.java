@@ -14,9 +14,9 @@ public class minimum_genetic_mutation {
     }
 
     public int minMutation(String startGene, String endGene, String[] bank) {
-        System.out.println(startGene);
-        System.out.println(endGene);
-        System.out.println(Arrays.toString(bank));
+        System.out.println("startGene: " + startGene);
+        System.out.println("endGene : " + endGene);
+        System.out.println("bank:" + Arrays.toString(bank));
         return 0;
     }
 }

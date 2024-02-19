@@ -152,7 +152,7 @@ public class IoUtil {
 
             // 填充参数信息
             for (int i = 0; i < parameterTypes.length && idx < size; i++, idx++) {
-                args[i] = ReflectUtils.parseArg(parameterTypes[i], inputList.get(idx));
+                args[i] = ReflectUtils.parseArg(obj, method.getName(), parameterTypes[i], inputList.get(idx));
             }
 
 
@@ -176,7 +176,7 @@ public class IoUtil {
                     result = args[0];
 
                 }
-                Object expect = ReflectUtils.parseArg(returnName, inputList.get(idx));
+                Object expect = ReflectUtils.parseArg(obj, method.getName(), returnName, inputList.get(idx));
                 if (expect != null && !TestUtils.valid(result, expect, returnName)) {
                     f = false;
                     // break;
@@ -223,9 +223,7 @@ public class IoUtil {
         List<String> ans = new ArrayList<>();
         try {
             if (openLongContent) {
-
                 return parseShpInfo(file);
-
             } else {
                 breder = new BufferedReader(new FileReader(file));
                 String t = null;
@@ -373,9 +371,59 @@ public class IoUtil {
                 }
             }
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         } finally {
+            close(bis);
         }
+    }
+
+    private static final String defaultContent = "List<String>";
+
+    public static <T> String findListReturnTypeMethod(Class<T> c, String name, String returnType) {
+
+        if (c == null) {
+            System.out.println("error t is null");
+            return defaultContent;
+        }
+
+        String path = buildAbsolutePath(c) + c.getSimpleName() + ".java";
+        File file = new File(path);
+        if (!file.exists()) {
+            System.out.println(file.getAbsolutePath() + "Not found !");
+            return defaultContent;
+        }
+        BufferedReader bis = null;
+        String s = null;
+        try {
+            bis = new BufferedReader(new FileReader(file));
+            while ((s = bis.readLine()) != null) {
+                if (s.contains(name + "(")) {
+                    break;
+                }
+            }
+        } catch (Exception e) {
+            close(bis);
+        }
+
+        if (s == null) {
+            return defaultContent;
+        }
+        String regex = "List".equals(returnType) ? "List<(.+)>" : "ArrayList<(.+)>";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(s);
+
+        try {
+            if (matcher.find()) {
+                return returnType + "<" + matcher.group(1) + ">";
+            } else {
+                System.out.println("No match found.");
+                return defaultContent;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return defaultContent;
+        }
+
     }
 
 

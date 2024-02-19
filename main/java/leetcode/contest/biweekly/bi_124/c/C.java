@@ -47,12 +47,10 @@ public class C {
     }
 
     public static String createKey(int i, int j, int target) {
-        StringBuilder sb = new StringBuilder();
-        sb.append(i);
-        sb.append(":");
-        sb.append(j);
-        sb.append(":");
-        sb.append(target);
-        return sb.toString();
+        return i +
+                ":" +
+                j +
+                ":" +
+                target;
     }
 }

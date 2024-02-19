@@ -8,7 +8,7 @@ import leetcode.utils.IoUtil;
  */
 public class B {
     public static void main(String[] args) {
-        IoUtil.testUtil(B.class);
+        IoUtil.testUtil(B.class,"lastNonEmptyString");
     }
 
     public String lastNonEmptyString(String s) {

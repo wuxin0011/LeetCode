@@ -8,7 +8,7 @@ import leetcode.utils.IoUtil;
  */
 public class A {
     public static void main(String[] args) {
-        IoUtil.testUtil(A.class);
+        IoUtil.testUtil(A.class,"maxOperations");
     }
 
     public int maxOperations(int[] nums) {

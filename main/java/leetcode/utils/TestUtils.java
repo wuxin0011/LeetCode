@@ -3,9 +3,7 @@ package leetcode.utils;
 import leetcode.function.Expect;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author: wuxin0011
@@ -84,7 +82,7 @@ public class TestUtils {
             }
         }
         if (idx == -1) {
-            System.out.println("ok");
+            // System.out.println("ok");
             return true;
         } else {
             System.out.println("error");
@@ -143,9 +141,78 @@ public class TestUtils {
 
     }
 
+
+    public static boolean deepEqual(ListNode result, ListNode expect) {
+        if (result == expect) return true;
+
+        if (result == null || expect == null) return false;
+
+        while (result != null && expect != null) {
+            if (result.val != expect.val) {
+                System.out.println("result = " + result.val + ",expect = " + expect.val);
+                return false;
+            }
+            result = result.next;
+            expect = expect.next;
+        }
+
+        if (result != expect) {
+            System.out.println("node length not equal");
+            return false;
+        }
+        return true;
+    }
+
+
+    public static boolean deepEqual(TreeNode result, TreeNode expect) {
+        if (result == expect) return true;
+        if (result == null || expect == null) return false;
+
+        Deque<TreeNode> rq = new ArrayDeque<>();
+        Deque<TreeNode> eq = new ArrayDeque<>();
+        rq.add(result);
+        eq.add(expect);
+
+        while (!rq.isEmpty() && !eq.isEmpty()) {
+            int s1 = rq.size();
+            int s2 = eq.size();
+            if (s1 != s2) {
+                return false;
+            }
+            int size = s1;
+            while (size > 0) {
+                size--;
+                TreeNode rNode = rq.poll();
+                TreeNode eNode = eq.poll();
+                if (rNode == null || eNode == null) {
+                    return false;
+                }
+                if (rNode.val != eNode.val) {
+                    return false;
+                }
+
+                if (rNode.left != null) {
+                    rq.add(rNode.left);
+                }
+                if (rNode.right != null) {
+                    rq.add(rNode.right);
+                }
+
+                if (eNode.left != null) {
+                    eq.add(eNode.left);
+                }
+                if (eNode.right != null) {
+                    eq.add(eNode.right);
+                }
+
+            }
+        }
+        return rq.size() == eq.size();
+    }
+
     public static <T> boolean deepEqual(T[][][] a, T[][][] b) {
         if (a == b) {
-            System.out.println("ok");
+            // System.out.println("ok");
             return true;
         }
         if (a == null || b == null || a.length != b.length || a[0].length != b[0].length || a[0][0].length != b[0][0].length) {
@@ -230,7 +297,18 @@ public class TestUtils {
                     Character[][] r = covert((char[][]) result);
                     return deepEqual(r, e);
                 }
+                case "TreeNode": {
+                    TreeNode e = (TreeNode) expect;
+                    TreeNode r = (TreeNode) result;
+                    return deepEqual(r, e);
+                }
+                case "ListNode": {
+                    ListNode e = (ListNode) expect;
+                    ListNode r = (ListNode) result;
+                    return deepEqual(r, e);
+                }
 
+                case "List":
                 case "ArrayList":
                     return deepEqual((ArrayList<Object>) result, (ArrayList<Object>) expect);
                 default:
