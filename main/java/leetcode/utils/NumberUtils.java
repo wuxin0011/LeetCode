@@ -1,6 +1,6 @@
 package leetcode.utils;
 
-import leetcode.sort.array.ArraySort;
+import leetcode.base.array.sort.ArraySort;
 
 import java.util.Arrays;
 import java.util.Random;

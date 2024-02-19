@@ -6,6 +6,6 @@ package leetcode.contest.template.t1.d;
  */
 public class D {
     public static void main(String[] args) {
-
+        // IoUtil.testUtil();
     }
 }
