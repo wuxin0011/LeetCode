@@ -46,14 +46,7 @@ public class IoUtil {
     }
 
 
-    /**
-     * 必须文件名为 in.txt
-     * 如果没有传入方法名将使用 class 中除main方法外的一个方法 如果只有一个或者两个方法名
-     * 将会调用默认方法
-     *
-     * @param c
-     * @param <T>
-     */
+
     public static <T> void testUtil(Class<T> c) {
         testUtil(c, DEFAULT_METHOD_NAME, DEFAULT_READ_FILE);
     }
@@ -104,7 +97,7 @@ public class IoUtil {
                 names.add(method.getName());
             }
             // System.out.println("names = " + names);
-            if (names.size() > 0 && DEFAULT_READ_FILE.equals(methodName)) {
+            if (names.size() > 0 && DEFAULT_METHOD_NAME.equals(methodName)) {
                 for (String name : names) {
                     if (name.equals("main") || name.startsWith("lambda$") || "f".equals(name) || "dfs".equals(name)) {
                         continue;
@@ -190,7 +183,7 @@ public class IoUtil {
             idx++;
         }
         if (f) {
-            System.out.println("success");
+            System.out.println("Accepted!");
         } else {
             System.err.println("fail");
         }
