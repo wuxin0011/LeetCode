@@ -27,7 +27,7 @@ public class IoUtil {
     /**
      * 默认文件名
      */
-    public static final String DEFAULT_READ_FILE = "in.txt";
+    public static final String DEFAULT_READ_FILE = "b-is-same-d.txt";
 
 
     /**

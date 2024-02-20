@@ -11,7 +11,7 @@ import java.util.Arrays;
 public class valid_sudoku {
 
     public static void main(String[] args) {
-        IoUtil.testUtil(valid_sudoku.class, "isValidSudoku", "in.txt", true);
+        IoUtil.testUtil(valid_sudoku.class, "isValidSudoku", "b-is-same-d.txt", true);
     }
 
     public boolean isValidSudoku(char[][] board) {

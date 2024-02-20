@@ -11,7 +11,7 @@ import java.util.List;
  */
 public class a_phone_number {
     public static void main(String[] args) {
-        IoUtil.testUtil(a_phone_number.class, "letterCombinations", "in.txt", false);
+        IoUtil.testUtil(a_phone_number.class, "letterCombinations", "b-is-same-d.txt", false);
     }
 
     private static final String[] Mapping = {"", "", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
