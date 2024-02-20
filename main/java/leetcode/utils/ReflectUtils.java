@@ -6,6 +6,8 @@ import leetcode.utils.Bean.Type;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
+
 
 /**
  * @author: wuxin0011
@@ -17,14 +19,24 @@ public class ReflectUtils {
     private static final String EMPTY_STR = "";
 
     public static void main(String[] args) {
-        // test ...
-        System.out.println(TreeNode.class.getSimpleName());
-//        List<List<Integer>> ans = new ArrayList<>();
-//        ArrayList<Integer> integers = new ArrayList<>();
-//        integers.add(100);
-//        ans.add(integers);
-//        System.out.println(ans.getClass().getSimpleName());
-//        System.out.println(ans.get(0).getClass().getSimpleName());
+        IoUtil.testUtil(ReflectUtils.class, "t1", "test.txt");
+    }
+
+
+    public static int t1(int[][][] arr) {
+        // System.out.println("result=>" + Arrays.deepToString(arr));
+        int max = 0;
+        for (int i = 0; i < arr.length; i++) {
+            for (int j = 0; j < arr[i].length; j++) {
+                int t = 0;
+                // System.out.println("arr[][] = >" + Arrays.toString(arr[i][j]));
+                for (int z = 0; z < arr[i][j].length; z++) {
+                    t += arr[i][j][z];
+                }
+                max = Math.max(max, t);
+            }
+        }
+        return max;
     }
 
     public static <T> String getClassInfo(Class<T> c) {
@@ -161,8 +173,12 @@ public class ReflectUtils {
                 case "boolean":
                 case "Boolean":
                     return input.contains("t");
+                case "boolean[]":
+                    return oneBooleanArray(input);
                 case "double":
                     return Double.parseDouble(input);
+                case "double[]":
+                    return oneDoubleArray(input);
                 case "float":
                     return Float.parseFloat(input);
                 case "int[]":
@@ -204,11 +220,44 @@ public class ReflectUtils {
             }
         } catch (NumberFormatException e) {
             // e.printStackTrace();
-            info(type);
+            errorInfo(type);
             return null;
         }
 
     }
+
+
+    public static <T> Object toList(Class<T> t, String methodName, String type, String input) {
+        String listType = IoUtil.findListReturnTypeMethod(t, methodName, type);
+        switch (listType) {
+            case "List<String>":
+                return parseListString(input);
+            case "List<List<String>>":
+                return parseDoubleString(input);
+            case "List<List<List<String>>>":
+                return parseThreeString(input);
+            case "List<Integer>":
+                return parseListInteger(input);
+            case "List<Boolean>":
+                return parseListBoolean(input);
+            case "List<Double>":
+                return parseDoubleList(input);
+            case "List<List<Integer>>":
+                return parseListDoubleInteger(input);
+            case "List<List<List<Integer>>>":
+                return parseListThreeInteger(input);
+            case "List<Character>":
+                return parseListChar(input);
+            case "List<List<Character>>":
+                return parseListDoubleChar(input);
+            case "List<List<List<Character>>>":
+                return parseThreeCharArray(input);
+            default:
+                System.err.println("NOT implement" + listType + ",place implement this ,default convert string list");
+                return parseListString(input);
+        }
+    }
+
 
     public static String toString(String input) {
         char[] charArray = input.toCharArray();
@@ -220,11 +269,49 @@ public class ReflectUtils {
         return sb.toString();
     }
 
-    private static Object threeStringArray(String input) {
-        System.out.println("string[][][] format not implement");
-        return null;
+
+    public static boolean[] oneBooleanArray(String input) {
+        List<Boolean> ls = parseListBoolean(input);
+        boolean[] ans = new boolean[ls.size()];
+        for (int i = 0; i < ls.size(); i++) {
+            ans[i] = ls.get(i);
+        }
+        return ans;
     }
 
+    private static List<Boolean> parseListBoolean(String input) {
+        List<String> strings = parseListString(input);
+        List<Boolean> ans = new ArrayList<>();
+        for (String s : strings) {
+            if (s.contains("t")) ans.add(true);
+            else ans.add(false);
+        }
+        return ans;
+    }
+
+
+    public static double[] oneDoubleArray(String input) {
+        List<Double> ls = parseDoubleList(input);
+        double[] ans = new double[ls.size()];
+        for (int i = 0; i < ls.size(); i++) {
+            ans[i] = ls.get(i);
+        }
+        return ans;
+    }
+
+
+    public static List<Double> parseDoubleList(String input) {
+        List<String> list = parseListString(input);
+        ArrayList<Double> doubles = new ArrayList<>();
+        for (String s : list) {
+            try {
+                doubles.add(Double.parseDouble(s));
+            } catch (NumberFormatException e) {
+                // ignore
+            }
+        }
+        return doubles;
+    }
 
     public static int[] oneIntArray(String input) {
         List<Integer> ls = parseListInteger(input);
@@ -240,42 +327,32 @@ public class ReflectUtils {
         int row = ls.size(), col = ls.get(0).size();
         int[][] ans = new int[row][col];
         for (int i = 0; i < row; i++) {
-            List<Integer> t = ls.get(i);
             for (int j = 0; j < col; j++) {
-                ans[i][j] = t.get(j);
+                ans[i][j] = ls.get(i).get(j);
             }
         }
         return ans;
     }
 
     public static int[][][] threeIntArray(String input) {
-        System.out.println("int[][][] format data not implement!");
-//        System.out.println("is int[][][]" + ",input = " + input);
-        StringBuilder sb = null;
-        List<List<List<Integer>>> ls = new ArrayList<>();
-        List<Integer> temp = new ArrayList<>();
-        // TODO ...
-        // System.out.println("int[][][] convert=>" + Arrays.deepToString(ans));
-        return null;
-    }
-
-
-    public static String[] oneStringArray(String input) {
-        List<String> ls = parseListString(input);
-        String[] ans = new String[ls.size()];
+        List<List<List<Integer>>> ls = parseListThreeInteger(input);
+        int[][][] result = new int[ls.size()][][];
         for (int i = 0; i < ls.size(); i++) {
-            ans[i] = ls.get(i);
+            List<List<Integer>> d = ls.get(i);
+            result[i] = new int[d.size()][];
+            for (int j = 0; j < d.size(); j++) {
+                List<Integer> t = d.get(j);
+                result[i][j] = new int[t.size()];
+                for (int k = 0; k < t.size(); k++) {
+                    result[i][j][k] = t.get(k);
+                }
+            }
         }
-        return ans;
-    }
-
-    public static String[][] doubleStringArray(String input) {
-        return null;
+        return result;
     }
 
 
     public static char[] oneCharArray(String input) {
-        // ["a","b","c"]
         List<Character> ls = parseListChar(input);
         char[] cs = new char[ls.size()];
         for (int i = 0; i < ls.size(); i++) {
@@ -297,39 +374,267 @@ public class ReflectUtils {
         return cs;
     }
 
-    public static <T> Object toList(Class<T> t, String methodName, String type, String input) {
-        ArrayList<Object> ans = new ArrayList<>();
-        // check
-        // System.out.println("input ======>" + input);
-        String listType = IoUtil.findListReturnTypeMethod(t, methodName, type);
-        switch (listType) {
-            case "List<String>":
-                return parseListString(input);
-            case "List<Integer>":
-            case "ArrayList<Integer>":
-                return parseListInteger(input);
-            case "List<List<Integer>>":
-                return parseListDoubleInteger(input);
-            case "List<Character>":
-            case "ArrayList<Character>":
-                return parseListChar(input);
-            case "List<List<Character>>":
-                return parseListDoubleChar(input);
-            default:
-                System.out.println("NOT implement" + listType + ",place implement this ,default convert string list");
-                return parseListString(input);
-        }
-    }
-
 
     public static char[][][] threeCharArray(String input) {
-        // [["a","b","c"],["a","b","c"]]
-        System.out.println("char[][][] content not implement");
-        return null;
+        List<List<List<Character>>> lists = parseThreeCharArray(input);
+        int row = lists.size(), col = lists.get(0).size(), vol = lists.get(0).get(0).size();
+        char[][][] ans = new char[row][col][vol];
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < col; j++) {
+                for (int z = 0; z < vol; z++) {
+                    ans[i][j][z] = lists.get(i).get(j).get(z);
+                }
+            }
+        }
+        return ans;
     }
 
 
-    public static void info(String argType) {
+    public static boolean isIgnore(char c) {
+        return c == '\r' || c == '\n' || c == '\t' || c == '\b' || c == '\f' || c == '\0' || c == '\\' || c == ' ' || c == '\'' || c == '\"' || c == '#';
+    }
+
+
+    public static List<Integer> parseListInteger(String input) {
+        List<String> strings = parseListString(input);
+        ArrayList<Integer> ans = new ArrayList<>();
+        for (String s : strings) {
+            try {
+                ans.add(Integer.parseInt(s));
+            } catch (NumberFormatException e) {
+                // ignore
+            }
+        }
+        return ans;
+    }
+
+    public static List<List<Integer>> parseListDoubleInteger(String input) {
+        List<List<Integer>> ls = new ArrayList<>();
+        List<List<String>> lists = parseDoubleString(input);
+        for (List<String> row : lists) {
+            if (row == null) {
+                continue;
+            }
+            List<Integer> temp = new ArrayList<>();
+            for (String s : row) {
+                if (s == null) continue;
+                try {
+                    temp.add(Integer.parseInt(s));
+                } catch (NumberFormatException e) {
+                    // ignore
+                }
+            }
+            ls.add(temp);
+        }
+        return ls;
+    }
+
+    public static List<List<List<Integer>>> parseListThreeInteger(String input) {
+        List<List<List<Integer>>> ans = new ArrayList<>();
+        List<List<List<String>>> lists = parseThreeString(input);
+        for (List<List<String>> list : lists) {
+            List<List<Integer>> d = new ArrayList<>();
+            if (list == null) continue;
+            for (List<String> strings : list) {
+                if (strings == null) continue;
+                List<Integer> t = new ArrayList<>();
+                for (String string : strings) {
+                    if (string == null) continue;
+                    t.add(Integer.parseInt(string));
+                }
+                d.add(t);
+            }
+            ans.add(d);
+        }
+        return ans;
+    }
+
+
+    public static List<Character> parseListChar(String input) {
+        List<Character> ls = new ArrayList<>();
+        List<String> strings = parseListString(input);
+        for (String s : strings) {
+            ls.add(s.charAt(0));
+        }
+        return ls;
+    }
+
+    public static List<List<Character>> parseListDoubleChar(String input) {
+        List<List<String>> lists = parseDoubleString(input);
+        List<List<Character>> ls = new ArrayList<>();
+        List<Character> temp = null;
+        for (List<String> row : lists) {
+            temp = new ArrayList<>();
+            for (String s : row) {
+                temp.add(s.charAt(0));
+            }
+            ls.add(temp);
+        }
+        return ls;
+    }
+
+    public static List<List<List<Character>>> parseThreeCharArray(String input) {
+        List<List<List<Character>>> ans = new ArrayList<>();
+        List<List<List<String>>> lists = parseThreeString(input);
+        for (List<List<String>> list : lists) {
+            List<List<Character>> d = new ArrayList<>();
+            if (list == null) continue;
+            for (List<String> strings : list) {
+                if (strings == null) continue;
+                List<Character> t = new ArrayList<>();
+                for (String string : strings) {
+                    if (string == null) continue;
+                    t.add(string.charAt(0));
+                }
+                d.add(t);
+            }
+            ans.add(d);
+        }
+        return ans;
+    }
+
+
+    public static String[] oneStringArray(String input) {
+        List<String> ls = parseListString(input);
+        String[] ans = new String[ls.size()];
+        for (int i = 0; i < ls.size(); i++) {
+            ans[i] = ls.get(i);
+        }
+        return ans;
+    }
+
+    public static String[][] doubleStringArray(String input) {
+        List<List<String>> lists = parseDoubleString(input);
+        int row = lists.size(), col = lists.get(0).size();
+        String[][] ans = new String[row][col];
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < col; j++) {
+                ans[i][j] = lists.get(i).get(j);
+            }
+        }
+        return ans;
+    }
+
+    public static String[][][] threeStringArray(String input) {
+        List<List<List<String>>> lists = parseThreeString(input);
+        int row = lists.size(), col = lists.get(0).size(), vol = lists.get(0).get(0).size();
+        String[][][] ans = new String[row][col][vol];
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < col; j++) {
+                for (int z = 0; z < vol; z++) {
+                    ans[i][j][z] = lists.get(i).get(j).get(z);
+                }
+            }
+        }
+        return ans;
+    }
+
+
+    public static List<String> parseListString(String input) {
+        List<String> ls = new ArrayList<>();
+        StringBuilder sb = null;
+        char[] cs = input.toCharArray();
+        for (char c : cs) {
+            if (c == '[') {
+                sb = new StringBuilder();
+                continue;
+            }
+            if (sb == null) break;
+            if (c == ']') {
+                ls.add(sb.toString());
+                break;
+            } else if (c == ',') {
+                ls.add(sb.toString());
+                sb = new StringBuilder();
+            } else {
+                sb.append(c);
+            }
+        }
+        return ls;
+    }
+
+
+    public static List<List<String>> parseDoubleString(String input) {
+        StringBuilder sb = null;
+        List<List<String>> ls = new ArrayList<>();
+        List<String> temp = null;
+        Stack<Character> sk = new Stack<>();
+        char[] cs = input.toCharArray();
+        for (int i = 0; i < cs.length; i++) {
+            char c = cs[i];
+            if (c == '[') {
+                sk.push(c);
+                if (sk.size() == 2) temp = new ArrayList<>();
+            } else if (c == ']') {
+                sk.pop();
+                if (sb != null && temp != null) {
+                    temp.add(sb.toString());
+                    ls.add(temp);
+                }
+                sb = null;
+                temp = null;
+            } else if (c == ',') {
+                if (temp != null && sb != null) {
+                    temp.add(sb.toString());
+                    sb = new StringBuilder();
+                }
+            } else {
+                if (sb == null) {
+                    sb = new StringBuilder();
+                }
+                sb.append(c);
+            }
+        }
+
+        return ls;
+    }
+
+
+    public static List<List<List<String>>> parseThreeString(String input) {
+        List<List<List<String>>> ans = new ArrayList<>();
+        char[] charArray = input.toCharArray();
+        StringBuilder sb = new StringBuilder();
+        boolean f1 = false, f2 = false, f3 = false;
+        List<List<String>> d = new ArrayList<>();
+        List<String> t = new ArrayList<>();
+        Stack<Character> sk = new Stack<>();
+        for (char c : charArray) {
+            if (isIgnore(c)) continue;
+            if (c == '[') {
+                sk.push(c);
+                if (sk.size() == 2) {
+                    d = new ArrayList<>();
+                } else if (sk.size() == 3) {
+                    t = new ArrayList<>();
+                }
+            } else if (c == ']') {
+                sk.pop();
+                if (sk.size() == 1) {
+                    ans.add(d);
+                } else if (sk.size() == 2) {
+                    if (sb != null) {
+                        t.add(sb.toString());
+                        sb = null;
+                    }
+                    d.add(t);
+                }
+            } else if (c == ',') {
+                if (sb != null) {
+                    t.add(sb.toString());
+                }
+                sb = null;
+            } else {
+                if (sb == null) {
+                    sb = new StringBuilder();
+                }
+                sb.append(c);
+            }
+        }
+        return ans;
+    }
+
+
+    public static void errorInfo(String argType) {
         switch (argType) {
             case "boolean":
                 System.out.println("place input a valid boolean content , example true ");
@@ -362,9 +667,9 @@ public class ReflectUtils {
             case "char[][]":
                 System.out.println("place input this format char[][] ,example [[\"8\",\"3\",\".\",\".\",\"7\",\".\",\".\",\".\",\".\"],[\".\",\".\",\".\",\".\",\"8\",\".\",\".\",\"7\",\"9\"]]\n");
                 break;
-            case "List<String>":
+            case "List":
             case "string[]":
-                System.out.println("place input this format List<String> ,example [\"abbb\",\"ba\",\"aa\"]");
+                System.out.println("place input this format List<String> ,example [\"abbb\",\"ba\",\"aa\"] if content is List<Integer> [1,5,4,2,9,9,9]");
                 break;
             case "string[][]":
                 System.out.println("place input this format string[][],example [[\"abbb\",\"ba\",\"aa\"],[\"ee\",\"dd\",\"cc\"]");
@@ -377,137 +682,5 @@ public class ReflectUtils {
                 break;
         }
     }
-
-
-    public static boolean isIgnore(char c) {
-        return c == '\r' || c == '\n' || c == '\t' || c == '\b' || c == '\f' || c == '\0' || c == '\\' || c == ' ' || c == '\'' || c == '\"' || c == '#';
-    }
-
-
-    public static List<Integer> parseListInteger(String input) {
-        List<Integer> ls = new ArrayList<>();
-        StringBuilder sb = null;
-        char[] cs = input.toCharArray();
-        // [1,2,3,4,45,5,5,100]
-        for (char c : cs) {
-            if (c == '[') {
-                sb = new StringBuilder();
-            } else if (c == ']' || c == ',') {
-                if (sb != null) {
-                    try {
-                        ls.add(Integer.parseInt(sb.toString()));
-                    } catch (NumberFormatException e) {
-                        // ignore ...
-                    }
-                }
-                sb = new StringBuilder();
-            } else {
-                if (sb != null) {
-                    sb.append(c);
-                }
-            }
-        }
-        return ls;
-    }
-
-    public static List<List<Integer>> parseListDoubleInteger(String input) {
-        StringBuilder sb = null;
-        List<List<Integer>> ls = new ArrayList<>();
-        List<Integer> temp = new ArrayList<>();
-        char[] cs = input.toCharArray();
-        for (int i = 1; i < cs.length; i++) {
-            char c = cs[i];
-            if (c == '[') {
-                sb = new StringBuilder();
-                temp = new ArrayList<>();
-            } else if (c == ',') {
-                if (sb != null) {
-                    try {
-                        temp.add(Integer.parseInt(sb.toString()));
-
-                    } catch (NumberFormatException e) {
-                        // ignore
-                    } finally {
-                        sb = new StringBuilder();
-                    }
-                }
-
-            } else if (c == ']') {
-                if (sb != null) {
-                    temp.add(Integer.parseInt(sb.toString()));
-                    ls.add(temp);
-                    if (i == cs.length - 2 || cs[i + 1] == ']') break;
-                    sb = new StringBuilder();
-                    temp = new ArrayList<>();
-                }
-            } else {
-                if (sb != null) {
-                    sb.append(c);
-                }
-            }
-        }
-
-        return ls;
-    }
-
-    public static List<String> parseListString(String input) {
-        List<String> ls = new ArrayList<>();
-        StringBuilder sb = null;
-        char[] cs = input.toCharArray();
-        for (char c : cs) {
-            if (c == '[') {
-                sb = new StringBuilder();
-                continue;
-            }
-            if (sb == null) break;
-            if (c == ']') {
-                ls.add(sb.toString());
-                break;
-            } else if (c == ',') {
-                ls.add(sb.toString());
-                sb = new StringBuilder();
-            } else {
-                sb.append(c);
-            }
-        }
-        return ls;
-    }
-
-    public static List<Character> parseListChar(String input) {
-        List<Character> ls = new ArrayList<>();
-        StringBuilder sb = null;
-        char[] charArray = input.toCharArray();
-        for (char c : charArray) {
-            if (c == '[' || c == ']' || c == ',' || isIgnore(c)) {
-                continue;
-            }
-            ls.add(c);
-        }
-        return ls;
-    }
-
-    public static List<List<Character>> parseListDoubleChar(String input) {
-        List<List<Character>> ls = new ArrayList<>();
-        char[] charArray = input.toCharArray();
-        List<Character> temp = null;
-        for (char c : charArray) {
-            if (c == ',')
-                continue;
-            if (c == '[') {
-                temp = new ArrayList<>();
-            } else if (c == ']') {
-                if (temp != null) {
-                    ls.add(temp);
-                }
-                temp = null;
-            } else {
-                if (temp != null) {
-                    temp.add(c);
-                }
-            }
-        }
-        return ls;
-    }
-
 
 }

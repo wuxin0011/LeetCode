@@ -2,6 +2,7 @@ package leetcode.utils;
 
 import leetcode.function.Expect;
 
+import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -324,8 +325,34 @@ public class TestUtils {
         }
     }
 
+
     public static Integer[] covert(int[] a) {
         Integer[] t = new Integer[a.length];
+        for (int i = 0; i < a.length; i++) {
+            t[i] = a[i];
+        }
+        return t;
+    }
+
+    public static Long[] covert(long[] a) {
+        Long[] t = new Long[a.length];
+        for (int i = 0; i < a.length; i++) {
+            t[i] = a[i];
+        }
+        return t;
+    }
+
+
+    public static Float[] covert(float[] a) {
+        Float[] t = new Float[a.length];
+        for (int i = 0; i < a.length; i++) {
+            t[i] = a[i];
+        }
+        return t;
+    }
+
+    public static Double[] covert(double[] a) {
+        Double[] t = new Double[a.length];
         for (int i = 0; i < a.length; i++) {
             t[i] = a[i];
         }
@@ -371,6 +398,34 @@ public class TestUtils {
                     t[i][j][k] = a[i][j][k];
                 }
             }
+        }
+        return t;
+    }
+
+
+    public static Character[][][] covert(char[][][] a) {
+        int m = a.length, n = a[0].length, z = a[0][0].length;
+        Character[][][] t = new Character[m][n][z];
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                for (int k = 0; k < z; k++) {
+                    t[i][j][k] = a[i][j][k];
+                }
+            }
+        }
+        return t;
+    }
+
+
+    public static <T> T[] covert(Object[] a, Class<T> c) {
+        T[] t = (T[]) Array.newInstance(c, a.length);
+        try {
+            for (int i = 0; i < a.length; i++) {
+                t[i] = (T) a[i];
+            }
+        } catch (Exception e) {
+            // ignore
+
         }
         return t;
     }

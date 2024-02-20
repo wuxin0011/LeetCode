@@ -151,6 +151,7 @@ public class IoUtil {
 
             if (idx >= size) {
                 f = false;
+                System.out.println("place check result match");
                 break;
             }
 
