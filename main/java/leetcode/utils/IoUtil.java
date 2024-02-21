@@ -51,9 +51,6 @@ public class IoUtil {
         testUtil(c, DEFAULT_METHOD_NAME, DEFAULT_READ_FILE);
     }
 
-    public String t1(String a) {
-        return a;
-    }
 
 
     public static <T> void testUtil(Class<T> c, String fileName, boolean openLongContent) {
@@ -150,8 +147,8 @@ public class IoUtil {
 
 
             if (idx >= size) {
-                f = false;
                 System.out.println("place check result match");
+                f = false;
                 break;
             }
 
@@ -161,14 +158,11 @@ public class IoUtil {
                 result = method.invoke(obj, args);
                 // 对比预期结果和实际结果
                 String returnName = method.getReturnType().getSimpleName();
-                // System.out.println("return simpleName = " + returnName);
                 if ("void".equals(returnName) && result == null) {
-                    // System.out.println("result type is void place implement this valid method\n");
                     // todo 没有返回值时候如何处理呢 ？
                     // 暂时处理成如果是 void 类型，将转换成第一个参数类型然后比较
                     returnName = parameterTypes[0].getSimpleName();
                     result = args[0];
-
                 }
                 Object expect = ReflectUtils.parseArg(obj, method.getName(), returnName, inputList.get(idx));
                 if (expect != null && !TestUtils.valid(result, expect, returnName)) {

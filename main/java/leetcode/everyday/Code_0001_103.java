@@ -1,5 +1,6 @@
 package leetcode.everyday;
 
+import leetcode.utils.IoUtil;
 import leetcode.utils.TreeNode;
 
 import java.util.ArrayDeque;
@@ -10,14 +11,12 @@ import java.util.List;
 /**
  * @author: wuxin0011
  * @Description: 二叉树的锯齿形层序遍历
+ * @url https://leetcode.cn/problems/binary-tree-zigzag-level-order-traversal
  */
 public class Code_0001_103 {
 
     public static void main(String[] args) {
-        Integer[] ls = {3, 9, 20, null, null, 15, 7};
-        TreeNode treeNode = TreeNode.widthBuildTreeNode(ls);
-        Code_0001_103 solution = new Code_0001_103();
-        System.out.println(solution.zigzagLevelOrder(treeNode));
+        IoUtil.testUtil(Code_0001_103.class,"zigzagLevelOrder","./txt_file/Code_0001_103.txt");
     }
 
     public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
