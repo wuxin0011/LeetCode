@@ -13,7 +13,7 @@ import java.util.List;
 @SuppressWarnings("all")
 public class D {
     public static void main(String[] args) {
-        IoUtil.testUtil(D.class, "beautifulIndices", "in.txt");
+        IoUtil.testUtil(D.class, "beautifulIndices", "surrounded_regions.txt");
     }
 
     public List<Integer> beautifulIndices(String s, String a, String b, int k) {

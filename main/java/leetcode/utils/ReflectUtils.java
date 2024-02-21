@@ -566,7 +566,9 @@ public class ReflectUtils {
                 sk.push(c);
                 if (sk.size() == 2) temp = new ArrayList<>();
             } else if (c == ']') {
-                sk.pop();
+                if (!sk.isEmpty()) {
+                    sk.pop();
+                }
                 if (sb != null && temp != null) {
                     temp.add(sb.toString());
                     ls.add(temp);
@@ -608,7 +610,9 @@ public class ReflectUtils {
                     t = new ArrayList<>();
                 }
             } else if (c == ']') {
-                sk.pop();
+                if (!sk.isEmpty()) {
+                    sk.pop();
+                }
                 if (sk.size() == 1) {
                     ans.add(d);
                 } else if (sk.size() == 2) {
