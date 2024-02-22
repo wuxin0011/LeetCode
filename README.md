@@ -180,3 +180,21 @@ Java
 // TODO 补充其他格式
 
 ```
+
+
+### 注意
+
+> 如果使用的跟目录请修改 [点这里](./main/java/leetcode.utils/IoUtil.java)
+
+
+我这里是`main/java/`作为根路径
+
+```java
+public static final String[] DEFAULT_ROOTS = {"main", "java"};
+```
+
+如果是`src`目录作为根路径
+```java
+public static final String[] DEFAULT_ROOTS = {"src"};
+```
+

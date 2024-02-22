@@ -279,14 +279,14 @@ public class TestUtils {
                     Integer[][][] r = covert((int[][][]) result);
                     return deepEqual(r, e);
                 }
-                case "string[]": {
+                case "String[]": {
                     String[] r = (String[]) result;
                     String[] e = (String[]) expect;
                     return deepEqual(r, e);
                 }
-                case "string[][]":
+                case "String[][]":
                     return deepEqual((String[][]) result, (String[][]) expect);
-                case "string[][][]":
+                case "String[][][]":
                     return deepEqual((String[][][]) result, (String[][][]) expect);
                 case "char[]": {
                     Character[] e = covert((char[]) expect);
@@ -296,6 +296,11 @@ public class TestUtils {
                 case "char[][]": {
                     Character[][] e = covert((char[][]) expect);
                     Character[][] r = covert((char[][]) result);
+                    return deepEqual(r, e);
+                }
+                case "char[][][]": {
+                    Character[][][] e = covert((char[][][]) expect);
+                    Character[][][] r = covert((char[][][]) result);
                     return deepEqual(r, e);
                 }
                 case "TreeNode": {
@@ -314,8 +319,16 @@ public class TestUtils {
                     return deepEqual((ArrayList<Object>) result, (ArrayList<Object>) expect);
                 default:
                     boolean t = expect != null && expect.equals(result);
-                    if (!t) {
-                        System.err.println("expect result = " + expect + ",but result = " + result);
+                    boolean isArray = expect != null && expect.getClass().getSimpleName().contains("[]");
+                    if (isArray) {
+                        t = Arrays.deepEquals((Object[]) result, (Object[]) expect);
+                        if (!t) {
+                            System.err.println("expect result = " + Arrays.deepToString((Object[]) expect) + ",but result = " + Arrays.deepToString((Object[]) result));
+                        }
+                    } else {
+                        if(!t){
+                            System.err.println("expect result = " + expect + ",but result = " + result);
+                        }
                     }
                     return t;
             }

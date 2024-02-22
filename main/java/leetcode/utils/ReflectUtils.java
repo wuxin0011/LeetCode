@@ -327,7 +327,7 @@ public class ReflectUtils {
         int row = ls.size(), col = ls.get(0).size();
         int[][] ans = new int[row][col];
         for (int i = 0; i < row; i++) {
-            for (int j = 0; j < col; j++) {
+            for (int j = 0; j < ls.get(i).size(); j++) {
                 ans[i][j] = ls.get(i).get(j);
             }
         }
@@ -380,8 +380,8 @@ public class ReflectUtils {
         int row = lists.size(), col = lists.get(0).size(), vol = lists.get(0).get(0).size();
         char[][][] ans = new char[row][col][vol];
         for (int i = 0; i < row; i++) {
-            for (int j = 0; j < col; j++) {
-                for (int z = 0; z < vol; z++) {
+            for (int j = 0; j < lists.get(i).size(); j++) {
+                for (int z = 0; z < lists.get(i).get(j).size(); z++) {
                     ans[i][j][z] = lists.get(i).get(j).get(z);
                 }
             }
@@ -440,7 +440,11 @@ public class ReflectUtils {
                 List<Integer> t = new ArrayList<>();
                 for (String string : strings) {
                     if (string == null) continue;
-                    t.add(Integer.parseInt(string));
+                    try {
+                        t.add(Integer.parseInt(string));
+                    } catch (NumberFormatException e) {
+                        // ignore
+                    }
                 }
                 d.add(t);
             }
@@ -508,7 +512,7 @@ public class ReflectUtils {
         int row = lists.size(), col = lists.get(0).size();
         String[][] ans = new String[row][col];
         for (int i = 0; i < row; i++) {
-            for (int j = 0; j < col; j++) {
+            for (int j = 0; j < lists.get(i).size(); j++) {
                 ans[i][j] = lists.get(i).get(j);
             }
         }
@@ -520,8 +524,8 @@ public class ReflectUtils {
         int row = lists.size(), col = lists.get(0).size(), vol = lists.get(0).get(0).size();
         String[][][] ans = new String[row][col][vol];
         for (int i = 0; i < row; i++) {
-            for (int j = 0; j < col; j++) {
-                for (int z = 0; z < vol; z++) {
+            for (int j = 0; j < lists.get(i).size(); j++) {
+                for (int z = 0; z < lists.get(i).get(j).size(); z++) {
                     ans[i][j][z] = lists.get(i).get(j).get(z);
                 }
             }
