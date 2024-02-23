@@ -184,7 +184,7 @@ Java
 
 ### 注意
 
-> 如果使用的跟目录请修改 [点这里](./main/java/leetcode.utils/IoUtil.java)
+> 如果使用的跟目录请修改 [点这里](./main/java/leetcode/utils/IoUtil.java)
 
 
 我这里是`main/java/`作为根路径
