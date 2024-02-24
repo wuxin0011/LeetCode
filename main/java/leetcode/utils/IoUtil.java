@@ -16,6 +16,8 @@ import java.util.regex.Pattern;
  * @author: wuxin0011
  * @Description: 处理输入输出
  */
+
+@SuppressWarnings("all")
 public class IoUtil {
 
 
@@ -142,7 +144,7 @@ public class IoUtil {
 
             // 填充参数信息
             for (int i = 0; i < parameterTypes.length && idx < size; i++, idx++) {
-                args[i] = ReflectUtils.parseArg(obj, method.getName(), parameterTypes[i], inputList.get(idx));
+                args[i] = ReflectUtils.parseArg(obj, method.getName(), parameterTypes[i], inputList.get(idx), i, parameterTypes.length);
             }
 
 
@@ -164,7 +166,7 @@ public class IoUtil {
                     returnName = parameterTypes[0].getSimpleName();
                     result = args[0];
                 }
-                Object expect = ReflectUtils.parseArg(obj, method.getName(), returnName, inputList.get(idx));
+                Object expect = ReflectUtils.parseArg(obj, method.getName(), returnName, inputList.get(idx), -1, -1);
                 if (expect != null && !TestUtils.valid(result, expect, returnName)) {
                     f = false;
                     // break;
@@ -367,13 +369,24 @@ public class IoUtil {
 
     private static final String defaultContent = "List<String>";
 
-    public static <T> String findListReturnTypeMethod(Class<T> c, String name, String returnType) {
 
+    /**
+     * 根据方法名称匹配 List参数
+     *
+     * @param c            类名
+     * @param name         方法名
+     * @param returnType   类型
+     * @param idx          参数序号 -1 表示是返回值类型 其他表示该参数的索引位置信息
+     * @param argsSize     校验参数类型大小是否一致！
+     * @param isReturnType 是否是返回类型
+     * @param <T>
+     * @return
+     */
+    public static <T> String findListReturnTypeMethod(Class<T> c, String name, String returnType, int idx, int argsSize) {
         if (c == null) {
             System.out.println("error t is null");
             return defaultContent;
         }
-
         String path = buildAbsolutePath(c) + c.getSimpleName() + ".java";
         File file = new File(path);
         if (!file.exists()) {
@@ -382,37 +395,87 @@ public class IoUtil {
         }
         BufferedReader bis = null;
         String s = null;
+        String matchMethodName = name + "(";
         try {
             bis = new BufferedReader(new FileReader(file));
             while ((s = bis.readLine()) != null) {
-                if (s.contains(name + "(")) {
+                if (s.contains(matchMethodName)) {
                     break;
                 }
             }
         } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
             close(bis);
         }
 
         if (s == null) {
+            System.out.println("not find + " + name + " method");
             return defaultContent;
         }
-        String regex = "List".equals(returnType) ? "List<(.+)>" : "ArrayList<(.+)>";
-        Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(s);
-
-        try {
-            if (matcher.find()) {
-                return returnType + "<" + matcher.group(1) + ">";
-            } else {
-                System.out.println("No match found.");
-                return defaultContent;
+        StringBuilder sb = new StringBuilder();
+        Stack<Character> sk = new Stack<>();
+        int st = -1;
+        if (idx == -1) {
+            st = s.indexOf(returnType);
+            if (st == -1) {
+                throw new RuntimeException("not find " + returnType + " as return type !");
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return defaultContent;
+            st += returnType.length();
+            sb.append(returnType);
+            for (int i = st; i < s.length(); i++) {
+                char cr = s.charAt(i);
+                if (sk.isEmpty() && cr == ' ') break;
+                if (cr == '[') {
+                    sk.push(cr);
+                } else if (cr == ']') {
+                    if (!sk.isEmpty()) {
+                        sk.pop();
+                    }
+                }
+                sb.append(cr);
+            }
+            return sb.toString();
+        } else {
+            // 根据方法名查找第一个参数
+            st = s.indexOf(matchMethodName);
+            if (st == -1) throw new RuntimeException("not find methodName");
+            st += name.length();
+            List<String> argsList = new ArrayList<>();
+            for (int i = st; i < s.length(); i++) {
+                char chr = s.charAt(i);
+                if (chr == ' ') {
+                    if (sb != null && sb.toString().length() != 0 && !"".equals(sb.toString())) {
+                        argsList.add(sb.toString());
+                        sb = null;
+                    }
+                    continue;
+                }
+                if (chr == '(') {
+                    sb = new StringBuilder();
+                    sk.push(chr);
+                } else if (chr == ')') {
+                    if (sb != null) {
+                        argsList.add(sb.toString());
+                        sb = null;
+                    }
+                    if (!sk.isEmpty()) {
+                        sk.pop();
+                    }
+                    if (sk.isEmpty()) break;
+                } else if (chr == ',') {
+                    sb = new StringBuilder();
+                } else {
+                    if (sb != null) {
+                        sb.append(chr);
+                    }
+                }
+            }
+            if (idx >= argsList.size()) throw new RuntimeException("not find " + returnType);
+            if (argsSize != argsList.size()) throw new RuntimeException("args size not match place check!");
+            return argsList.get(idx);
         }
+
 
     }
-
-
 }

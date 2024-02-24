@@ -8,6 +8,6 @@ import leetcode.utils.IoUtil;
  */
 public class A {
     public static void main(String[] args) {
-        // IoUtil.testUtil();
+        IoUtil.testUtil(A.class,"main","in.txt");
     }
 }

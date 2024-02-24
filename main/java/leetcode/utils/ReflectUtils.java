@@ -13,6 +13,7 @@ import java.util.Stack;
  * @author: wuxin0011
  * @Description:
  */
+@SuppressWarnings("all")
 public class ReflectUtils {
 
 
@@ -148,11 +149,11 @@ public class ReflectUtils {
     }
 
 
-    public static <T> Object parseArg(Object src, String methodName, Class<T> c, String input) {
-        return parseArg(src, methodName, c.getSimpleName(), input);
+    public static <T> Object parseArg(Object src, String methodName, Class<T> c, String input, int idx,int argsSize) {
+        return parseArg(src, methodName, c.getSimpleName(), input, idx, argsSize);
     }
 
-    public static Object parseArg(Object src, String methodName, String type, String input) {
+    public static Object parseArg(Object src, String methodName, String type, String input, int idx, int argsSize) {
         if ("".equals(input) || input.length() == 0) {
             System.out.println("read content is null");
             return null;
@@ -213,7 +214,7 @@ public class ReflectUtils {
                     return ListNode.createListNode(oneIntArray(input));
                 case "List":
                 case "ArrayList":
-                    return toList(src.getClass(), methodName, type, input);
+                    return toList(src.getClass(), methodName, type, input, idx, argsSize);
                 default:
                     System.out.println(type + " not implement ,place implement!");
                     return null;
@@ -227,8 +228,8 @@ public class ReflectUtils {
     }
 
 
-    public static <T> Object toList(Class<T> t, String methodName, String type, String input) {
-        String listType = IoUtil.findListReturnTypeMethod(t, methodName, type);
+    public static <T> Object toList(Class<T> t, String methodName, String type, String input, int idx, int argsSize) {
+        String listType = IoUtil.findListReturnTypeMethod(t, methodName, type,idx,argsSize);
         switch (listType) {
             case "List<String>":
                 return parseListString(input);
@@ -253,7 +254,7 @@ public class ReflectUtils {
             case "List<List<List<Character>>>":
                 return parseThreeCharArray(input);
             default:
-                System.err.println("NOT implement" + listType + ",place implement this ,default convert string list");
+                System.err.println("NOT implement " + listType + ",place implement this ,default convert string list");
                 return parseListString(input);
         }
     }

@@ -1,4 +1,4 @@
-package leetcode.contest.template.t1.d;
+package leetcode.contest.weekly.w_300.w_373.d;
 
 import leetcode.utils.IoUtil;
 

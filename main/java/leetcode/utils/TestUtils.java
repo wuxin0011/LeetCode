@@ -10,6 +10,7 @@ import java.util.*;
  * @author: wuxin0011
  * @Description:
  */
+@SuppressWarnings("all")
 public class TestUtils {
 
 
@@ -69,7 +70,7 @@ public class TestUtils {
             return true;
         }
         if (a == null || b == null || a.size() != b.size()) {
-            System.out.println("error");
+            System.out.println("result.size() != expect.size()");
             return false;
         }
         int n = a.size();

@@ -1,4 +1,4 @@
-package leetcode.contest.template.t1.d;
+package leetcode.contest.weekly.w_300.w_373.b;
 
 import leetcode.utils.IoUtil;
 
@@ -6,8 +6,8 @@ import leetcode.utils.IoUtil;
  * @author: wuxin0011
  * @Description:
  */
-public class D {
+public class B {
     public static void main(String[] args) {
-        IoUtil.testUtil(D.class,"main","in.txt");
+        IoUtil.testUtil(B.class,"main","in.txt");
     }
 }
