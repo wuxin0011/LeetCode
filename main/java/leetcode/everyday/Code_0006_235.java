@@ -8,8 +8,8 @@ import java.util.List;
 
 /**
  * @author: wuxin0011
- * @Description: 二叉搜索树最近节点查询
- * @url https://leetcode.cn/problems/closest-nodes-queries-in-a-binary-search-tree/description/
+ * @Description: 二叉搜索树的最近公共祖先
+ * @url https://leetcode.cn/problems/lowest-common-ancestor-of-a-binary-search-tree/
  */
 @SuppressWarnings("all")
 public class Code_0006_235 {
