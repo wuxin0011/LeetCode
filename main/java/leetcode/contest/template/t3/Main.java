@@ -2,7 +2,7 @@ package leetcode.contest.template.t3;
 
 import leetcode.utils.IoUtil;
 
-import java.util.Arrays;
+import java.util.*;
 
 /**
  * @author: wuxin0011
