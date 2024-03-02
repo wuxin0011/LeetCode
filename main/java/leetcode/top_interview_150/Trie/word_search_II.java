@@ -2,7 +2,8 @@ package leetcode.top_interview_150.Trie;
 
 import leetcode.utils.IoUtil;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author: wuxin0011
@@ -12,7 +13,7 @@ import java.util.*;
 public class word_search_II {
 
     public static void main(String[] args) {
-        IoUtil.testUtil(word_search_II.class,"findWords","./txt_file/word_search_II.txt");
+        IoUtil.testUtil(word_search_II.class, "findWords", "./txt_file/word_search_II.txt", false, false);
     }
 
 

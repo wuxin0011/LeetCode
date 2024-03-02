@@ -64,7 +64,7 @@ public class TestUtils {
     }
 
 
-    public static <T> boolean deepEqual(List<T> a, List<T> b) {
+    public static <T> boolean deepEqual(List<T> a, List<T> b, boolean isStrict) {
         if (a == b) {
             System.out.println("ok");
             return true;
@@ -74,48 +74,73 @@ public class TestUtils {
             return false;
         }
         int n = a.size();
-        int idx = -1;
-        for (int i = 0; i < n; i++) {
-            T t1 = a.get(i);
-            T t2 = b.get(i);
-            if(t1 == null || !valid(t1,t2,t1.getClass().getSimpleName())){
-                idx = i;
-                break;
+        if (isStrict) {
+            int idx = -1;
+            for (int i = 0; i < n; i++) {
+                T t1 = a.get(i);
+                T t2 = b.get(i);
+                if (t1 == null || !valid(t1, t2, t1.getClass().getSimpleName(), isStrict)) {
+                    idx = i;
+                    break;
+                }
             }
-        }
-        if (idx == -1) {
-            // System.out.println("ok");
-            return true;
+            if (idx == -1) {
+                // System.out.println("ok");
+                return true;
+            } else {
+                System.out.println("error");
+                System.out.println("index = " + idx + ",a:" + a.get(idx) + ",b = " + b.get(idx));
+                return false;
+            }
         } else {
-            System.out.println("error");
-            System.out.println("index = " + idx + ",a:" + a.get(idx) + ",b = " + b.get(idx));
-            return false;
+            Set<T> aset = new HashSet<>();
+            Set<T> bset = new HashSet<>();
+            for (int i = 0; i < n; i++) {
+                T t1 = a.get(i);
+                T t2 = b.get(i);
+                aset.add(t1);
+                bset.add(t2);
+            }
+            return valid(aset, bset);
         }
+
     }
 
-    public static <T> boolean deepEqual(T[] a, T[] b) {
+    public static <T> boolean deepEqual(T[] a, T[] b, boolean isStrict) {
         if (a == b) {
             return true;
         }
         if (a == null || b == null || a.length != b.length) {
             return false;
         }
-        int n = a.length, x = -1;
-        for (int i = 0; i < n; i++) {
-            if (!valid(a[i], b[i], b[i].getClass().getSimpleName())) {
-                x = i;
-                break;
+        if (isStrict) {
+            int n = a.length, x = -1;
+            for (int i = 0; i < n; i++) {
+                if (!valid(a[i], b[i], b[i].getClass().getSimpleName(), isStrict)) {
+                    x = i;
+                    break;
+                }
             }
+            if (x != -1) {
+                System.err.println("error:( idx = " + x + " expect result = " + b[x] + ",but result =  " + a[x]);
+                return false;
+            }
+            return true;
+        } else {
+            Set<T> aset = new HashSet<>();
+            Set<T> bset = new HashSet<>();
+            for (int i = 0; i < a.length; i++) {
+                aset.add(a[i]);
+                bset.add(b[i]);
+            }
+            // valid
+            return valid(aset, bset);
         }
-        if (x != -1) {
-            System.err.println("error:(  idx = " + x + " expect result = " + b[x] + ",but result =  " + a[x]);
-            return false;
-        }
-        return true;
+
     }
 
 
-    public static <T> boolean deepEqual(T[][] a, T[][] b) {
+    public static <T> boolean deepEqual(T[][] a, T[][] b, boolean isStrict) {
         if (a == b) {
             System.out.println("ok");
             return true;
@@ -127,7 +152,7 @@ public class TestUtils {
         int m = a.length, n = a[0].length, x = -1, y = -1;
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
-                if (!valid(a[i][j], b[i][j], b[i][j].getClass().getSimpleName())) {
+                if (!valid(a[i][j], b[i][j], b[i][j].getClass().getSimpleName(), isStrict)) {
                     x = i;
                     y = j;
                     break;
@@ -212,7 +237,7 @@ public class TestUtils {
         return rq.size() == eq.size();
     }
 
-    public static <T> boolean deepEqual(T[][][] a, T[][][] b) {
+    public static <T> boolean deepEqual(T[][][] a, T[][][] b, boolean isStrict) {
         if (a == b) {
             // System.out.println("ok");
             return true;
@@ -230,7 +255,7 @@ public class TestUtils {
                     if (a[i][j][k] == b[i][j][k]) {
                         continue;
                     }
-                    if (!valid(a[i][j][k], b[i][j][k], b[i][j][k].getClass().getSimpleName())) {
+                    if (!valid(a[i][j][k], b[i][j][k], b[i][j][k].getClass().getSimpleName(), isStrict)) {
                         x = i;
                         y = j;
                         o = k;
@@ -251,7 +276,7 @@ public class TestUtils {
     }
 
 
-    public static boolean valid(Object result, Object expect, String returnType) {
+    public static boolean valid(Object result, Object expect, String returnType, boolean isStrict) {
         if (result == expect) {
             return true;
         }
@@ -268,41 +293,41 @@ public class TestUtils {
                 case "int[]": {
                     Integer[] e = covert((int[]) expect);
                     Integer[] r = covert((int[]) result);
-                    return deepEqual(r, e);
+                    return deepEqual(r, e, isStrict);
                 }
                 case "int[][]": {
                     Integer[][] e = covert((int[][]) expect);
                     Integer[][] r = covert((int[][]) result);
-                    return deepEqual(r, e);
+                    return deepEqual(r, e, isStrict);
                 }
                 case "int[][][]": {
                     Integer[][][] e = covert((int[][][]) expect);
                     Integer[][][] r = covert((int[][][]) result);
-                    return deepEqual(r, e);
+                    return deepEqual(r, e, isStrict);
                 }
                 case "String[]": {
                     String[] r = (String[]) result;
                     String[] e = (String[]) expect;
-                    return deepEqual(r, e);
+                    return deepEqual(r, e, isStrict);
                 }
                 case "String[][]":
-                    return deepEqual((String[][]) result, (String[][]) expect);
+                    return deepEqual((String[][]) result, (String[][]) expect, isStrict);
                 case "String[][][]":
-                    return deepEqual((String[][][]) result, (String[][][]) expect);
+                    return deepEqual((String[][][]) result, (String[][][]) expect, isStrict);
                 case "char[]": {
                     Character[] e = covert((char[]) expect);
                     Character[] r = covert((char[]) result);
-                    return deepEqual(r, e);
+                    return deepEqual(r, e, isStrict);
                 }
                 case "char[][]": {
                     Character[][] e = covert((char[][]) expect);
                     Character[][] r = covert((char[][]) result);
-                    return deepEqual(r, e);
+                    return deepEqual(r, e, isStrict);
                 }
                 case "char[][][]": {
                     Character[][][] e = covert((char[][][]) expect);
                     Character[][][] r = covert((char[][][]) result);
-                    return deepEqual(r, e);
+                    return deepEqual(r, e, isStrict);
                 }
                 case "TreeNode": {
                     TreeNode e = (TreeNode) expect;
@@ -317,7 +342,7 @@ public class TestUtils {
 
                 case "List":
                 case "ArrayList":
-                    return deepEqual((ArrayList<Object>) result, (ArrayList<Object>) expect);
+                    return deepEqual((ArrayList<Object>) result, (ArrayList<Object>) expect, isStrict);
                 default:
                     boolean t = expect != null && expect.equals(result);
                     boolean isArray = expect != null && expect.getClass().getSimpleName().contains("[]");
@@ -442,6 +467,25 @@ public class TestUtils {
 
         }
         return t;
+    }
+
+
+    public static <T> boolean valid(Set<T> aset, Set<T> bset) {
+        if (aset == bset) {
+            return true;
+        }
+        if (aset.size() != bset.size()) {
+            return false;
+        }
+        int cnt = 0;
+        for (T a : aset) {
+            if (bset.contains(a)) {
+                cnt++;
+            } else {
+                return false;
+            }
+        }
+        return cnt == aset.size();
     }
 
 

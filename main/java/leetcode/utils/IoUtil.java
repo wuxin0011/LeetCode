@@ -37,6 +37,13 @@ public class IoUtil {
      */
     public static final boolean DEFAULT_SUPPORT_LONG_CONTENT = false;
 
+
+    /**
+     * 是否严格相等！
+     * 默认 true
+     */
+    public static final boolean IS_STRICT_EQUAL = true;
+
     /**
      * 默认路径 如果是 main/java 请用 {“main”，“java”}
      */
@@ -74,6 +81,10 @@ public class IoUtil {
         testUtil(c, methodName, fileName, DEFAULT_SUPPORT_LONG_CONTENT);
     }
 
+    public static <T> void testUtil(Class<T> c, String methodName, String fileName, boolean openLongContent) {
+        testUtil(c, methodName, fileName, openLongContent, IS_STRICT_EQUAL);
+    }
+
 
     /**
      * 对拍核心方法
@@ -82,9 +93,10 @@ public class IoUtil {
      * @param methodName      方法名 但传入默认的时候 自动调用 除 "main" 方法外的一个方法，唯有只有一个其他方法适用
      * @param fileName        读取文件名
      * @param openLongContent 开启##解析
+     * @param isStrict        是否开启严格相等 如果不开启元素顺序，希望 为 false
      * @param <T>             T
      */
-    public static <T> void testUtil(Class<T> c, String methodName, String fileName, boolean openLongContent) {
+    public static <T> void testUtil(Class<T> c, String methodName, String fileName, boolean openLongContent, boolean isStrict) {
         check(c, methodName, fileName);
         try {
             T obj = c.newInstance();
@@ -121,7 +133,7 @@ public class IoUtil {
                     System.exit(0);
                     break;
                 }
-                startValid(obj, method, inputList);
+                startValid(obj, method, inputList, isStrict);
             }
             if (!find) {
                 System.err.println("check methodName ,not found " + methodName + " method !");
@@ -131,7 +143,7 @@ public class IoUtil {
         }
     }
 
-    public static <T> void startValid(Object obj, Method method, List<String> inputList) {
+    public static <T> void startValid(Object obj, Method method, List<String> inputList, boolean isStrict) {
         Class<?>[] parameterTypes = method.getParameterTypes();
         Object[] args = new Object[parameterTypes.length];
         int size = inputList.size();
@@ -167,7 +179,7 @@ public class IoUtil {
                     result = args[0];
                 }
                 Object expect = ReflectUtils.parseArg(obj, method.getName(), returnName, inputList.get(idx), -1, -1);
-                if (expect != null && !TestUtils.valid(result, expect, returnName)) {
+                if (expect != null && !TestUtils.valid(result, expect, returnName, isStrict)) {
                     f = false;
                     // break;
                 }

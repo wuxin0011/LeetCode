@@ -29,7 +29,7 @@
 核心实现方法请查看 **[testUtil](./main/java/leetcode/utils/IoUtil.java)** 方法
 
 ```java
-public static <T> void testUtil(Class<T> c, String methodName, String fileName, boolean openLongContent)
+public static <T> void testUtil(Class<T> c, String methodName, String fileName, boolean openLongContent,boolean isStrict)
 ```
 
  - 类名
@@ -40,6 +40,7 @@ public static <T> void testUtil(Class<T> c, String methodName, String fileName, 
    - 默认`in.txt`
  - 是否开启 `#content#` 格式解析
    - 默认为`false`
+ - 是否严格比较 ，默认 true ，如果不注重元素顺序，希望使用 false
 
 **数组或者列表**
 

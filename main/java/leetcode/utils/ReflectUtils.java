@@ -537,6 +537,7 @@ public class ReflectUtils {
 
     public static List<String> parseListString(String input) {
         List<String> ls = new ArrayList<>();
+        if ("[]".equals(input)) return ls;
         StringBuilder sb = null;
         char[] cs = input.toCharArray();
         for (char c : cs) {
