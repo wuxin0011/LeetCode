@@ -70,6 +70,5 @@ public class minimum_genetic_mutation {
             }
         }
         return true;
-
     }
 }
