@@ -18,7 +18,7 @@
 
 ## TODO
  - [x] 准备写个支持本地对拍的code😅
-
+ - [ ] 准备实现自动解析。[点解查看详情](./main/java/crwal/readme.md)
 
 
 ## 对拍格式
