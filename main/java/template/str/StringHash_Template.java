@@ -7,7 +7,6 @@ import java.util.List;
  * @author: wuxin0011
  * @Description:
  */
-@SuppressWarnings("all")
 public class StringHash_Template {
 
     public static final StringHash sh = new StringHash();
@@ -150,24 +149,24 @@ public class StringHash_Template {
 
     //********************************************************StringHashSimple*****************************************************
     public static class StringHashSimple {
-        private static final int MAX = (int) 1e6 + 1;
+        private static final int MAX = 1000001;
         private static final int BASE = 499;
         private static long[] pow = new long[MAX];
         private static long[] hash = new long[MAX];
 
         private static int right;
 
-        public static long build(String s) {
+        public static  void build(String s) {
             if (s == null || "".equals(s)) {
-                return 0;
+                return;
             }
-            return build(s.toCharArray());
+            build(s.toCharArray());
         }
 
 
-        public static long build(char[] ss) {
+        public static void build(char[] ss) {
             if (ss == null || ss.length == 0) {
-                return 0;
+                return;
             }
 
             if (ss.length > MAX) {
@@ -181,7 +180,6 @@ public class StringHash_Template {
                 pow[i] = pow[i - 1] * BASE;
                 hash[i] = hash[i - 1] * BASE + ss[i] - 'a' + 1;
             }
-            return hash[right - 1];
         }
 
         public static long getHash() {
