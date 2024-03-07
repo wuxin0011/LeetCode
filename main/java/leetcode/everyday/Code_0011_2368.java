@@ -12,8 +12,8 @@ import java.util.*;
 
 /**
  * @author: wuxin0011
- * @Description:  检查数组是否存在有效划分
- * @url https://leetcode.cn/problems/check-if-there-is-a-valid-partition-for-the-array/
+ * @Description:  受限条件下可到达节点的数目
+ * @url https://leetcode.cn/problems/reachable-nodes-with-restrictions/description/
  */
 @SuppressWarnings("all")
 public class Code_0011_2368 {
