@@ -1,4 +1,4 @@
-package leetcode.top_interview_150.a_phone_number;
+package leetcode.top_interview_150.backtracking.a_phone_number;
 
 import leetcode.utils.IoUtil;
 

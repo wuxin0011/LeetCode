@@ -1,0 +1,10 @@
+["cab","ad","bad","c"]
+["ab","","ba",""]
+
+
+["abc","bcd","abcd"]
+["","","abcd"]
+
+
+["vbb","grg","lexn","oklqe","yxav"]
+["b","g","n","k","a"]

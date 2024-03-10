@@ -1,4 +1,4 @@
-package leetcode.top_interview_150.Trie;
+package leetcode.top_interview_150.prefix_tree;
 
 import leetcode.utils.IoUtil;
 

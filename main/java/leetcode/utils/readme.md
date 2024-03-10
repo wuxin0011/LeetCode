@@ -3,7 +3,7 @@
 
 参数说明
 
-核心实现方法请查看 **[testUtil](/leetcode/main/java/leetcode/utils/IoUtil.java)** 方法
+核心实现方法请查看 **[testUtil](./IoUtil.java)** 方法
 
 ```java
 public static <T> void testUtil(Class<T> c, String methodName, String fileName, boolean openLongContent,boolean isStrict)
@@ -162,7 +162,7 @@ Java
 
 ### 注意
 
-> 如果使用的跟目录请修改 [点这里](./main/java/leetcode/utils/IoUtil.java)
+> 如果使用的跟目录请修改 [点这里](./IoUtil.java)
 
 
 我这里是`main/java/`作为根路径

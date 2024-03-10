@@ -1,4 +1,4 @@
-package leetcode.top_interview_150.minimum_genetic_mutation;
+package leetcode.top_interview_150.backtracking.minimum_genetic_mutation;
 
 import leetcode.utils.IoUtil;
 
@@ -37,7 +37,7 @@ public class minimum_genetic_mutation {
     }
 
     public void dfs(String src,int t){
-        System.out.println("cnt => " + t);
+        // System.out.println("cnt => " + t);
         if(src.equals(endGene)){
             //System.out.println("find======>");
             cnt = Math.min(cnt,t);
@@ -53,7 +53,7 @@ public class minimum_genetic_mutation {
                 vis[i] = false;
             }
         }
-        
+
     }
 
     public static boolean check(String src,String target){

@@ -12,7 +12,7 @@ import java.util.List;
  * @author: wuxin0011
  * @Description:
  */
-
+@SuppressWarnings("all")
 @Description(value = "电话号码的字母组合", url = "https://leetcode.cn/problems/letter-combinations-of-a-phone-number/", diff = Difficulty.MEDIUM)
 public class LetterCombinationsOfAPhoneNumber implements LogarithmicDevice {
 
