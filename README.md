@@ -4,6 +4,7 @@
 
 - JDK1.8
 - [官方链接](https://leetcode.cn/)
+- [中文接口文档](https://www.matools.com/api/java8)
 
 ## 更新日志
 
@@ -20,4 +21,41 @@
  - [x] 准备写个支持本地对拍的code [点解查看详情😅](./main/java/leetcode/utils/readme.md)
  - [ ] 准备实现自动解析。[点解查看详情😅](./main/java/crwal/readme.md)
 
+
+
+
+
+## 推荐链接
+
+- [题单](https://doocs.gitee.io/leetcode/tags.html)
+- 大数据[zerotrac](https://zerotrac.github.io/leetcode_problem_rating/#/)
+- 分数分类[rating](https://huxulm.github.io/lc-rating/)
+
+
+
+由于网络问题经常访问不了，可以尝试保存在本地 [点我测试🚀](https://huxulm.github.io/lc-rating/)
+
+打开浏览器控制将下面内容复制到控制台run
+
+```js
+const trs = document.querySelectorAll('table tbody tr')
+
+let ans = []
+Array.from(trs).forEach(tr=>{
+	const tds = tr.querySelectorAll('td')
+	const title = tds[2].querySelector('a').textContent
+	const url = tds[2].querySelector('a').href
+	const score = tds[3].querySelector('div').textContent
+	// console.log(title,url,score)
+	let obj = {
+		title,
+		score,
+		url
+	}
+	ans.push(obj)
+})
+// console.log(ans)
+console.table(ans)
+
+```
 
