@@ -307,6 +307,22 @@ public class TestUtils {
                     Integer[][][] r = covert((int[][][]) result);
                     return deepEqual(r, e, isStrict);
                 }
+                case "Long[]":
+                case "long[]": {
+                    Long[] e = covert((long[]) expect);
+                    Long[] r = covert((long[]) result);
+                    return deepEqual(r, e, isStrict);
+                }
+                case "double[]": {
+                    Double[] e = covert((double[]) expect);
+                    Double[] r = covert((double[]) result);
+                    return deepEqual(r, e, isStrict);
+                }
+                case "float[]": {
+                    Float[] e = covert((float[]) expect);
+                    Float[] r = covert((float[]) result);
+                    return deepEqual(r, e, isStrict);
+                }
                 case "String[]": {
                     String[] r = (String[]) result;
                     String[] e = (String[]) expect;
@@ -365,7 +381,6 @@ public class TestUtils {
             return false;
         }
     }
-
 
     public static Integer[] covert(int[] a) {
         Integer[] t = new Integer[a.length];

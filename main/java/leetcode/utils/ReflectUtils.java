@@ -175,26 +175,37 @@ public class ReflectUtils {
                 case "Boolean":
                     return input.contains("t");
                 case "boolean[]":
+                case "Boolean[]":
                     return oneBooleanArray(input);
                 case "double":
                     return Double.parseDouble(input);
                 case "double[]":
                     return oneDoubleArray(input);
+                case "long[]":
+                case "Long[]":
+                    return oneLongArray(input);
                 case "float":
                     return Float.parseFloat(input);
                 case "int[]":
+                case "Integer[]":
                     return oneIntArray(input);
                 case "int[][]":
+                case "Integer[][]":
                     return doubleIntArray(input);
                 case "int[][][]":
+                case "Integer[][][]":
                     return threeIntArray(input);
                 case "char":
+                case "Character":
                     return input.toCharArray()[0];
                 case "char[]":
+                case "Character[]":
                     return oneCharArray(input);
                 case "char[][]":
+                case "Character[][]":
                     return doubleCharArray(input);
                 case "char[][][]":
+                case "Character[][][]":
                     return threeCharArray(input);
                 case "string":
                 case "String":
@@ -227,9 +238,30 @@ public class ReflectUtils {
 
     }
 
+    private static Object oneLongArray(String input) {
+        List<Long> ls = parseListLong(input);
+        long[] res = new long[ls.size()];
+        for (int i = 0; i < ls.size(); i++) {
+            res[i] = ls.get(i);
+        }
+        return res;
+    }
+
+    private static List<Long> parseListLong(String input) {
+        List<String> strings = parseListString(input);
+        List<Long> res = new ArrayList<>();
+        for (String s : strings) {
+            try {
+                res.add(Long.parseLong(s));
+            } catch (Exception e) {
+            }
+        }
+        return res;
+    }
+
 
     public static <T> Object toList(Class<T> t, String methodName, String type, String input, int idx, int argsSize) {
-        String listType = IoUtil.findListReturnTypeMethod(t, methodName, type,idx,argsSize);
+        String listType = IoUtil.findListReturnTypeMethod(t, methodName, type, idx, argsSize);
         switch (listType) {
             case "List<String>":
                 return parseListString(input);
@@ -239,6 +271,8 @@ public class ReflectUtils {
                 return parseThreeString(input);
             case "List<Integer>":
                 return parseListInteger(input);
+            case "List<Long>":
+                return parseListLong(input);
             case "List<Boolean>":
                 return parseListBoolean(input);
             case "List<Double>":
