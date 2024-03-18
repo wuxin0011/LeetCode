@@ -45,15 +45,38 @@ public class IoUtil {
     public static final boolean IS_STRICT_EQUAL = true;
 
     /**
-     * 默认路径 如果是 main/java 请用 {“main”，“java”}
+     * 如果想使用自定义路径, 如 main\java => {"main"，"java"}
      */
     public static final String[] DEFAULT_ROOTS = {"main", "java"};
+
+
+    private static String ROOT_DIR = "null";
+
+    static {
+        getProjectRootDir();
+    }
+
+    public static String getProjectRootDir() {
+        if (!(ROOT_DIR == null || "null".equals(ROOT_DIR))) {
+            return ROOT_DIR;
+        }
+        if (DEFAULT_ROOTS == null) {
+            throw new RuntimeException("not null");
+        }
+        StringBuilder sb = new StringBuilder();
+        sb.append(File.separator);
+        for (String defaultRoot : DEFAULT_ROOTS) {
+            sb.append(defaultRoot);
+            sb.append(File.separator);
+        }
+        ROOT_DIR = sb.toString();
+        return ROOT_DIR;
+    }
 
 
     public static void main(String[] args) {
         //IoUtil.testUtil(IoUtil.class, "t1", "test.txt", true);
     }
-
 
 
     public static <T> void testUtil(Class<T> c) {
@@ -251,13 +274,8 @@ public class IoUtil {
 
 
     public static String buildAbsolutePath() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(File.separator);
-        for (String defaultRoot : DEFAULT_ROOTS) {
-            sb.append(defaultRoot);
-            sb.append(File.separator);
-        }
-        return buildAbsolutePath(sb.toString());
+
+        return buildAbsolutePath(getProjectRootDir());
     }
 
     public static String buildAbsolutePath(String baseDir) {
@@ -490,4 +508,18 @@ public class IoUtil {
 
 
     }
+
+
+    public static <T> String wrapperAbsolutePath(Class<T> c, String dir) {
+        Objects.requireNonNull(dir, "dir Not allow null");
+        if (dir.charAt(0) == '\\' || dir.charAt(0) == '/') {
+            return dir;
+        }
+        if (dir.charAt(1) == ':') {
+            return dir;
+        }
+
+        return IoUtil.buildAbsolutePath(c) + dir;
+    }
+
 }
