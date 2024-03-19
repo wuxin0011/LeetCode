@@ -26,7 +26,7 @@ public class Code_0000_00 {
         do {
             System.out.print("place input a No as problem NO : ");
             id = scanner.next();
-            System.out.println("place input a valid No !");
+
         } while (!check(id));
         // System.out.println("you input No  = " + id);
         int count = getJavaFileCount() - 1;
@@ -40,6 +40,7 @@ public class Code_0000_00 {
         try {
             Integer.valueOf(id);
         } catch (Exception e) {
+            System.out.println("place input a valid Number !");
             return false;
         }
         return true;
