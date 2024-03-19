@@ -29,8 +29,9 @@ public class WeekContest implements Contest {
 
     public WeekContest(int no, String lastestDate, int problems, String dirPrefix, String dir, int times, Class<?> c) {
         this.lastestDateNo = no;
+        this.dir = dir;
         this.lastestDate = Objects.requireNonNull(parse(lastestDate), "date format is fail");
-        this.setClass(c);
+        this.setClass(c, dir);
         this.times = Math.max(1, times);
         this.problems = problems;
         this.dirPrefix = dirPrefix.endsWith("_") ? dirPrefix : (dirPrefix + "_");
@@ -41,10 +42,11 @@ public class WeekContest implements Contest {
      * 可以自动调整类目录
      *
      * @param c
+     * @param _dir
      */
-    public void setClass(Class<?> c) {
+    public void setClass(Class<?> c, String _dir) {
         this.aClass = c == null ? WeekContest.class : c;
-        this.dir = IoUtil.wrapperAbsolutePath(aClass, dir);
+        this.dir = IoUtil.wrapperAbsolutePath(aClass, _dir);
     }
 
     /**

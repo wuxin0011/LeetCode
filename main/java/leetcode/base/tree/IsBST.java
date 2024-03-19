@@ -2,6 +2,7 @@ package leetcode.base.tree;
 
 import code_generation.LogarithmicDevice;
 import code_generation.annotation.Description;
+import code_generation.bean.TreeNode;
 import code_generation.utils.*;
 
 /**

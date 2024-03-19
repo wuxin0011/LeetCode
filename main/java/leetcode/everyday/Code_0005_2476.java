@@ -1,7 +1,7 @@
 package leetcode.everyday;
 
 import code_generation.utils.IoUtil;
-import code_generation.utils.TreeNode;
+import code_generation.bean.TreeNode;
 
 import java.util.ArrayList;
 import java.util.List;

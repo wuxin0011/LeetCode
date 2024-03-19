@@ -1,4 +1,4 @@
-package code_generation.utils;
+package code_generation.bean;
 
 import java.util.Objects;
 

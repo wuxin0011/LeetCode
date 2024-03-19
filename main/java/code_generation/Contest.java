@@ -40,6 +40,7 @@ public interface Contest {
                 }
                 break;
             } catch (Exception ignored) {
+                sc.next();
             }
         }
         createNo(NO);
@@ -52,4 +53,6 @@ public interface Contest {
     default void createNo(int NO) {
         System.out.println("place implement this method");
     }
+
+
 }

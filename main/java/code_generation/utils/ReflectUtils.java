@@ -1,6 +1,8 @@
 package code_generation.utils;
 
 import code_generation.annotation.Description;
+import code_generation.bean.ListNode;
+import code_generation.bean.TreeNode;
 import code_generation.enums.Type;
 
 import java.lang.reflect.Method;

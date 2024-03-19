@@ -1,5 +1,7 @@
 package code_generation.utils;
 
+import code_generation.bean.ListNode;
+import code_generation.bean.TreeNode;
 import leetcode.function.Expect;
 
 import java.lang.reflect.Array;

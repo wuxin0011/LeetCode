@@ -1,7 +1,7 @@
 package leetcode.base.array.sort;
 
 import code_generation.annotation.Description;
-import code_generation.utils.InvocationHandlerMethodTime;
+import code_generation.proxy.InvocationHandlerMethodTime;
 
 /**
  * @author: wuxin0011

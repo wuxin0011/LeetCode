@@ -1,7 +1,7 @@
 package leetcode.top_interview_150.sort_list_node;
 
 import code_generation.utils.IoUtil;
-import code_generation.utils.ListNode;
+import code_generation.bean.ListNode;
 
 /**
  * @author: wuxin0011

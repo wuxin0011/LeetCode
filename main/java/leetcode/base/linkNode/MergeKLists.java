@@ -3,8 +3,8 @@ package leetcode.base.linkNode;
 import code_generation.annotation.Description;
 import code_generation.enums.Difficulty;
 import code_generation.enums.Tag;
-import code_generation.utils.InvocationHandlerMethodTime;
-import code_generation.utils.ListNode;
+import code_generation.proxy.InvocationHandlerMethodTime;
+import code_generation.bean.ListNode;
 import code_generation.LogarithmicDevice;
 
 import java.util.ArrayList;

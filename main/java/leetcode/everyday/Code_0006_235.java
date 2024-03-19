@@ -1,7 +1,7 @@
 package leetcode.everyday;
 
 import code_generation.utils.IoUtil;
-import code_generation.utils.TreeNode;
+import code_generation.bean.TreeNode;
 
 /**
  * @author: wuxin0011

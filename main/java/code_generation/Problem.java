@@ -7,10 +7,11 @@ import java.io.File;
 import java.io.FileWriter;
 import java.time.LocalDate;
 import java.util.Objects;
+import java.util.Scanner;
 
 /**
  * @author: wuxin0011
- * @Description:
+ * @Description: 生成模板
  */
 public class Problem {
 
@@ -200,6 +201,40 @@ public class Problem {
         int month = now.getMonth().getValue();
         int day = now.getDayOfMonth();
         customContest(problems, year, month, day, dirPrefix, dirName, c);
+    }
+
+    public static void customContest(Class<?> c) {
+        Objects.requireNonNull(c, "class not allow null");
+        Scanner sc = new Scanner(System.in);
+        int problems = 0;
+        String dirPrefix = "";
+        String dir = "";
+        int count = 0;
+        while (true) {
+            if (count > 10) {
+                break;
+            }
+            System.out.print("place input a valid number as problems : ");
+            try {
+                problems = sc.nextInt();
+                if (problems <= 0) {
+                    count++;
+                    continue;
+                }
+                break;
+            } catch (Exception ignored) {
+                count++;
+                sc.next(); // 清空输入缓冲区
+            }
+        }
+        if (count > 10) {
+            throw new RuntimeException("You only input error max 10 times ");
+        }
+        System.out.print("place input a valid string as dirPrefix : ");
+        dirPrefix = sc.next();
+        System.out.print("place input a valid string as dir : ");
+        dir = sc.next();
+        Problem.customContest(problems, dirPrefix, dir, c);
     }
 
 
