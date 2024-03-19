@@ -24,7 +24,7 @@ public class WeekContest {
     /**
      * 双周赛
      */
-    public static final WeekContest BI_WEEK_CONTEST = new WeekContest(100, "2023-03-18 22:30:0", 4, "bi_", "biweekly", 2, null);
+    public static final WeekContest BI_WEEK_CONTEST = new WeekContest(100, "2023-03-18 22:30:00", 4, "bi_", "biweekly", 2, null);
     private static final Date currentDate = new Date();
 
 

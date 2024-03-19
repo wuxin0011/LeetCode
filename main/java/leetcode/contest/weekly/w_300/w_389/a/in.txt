@@ -1,0 +1,9 @@
+leetcode
+true
+
+abcba
+true
+
+
+abcd
+false

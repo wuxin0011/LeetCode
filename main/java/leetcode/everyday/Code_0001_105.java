@@ -12,10 +12,10 @@ import java.util.Map;
  * @Description: 从前序与中序遍历序列构造二叉树
  * @url https://leetcode.cn/problems/construct-binary-tree-from-preorder-and-inorder-traversal/
  */
-public class Code_0002_105 {
+public class Code_0001_105 {
 
     public static void main(String[] args) {
-        IoUtil.testUtil(Code_0002_105.class, "buildTree", "./txt_file/Code_0002_105.txt");
+        IoUtil.testUtil(Code_0001_105.class, "buildTree", "./txt_file/Code_0002_105.txt");
     }
 
     public Map<Integer,Integer> hashMap = new HashMap<>();

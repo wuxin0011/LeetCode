@@ -131,7 +131,7 @@ public class IoUtil {
                 names.add(method.getName());
             }
             // System.out.println("names = " + names);
-            if (names.size() > 0 && DEFAULT_METHOD_NAME.equals(methodName)) {
+            if (names.size() > 0 && DEFAULT_METHOD_NAME.equals(methodName) || "main".equals(methodName)) {
                 for (String name : names) {
                     if (name.equals("main") || name.startsWith("lambda$") || "f".equals(name) || "dfs".equals(name)) {
                         continue;
@@ -512,14 +512,13 @@ public class IoUtil {
 
     public static <T> String wrapperAbsolutePath(Class<T> c, String dir) {
         Objects.requireNonNull(dir, "dir Not allow null");
-        if (dir.charAt(0) == '\\' || dir.charAt(0) == '/') {
-            return dir;
-        }
-        if (dir.charAt(1) == ':') {
-            return dir;
-        }
-
-        return IoUtil.buildAbsolutePath(c) + dir;
+        return isAbsolutePath(dir) ? dir : IoUtil.buildAbsolutePath(c) + dir;
     }
 
+    public static boolean isAbsolutePath(String dir) {
+        if (dir == null || dir.length() == 0) {
+            return false;
+        }
+        return dir.charAt(0) == File.separator.charAt(0) || dir.charAt(0) == '/' || dir.length() >= 2 && dir.charAt(1) == ':';
+    }
 }

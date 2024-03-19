@@ -5,11 +5,15 @@ import leetcode.utils.IoUtil;
 /**
  * @author: wuxin0011
  * @Description:
- * @url
+ * @url https://leetcode.cn/problems/minimum-moves-to-pick-k-ones/description/
  * @title
  */
 public class D {
     public static void main(String[] args) {
-        IoUtil.testUtil(D.class,"main","in.txt");
+        IoUtil.testUtil(D.class, "minimumMoves", "in.txt");
+    }
+
+    public long minimumMoves(int[] nums, int k, int maxChanges) {
+        return 0;
     }
 }

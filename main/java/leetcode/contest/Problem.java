@@ -6,6 +6,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.time.LocalDate;
+import java.util.Objects;
 
 /**
  * @author: wuxin0011
@@ -16,20 +17,44 @@ public class Problem {
 
     private static final String ROOT_DIR = IoUtil.getProjectRootDir();
 
-    private static void createTemplate(String classFilePath) {
+    public static void createTemplate(String classFilePath) {
         createTemplate(new File(classFilePath));
     }
 
-    private static void createTemplate(File classFilePath) {
+    public static void createTemplate(File classFilePath) {
+        createTemplate(classFilePath, null);
+    }
+
+    private static String handlerTxt(String txtFile, String name, File javaFilePath) {
+        if (txtFile == null) {
+            txtFile = name;
+        }
+        if (txtFile.endsWith(".txt")) {
+            txtFile = txtFile.replace(".txt", "");
+        }
+        String temp = IoUtil.isAbsolutePath(txtFile) ? (txtFile + ".txt") : javaFilePath.getParent() + File.separator + txtFile + ".txt";
+        File file = createFile(temp);
+        if (file != null && javaFilePath != null && file.getAbsolutePath().contains(javaFilePath.getParent())) {
+            txtFile = "." + file.getAbsolutePath().replace(javaFilePath.getParent(), "").replace("\\", "\\\\");
+            txtFile = txtFile.replace(".\\\\", "");
+        }
+        if (txtFile.endsWith(".txt")) {
+            txtFile = txtFile.replace(".txt", "");
+        }
+        return txtFile;
+    }
+
+    public static void createTemplate(File classFilePath, String txtFile) {
         try {
             String packageInfo = createPackageInfo(classFilePath.getAbsolutePath());
             String name = classFilePath.getName().replace(".java", "");
-            String info = String.format(pattern, packageInfo, name, name, name);
+            txtFile = handlerTxt(txtFile, name, classFilePath);
+            String info = String.format(pattern, packageInfo, name, name, txtFile);
             BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(classFilePath));
             bufferedWriter.write(info);
             bufferedWriter.flush();
             bufferedWriter.close();
-            System.out.println(classFilePath + " ,write success !");
+            System.out.println(classFilePath + "  create success !");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -85,9 +110,12 @@ public class Problem {
     }
 
     private static File createFile(String fileName) {
-        File file = new File(fileName);
+
         try {
+            File file = new File(fileName);
+            Objects.requireNonNull(file, "file is null");
             String parent = file.getParent();
+            Objects.requireNonNull(file, "file dir is null");
             File parentFile = new File(parent);
             if (!parentFile.exists()) parentFile.mkdirs();
             if (!file.exists()) {
@@ -102,6 +130,20 @@ public class Problem {
         }
     }
 
+    public static void create(String javaFilePath, String txtFilePath, Class<?> c) {
+        javaFilePath = IoUtil.wrapperAbsolutePath(c, javaFilePath);
+        txtFilePath = IoUtil.wrapperAbsolutePath(c, txtFilePath);
+        create(javaFilePath, txtFilePath);
+    }
+
+
+    public static void create(String javaFilePath, String txtFilePath) {
+        File classFile = createFile(javaFilePath);
+        if (classFile != null) {
+            createTemplate(classFile, txtFilePath);
+        }
+    }
+
 
     public static void create(int id, String path) {
         // create dir
@@ -112,7 +154,7 @@ public class Problem {
         if (classFile != null) {
             createTemplate(classFile);
         }
-        createFile(prefix + ".txt");
+        // createFile(prefix + ".txt");
     }
 
     public static String createPackageInfo(String classFile) {

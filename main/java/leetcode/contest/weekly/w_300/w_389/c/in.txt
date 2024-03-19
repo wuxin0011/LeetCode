@@ -1,0 +1,11 @@
+aabcaba
+0
+3
+
+dabdcbdcdcd
+2
+2
+
+aaabaaa
+2
+1

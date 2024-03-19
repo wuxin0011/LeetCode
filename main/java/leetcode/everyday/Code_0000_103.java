@@ -13,10 +13,10 @@ import java.util.List;
  * @Description: 二叉树的锯齿形层序遍历
  * @url https://leetcode.cn/problems/binary-tree-zigzag-level-order-traversal
  */
-public class Code_0001_103 {
+public class Code_0000_103 {
 
     public static void main(String[] args) {
-        IoUtil.testUtil(Code_0001_103.class,"zigzagLevelOrder","./txt_file/Code_0001_103.txt");
+        IoUtil.testUtil(Code_0000_103.class,"zigzagLevelOrder","./txt_file/Code_0001_103.txt");
     }
 
     public List<List<Integer>> zigzagLevelOrder(TreeNode root) {

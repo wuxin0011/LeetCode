@@ -13,10 +13,10 @@ import java.util.Map;
  * @url https://leetcode.cn/problems/construct-binary-tree-from-inorder-and-postorder-traversal
  */
 @SuppressWarnings("all")
-public class Code_0003_106 {
+public class Code_0002_106 {
 
     public static void main(String[] args) {
-        IoUtil.testUtil(Code_0003_106.class, "buildTree", "./txt_file/Code_0003_106.txt");
+        IoUtil.testUtil(Code_0002_106.class, "buildTree", "./txt_file/Code_0003_106.txt");
     }
 
     private Map<Integer, Integer> d = new HashMap<>();
