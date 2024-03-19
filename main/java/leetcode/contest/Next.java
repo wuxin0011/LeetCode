@@ -9,8 +9,7 @@ import java.time.LocalTime;
 public class Next {
     // create template
     public static void main(String[] args) {
-
-
+        autoCreateNext();
     }
 
 
