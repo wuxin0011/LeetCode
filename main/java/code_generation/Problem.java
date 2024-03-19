@@ -1,6 +1,6 @@
 package code_generation;
 
-import leetcode.utils.IoUtil;
+import code_generation.utils.IoUtil;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -63,7 +63,7 @@ public class Problem {
 
     final static String pattern = "package %s;\n" +
             "\n" +
-            "import leetcode.utils.IoUtil;\n" +
+            "import code_generation.utils.IoUtil;\n" +
             "import java.util.*;\n" +
             "/**\n" +
             " * @author: wuxin0011\n" +

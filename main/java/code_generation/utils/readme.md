@@ -25,16 +25,17 @@ public static <T> void testUtil(Class<T> c, String methodName, String fileName, 
 > 举个例子 下面方法是获取数组的最大值
 
 ```java
-import leetcode.utils.IoUtil;
+import code_generation.utils.IoUtil;
 
 class Main {
     public static void main(String[] args) {
-        IoUtil.testUtil(Main.class,"getMax","in.txt");
+        IoUtil.testUtil(Main.class, "getMax", "in.txt");
     }
-    public int getMax(int[] arr){
-        int mx =  Integer.MIN_VALUE;
-        for(int num : arr){
-            if(mx<num)mx = num;
+
+    public int getMax(int[] arr) {
+        int mx = Integer.MIN_VALUE;
+        for (int num : arr) {
+            if (mx < num) mx = num;
         }
         return mx;
     }

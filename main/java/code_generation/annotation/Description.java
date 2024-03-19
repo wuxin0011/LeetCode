@@ -1,8 +1,8 @@
-package leetcode.annotation;
+package code_generation.annotation;
 
-import leetcode.utils.Bean.Difficulty;
-import leetcode.utils.Bean.Tag;
-import leetcode.utils.Bean.Type;
+import code_generation.enums.Difficulty;
+import code_generation.enums.Tag;
+import code_generation.enums.Type;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

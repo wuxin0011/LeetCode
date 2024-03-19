@@ -1,4 +1,4 @@
-package leetcode.utils;
+package code_generation.utils;
 
 import leetcode.base.array.sort.ArraySort;
 

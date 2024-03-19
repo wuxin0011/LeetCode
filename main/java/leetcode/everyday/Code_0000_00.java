@@ -1,7 +1,7 @@
 package leetcode.everyday;
 
 import code_generation.Problem;
-import leetcode.utils.IoUtil;
+import code_generation.utils.IoUtil;
 
 import java.io.File;
 import java.util.Arrays;

@@ -1,4 +1,4 @@
-package leetcode.utils;
+package code_generation;
 
 /**
  * @author: wuxin0011

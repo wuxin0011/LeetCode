@@ -1,7 +1,7 @@
 package leetcode.contest.biweekly.bi_100.bi_127.d;
 
-import leetcode.utils.IoUtil;
-import java.util.*;
+import code_generation.utils.IoUtil;
+
 /**
  * @author: wuxin0011
  * @Description:

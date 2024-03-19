@@ -1,10 +1,10 @@
 package leetcode.base.maximum;
 
-import leetcode.annotation.Description;
-import leetcode.utils.Bean.Difficulty;
-import leetcode.utils.InvocationHandlerMethodTime;
-import leetcode.utils.LogarithmicDevice;
-import leetcode.utils.TestUtils;
+import code_generation.annotation.Description;
+import code_generation.enums.Difficulty;
+import code_generation.utils.InvocationHandlerMethodTime;
+import code_generation.LogarithmicDevice;
+import code_generation.utils.TestUtils;
 
 /**
  * @author: wuxin0011

@@ -1,8 +1,8 @@
 package leetcode.other.simple;
 
-import leetcode.annotation.Description;
-import leetcode.utils.InvocationHandlerMethodTime;
-import leetcode.utils.LogarithmicDevice;
+import code_generation.annotation.Description;
+import code_generation.utils.InvocationHandlerMethodTime;
+import code_generation.LogarithmicDevice;
 
 /**
  * @author: wuxin0011

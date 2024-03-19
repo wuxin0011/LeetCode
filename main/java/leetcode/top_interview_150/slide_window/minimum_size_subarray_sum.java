@@ -1,6 +1,6 @@
 package leetcode.top_interview_150.slide_window;
 
-import leetcode.utils.IoUtil;
+import code_generation.utils.IoUtil;
 
 /**
  * @author: wuxin0011

@@ -1,6 +1,6 @@
 package leetcode.top_interview_150.graph;
 
-import leetcode.utils.IoUtil;
+import code_generation.utils.IoUtil;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;

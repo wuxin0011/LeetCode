@@ -1,6 +1,6 @@
 package leetcode.base.strings;
 
-import leetcode.utils.TestUtils;
+import code_generation.utils.TestUtils;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,7 +1,7 @@
-package leetcode.utils;
+package code_generation.utils;
 
-import leetcode.annotation.Description;
-import leetcode.utils.Bean.Type;
+import code_generation.annotation.Description;
+import code_generation.enums.Type;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;

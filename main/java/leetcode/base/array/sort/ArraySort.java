@@ -1,7 +1,7 @@
 package leetcode.base.array.sort;
 
-import leetcode.utils.LogarithmicDevice;
-import leetcode.utils.NumberUtils;
+import code_generation.LogarithmicDevice;
+import code_generation.utils.NumberUtils;
 
 import java.util.Arrays;
 

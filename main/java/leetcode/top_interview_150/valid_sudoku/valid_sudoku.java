@@ -1,6 +1,6 @@
 package leetcode.top_interview_150.valid_sudoku;
 
-import leetcode.utils.IoUtil;
+import code_generation.utils.IoUtil;
 
 import java.util.Arrays;
 

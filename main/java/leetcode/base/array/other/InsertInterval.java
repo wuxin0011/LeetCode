@@ -1,10 +1,10 @@
 package leetcode.base.array.other;
 
-import leetcode.annotation.Description;
-import leetcode.utils.Bean.Difficulty;
-import leetcode.utils.Bean.Type;
-import leetcode.utils.InvocationHandlerMethodTime;
-import leetcode.utils.LogarithmicDevice;
+import code_generation.annotation.Description;
+import code_generation.enums.Difficulty;
+import code_generation.enums.Type;
+import code_generation.utils.InvocationHandlerMethodTime;
+import code_generation.LogarithmicDevice;
 
 import java.util.ArrayList;
 import java.util.Arrays;

@@ -1,9 +1,9 @@
 package leetcode.other.medium;
 
-import leetcode.annotation.Description;
-import leetcode.utils.Bean.Difficulty;
-import leetcode.utils.InvocationHandlerMethodTime;
-import leetcode.utils.LogarithmicDevice;
+import code_generation.annotation.Description;
+import code_generation.enums.Difficulty;
+import code_generation.utils.InvocationHandlerMethodTime;
+import code_generation.LogarithmicDevice;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,6 +1,6 @@
 package code_generation;
 
-import leetcode.utils.IoUtil;
+import code_generation.utils.IoUtil;
 
 import java.io.File;
 import java.text.SimpleDateFormat;

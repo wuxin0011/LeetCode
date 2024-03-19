@@ -1,9 +1,6 @@
 package leetcode.everyday;
 
-import leetcode.utils.IoUtil;
-
-import java.util.HashMap;
-import java.util.Map;
+import code_generation.utils.IoUtil;
 
 /**
  * @author: wuxin0011

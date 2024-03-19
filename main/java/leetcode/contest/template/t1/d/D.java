@@ -1,7 +1,7 @@
 package leetcode.contest.template.t1.d;
 
-import leetcode.utils.IoUtil;
-import java.util.*;
+import code_generation.utils.IoUtil;
+
 /**
  * @author: wuxin0011
  * @Description:

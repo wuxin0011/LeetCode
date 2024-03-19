@@ -1,7 +1,7 @@
 package leetcode.contest.weekly.w_200.w_232.b;
 
-import leetcode.utils.IoUtil;
-import java.util.*;
+import code_generation.utils.IoUtil;
+
 /**
  * @author: wuxin0011
  * @Description:

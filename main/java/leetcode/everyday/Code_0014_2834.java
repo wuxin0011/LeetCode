@@ -1,6 +1,6 @@
 package leetcode.everyday;
 
-import leetcode.utils.IoUtil;
+import code_generation.utils.IoUtil;
 import java.util.Set;
 import java.util.HashSet;
 /*

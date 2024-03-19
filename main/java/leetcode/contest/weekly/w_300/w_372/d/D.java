@@ -1,6 +1,6 @@
 package leetcode.contest.weekly.w_300.w_372.d;
 
-import leetcode.utils.IoUtil;
+import code_generation.utils.IoUtil;
 
 /**
  * @author: wuxin0011

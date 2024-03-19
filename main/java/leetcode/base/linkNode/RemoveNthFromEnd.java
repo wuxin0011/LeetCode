@@ -1,9 +1,9 @@
 package leetcode.base.linkNode;
 
-import leetcode.annotation.Description;
-import leetcode.utils.Bean.Difficulty;
-import leetcode.utils.Bean.Tag;
-import leetcode.utils.ListNode;
+import code_generation.annotation.Description;
+import code_generation.enums.Difficulty;
+import code_generation.enums.Tag;
+import code_generation.utils.ListNode;
 
 /**
  * @author: wuxin0011

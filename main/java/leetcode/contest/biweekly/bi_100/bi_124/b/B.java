@@ -1,6 +1,6 @@
 package leetcode.contest.biweekly.bi_100.bi_124.b;
 
-import leetcode.utils.IoUtil;
+import code_generation.utils.IoUtil;
 
 /**
  * @author: wuxin0011

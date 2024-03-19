@@ -1,8 +1,8 @@
 package leetcode.base.array.sort;
 
-import leetcode.annotation.Description;
-import leetcode.utils.IoUtil;
-import leetcode.utils.NumberUtils;
+import code_generation.annotation.Description;
+import code_generation.utils.IoUtil;
+import code_generation.utils.NumberUtils;
 
 /**
  * @author: wuxin001

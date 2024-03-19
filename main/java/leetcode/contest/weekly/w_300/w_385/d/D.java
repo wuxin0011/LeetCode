@@ -1,7 +1,7 @@
 package leetcode.contest.weekly.w_300.w_385.d;
 
 
-import leetcode.utils.IoUtil;
+import code_generation.utils.IoUtil;
 
 import java.util.HashMap;
 import java.util.Map;

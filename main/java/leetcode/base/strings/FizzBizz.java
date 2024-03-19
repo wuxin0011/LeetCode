@@ -1,12 +1,12 @@
 package leetcode.base.strings;
 
-import leetcode.annotation.Description;
-import leetcode.utils.Bean.Difficulty;
-import leetcode.utils.Bean.Tag;
-import leetcode.utils.Bean.Type;
-import leetcode.utils.InvocationHandlerMethodTime;
-import leetcode.utils.LogarithmicDevice;
-import leetcode.utils.TestUtils;
+import code_generation.annotation.Description;
+import code_generation.enums.Difficulty;
+import code_generation.enums.Tag;
+import code_generation.enums.Type;
+import code_generation.utils.InvocationHandlerMethodTime;
+import code_generation.LogarithmicDevice;
+import code_generation.utils.TestUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;

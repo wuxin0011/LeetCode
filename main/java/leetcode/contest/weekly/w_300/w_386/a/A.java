@@ -1,6 +1,6 @@
 package leetcode.contest.weekly.w_300.w_386.a;
 
-import leetcode.utils.IoUtil;
+import code_generation.utils.IoUtil;
 
 import java.util.HashMap;
 import java.util.Map;

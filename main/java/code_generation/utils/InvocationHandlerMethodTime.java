@@ -1,4 +1,6 @@
-package leetcode.utils;
+package code_generation.utils;
+
+import code_generation.LogarithmicDevice;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;

@@ -1,7 +1,7 @@
 package leetcode.base.maximum;
 
-import leetcode.annotation.Description;
-import leetcode.utils.Bean.Difficulty;
+import code_generation.annotation.Description;
+import code_generation.enums.Difficulty;
 
 /**
  * @author: wuxin0011

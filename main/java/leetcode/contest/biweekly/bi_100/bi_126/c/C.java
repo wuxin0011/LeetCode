@@ -1,6 +1,6 @@
 package leetcode.contest.biweekly.bi_100.bi_126.c;
 
-import leetcode.utils.IoUtil;
+import code_generation.utils.IoUtil;
 
 import java.util.ArrayList;
 import java.util.Collections;

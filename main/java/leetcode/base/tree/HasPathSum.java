@@ -1,6 +1,6 @@
 package leetcode.base.tree;
 
-import leetcode.annotation.Description;
+import code_generation.annotation.Description;
 
 /**
  * @author: wuxin0011

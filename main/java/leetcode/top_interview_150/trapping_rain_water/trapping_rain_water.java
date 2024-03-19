@@ -1,6 +1,6 @@
 package leetcode.top_interview_150.trapping_rain_water;
 
-import leetcode.utils.IoUtil;
+import code_generation.utils.IoUtil;
 
 /**
  * @author: wuxin0011

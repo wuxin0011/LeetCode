@@ -1,6 +1,6 @@
 package template.str;
 
-import leetcode.utils.TestUtils;
+import code_generation.utils.TestUtils;
 
 import java.util.List;
 

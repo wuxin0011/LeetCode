@@ -1,4 +1,4 @@
-package leetcode.utils.Bean;
+package code_generation.enums;
 
 /**
  * @author: wuxin0011
