@@ -1,6 +1,6 @@
 package leetcode.everyday;
 
-import leetcode.contest.Problem;
+import code_generation.Problem;
 import leetcode.utils.IoUtil;
 
 import java.io.File;

@@ -1,4 +1,4 @@
-package crwal.leetcode;
+package code_generation.leetcode;
 
 /**
  * @author: wuxin0011

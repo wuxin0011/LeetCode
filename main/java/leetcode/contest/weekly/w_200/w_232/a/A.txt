@@ -1,0 +1,17 @@
+bank
+kanb
+true
+
+
+attack
+defend
+false
+
+
+kelb
+kelb
+true
+
+abcd
+dcba
+false

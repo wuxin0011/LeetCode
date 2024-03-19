@@ -1,4 +1,4 @@
-package leetcode.contest;
+package code_generation;
 
 import leetcode.utils.IoUtil;
 

@@ -1,10 +1,9 @@
-package leetcode.contest;
+package code_generation;
 
 import leetcode.utils.IoUtil;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
-import java.time.LocalTime;
 import java.util.Date;
 import java.util.Objects;
 
@@ -12,19 +11,9 @@ import java.util.Objects;
  * @author: wuxin0011
  * @Description:
  */
-public class WeekContest {
+public class WeekContest implements Contest {
 
 
-    /**
-     * 周赛
-     */
-    public static final WeekContest WEEK_CONTEST = new WeekContest(380, "2024-01-14 10:30:00", 4, "w_", "weekly", 1, null);
-
-
-    /**
-     * 双周赛
-     */
-    public static final WeekContest BI_WEEK_CONTEST = new WeekContest(100, "2023-03-18 22:30:00", 4, "bi_", "biweekly", 2, null);
     private static final Date currentDate = new Date();
 
 
@@ -40,12 +29,22 @@ public class WeekContest {
 
     public WeekContest(int no, String lastestDate, int problems, String dirPrefix, String dir, int times, Class<?> c) {
         this.lastestDateNo = no;
-        this.aClass = c == null ? WeekContest.class : c;
         this.lastestDate = Objects.requireNonNull(parse(lastestDate), "date format is fail");
-        this.dir = IoUtil.wrapperAbsolutePath(aClass, dir);
+        this.setClass(c);
         this.times = Math.max(1, times);
         this.problems = problems;
         this.dirPrefix = dirPrefix.endsWith("_") ? dirPrefix : (dirPrefix + "_");
+    }
+
+
+    /**
+     * 可以自动调整类目录
+     *
+     * @param c
+     */
+    public void setClass(Class<?> c) {
+        this.aClass = c == null ? WeekContest.class : c;
+        this.dir = IoUtil.wrapperAbsolutePath(aClass, dir);
     }
 
     /**
@@ -115,20 +114,6 @@ public class WeekContest {
         createTestProblem(NO, wrapperDir);
     }
 
-
-    public static void auto() {
-        LocalTime currentTime = LocalTime.now();
-        int hour = currentTime.getHour();
-        if (9 <= hour && hour <= 12) {
-            System.out.println("create week" + WEEK_CONTEST.getNO());
-            WEEK_CONTEST.next();
-        } else if (21 <= hour) {
-            System.out.println("create BI_WEEK_CONTEST" + BI_WEEK_CONTEST.getNO());
-            BI_WEEK_CONTEST.next();
-        } else {
-            System.out.println("no contest start ");
-        }
-    }
 
 
 }
