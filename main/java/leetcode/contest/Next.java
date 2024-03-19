@@ -1,12 +1,14 @@
 package leetcode.contest;
 
-import java.time.LocalTime;
+import java.util.Calendar;
 
 /**
  * @author: wuxin0011
  * @Description: 生成 template 类
  */
 public class Next {
+    final static int[] DAYS = {0, 7, 1, 2, 3, 4, 5, 6};
+
     // create template
     public static void main(String[] args) {
         autoCreateNext();
@@ -14,11 +16,12 @@ public class Next {
 
 
     public static void autoCreateNext() {
-        LocalTime lc = LocalTime.now();
-        int hour = lc.getHour();
-        if (hour >= 9 && hour <= 12) {
+        Calendar calendar = Calendar.getInstance();
+        int dayofWeek = calendar.get(Calendar.DAY_OF_WEEK);
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        if (hour >= 9 && hour <= 12 && DAYS[dayofWeek] == 7) {
             LeetCodeContest.WEEK_CONTEST.next();
-        } else if (hour >= 21) {
+        } else if (hour >= 21 && DAYS[dayofWeek] == 6) {
             LeetCodeContest.BI_WEEK_CONTEST.next();
         } else {
             System.out.println("Not contest will start !");

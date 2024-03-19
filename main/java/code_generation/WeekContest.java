@@ -3,7 +3,10 @@ package code_generation;
 import code_generation.utils.IoUtil;
 
 import java.io.File;
-import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.Objects;
 
@@ -15,10 +18,10 @@ public class WeekContest implements Contest {
 
 
     private static final Date currentDate = new Date();
-
+    private static final LocalDate NOW = LocalDate.now();
 
     private int lastestDateNo; // 最近一次比赛编号
-    private Date lastestDate; // 最近一次比赛时间
+    private LocalDate lastestDate; // 最近一次比赛时间
     private String dir; // 生成的目录
     private int times; // 比赛频率
     private int problems; // 多少个题目 默认4个
@@ -80,16 +83,16 @@ public class WeekContest implements Contest {
 
 
     public int getNO() {
-        long millisecondsBetween = currentDate.getTime() - lastestDate.getTime();
-        long weeksBetween = (millisecondsBetween / (7 * 24 * 60 * 60 * 1000) + times) / times;
+        int weeksBetween = (int) (ChronoUnit.WEEKS.between(lastestDate, NOW) / times);
         return (int) (this.lastestDateNo + weeksBetween);
     }
 
 
-    public static Date parse(String text) {
+    public LocalDate parse(String text) {
         try {
-            final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            return sdf.parse(text);
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            LocalDateTime localDateTime = LocalDateTime.parse(text, formatter);
+            return localDateTime.toLocalDate();
         } catch (Exception e) {
             return null;
         }
