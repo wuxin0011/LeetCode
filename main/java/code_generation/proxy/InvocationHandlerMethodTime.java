@@ -1,6 +1,5 @@
 package code_generation.proxy;
 
-import code_generation.LogarithmicDevice;
 import code_generation.utils.ReflectUtils;
 
 import java.lang.reflect.InvocationHandler;

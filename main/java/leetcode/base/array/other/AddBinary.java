@@ -1,6 +1,6 @@
 package leetcode.base.array.other;
 
-import code_generation.LogarithmicDevice;
+import code_generation.proxy.LogarithmicDevice;
 
 /**
  * @author: wuxin0011

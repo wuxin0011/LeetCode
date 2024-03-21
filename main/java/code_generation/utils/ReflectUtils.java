@@ -156,7 +156,7 @@ public class ReflectUtils {
     }
 
     public static Object parseArg(Object src, String methodName, String type, String input, int idx, int argsSize) {
-        if ("".equals(input) || input.length() == 0) {
+        if (input == null || "".equals(input) || input.length() == 0) {
             System.out.println("read content is null");
             return null;
         }
@@ -297,6 +297,9 @@ public class ReflectUtils {
 
 
     public static String toString(String input) {
+        if (input == null || input.length() == 0) {
+            throw new NullPointerException("input content is null");
+        }
         char[] charArray = input.toCharArray();
         StringBuilder sb = new StringBuilder();
         for (char c : charArray) {

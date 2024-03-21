@@ -1,6 +1,6 @@
 package leetcode.contest;
 
-import code_generation.Problem;
+import code_generation.contest.Problem;
 
 /**
  * @author: wuxin0011

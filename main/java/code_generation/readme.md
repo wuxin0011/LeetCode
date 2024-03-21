@@ -1,5 +1,7 @@
 ### 目录结构
 
+- [contest](./contest)
+  - 题目相关类
 - [bean](./bean)
   - 负责常用的引用例如 ``ListNode`` 、`TreeNode` 等
 - [parse](./parse)
@@ -10,5 +12,5 @@
   - 顾名思义爬虫用的，自动抓取网站数据
 - [enums](./enums)
   - 枚举题类型
- - [proxy](./proxy)
-   - 代理类，自动运行对比，不过该功能已经不怎么使用了
+- [proxy](./proxy)
+  - 代理类，自动运行对比，不过该功能已经不怎么使用了

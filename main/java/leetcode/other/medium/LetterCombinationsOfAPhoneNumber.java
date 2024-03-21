@@ -3,7 +3,7 @@ package leetcode.other.medium;
 import code_generation.annotation.Description;
 import code_generation.enums.Difficulty;
 import code_generation.proxy.InvocationHandlerMethodTime;
-import code_generation.LogarithmicDevice;
+import code_generation.proxy.LogarithmicDevice;
 
 import java.util.ArrayList;
 import java.util.List;

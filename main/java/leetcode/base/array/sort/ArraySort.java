@@ -1,6 +1,6 @@
 package leetcode.base.array.sort;
 
-import code_generation.LogarithmicDevice;
+import code_generation.proxy.LogarithmicDevice;
 import code_generation.utils.NumberUtils;
 
 import java.util.Arrays;

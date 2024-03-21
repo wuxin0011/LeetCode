@@ -1,9 +1,6 @@
 package leetcode.contest;
 
-import code_generation.Contest;
-import code_generation.WeekContest;
-
-import java.time.LocalTime;
+import code_generation.contest.WeekContest;
 
 /**
  * @author: wuxin0011

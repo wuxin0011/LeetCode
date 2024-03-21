@@ -171,21 +171,33 @@ public class IoUtil {
         Object[] args = new Object[parameterTypes.length];
         int size = inputList.size();
         boolean f = true;
+        String read = null;
+        List<Integer> errorTimes = new ArrayList<>();
+        int compareTimes = 0;
         for (int idx = 0; idx < size; ) {
-            if (inputList.get(idx) == null || inputList.get(idx).length() == 0) {
-                idx++;
-                continue;
-            }
-
             // 填充参数信息
+            boolean isFill = false; // 参数校验标志信息
             for (int i = 0; i < parameterTypes.length && idx < size; i++, idx++) {
-                args[i] = ReflectUtils.parseArg(obj, method.getName(), parameterTypes[i], inputList.get(idx), i, parameterTypes.length);
+                // 允许答案和输入参数之间有间隙
+                while (idx < size && ((read = inputList.get(idx)) == null || read.length() == 0)) {
+                    idx++;
+                }
+                if (idx == size) {
+                    break;
+                }
+                if (idx != size && (read == null || read.length() == 0)) {
+                    throw new RuntimeException("result not match place check your ans !");
+                }
+                isFill = true;
+                args[i] = ReflectUtils.parseArg(obj, method.getName(), parameterTypes[i], read, i, parameterTypes.length);
+                read = null;
             }
-
 
             if (idx >= size) {
-                System.out.println("place check result match");
-                f = false;
+                if (isFill) {
+                    System.out.println("place check result match");
+                    errorTimes.add(compareTimes);
+                }
                 break;
             }
 
@@ -201,23 +213,34 @@ public class IoUtil {
                     returnName = parameterTypes[0].getSimpleName();
                     result = args[0];
                 }
-                Object expect = ReflectUtils.parseArg(obj, method.getName(), returnName, inputList.get(idx), -1, -1);
-                if (expect != null && !TestUtils.valid(result, expect, returnName, isStrict)) {
-                    f = false;
-                    // break;
-                }
 
+                // 允许答案和输入参数之间有间隙
+                while (idx < inputList.size() && ((read = inputList.get(idx)) == null || read.length() == 0)) {
+                    idx++;
+                }
+                // 结果不匹配
+                if (read == null || read.length() == 0) {
+                    throw new RuntimeException("result not match place check your ans !");
+                }
+                Object expect = ReflectUtils.parseArg(obj, method.getName(), returnName, read, -1, -1);
+                if (expect != null && !TestUtils.valid(result, expect, returnName, isStrict)) {
+                    errorTimes.add(compareTimes); // save error
+                }
+                read = null;
             } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
                 e.printStackTrace();
-                f = false;
+                errorTimes.add(compareTimes);
                 break;
             }
-            idx++;
+            idx++; // match ok
+            compareTimes++; // 比较次数
         }
-        if (f) {
+        if (errorTimes.size() == 0) {
             System.out.println("Accepted!");
         } else {
-            System.err.println("fail");
+            for (int error : errorTimes) {
+                System.out.println("compare " + error + " is Error ,place check your program");
+            }
         }
 
     }

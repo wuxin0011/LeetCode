@@ -4,7 +4,7 @@ import code_generation.annotation.Description;
 import code_generation.enums.Difficulty;
 import code_generation.enums.Type;
 import code_generation.proxy.InvocationHandlerMethodTime;
-import code_generation.LogarithmicDevice;
+import code_generation.proxy.LogarithmicDevice;
 import code_generation.utils.TestUtils;
 
 import java.util.ArrayDeque;

@@ -2,7 +2,7 @@ package leetcode.other.medium;
 
 import code_generation.annotation.Description;
 import code_generation.proxy.InvocationHandlerMethodTime;
-import code_generation.LogarithmicDevice;
+import code_generation.proxy.LogarithmicDevice;
 
 /**
  * @author: wuxin0011
