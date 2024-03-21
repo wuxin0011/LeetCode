@@ -173,7 +173,7 @@ public class IoUtil {
         boolean f = true;
         String read = null;
         List<Integer> errorTimes = new ArrayList<>();
-        int compareTimes = 0;
+        int compareTimes = 1;
         for (int idx = 0; idx < size; ) {
             // 填充参数信息
             boolean isFill = false; // 参数校验标志信息
