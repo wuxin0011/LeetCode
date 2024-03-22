@@ -170,9 +170,10 @@ public class IoUtil {
         Class<?>[] parameterTypes = method.getParameterTypes();
         Object[] args = new Object[parameterTypes.length];
         int size = inputList.size();
-        boolean f = true;
         String read = null;
+
         List<Integer> errorTimes = new ArrayList<>();
+        int exceptionTime = -1;
         int compareTimes = 1;
         for (int idx = 0; idx < size; ) {
             // 填充参数信息
@@ -229,7 +230,7 @@ public class IoUtil {
                 read = null;
             } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
                 e.printStackTrace();
-                errorTimes.add(compareTimes);
+                exceptionTime = compareTimes;
                 break;
             }
             idx++; // match ok
@@ -240,6 +241,9 @@ public class IoUtil {
         } else {
             for (int error : errorTimes) {
                 System.out.println("compare " + error + " is Error ,place check your program");
+            }
+            if (exceptionTime != -1) {
+                System.out.println("exception times :" + exceptionTime);
             }
         }
 
