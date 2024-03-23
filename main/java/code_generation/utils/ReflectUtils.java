@@ -578,8 +578,8 @@ public class ReflectUtils {
         List<String> ls = new ArrayList<>();
         char[] flag = getFlag(input);
         char startFlag = flag[0];
-        char endFlag = flag[0];
-        char interruptFlag = flag[0];
+        char endFlag = flag[1];
+        char interruptFlag = flag[2];
         String nullStr = new String(new char[]{startFlag, endFlag});
         if (nullStr.equals(input)) return ls;
         StringBuilder sb = null;
@@ -608,8 +608,8 @@ public class ReflectUtils {
         StringBuilder sb = null;
         char[] flag = getFlag(input);
         char startFlag = flag[0];
-        char endFlag = flag[0];
-        char interruptFlag = flag[0];
+        char endFlag = flag[1];
+        char interruptFlag = flag[2];
         List<List<String>> ls = new ArrayList<>();
         List<String> temp = null;
         Stack<Character> sk = new Stack<>();
@@ -656,8 +656,8 @@ public class ReflectUtils {
         Stack<Character> sk = new Stack<>();
         char[] flag = getFlag(input);
         char startFlag = flag[0];
-        char endFlag = flag[0];
-        char interruptFlag = flag[0];
+        char endFlag = flag[1];
+        char interruptFlag = flag[2];
         for (char c : charArray) {
             if (isIgnore(c)) continue;
             if (c == startFlag) {
