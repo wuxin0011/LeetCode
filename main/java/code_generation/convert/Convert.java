@@ -1,4 +1,4 @@
-package code_generation.parse;
+package code_generation.convert;
 
 import java.util.IllegalFormatConversionException;
 
@@ -6,7 +6,7 @@ import java.util.IllegalFormatConversionException;
  * @author: wuxin0011
  * @Description: 根据输入的内容进行解析不同平台对输入输出内容要求和格式不同！
  */
-public interface Parse<T> {
+public interface Convert<T> {
 
 
     /**
@@ -17,6 +17,6 @@ public interface Parse<T> {
      * @return 返回解析后的结果
      * @throws IllegalFormatConversionException 解析格式转换异常
      */
-    T parse(String input) throws IllegalFormatConversionException;
+    T convert(String input) throws IllegalFormatConversionException;
 
 }

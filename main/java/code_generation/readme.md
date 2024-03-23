@@ -4,7 +4,7 @@
   - 题目相关类
 - [bean](./bean)
   - 负责常用的引用例如 ``ListNode`` 、`TreeNode` 等
-- [parse](./parse)
+- [convert](./convert)
   - 负责解析输入参数，
 - [utils](./utils)
   - 常用的工具类

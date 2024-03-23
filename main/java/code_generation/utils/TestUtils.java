@@ -2,7 +2,7 @@ package code_generation.utils;
 
 import code_generation.bean.ListNode;
 import code_generation.bean.TreeNode;
-import leetcode.function.Expect;
+import code_generation.function.Expect;
 
 import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
