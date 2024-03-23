@@ -67,11 +67,12 @@ public class TreeNode {
     /**
      * 通过宽度遍历方式构建二叉树
      *
-     * @param ls
-     * @return
+     * @param ls 序列化后的二叉树
+     * @return 返回二叉树的根节点
      */
     public static TreeNode widthBuildTreeNode(String[] ls) {
-        if (ls == null || ls.length == 0 || ls[0] == null || "null".equals(ls[0])) {
+
+        if (ls == null || ls.length == 0 || ls[0] == null || isNullNode(ls[0])) {
             return null;
         }
         Deque<TreeNode> q = new ArrayDeque<>();
@@ -80,18 +81,18 @@ public class TreeNode {
         int i = 1;
         while (i < ls.length && !q.isEmpty()) {
             int s = q.size();
-            while (s > 0 && i<ls.length) {
+            while (s > 0 && i < ls.length) {
                 s--;
                 TreeNode node = q.poll();
                 if (node == null) continue;
-                if (!"null".equals(ls[i])) {
+                if (!isNullNode(ls[i])) {
                     TreeNode left = new TreeNode(Integer.parseInt(ls[i]));
                     node.left = left;
                     q.add(left);
                 }
                 i++;
-                if( i >= ls.length)break;
-                if (!"null".equals(ls[i])) {
+                if (i >= ls.length) break;
+                if (!isNullNode(ls[i])) {
                     TreeNode right = new TreeNode(Integer.parseInt(ls[i]));
                     node.right = right;
                     q.add(right);
@@ -102,6 +103,11 @@ public class TreeNode {
         return root;
     }
 
+    // "null" support lc
+    // "#" supprot niuke
+    private static boolean isNullNode(String s) {
+        return "null".equals(s) || "#".equals(s);
+    }
 
 
     public static TreeNode widthBuildTreeNode(Integer[] ls) {
@@ -109,7 +115,7 @@ public class TreeNode {
             return null;
         }
         String[] s = new String[ls.length];
-        for(int i = 0;i<ls.length;i++){
+        for (int i = 0; i < ls.length; i++) {
             s[i] = String.valueOf(ls[i]);
         }
         return widthBuildTreeNode(s);

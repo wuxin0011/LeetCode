@@ -576,19 +576,24 @@ public class ReflectUtils {
 
     public static List<String> parseListString(String input) {
         List<String> ls = new ArrayList<>();
-        if ("[]".equals(input)) return ls;
+        char[] flag = getFlag(input);
+        char startFlag = flag[0];
+        char endFlag = flag[0];
+        char interruptFlag = flag[0];
+        String nullStr = new String(new char[]{startFlag, endFlag});
+        if (nullStr.equals(input)) return ls;
         StringBuilder sb = null;
         char[] cs = input.toCharArray();
         for (char c : cs) {
-            if (c == '[') {
+            if (c == startFlag) {
                 sb = new StringBuilder();
                 continue;
             }
             if (sb == null) break;
-            if (c == ']') {
+            if (c == endFlag) {
                 ls.add(sb.toString());
                 break;
-            } else if (c == ',') {
+            } else if (c == interruptFlag) {
                 ls.add(sb.toString());
                 sb = new StringBuilder();
             } else {
@@ -601,16 +606,20 @@ public class ReflectUtils {
 
     public static List<List<String>> parseDoubleString(String input) {
         StringBuilder sb = null;
+        char[] flag = getFlag(input);
+        char startFlag = flag[0];
+        char endFlag = flag[0];
+        char interruptFlag = flag[0];
         List<List<String>> ls = new ArrayList<>();
         List<String> temp = null;
         Stack<Character> sk = new Stack<>();
         char[] cs = input.toCharArray();
         for (int i = 0; i < cs.length; i++) {
             char c = cs[i];
-            if (c == '[') {
+            if (c == startFlag) {
                 sk.push(c);
                 if (sk.size() == 2) temp = new ArrayList<>();
-            } else if (c == ']') {
+            } else if (c == endFlag) {
                 if (!sk.isEmpty()) {
                     sk.pop();
                 }
@@ -620,7 +629,7 @@ public class ReflectUtils {
                 }
                 sb = null;
                 temp = null;
-            } else if (c == ',') {
+            } else if (c == interruptFlag) {
                 if (temp != null && sb != null) {
                     temp.add(sb.toString());
                     sb = new StringBuilder();
@@ -645,16 +654,20 @@ public class ReflectUtils {
         List<List<String>> d = new ArrayList<>();
         List<String> t = new ArrayList<>();
         Stack<Character> sk = new Stack<>();
+        char[] flag = getFlag(input);
+        char startFlag = flag[0];
+        char endFlag = flag[0];
+        char interruptFlag = flag[0];
         for (char c : charArray) {
             if (isIgnore(c)) continue;
-            if (c == '[') {
+            if (c == startFlag) {
                 sk.push(c);
                 if (sk.size() == 2) {
                     d = new ArrayList<>();
                 } else if (sk.size() == 3) {
                     t = new ArrayList<>();
                 }
-            } else if (c == ']') {
+            } else if (c == endFlag) {
                 if (!sk.isEmpty()) {
                     sk.pop();
                 }
@@ -667,7 +680,7 @@ public class ReflectUtils {
                     }
                     d.add(t);
                 }
-            } else if (c == ',') {
+            } else if (c == interruptFlag) {
                 if (sb != null) {
                     t.add(sb.toString());
                 }
@@ -730,6 +743,29 @@ public class ReflectUtils {
                 System.out.println("unknown support type");
                 break;
         }
+    }
+
+
+    public static char[] getFlag(String input) {
+        char st = '\0';
+        for (int i = 0; i < input.length(); i++) {
+            if ((st = input.charAt(i)) != ' ' && st != '\0') {
+                break;
+            }
+        }
+        char[] flag = new char[3];
+        if (st == '{') {
+            flag[0] = '{';
+            flag[1] = '}';
+            flag[2] = ',';
+        } else if (st == '[') {
+            flag[0] = '[';
+            flag[1] = ']';
+            flag[2] = ',';
+        } else {
+            throw new RuntimeException("NO this parse format, place implement");
+        }
+        return flag;
     }
 
 }
