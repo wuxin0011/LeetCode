@@ -763,7 +763,7 @@ public class ReflectUtils {
             flag[1] = ']';
             flag[2] = ',';
         } else {
-            throw new RuntimeException("NO this parse format, place implement");
+            throw new RuntimeException("NO this parse format, place implement ,start flag is " + st);
         }
         return flag;
     }
