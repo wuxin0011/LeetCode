@@ -10,15 +10,21 @@ public class Constant {
 
     public static final String csrftoken = "csrftoken";
     public static final String LEETCODE_SESSION = "LEETCODE_SESSION";
-    public static final String SESSION = "session";
     public static final String CONFIG_NAME = "request.properties";
+
+    public static final String params = "params";
+    public static final String headers = "headers";
+    public static final String cookies = "cookies";
+
+    public static final String[] CONFIGS = new String[]{headers};
 
 
     public static final Random RANDOM = new Random();
 
 
     public static String getUserAgent() {
-        return UserAgents[RANDOM.nextInt(UserAgents.length)];
+//        return UserAgents[RANDOM.nextInt(UserAgents.length)];
+        return "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36 Edg/116.0.1938.62";
     }
 
 

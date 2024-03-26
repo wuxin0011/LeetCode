@@ -1,6 +1,6 @@
 package code_generation.contest;
 
-import java.util.Scanner;
+import java.util.List;
 
 /**
  * @author: wuxin0011
@@ -9,50 +9,41 @@ import java.util.Scanner;
 public interface Contest {
 
 
-    /**
-     * 根据时间自动生成
+    /***
+     * 获取本次比赛编号
+     * @return ID
      */
-    default void auto() {
-        next();
-    }
-
-
-    /**
-     * 下一场次
-     */
-    default void next() {
-
-    }
+    int getId();
 
 
     /**
-     * 根据输入自定义生成
+     * 获取比赛所有题目链接
+     *
+     * @param id id
+     * @return urls
      */
-    default void createNo() {
-        int NO;
-        Scanner sc = new Scanner(System.in);
-        while (true) {
-            System.out.print("place input a valid contest number : ");
-            try {
-                NO = sc.nextInt();
-                if (NO <= 0) {
-                    continue;
-                }
-                break;
-            } catch (Exception ignored) {
-                sc.next();
-            }
-        }
-        createNo(NO);
-    }
+    List<String> getUrls(int id);
 
 
     /**
-     * 根据序号生成
+     * 解析测试案例
+     *
+     * @return 返回测试案例
      */
-    default void createNo(int NO) {
-        System.out.println("place implement this method");
-    }
+    String parseTestCase(String input);
 
+
+    /**
+     * 解析代码快内容
+     *
+     * @return 返回代码快内容
+     */
+    String parseCodeTemplate(String input);
+
+
+    /**
+     * 生成template
+     */
+    void generatorTemplate();
 
 }

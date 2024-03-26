@@ -303,7 +303,7 @@ public class ReflectUtils {
         char[] charArray = input.toCharArray();
         StringBuilder sb = new StringBuilder();
         for (char c : charArray) {
-            if (isIgnore(c)) continue;
+            if (StringUtils.isIgnoreStrict(c)) continue;
             sb.append(c);
         }
         return sb.toString();
@@ -430,9 +430,7 @@ public class ReflectUtils {
     }
 
 
-    public static boolean isIgnore(char c) {
-        return c == '\r' || c == '\n' || c == '\t' || c == '\b' || c == '\f' || c == '\0' || c == '\\' || c == ' ' || c == '\'' || c == '\"' || c == '#';
-    }
+
 
 
     public static List<Integer> parseListInteger(String input) {
@@ -659,7 +657,7 @@ public class ReflectUtils {
         char endFlag = flag[1];
         char interruptFlag = flag[2];
         for (char c : charArray) {
-            if (isIgnore(c)) continue;
+            if (StringUtils.isIgnoreStrict(c)) continue;
             if (c == startFlag) {
                 sk.push(c);
                 if (sk.size() == 2) {

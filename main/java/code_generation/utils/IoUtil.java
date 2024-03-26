@@ -4,6 +4,7 @@ package code_generation.utils;
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
@@ -537,7 +538,7 @@ public class IoUtil {
     }
 
 
-    public static <T> String wrapperAbsolutePath(Class<T> c, String dir) {
+    public static String wrapperAbsolutePath(Class<?> c, String dir) {
         Objects.requireNonNull(dir, "dir Not allow null");
         return isAbsolutePath(dir) ? dir : IoUtil.buildAbsolutePath(c) + dir;
     }
@@ -547,5 +548,99 @@ public class IoUtil {
             return false;
         }
         return dir.charAt(0) == File.separator.charAt(0) || dir.charAt(0) == '/' || dir.length() >= 2 && dir.charAt(1) == ':';
+    }
+
+
+    public static String readContent(Class<?> c, String path) {
+        path = wrapperAbsolutePath(c, path);
+        return readContent(path);
+    }
+
+    public static String readContent(String path) {
+        return readContent(new File(path));
+    }
+
+
+    public static String readContent(File file) {
+        BufferedInputStream bis = null;
+        StringBuilder sb = null;
+        try {
+            if (!file.exists()) {
+                return "";
+            }
+            bis = new BufferedInputStream(new FileInputStream(file));
+            sb = new StringBuilder();
+            byte[] buf = new byte[1024 * 1024];
+            int len = -1;
+            while ((len = bis.read(buf)) != -1) {
+                sb.append(new String(buf, 0, len));
+            }
+            return sb.toString();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "";
+        } finally {
+            close(bis);
+        }
+
+    }
+
+
+    public static void writeContent(Class<?> c, String url, String content) {
+        url = wrapperAbsolutePath(c, url);
+        writeContent(url, content);
+    }
+
+
+    public static void writeContent(String url, String content) {
+        writeContent(new File(url), content);
+    }
+
+    public static void writeContent(File file, String content) {
+        BufferedOutputStream bos = null;
+        try {
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+            bos = new BufferedOutputStream(new FileOutputStream(file));
+            bos.write(content.getBytes(StandardCharsets.UTF_8));
+            bos.flush();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } finally {
+            IoUtil.close(bos);
+        }
+    }
+
+
+    public static File createFile(Class<?> c, String filename) {
+        filename = wrapperAbsolutePath(c, filename);
+        return createFile(filename);
+    }
+
+
+    public static File createFile(String fileName) {
+
+        try {
+            File file = new File(fileName);
+            if (file == null) {
+                return null;
+            }
+            String parent = file.getParent();
+            if (parent == null) {
+                return file;
+            }
+            File parentFile = new File(parent);
+            if (!parentFile.exists()) parentFile.mkdirs();
+            if (!file.exists()) {
+                file.createNewFile();
+                return file;
+            }
+            System.out.println(fileName + " is exists create fail");
+            return null;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

@@ -7,6 +7,6 @@ package leetcode.contest;
 public class BIWeekGen {
 
     public static void main(String[] args) {
-        LeetCodeContest.BI_WEEK_CONTEST.createNo();
+        Test.BI_WEEK_CONTEST.createNo();
     }
 }

@@ -10,7 +10,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Properties;
+import java.util.StringJoiner;
 
 /**
  * @author: wuxin0011
@@ -25,94 +25,46 @@ public class Request {
     public static final byte[] buff = new byte[1024 * 1024];
 
 
-    private Map<String, String> cookies;
-    private String host;
-    private String referrer;
-    private Properties properties;
-    private String configName;
+    private Map<String, String> headers;
     private Class<?> aClass;
 
-    public Request(Class<?> aClass, String[] names) {
-        this(null, null, aClass, names);
+    public Request() {
+        this(Request.class);
     }
 
-
-    public Request(String host, String referrer, Class<?> aClass, String[] names) {
+    public Request(Class<?> aClass) {
         this.aClass = Objects.requireNonNull(aClass, "class not allow null");
-        this.properties = Config.getConfig(aClass);
-        this.cookies = Config.getCookieMap(properties, names);
-        this.host = host == null ? properties.getProperty("host") : host;
-        this.referrer = referrer == null ? properties.getProperty("referrer") : referrer;
+        Map<String, Map<String, String>> maps = Config.initConfig(aClass);
+        this.headers = maps.get(Constant.headers);
     }
 
-    public Properties getProperties() {
-        return properties;
-    }
-
-    public void setProperties(Properties properties) {
-        this.properties = properties;
-    }
-
-    public String getConfigName() {
-        return configName;
-    }
-
-    public void setConfigName(String configName) {
-        this.configName = configName;
-    }
 
     public Class<?> getaClass() {
         return aClass;
     }
 
-    public void setaClass(Class<?> aClass) {
-        this.aClass = aClass;
+    public Map<String, String> getHeaders() {
+        return headers;
     }
 
-
-    public void setCookies(Map<String, String> cookies) {
-        this.cookies = cookies;
+    public void setHeaders(Map<String, String> headers) {
+        this.headers = headers;
     }
 
-    public void setHost(String host) {
-        this.host = host;
-    }
-
-    public void setReferrer(String referrer) {
-        this.referrer = referrer;
-    }
-
-    public Map<String, String> getCookies() {
-        return cookies;
-    }
-
-    public String getHost() {
-        return host;
-    }
-
-    public String getReferrer() {
-        return referrer;
-    }
 
     public void initHttpURLConnection(HttpURLConnection connection) {
         Objects.requireNonNull(connection, "HttpURLConnection connection not allow null !");
-        connection.setRequestProperty("User-Agent", Constant.getUserAgent());
-        if (cookies != null && cookies.size() != 0) {
-            String s = buildCookies(cookies);
-            System.out.println("cookies=====>" + s);
-            connection.setRequestProperty("Cookie", s);
+        if (headers != null && headers.size() > 0) {
+            this.headers.forEach(connection::setRequestProperty);
+            // System.out.println(this.headers.get("Cookie"));
         }
-        connection.setRequestProperty("Connection", "keep-alive");
-        if (host != null && host.length() != 0) {
-            connection.setRequestProperty("host", host);
-        }
-        if (referrer != null && referrer.length() != 0) {
-            connection.setRequestProperty("referrer", referrer);
-        }
+
     }
+
 
     public static HttpURLConnection getConnection(String url) {
         try {
+            System.out.println("access url : " + url);
             URL apiUrl = new URL(url);
             return (HttpURLConnection) apiUrl.openConnection();
         } catch (IOException e) {
@@ -124,13 +76,17 @@ public class Request {
         return requestGet(url, null, null);
     }
 
+    public String requestGet(String url, String Accept) {
+        return requestGet(url, Accept, null);
+    }
+
 
     public String requestGet(String url, String Accept, Map<String, String> params) {
         url = wrapperUrl(url, params);
         HttpURLConnection connection = getConnection(url);
         initHttpURLConnection(connection);
         if (connection != null) {
-            connection.setRequestProperty("Accept", Accept == null ? applicationHtml : Accept);
+            connection.setRequestProperty("Content-Type", Accept == null ? applicationHtml : Accept);
             return requestGet(connection);
         }
         return "";
@@ -151,19 +107,18 @@ public class Request {
             }
             return response(connection);
         } catch (Exception e) {
-            System.out.println("place check csrftoken and session is not expire ！");
-            System.out.println("============================");
             e.printStackTrace();
-            System.out.println("============================");
             return "";
         }
     }
 
-    public String requestPost(String url, Map<String, String> requestBody) {
-        return requestPost(url, null, requestBody, null);
+
+    public String requestPost(String url, String jsonStr) {
+
+        return requestPost(url, applicationJSON, jsonStr, null);
     }
 
-    public String requestPost(String url, String ContentType, Map<String, String> requestBody, Map<String, String> params) {
+    public String requestPost(String url, String ContentType, String jsonStr, Map<String, String> params) {
         url = wrapperUrl(url, params);
 
         try {
@@ -171,22 +126,19 @@ public class Request {
             if (connection == null) {
                 return "";
             }
-            connection.setRequestProperty("Content-Type", applicationJSON);
+            connection.setRequestProperty("Content-Type", ContentType == null ? applicationJSON : ContentType);
             initHttpURLConnection(connection);
             connection.setRequestMethod("POST");
-            connection.setDoInput(true);
-            connection.setDoOutput(true);
-            String postData = buildBody(requestBody);
-            DataOutputStream outputStream = new DataOutputStream(connection.getOutputStream());
-            outputStream.writeBytes(postData);
-            outputStream.flush();
-            outputStream.close();
+            if (jsonStr != null && jsonStr.length() > 0) {
+                connection.setDoOutput(true);
+                DataOutputStream outputStream = new DataOutputStream(connection.getOutputStream());
+                outputStream.writeBytes(jsonStr);
+                outputStream.flush();
+                outputStream.close();
+            }
             return response(connection);
         } catch (Exception e) {
-            System.out.println("place check csrftoken and session is not expire ! ");
-            System.out.println("============================");
             e.printStackTrace();
-            System.out.println("============================");
             return "";
         }
 
@@ -222,10 +174,10 @@ public class Request {
         int size = 0;
         int end = map.size();
         StringBuilder sb = new StringBuilder();
-        for (Map.Entry<String, String> cookie : map.entrySet()) {
-            sb.append(cookie.getKey());
+        for (Map.Entry<String, String> item : map.entrySet()) {
+            sb.append(item.getKey());
             sb.append(connectionTag);
-            sb.append(cookie.getValue());
+            sb.append(item.getValue());
             if (size != end - 1) {
                 sb.append(endTag);
             }
@@ -234,12 +186,10 @@ public class Request {
         return sb.toString();
     }
 
+
     public static String response(HttpURLConnection connection) {
         BufferedInputStream bis = null;
         try {
-            if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
-                throw new RuntimeException(" response error ! code = " + connection.getResponseCode());
-            }
             bis = new BufferedInputStream(connection.getInputStream());
             StringBuilder response = new StringBuilder();
             int l = -1;
@@ -249,11 +199,20 @@ public class Request {
             connection.disconnect();
             return response.toString();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+            return "";
         } finally {
             IoUtil.close(bis);
         }
+
+
     }
 
-
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", Request.class.getSimpleName() + "[", "]")
+                .add("headers=" + headers)
+                .add("aClass=" + aClass)
+                .toString();
+    }
 }

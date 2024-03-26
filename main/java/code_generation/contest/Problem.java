@@ -1,10 +1,10 @@
 package code_generation.contest;
 
+import code_generation.crwal.leetcode.WeekContest;
 import code_generation.utils.IoUtil;
+import code_generation.utils.StringUtils;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
 import java.time.LocalDate;
 import java.util.Objects;
 import java.util.Scanner;
@@ -18,6 +18,11 @@ public class Problem {
 
     private static final String ROOT_DIR = IoUtil.getProjectRootDir();
 
+
+    public static void createTemplate(String classFilePath, String testCase, String code) {
+        createTemplate(new File(classFilePath), null, testCase, code);
+    }
+
     public static void createTemplate(String classFilePath) {
         createTemplate(new File(classFilePath));
     }
@@ -26,7 +31,12 @@ public class Problem {
         createTemplate(classFilePath, null);
     }
 
-    private static String handlerTxt(String txtFile, String name, File javaFilePath) {
+
+    public static String handlerTxt(String txtFile, String name, File javaFilePath) {
+        return handlerTxt(txtFile, name, javaFilePath, "");
+    }
+
+    public static String handlerTxt(String txtFile, String name, File javaFilePath, String testCase) {
         if (txtFile == null) {
             txtFile = name;
         }
@@ -34,8 +44,14 @@ public class Problem {
             txtFile = txtFile.replace(".txt", "");
         }
         String temp = IoUtil.isAbsolutePath(txtFile) ? (txtFile + ".txt") : javaFilePath.getParent() + File.separator + txtFile + ".txt";
-        File file = createFile(temp);
-        if (file != null && javaFilePath != null && file.getAbsolutePath().contains(javaFilePath.getParent())) {
+        File file = IoUtil.createFile(temp);
+        if (file == null) {
+            return txtFile;
+        }
+        if (testCase != null && testCase.length() > 0) {
+            IoUtil.writeContent(file, StringUtils.replaceIgnoreContent(testCase));
+        }
+        if (javaFilePath != null && file.getAbsolutePath().contains(javaFilePath.getParent())) {
             txtFile = "." + file.getAbsolutePath().replace(javaFilePath.getParent(), "").replace("\\", "\\\\");
             txtFile = txtFile.replace(".\\\\", "");
         }
@@ -47,14 +63,25 @@ public class Problem {
 
     public static void createTemplate(File classFilePath, String txtFile) {
         try {
-            String packageInfo = createPackageInfo(classFilePath.getAbsolutePath());
+            String packageInfo = getPackageInfo(classFilePath.getAbsolutePath());
             String name = classFilePath.getName().replace(".java", "");
             txtFile = handlerTxt(txtFile, name, classFilePath);
             String info = String.format(pattern, packageInfo, name, name, txtFile);
-            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(classFilePath));
-            bufferedWriter.write(info);
-            bufferedWriter.flush();
-            bufferedWriter.close();
+            IoUtil.writeContent(classFilePath, info);
+            System.out.println(classFilePath + "  create success !");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public static void createTemplate(File classFilePath, String txtFile, String testCase, String code) {
+        try {
+            String packageInfo = getPackageInfo(classFilePath.getAbsolutePath());
+            String name = classFilePath.getName().replace(".java", "");
+            txtFile = handlerTxt(txtFile, name, classFilePath, testCase);
+            String info = String.format(pattern, packageInfo, name, name, txtFile);
+            IoUtil.writeContent(classFilePath, info);
             System.out.println(classFilePath + "  create success !");
         } catch (Exception e) {
             e.printStackTrace();
@@ -110,6 +137,45 @@ public class Problem {
 
     }
 
+
+    public static void createLcContestTemplate(int id, String dir, String textCase, String code) {
+        File file = new File(dir);
+        if (file.exists() && !file.isDirectory()) {
+            throw new RuntimeException("file is exists and not is Directory ");
+        }
+        try {
+            if (!file.exists()) file.mkdirs();
+        } catch (Exception e) {
+            // ignore
+        }
+
+    }
+
+
+    final static String LCContestTemplate = "package %s;\n" +
+            "\n" +
+            "import code_generation.utils.IoUtil;\n" +
+            "import java.util.*;\n" +
+            "/**\n" +
+            " * @author: wuxin0011\n" +
+            " * @Description:\n" +
+            " * @url:   %s\n" +
+            " * @title: %s\n" +
+            " */\n" +
+            "public class %s {\n" +
+            "    public static void main(String[] args) {\n" +
+            "        IoUtil.testUtil(%s.class,IoUtil.DEFAULT_METHOD_NAME,\"%s.txt\");\n" +
+            "    }\n" +
+            "    " +
+            "    %s" +
+            "     \n" +
+            "}\n";
+
+    private static String createLcContestTemplate(String packageInfo, String url, String title, String className, String textName, String method) {
+        return String.format(LCContestTemplate, packageInfo, url, title, className, className, textName, method);
+    }
+
+
     private static File createFile(String fileName) {
 
         try {
@@ -158,7 +224,18 @@ public class Problem {
         // createFile(prefix + ".txt");
     }
 
-    public static String createPackageInfo(String classFile) {
+    public static void create(int id, String path, String testCase, String code) {
+        // create dir
+        File dirFile = new File(createDir(id, false, path));
+        if (!dirFile.exists()) dirFile.mkdir();
+        String prefix = createDir(id, true, dirFile.getAbsolutePath());
+        File classFile = createFile(prefix + ".java");
+        if (classFile != null) {
+            createTemplate(classFile.getAbsolutePath(), testCase, code);
+        }
+    }
+
+    public static String getPackageInfo(String classFile) {
         File file = new File(classFile);
         String dir = "";
         if (file.isFile()) {
@@ -190,10 +267,6 @@ public class Problem {
         return new String(charArray);
     }
 
-
-    public static void customContest(int problems, String dirPrefix, String dirName) {
-        customContest(problems, dirPrefix, dirName, null);
-    }
 
     public static void customContest(int problems, String dirPrefix, String dirName, Class<?> c) {
         LocalDate now = LocalDate.now();
@@ -265,13 +338,5 @@ public class Problem {
         sb.append(File.separator);
         String wrapperDir = sb.toString();
         createProblems(problems, wrapperDir);
-    }
-
-
-    public static void main(String[] args) {
-        //
-
-        createProblems(10, IoUtil.buildAbsolutePath() + "\\test");
-        // create(20, );
     }
 }

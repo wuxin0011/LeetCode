@@ -19,10 +19,11 @@ public class Next {
         Calendar calendar = Calendar.getInstance();
         int dayofWeek = calendar.get(Calendar.DAY_OF_WEEK);
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
-        if (hour >= 9 && hour <= 12 && DAYS[dayofWeek] == 7) {
-            LeetCodeContest.WEEK_CONTEST.next();
-        } else if (hour >= 21 && DAYS[dayofWeek] == 6) {
-            LeetCodeContest.BI_WEEK_CONTEST.next();
+        int minute = calendar.get(Calendar.MINUTE);
+        if (hour >= 10 && hour <= 12 && DAYS[dayofWeek] == 7 && minute >= 30) {
+            Test.WEEK_CONTEST.next();
+        } else if (hour >= 22 && DAYS[dayofWeek] == 6 && minute >= 30) {
+            Test.BI_WEEK_CONTEST.next();
         } else {
             System.out.println("Not contest will start !");
         }
