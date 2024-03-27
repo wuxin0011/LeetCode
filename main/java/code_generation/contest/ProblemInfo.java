@@ -1,7 +1,9 @@
 package code_generation.contest;
 
 import code_generation.utils.IoUtil;
+import code_generation.utils.StringUtils;
 
+import java.io.File;
 import java.util.StringJoiner;
 
 /**
@@ -16,21 +18,42 @@ public class ProblemInfo {
     private ClassTemplate classTemplate;
     private Class<?> aClass;
 
-    public ProblemInfo(String javaFile, String txtFile, String testCase, ClassTemplate classTemplate, Class<?> aClass) {
+    private String dirPrefix;
+
+
+    private void updateDir(String javaFile, String txtFile) {
+        if (!javaFile.endsWith(".java")) {
+            javaFile = javaFile + ".java";
+
+        }
+        if (!txtFile.endsWith(".txt")) {
+            txtFile = txtFile + ".txt";
+        }
+        this.javaFile = IoUtil.wrapperAbsolutePath(aClass, StringUtils.isEmpty(dirPrefix) ? javaFile : (dirPrefix + File.separator + javaFile));
+        this.txtFile = IoUtil.wrapperAbsolutePath(aClass, StringUtils.isEmpty(dirPrefix) ? txtFile : (dirPrefix + File.separator + txtFile));
+    }
+
+
+    public ProblemInfo(String javaFile, String txtFile, String dirPrefix, String testCase, ClassTemplate classTemplate, Class<?> aClass) {
         this.aClass = aClass;
-        this.javaFile = IoUtil.wrapperAbsolutePath(aClass, javaFile);
-        this.txtFile = IoUtil.wrapperAbsolutePath(aClass, txtFile);
+        this.dirPrefix = dirPrefix;
         this.testCase = testCase;
         this.classTemplate = classTemplate;
+        updateDir(javaFile, txtFile);
+
+    }
+
+    public ProblemInfo(String javaFile, String txtFile, String testCase, ClassTemplate classTemplate, Class<?> aClass) {
+        this(javaFile, txtFile, "", testCase, classTemplate, aClass);
     }
 
 
     public void setJavaFile(String javaFile) {
-        this.javaFile = IoUtil.wrapperAbsolutePath(aClass, javaFile);
+        updateDir(javaFile, txtFile);
     }
 
     public void setTxtFile(String txtFile) {
-        this.txtFile = IoUtil.wrapperAbsolutePath(aClass, txtFile);
+        updateDir(javaFile, txtFile);
     }
 
     public void setTestCase(String testCase) {
@@ -43,6 +66,15 @@ public class ProblemInfo {
 
     public void setaClass(Class<?> aClass) {
         this.aClass = aClass;
+    }
+
+    public String getDirPrefix() {
+        return dirPrefix;
+    }
+
+    public void setDirPrefix(String dirPrefix) {
+        this.dirPrefix = dirPrefix;
+        updateDir(javaFile, txtFile);
     }
 
     public String getJavaFile() {
@@ -72,8 +104,9 @@ public class ProblemInfo {
                 .add("javaFile='" + javaFile + "'")
                 .add("txtFile='" + txtFile + "'")
                 .add("testCase='" + testCase + "'")
-                .add("classTemplate=" + ClassTemplate.getTemplate(classTemplate))
+                .add("classTemplate=" + classTemplate)
                 .add("aClass=" + aClass)
+                .add("dirPrefix='" + dirPrefix + "'")
                 .toString();
     }
 }

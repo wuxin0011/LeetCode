@@ -11,7 +11,8 @@
 
 
 
-- 2024/3/19 破坏性调整目录结构，新增代码tempalte自动生成[点我查看](./main/java/code_generation/contest/Problem.java)、 以及 [周赛类](./main/java/code_generation/contest/WeekContest.java )
+- 2024/3/27 基本完成自动案例功能
+- 2024/3/19 破坏性调整目录结构，新增代码`template`自动生成[点我查看](./main/java/code_generation/contest/Problem.java)、 以及 [LC周赛类](./main/java/code_generation/crwal/leetcode/WeekContest.java )
 - 2024/2/15 调整目录结构，为`ACM`模式做预留。另外 好像大部分题目都没有写，有点懒了，算了🤣。
 - 不知道啥时候首次提交了
 

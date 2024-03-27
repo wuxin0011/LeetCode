@@ -8,24 +8,21 @@ import code_generation.utils.StringUtils;
  * @Description:
  */
 public class ClassTemplate {
-
-
-    String method;
-    String methodName;
-    String className;
-    String title;
-    String url;
-    String textFileName;
-    String packageInfo;
-    String importInfo;
-
-    boolean isNeedMod = false;
+    public String method;
+    public String methodName;
+    public String className;
+    public String title;
+    public String url;
+    public String textFileName;
+    public String packageInfo;
+    public String importInfo;
+    public boolean isNeedMod = false;
 
     public ClassTemplate() {
         this.method = "";
         this.methodName = "IoUtil.DEFAULT_METHOD_NAME";
         this.className = "Solution";
-        this.textFileName = "in";
+        this.textFileName = StringUtils.wrapperKey(IoUtil.DEFAULT_READ_FILE);
         this.title = "";
         this.url = "";
         this.packageInfo = "";
@@ -111,13 +108,13 @@ public class ClassTemplate {
             "public class %s {\n\n" +
             "    public static void main(String[] args) {\n" +
             "        IoUtil.testUtil(%s.class,%s,%s);\n" +
-            "    }\n\n" +
-            "    " +
-            "    %s " +
-            "     \n\n" +
-            " // %s" +
-            "     \n" +
-            "}\n";
+            "    }" +
+            "\n" +
+            " %s " +
+            " \n" +
+            "//%s" +
+            "  \n" +
+            "}";
 
     public static String getTemplate(ClassTemplate info) {
         return String.format(

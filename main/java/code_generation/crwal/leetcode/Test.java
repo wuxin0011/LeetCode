@@ -30,7 +30,7 @@ public class Test {
         // System.out.println(request.requestPost(graphql, JsonStrTemplate.getTotalInfo()));
 
         // 获取测试案例 OK
-        // System.out.println(request.requestPost(graphql, JsonStrTemplate.createQuestionTestCase("count-submatrices-with-top-left-element-and-sum-less-than-k")));
+         System.out.println(request.requestPost(graphql, LCJsonTemplate.createQuestionTestCase("count-submatrices-with-top-left-element-and-sum-less-than-k")));
 
 
         // submit OK
@@ -186,6 +186,8 @@ public class Test {
 
 
     public static void main(String[] args) throws Exception {
+//        testPost();
+
         // testGetContest();
 
         // testPost();
@@ -196,7 +198,7 @@ public class Test {
 
         // parseUrls();
 
-        // testDefaultProblems();
+         testDefaultProblems();
 
         // testCodeSnippets();
 

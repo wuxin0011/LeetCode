@@ -10,7 +10,7 @@ import java.util.Scanner;
  * @author: wuxin0011
  * @Description: 每日一题模板
  */
-public class EveryDay implements DefaultProblem {
+public class EveryDay implements CustomProblem {
 
 
     public static final EveryDay EVERY_DAY = new EveryDay();
