@@ -8,6 +8,6 @@ import code_generation.contest.EveryDay;
  */
 public class Day {
     public static void main(String[] args) {
-        EveryDay.start(Day.class, false);
+        EveryDay.EVERY_DAY.start(Day.class, false);
     }
 }

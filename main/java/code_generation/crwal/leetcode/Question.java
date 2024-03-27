@@ -1,12 +1,11 @@
 package code_generation.crwal.leetcode;
 
 import code_generation.crwal.TestCaseUtil;
+import code_generation.utils.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringJoiner;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * @author: wuxin0011
@@ -132,7 +131,7 @@ public class Question {
     }
 
     public static void checkContestUrl(String api_url, String title_slug) {
-        if (title_slug == null || title_slug.length() == 0) {
+        if (StringUtils.isEmpty(title_slug)) {
             throw new RuntimeException("place config title_slug");
         }
         if (api_url == null
@@ -148,15 +147,15 @@ public class Question {
         String p = parse(jsonStr, "questions", '[', ']');
         List<String> parses = parse(p, '{', '}');
         List<Question> qs = new ArrayList<>();
-        String NoId = parseId(api_url);
+        String NoId = StringUtils.parseId(api_url);
         for (String s : parses) {
             Question question = new Question();
-            String id = getStrByName(s, "id");
-            String question_id = getStrByName(s, "question_id");
-            String title = getStrByName(s, "title");
-            String credit = getStrByName(s, "credit");
-            String title_slug = getStrByName(s, "title_slug");
-            String category_slug = getStrByName(s, "category_slug");
+            String id = StringUtils.jsonStrGetValueByKey(s, "id");
+            String question_id = StringUtils.jsonStrGetValueByKey(s, "question_id");
+            String title = StringUtils.jsonStrGetValueByKey(s, "title");
+            String credit = StringUtils.jsonStrGetValueByKey(s, "credit");
+            String title_slug = StringUtils.jsonStrGetValueByKey(s, "title_slug");
+            String category_slug = StringUtils.jsonStrGetValueByKey(s, "category_slug");
             question.buildTitleSlug(title_slug);
             question.buildTitle(title);
             question.buildCredit(credit);
@@ -167,9 +166,6 @@ public class Question {
             question.buildContestNo(NoId);
             qs.add(question);
         }
-//        for (Question q : qs) {
-//            System.out.println(q);
-//        }
         return qs;
     }
 
@@ -177,7 +173,7 @@ public class Question {
 
         char[] charArray = input.toCharArray();
         StringBuilder sb = null;
-        int pos = TestCaseUtil.kmpSearch(input, name);
+        int pos = StringUtils.kmpSearch(input, name);
         if (pos == -1) {
             throw new RuntimeException("Not find " + name);
         }
@@ -232,58 +228,5 @@ public class Question {
         return ans;
     }
 
-
-    public static String getStrByName(String data, String key) {
-        key = "\"" + key + "\"";
-        int find = data.indexOf(key);
-        if (find == -1) {
-            System.out.println("Not find key " + key);
-            return "";
-        }
-        int startIndex = find + key.length();
-
-        StringBuilder sb = null;
-        int deep = 0;
-        for (int i = startIndex; i < data.length(); i++) {
-            char c = data.charAt(i);
-            if (c == ':') {
-                sb = new StringBuilder();
-            } else if (c == ' ') {
-                // ignore ...
-            } else if (c == ',') {
-                break;
-            } else if (c == '\"' || c == '\'') {
-                deep++;
-                if (deep == 2) {
-                    break;
-                }
-            } else {
-                if (sb != null) {
-                    sb.append(c);
-                }
-            }
-        }
-        String s = sb == null ? "" : sb.toString();
-        if (s.length() == 0) {
-            return s;
-        } else {
-            int endIndex = data.indexOf(",", startIndex);
-            if (endIndex == -1) {
-                endIndex = data.indexOf("}", startIndex);
-            }
-            return data.substring(startIndex, endIndex).replace(":", "").replaceAll("\"", "");
-        }
-
-    }
-
-    public static String parseId(String url) {
-        Pattern compile = Pattern.compile("\\d+");
-        Matcher matcher = compile.matcher(url);
-        if (matcher.find()) {
-            return matcher.group();
-        }
-        return "";
-
-    }
 
 }

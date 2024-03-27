@@ -32,6 +32,7 @@ public class LCJsonTemplate {
         return String.format(questionTitleStr, titleSlug);
     }
 
+    // 题目说明
     private static final String questionTranslationStr = "{\n" +
             "    \"query\": \"\\n    query questionTranslations($titleSlug: String!) {\\n  question(titleSlug: $titleSlug) {\\n    translatedTitle\\n    translatedContent\\n  }\\n}\\n    \",\n" +
             "    \"variables\": {\n" +
@@ -45,6 +46,7 @@ public class LCJsonTemplate {
     }
 
 
+    // 题目标签信息
     private static final String singleQuestionTopicTagsStr = "{\n" +
             "    \"query\": \"\\n    query singleQuestionTopicTags($titleSlug: String!) {\\n  question(titleSlug: $titleSlug) {\\n    topicTags {\\n      name\\n      slug\\n      translatedName\\n    }\\n  }\\n}\\n    \",\n" +
             "    \"variables\": {\n" +
@@ -66,6 +68,7 @@ public class LCJsonTemplate {
             "    \"operationName\": \"consolePanelConfig\"\n" +
             "}";
 
+    @Deprecated
     public static String createQuestionTestCase(String suffixUrl) {
         return String.format(questionTestCase, suffixUrl);
     }
@@ -79,15 +82,6 @@ public class LCJsonTemplate {
         return totalInfo;
     }
 
-    private static final String userInfo = "{\n" +
-            "    \"operationName\": \"userStatusGlobal\",\n" +
-            "    \"variables\": {},\n" +
-            "    \"query\": \"query userStatusGlobal {\\n  userStatus {\\n    isSignedIn\\n    isAdmin\\n    isStaff\\n    isSuperuser\\n    isTranslator\\n    isVerified\\n    isPhoneVerified\\n    isWechatVerified\\n    checkedInToday\\n    username\\n    realName\\n    userSlug\\n    groups\\n    avatar\\n    optedIn\\n    requestRegion\\n    region\\n    socketToken\\n    activeSessionId\\n    permissions\\n    completedFeatureGuides\\n    useTranslation\\n    accountStatus {\\n      isFrozen\\n      inactiveAfter\\n      __typename\\n    }\\n    __typename\\n  }\\n}\\n\"\n" +
-            "}";
-
-    public static String getUserInfo() {
-        return totalInfo;
-    }
 
 
 
@@ -105,6 +99,40 @@ public class LCJsonTemplate {
 
     public static String questionDiscussComments() {
         return commentInfoStr;
+    }
+
+
+    private static final String questionEditorDataStr = "{\n" +
+            "    \"query\": \"\\n    query questionEditorData($titleSlug: String!) {\\n  question(titleSlug: $titleSlug) {\\n    questionId\\n    questionFrontendId\\n    codeSnippets {\\n      lang\\n      langSlug\\n      code\\n    }\\n    envInfo\\n    enableRunCode\\n    hasFrontendPreview\\n    frontendPreviews\\n  }\\n}\\n    \",\n" +
+            "    \"variables\": {\n" +
+            "        \"titleSlug\": \"%s\"\n" +
+            "    },\n" +
+            "    \"operationName\": \"questionEditorData\"\n" +
+            "}";
+
+
+    /**
+     * 查询编辑器状态
+     *
+     * @param titleSlug
+     * @return
+     */
+    public static String questionEditorData(String titleSlug) {
+        return String.format(questionEditorDataStr, titleSlug);
+    }
+
+
+    private static final String userStatusStr = "{\n" +
+            "    \"variables\": {},\n" +
+            "    \"query\": \"\\n        query globalData {\\n          userStatus {\\n            isSignedIn\\n            isPremium\\n            username\\n            realName\\n            avatar\\n            userSlug\\n            isAdmin\\n            checkedInToday\\n            useTranslation\\n            premiumExpiredAt\\n            isTranslator\\n            isSuperuser\\n            isPhoneVerified\\n            isVerified\\n          }\\n          jobsMyCompany {\\n            nameSlug\\n          }\\n          commonNojPermissionTypes\\n        }\\n      \"\n" +
+            "}";
+
+    public static String userStatus() {
+        return userStatusStr;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(userStatusStr);
     }
 
 

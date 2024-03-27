@@ -5,6 +5,7 @@ import code_generation.bean.ListNode;
 import code_generation.bean.TreeNode;
 import code_generation.enums.Type;
 
+import java.io.File;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
@@ -765,5 +766,57 @@ public class ReflectUtils {
         }
         return flag;
     }
+
+
+    public static String getPackageInfo(String classFile) {
+        File file = new File(classFile);
+//       D:\desktop\project\Learn\leetcode\main\java\leetcode\everyday\day_000\Code_0026_2580.java
+        String dir = "";
+        if (file.exists()) {
+            if (file.isFile()) {
+                int i = classFile.lastIndexOf(File.separator);
+                if (i != -1) {
+                    dir = classFile.substring(0, i);
+                }
+            } else { // is dir
+                dir = classFile;
+            }
+
+        } else {
+            if (classFile.endsWith(".java")) {
+                int i = classFile.lastIndexOf(File.separator);
+                if (i != -1) {
+                    dir = classFile.substring(0, i);
+                }
+            } else {
+                dir = classFile;
+            }
+        }
+        if (StringUtils.isEmpty(dir) || !dir.contains(IoUtil.getWorkDir())) {
+            throw new RuntimeException("place check project running on " + IoUtil.getWorkDir());
+        }
+        int id = dir.indexOf(IoUtil.getProjectRootDir());
+        if (id == -1) {
+            throw new RuntimeException("place check " + dir + " is local work dir ");
+        }
+        String packageDir = dir.substring(id + IoUtil.getProjectRootDir().length());
+        char[] charArray = packageDir.toCharArray();
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < charArray.length; i++) {
+            char c = charArray[i];
+            if (c != '\\' && c != '/') {
+                continue;
+            }
+            if (i == charArray.length - 1) {
+                charArray[i] = ' ';
+                break;
+            } else {
+                c = '.';
+            }
+            charArray[i] = c;
+        }
+        return new String(charArray);
+    }
+
 
 }

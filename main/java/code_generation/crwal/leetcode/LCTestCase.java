@@ -2,6 +2,7 @@ package code_generation.crwal.leetcode;
 
 import code_generation.contest.TestCase;
 import code_generation.crwal.TestCaseUtil;
+import code_generation.utils.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,13 +15,13 @@ import java.util.regex.Pattern;
  */
 public class LCTestCase implements TestCase {
 
-    static final String input_flag = "Input:";
-    static final String output_flag = "Output:";
-    static final String strong_start = "<strong>";
-    static final String strong_end = "</strong>";
+    public static final String input_flag = "Input:";
+    public static final String output_flag = "Output:";
+    public static final String strong_start = "<strong>";
+    public static final String strong_end = "</strong>";
 
-    static final String pre_start = "<pre";
-    static final String pre_end = "</pre>";
+    public static final String pre_start = "<pre";
+    public static final String pre_end = "</pre>";
 
 
     public static final String EqualFlag = "=";
@@ -43,20 +44,24 @@ public class LCTestCase implements TestCase {
                 TestCaseUtil.startParseContestTestCase(result, EqualFlag, interFlag, ans);
             } else {
                 ans.add(result);
+                ans.add("\n");
             }
         }
-        if (ans.size() != 0) {
-            return ans;
+        if (ans.size() == 0) {
+            handlerOldOutPut(input, ans);
         }
-        handlerOldOutPut(input, ans);
+//        if (ans.size() > 0 && (ans.size() & 1) == 1) {
+//            throw new ParseException("parse result fail", 0);
+//        }
+        StringUtils.handlerResult(ans);
         return ans;
     }
 
 
     public static void handlerOldOutPut(String input, List<String> ans) {
 
-        List<Integer> input_pos = TestCaseUtil.kmpSearchList(input, input_flag);
-        List<Integer> output_pos = TestCaseUtil.kmpSearchList(input, output_flag);
+        List<Integer> input_pos = StringUtils.kmpSearchList(input, input_flag);
+        List<Integer> output_pos = StringUtils.kmpSearchList(input, output_flag);
         int size = output_pos.size();
         if (size == 0) {
             System.out.println("not find any output testcase");
@@ -66,7 +71,7 @@ public class LCTestCase implements TestCase {
         // System.out.println("len = " + input.length());
         for (int i = 0; i < input_pos.size(); i++) {
             parseInputTestCase(input.substring(input_pos.get(i), output_pos.get(i)), ans);
-            int j = TestCaseUtil.kmpSearch(input.substring(output_pos.get(i)), strong_start);
+            int j = StringUtils.kmpSearch(input.substring(output_pos.get(i)), strong_start);
             if (j != -1) {
                 parseOutputTestCase(input.substring(output_pos.get(i), j + output_pos.get(i) + strong_start.length()), ans);
             }
@@ -75,30 +80,37 @@ public class LCTestCase implements TestCase {
 
     @Override
     public List<String> parseDefault(String input) {
-        final String classSelector = "class=\"elfjS\" data-track-load=\"description_content\">";
-        input = TestCaseUtil.getTagContent(input, classSelector, 0, "<div", "</div");
-        String example = "class=\"example\"";
-        int i2 = TestCaseUtil.kmpSearch(input, example);
-        if (i2 != -1) {
-            input = input.substring(i2);
-        }
+        // System.out.println("test cast input : " + input);
+        // final String classSelector = "class=\"elfjS\" data-track-load=\"description_content\">";
+        // input = TestCaseUtil.getTagContent(input, classSelector, 0, "<div", "</div");
+        // String example = "class=\"example\"";
+        // int i2 = StringUtils.kmpSearch(input, example);
+        // System.out.println("i2 = > " + (i2 == -1 ? "Not found " : "yes"));
+        // if (i2 != -1) {
+        //    input = input.substring(i2);
+        // }
 
         // parse1(input);
-        List<Integer> preList = TestCaseUtil.kmpSearchList(input, pre_start);
-        List<Integer> preEndList = TestCaseUtil.kmpSearchList(input, pre_end);
+        List<Integer> preList = StringUtils.kmpSearchList(input, pre_start);
+        List<Integer> preEndList = StringUtils.kmpSearchList(input, pre_end);
         if (preList.size() != preEndList.size()) {
             throw new RuntimeException("error");
         }
+        List<String> ans = new ArrayList<>();
         for (int idx = 0; idx < preList.size(); idx++) {
             int st = preList.get(idx);
             int end = preEndList.get(idx);
-            if (st > end) {
-                throw new RuntimeException("error");
-            }
             String target = input.substring(st, end + pre_end.length());
-            return TestCaseUtil.parseDefaultTextCase(target);
+            // System.out.println("target" + target);
+            TestCaseUtil.parseDefaultTextCase(target, ans);
+
+//            return strings;
         }
-        throw new RuntimeException("NO supprot");
+        StringUtils.handlerResult(ans);
+//        for (String s : ans) {
+//            System.out.println(s);
+//        }
+        return ans;
     }
 
 
@@ -109,7 +121,7 @@ public class LCTestCase implements TestCase {
         int deep = 0;
         for (int i = 0; i < s.length(); i++) {
             char c = s.charAt(i);
-            if (isIgnore(c)) {
+            if (StringUtils.isIgnore(c)) {
                 continue;
             }
             if (c == '=') {
@@ -154,7 +166,7 @@ public class LCTestCase implements TestCase {
         StringBuilder sb = null;
         for (int i = 0; i < s.length(); i++) {
             char c = s.charAt(i);
-            if (isIgnore(c)) {
+            if (StringUtils.isIgnore(c)) {
                 continue;
             }
             if (c == '>') {
@@ -174,9 +186,10 @@ public class LCTestCase implements TestCase {
     }
 
 
-    public static boolean isIgnore(char c) {
-        return c == '\r' || c == '\n' || c == '\t' || c == '\b' || c == '\f' || c == '\0' || c == '\\' || c == ' ' || c == '\'' || c == '\"';
-    }
+    public static void main(String[] args) {
+        String unicodeString = "\\u7ed9\\u4f60\\u4e00\\u4e2a\\u4e8c\\u7ef4\\u6574\\u6570\\u6570";
 
+
+    }
 
 }

@@ -75,6 +75,7 @@ public class WeekContest implements Contest {
             System.out.println("No contest !" + No);
             return;
         }
+        System.out.println("fetch problems urls success ! start parse problems ");
         for (int i = 0; i < questions.size(); i++) {
             Question question = questions.get(i);
             if (question == null) {

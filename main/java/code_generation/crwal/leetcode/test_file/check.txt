@@ -1,0 +1,51 @@
+{
+    "status_code": 10,
+    "lang": "java",
+    "run_success": true,
+    "status_runtime": "0 ms",
+    "memory": 40688000,
+    "display_runtime": "0",
+    "code_answer": [
+        "0",
+        "0"
+    ],
+    "code_output": [],
+    "std_output_list": [
+        "",
+        "",
+        ""
+    ],
+    "elapsed_time": 158,
+    "task_finish_time": 1711484704551,
+    "task_name": "judger.runcodetask.RunCode",
+    "expected_status_code": 10,
+    "expected_lang": "cpp",
+    "expected_run_success": true,
+    "expected_status_runtime": "3",
+    "expected_memory": 7540000,
+    "expected_code_answer": [
+        "2",
+        "4"
+    ],
+    "expected_code_output": [],
+    "expected_std_output_list": [
+        "",
+        "",
+        ""
+    ],
+    "expected_elapsed_time": 11,
+    "expected_task_finish_time": 1711482139326,
+    "expected_task_name": "judger.interprettask.Interpret",
+    "correct_answer": false,
+    "compare_result": "00",
+    "status_msg": "Accepted",
+    "state": "SUCCESS",
+    "fast_submit": false,
+    "total_correct": 0,
+    "total_testcases": 2,
+    "submission_id": "runcode_1711484704.0994444_wQ7OOyOlAp",
+    "runtime_percentile": null,
+    "status_memory": "39.7 MB",
+    "memory_percentile": null,
+    "pretty_lang": "Java"
+}

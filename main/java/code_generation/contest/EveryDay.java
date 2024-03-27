@@ -1,8 +1,7 @@
 package code_generation.contest;
 
-import code_generation.utils.IoUtil;
+import code_generation.utils.ProblemEveryDayUtils;
 
-import java.io.File;
 import java.util.Objects;
 import java.util.Scanner;
 
@@ -11,13 +10,18 @@ import java.util.Scanner;
  * @author: wuxin0011
  * @Description: 每日一题模板
  */
-public class EveryDay {
-    public static void start(Class<?> c) {
+public class EveryDay implements DefaultProblem {
+
+
+    public static final EveryDay EVERY_DAY = new EveryDay();
+
+
+    public void start(Class<?> c) {
         start(c, true);
     }
 
 
-    public static void start(Class<?> c, boolean input) {
+    public void start(Class<?> c, boolean input) {
         Objects.requireNonNull(c, "class not allow null");
         String id = "";
         if (input) {
@@ -25,111 +29,18 @@ public class EveryDay {
             do {
                 System.out.print("place input a No as problem NO : ");
                 id = scanner.next();
-            } while (!check(id));
+            } while (!ProblemEveryDayUtils.check(id));
         }
-        int count = Math.max(getJavaFileCount(c), 0);
-        String dir = createPrefix(count);
-        String base = convertDir(count);
+        int count = Math.max(ProblemEveryDayUtils.getJavaFileCount(c), 0);
+        String dir = ProblemEveryDayUtils.createPrefix(count);
+        String base = ProblemEveryDayUtils.convertDir(count);
         String name = dir + Constant.FIlE_PREFIX + base;
         if (input) {
             name = name + "_" + id;
         }
-        String javaPath = buildJavaFilePath("", name);
-        String txtPath = buildTxtFilePath(dir, name);
+        String javaPath = ProblemEveryDayUtils.buildJavaFilePath("", name);
+        String txtPath = ProblemEveryDayUtils.buildTxtFilePath(dir, name);
         Problem.create(javaPath, txtPath, c);
-    }
-
-
-    private static String buildTxtFilePath(String dir, String name) {
-        if (!dir.endsWith(File.separator)) {
-            dir = dir + File.separator;
-        }
-        if (name.contains(dir)) {
-            name = name.replace(dir, "");
-        }
-        if (!name.endsWith(Constant.TXT_FILE_SUFFIX)) {
-            name = name + Constant.TXT_FILE_SUFFIX;
-        }
-        if (!dir.contains(Constant.TXT_FILE_PREFIX)) {
-            dir = dir + Constant.TXT_FILE_PREFIX + File.separator;
-        }
-        return dir + name;
-    }
-
-    private static String buildJavaFilePath(String dir, String name) {
-        if (!name.endsWith(Constant.JAVA_FILE_SUFFIX)) {
-            name = name + Constant.JAVA_FILE_SUFFIX;
-        }
-        if (dir == null || dir.length() == 0) {
-            return name;
-        }
-        if (!dir.endsWith(File.separator)) {
-            dir = dir + File.separator;
-        }
-        return dir + name;
-    }
-
-    public static boolean check(String id) {
-        try {
-            Integer.valueOf(id);
-        } catch (Exception e) {
-            System.out.println("place input a valid Number !");
-            return false;
-        }
-        return true;
-    }
-
-    public static int getJavaFileCount(Class<?> c) {
-        String path = IoUtil.buildAbsolutePath(c);
-        int count = countDirJavaFile(new File(path));
-        return (int) count;
-    }
-
-    private static boolean isJavaFile(File f) {
-        if (f == null || !f.isFile()) return false;
-        return f.getName().startsWith(Constant.FIlE_PREFIX) && f.getName().endsWith(Constant.JAVA_FILE_SUFFIX);
-    }
-
-
-    private static int countDirJavaFile(File file) {
-        if (file == null) {
-            return 0;
-        }
-        int res = 0;
-        if (isJavaFile(file)) {
-            res++;
-        } else if (file.isDirectory()) {
-            File[] files = file.listFiles();
-            if (files == null) {
-                return 0;
-            }
-            for (File f : files) {
-                if (isJavaFile(f)) {
-                    res++;
-                } else if (f.isDirectory()) {
-                    res += countDirJavaFile(f);
-                }
-            }
-        }
-        return res;
-    }
-
-    private static String convertDir(int count) {
-        if (count >= 1000) {
-            return String.valueOf(count);
-        }
-        if (count >= 100) {
-            return "0" + count;
-        }
-        if (count >= 10) {
-            return "00" + count;
-        }
-        return "000" + count;
-    }
-
-    private static String createPrefix(int count) {
-        int baseDir = Math.max(0, count / 100 * 100);
-        return Constant.DIR_PREFIX + (count < 100 ? "000" : String.valueOf(baseDir)) + File.separator;
     }
 
 }

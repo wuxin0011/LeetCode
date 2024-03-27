@@ -1,5 +1,8 @@
 package code_generation.crwal;
 
+import code_generation.crwal.leetcode.LCTestCase;
+import code_generation.utils.StringUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,6 +11,17 @@ import java.util.List;
  * @Description:
  */
 public class TestCaseUtil {
+
+
+    // 输入 unicode
+    public static final String inputUnicode = "\\u8f93\\u5165\\uff1a";
+
+    // 输出 unicode
+    public static final String outputUnicode = "\\u8f93\\u51fa\\uff1a";
+
+
+    // 解释 unicode
+    public static final String explainUnicode = "\\u89e3\\u91ca\\uff1a";
 
 
     /**
@@ -26,10 +40,6 @@ public class TestCaseUtil {
     }
 
 
-    public static boolean isIgnore(char c) {
-        return c == '\r' || c == '\n' || c == '\t' || c == '\b' || c == '\f' || c == '\0' || c == '\\' || c == ' ' || c == '\'' || c == '\"';
-    }
-
     /**
      * 解析周赛案例
      *
@@ -39,62 +49,71 @@ public class TestCaseUtil {
      * @param ans       结果
      */
     public static void startParseContestTestCase(String input, String startFlag, String endFlag, List<String> ans) {
+        // System.out.println("input======>\n"+input);
         char[] charArray = input.toCharArray();
         int deep = 0;
         StringBuilder sb = null;
-        for (char c : charArray) {
-            if (isIgnore(c)) {
-                continue;
-            }
-            switch (c) {
-                case '=':
-                case ':':
-                case '\uFF1A':
-                    sb = new StringBuilder();
-                    break;
-                case '[':
-                case '{':
-                case '\u3010':
-                    deep++;
-                    sb = new StringBuilder();
-                    sb.append(c);
-                    break;
-                case ']':
-                case '}':
-                case '\u3011':
-                    deep--;
-                    if (deep == 0) {
+        if (StringUtils.kmpSearch(input, "=") == -1 && StringUtils.kmpSearch(input, ":") == -1) {
+            ans.add(input);
+        } else {
+            for (char c : charArray) {
+                if (StringUtils.isIgnore(c)) {
+                    continue;
+                }
+                switch (c) {
+                    case '=':
+                    case ':':
+                    case '\uFF1A':
+                        sb = new StringBuilder();
+                        break;
+                    case '[':
+                    case '{':
+                    case '\u3010':
+                        if (deep == 0 && sb == null) {
+                            sb = new StringBuilder();
+                        }
                         if (sb != null) {
                             sb.append(c);
-                            ans.add(sb.toString());
-                            sb = null;
                         }
-                    }
-                    break;
-                case ',':
-                case '\uFF0C':
-                    if (sb != null) {
-                        if (deep == 0) {
-                            ans.add(sb.toString());
-                            sb = new StringBuilder();
-                        } else {
+                        deep++;
+                        break;
+                    case ']':
+                    case '}':
+                    case '\u3011':
+                        deep--;
+                        if (sb != null) {
+                            sb.append(c);
+                            if (deep == 0) {
+                                ans.add(sb.toString());
+                                sb = null;
+                            }
+                        }
+
+                        break;
+                    case ',':
+                    case '\uFF0C':
+                        if (sb != null) {
+                            if (deep == 0) {
+                                ans.add(sb.toString());
+                                sb = new StringBuilder();
+                            } else {
+                                sb.append(c);
+                            }
+                        }
+                        break;
+                    default:
+                        if (sb != null) {
                             sb.append(c);
                         }
-                    }
-                    break;
-                default:
-                    if (sb != null) {
-                        sb.append(c);
-                    }
+                }
+
+
             }
-
-
+            if (sb != null) {
+                ans.add(sb.toString());
+            }
+            ans.add("\n");
         }
-        if (sb != null) {
-            ans.add(sb.toString());
-            sb = null;
-        }
-
     }
 
     /**
@@ -127,7 +146,7 @@ public class TestCaseUtil {
         if (input.length() < startTag.length() || input.length() < endTag.length()) {
             throw new RuntimeException("input length not ");
         }
-        int stIdx = kmpSearch(input, start, classSelectorFlag);
+        int stIdx = StringUtils.kmpSearch(input, start, classSelectorFlag);
         if (stIdx == -1) {
             //throw new RuntimeException("input content Not find " + classSelectorFlag);
             return input;
@@ -168,135 +187,85 @@ public class TestCaseUtil {
     }
 
 
-    public static List<Integer> kmpSearchList(String text, String pattern) {
-        int id = 0;
-        List<Integer> ans = new ArrayList<>();
-        while (true) {
-            id = kmpSearch(text, id == 0 ? id : id + pattern.length(), pattern);
-            if (id == -1) {
-                break;
+    public static void parseDefaultTextCase(String input, List<String> ans) {
+        input = input.replace("\\n", "");
+        if (checkHasUnicodeInputOutput(input)) {
+            unicodeParseInputOutPut(input, ans);
+        } else {
+            int i1 = StringUtils.kmpSearch(input, "=");
+            int i2 = StringUtils.kmpSearch(input, ":");
+            if (i1 == -1 && i2 == -1) {
+                ans.add(input);
+                return;
             }
-            ans.add(id);
-        }
-        return ans;
-    }
-
-
-    public static int kmpSearch(String text, String pattern) {
-        return kmpSearch(text, 0, pattern);
-    }
-
-    public static int kmpSearch(String text, int st, String pattern) {
-        if (pattern == null || text == null || pattern.length() > text.length()) {
-            return -1;
-        }
-        if (st < 0 || st >= text.length()) {
-            throw new RuntimeException("out");
-        }
-        int[] next = new int[pattern.length()];
-        for (int i = 1, cnt = 0; i < pattern.length(); i++) {
-            while (cnt > 0 && pattern.charAt(i) != pattern.charAt(cnt)) {
-                cnt = next[cnt - 1];
-            }
-            if (pattern.charAt(i) == pattern.charAt(cnt)) {
-                cnt++;
-            }
-            next[i] = cnt;
-        }
-        for (int i = st, cnt = 0; i < text.length(); i++) {
-            while (cnt > 0 && text.charAt(i) != pattern.charAt(cnt)) {
-                cnt = next[cnt - 1];
-            }
-            if (text.charAt(i) == pattern.charAt(cnt)) {
-                cnt++;
-            }
-            if (cnt == pattern.length()) {
-                return i - pattern.length() + 1; // 找到第一个内容
-            }
-        }
-        return -1;
-    }
-
-
-    public static List<String> parseDefaultTextCase(String input) {
-        List<String> ans = new ArrayList<>();
-        int i1 = TestCaseUtil.kmpSearch(input, "=");
-        List<Integer> strongList = TestCaseUtil.kmpSearchList(input, "<strong>");
-        int end = strongList.size() >= 3 ? strongList.get(2) : -1;
-        if (end == -1) {
-            throw new RuntimeException("error");
-        }
-        // System.out.println(strongList + ":end = " + end + ",end = " + (input.length() - 1));
-        StringBuilder sb = null;
-        int deep = 0, args = 0;
-        for (int i = i1; i < end; i++) {
-            char c = input.charAt(i);
-            if (TestCaseUtil.isIgnore(c)) {
-                if (sb != null && i == end - 1) {
-                    ans.add(sb.toString());
-                    sb = null;
+            List<String> temp = new ArrayList<>();
+            int end = Math.min(Math.max(input.length() - LCTestCase.pre_end.length(), 1), input.length());
+            StringBuilder sb = null;
+            int deep = 0, args = 0;
+            for (int i = i1; i < end; i++) {
+                char c = input.charAt(i);
+                if (StringUtils.isIgnore(c)) {
+                    if (sb != null && i == end - 1) {
+                        temp.add(sb.toString());
+                        sb = null;
+                    }
+                    continue;
                 }
-                continue;
-            }
 
-            switch (c) {
-                case '<':
-                    if (args > 0 && sb != null) {
-                        ans.add(sb.toString());
-                        args--;
-                        sb = null;
-                    }
-                case '=':
-                case '>':
-                case ':':
-                    if (c == '=') {
-                        args++;
-                    }
-                    sb = new StringBuilder();
-                    break;
-                case '[':
-                    deep++;
-                    if (sb != null) {
-                        sb.append(c);
-                    }
-                    break;
-                case ']':
-                    deep--;
-                    if (sb != null) {
-                        sb.append(c);
-                    }
-                    if (deep == 0 && sb != null) {
-                        ans.add(sb.toString());
-                        if (args > 0) args--;
-                        sb = null;
-                    }
-                    break;
-                case ',':
-                    if (sb != null) {
-                        if (deep == 0) {
-                            ans.add(sb.toString());
-                            if (args > 0) args--;
+                switch (c) {
+                    case '<':
+                        if (args > 0 && sb != null) {
+                            temp.add(sb.toString());
+                            args--;
                             sb = null;
-                        } else {
+                        }
+                    case '=':
+                    case '>':
+                    case ':':
+                        if (c == '=') {
+                            args++;
+                        }
+                        sb = new StringBuilder();
+                        break;
+                    case '[':
+                        deep++;
+                        if (sb != null) {
                             sb.append(c);
                         }
-                    }
-                    break;
-                default:
-                    if (sb != null) {
-                        sb.append(c);
-                    }
-                    break;
+                        break;
+                    case ']':
+                        deep--;
+                        if (sb != null) {
+                            sb.append(c);
+                        }
+                        if (deep == 0 && sb != null) {
+                            temp.add(sb.toString());
+                            if (args > 0) args--;
+                            sb = null;
+                        }
+                        break;
+                    case ',':
+                        if (sb != null) {
+                            if (deep == 0) {
+                                temp.add(sb.toString());
+                                if (args > 0) args--;
+                                sb = null;
+                            } else {
+                                sb.append(c);
+                            }
+                        }
+                        break;
+                    default:
+                        if (sb != null) {
+                            sb.append(c);
+                        }
+                        break;
+                }
             }
+            temp.add("\n");
+            ans.addAll(temp);
         }
-        for (int i = 0; i < ans.size(); i++) {
-            if (i == ans.size() - 1) {
-                System.out.println("result  = " + ans.get(i));
-            } else {
-                System.out.println("args" + i + " = " + ans.get(i));
-            }
-        }
-        return ans;
+
     }
 
 
@@ -308,10 +277,46 @@ public class TestCaseUtil {
         for (int i = 0; i < ans.size(); i++) {
             sb.append(ans.get(i));
             if (i != ans.size() - 1) {
-                sb.append("\n");
+               sb.append("\n");
             }
         }
         return sb.toString();
+    }
+
+
+    public static void unicodeParseInputOutPut(String input, List<String> ans) {
+
+        int a = StringUtils.kmpSearch(input, inputUnicode);
+        int b = StringUtils.kmpSearch(input, outputUnicode);
+        int c = StringUtils.kmpSearch(input, explainUnicode);
+        String inputStr = handlerIgnoreStr(input.substring(a, b));
+        String outputStr = handlerIgnoreStr(input.substring(b, c));
+        startParseContestTestCase(inputStr, LCTestCase.EqualFlag, LCTestCase.interFlag, ans);
+        StringUtils.handlerResult(ans);
+        startParseContestTestCase(outputStr, LCTestCase.EqualFlag, LCTestCase.interFlag, ans);
+        ans.add("\n");
+    }
+
+
+    // 是否是unicode格式
+    public static boolean checkHasUnicodeInputOutput(String input) {
+        int a = StringUtils.kmpSearch(input, inputUnicode);
+        int b = StringUtils.kmpSearch(input, outputUnicode);
+        int c = StringUtils.kmpSearch(input, explainUnicode);
+        return a != -1 && b != -1 && c != -1 && a < b && b < c;
+    }
+
+
+    public static String handlerIgnoreStr(String s) {
+        if (StringUtils.isEmpty(s)) return s;
+        s = s.replace(inputUnicode, "").replace(outputUnicode, "").replace(explainUnicode, "");
+        s = s.replace("<b>", "").replace("</b>", "");
+        s = s.replace("<p>", "").replace("</p>", "");
+        s = s.replace("<span>", "").replace("</span>", "");
+        s = s.replace("<strong>", "").replace("</strong>", "");
+        s = s.replace("<div>", "").replace("</div>", "");
+        s = s.replace("<br>", "").replace("</br>", "");
+        return s;
     }
 
 
