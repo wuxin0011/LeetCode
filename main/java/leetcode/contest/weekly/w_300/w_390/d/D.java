@@ -2,8 +2,6 @@ package leetcode.contest.weekly.w_300.w_390.d;
 
 import code_generation.utils.IoUtil;
 
-import java.util.PriorityQueue;
-
 /**
  * @author: wuxin0011
  * @Description:
@@ -13,60 +11,65 @@ import java.util.PriorityQueue;
 public class D {
     public static void main(String[] args) {
 
-        IoUtil.testUtil(D.class, IoUtil.DEFAULT_METHOD_NAME, "D.txt");
+        IoUtil.testUtil(D.class, "stringIndices", "D.txt");
     }
 
 
     public int[] stringIndices(String[] wordsContainer, String[] wordsQuery) {
         int n = wordsQuery.length;
+        Trie root = new Trie();
+        build(wordsContainer, root);
         int[] ans = new int[n];
-//        PriorityQueue<int[]> q = new PriorityQueue<>((a,b)->a[0]==b[0] ? a[1]-b[1]:);
-//        for (int i = 0; i < wordsContainer.length; i++) {
-//            q.add(new int[]{wordsQuery.length, i});
-//        }
-
         for (int i = 0; i < wordsQuery.length; i++) {
-            ans[i] = 0;
+            ans[i] = query(wordsQuery[i], root);
         }
-        return null;
+        return ans;
     }
 
 
     public static class Trie {
         Trie[] next;
-        boolean isEnd;
-        int path;
+        int l = Integer.MAX_VALUE;
+        int id = 0;
 
         public Trie() {
             this.next = new Trie[26];
-            this.isEnd = false;
-            this.path = 0;
         }
     }
 
 
     public static void build(String[] ss, Trie root) {
-        for (String s : ss) {
+        for (int curId = 0; curId < ss.length; curId++) {
             Trie cur = root;
+            String s = ss[curId];
+            int n = s.length();
+            if (n < cur.l) {
+                cur.l = n;
+                cur.id = curId;
+            }
+            // 倒叙创建前缀树路径
             for (int i = s.length() - 1; i >= 0; i--) {
                 int id = s.charAt(i) - 'a';
                 if (cur.next[id] == null) {
                     cur.next[id] = new Trie();
                 }
-                cur.next[id].path++;
                 cur = cur.next[id];
+                if (n < cur.l) {
+                    cur.l = n;
+                    cur.id = curId;
+                }
             }
-            cur.isEnd = true;
         }
+
     }
 
 
-    public static int search(String[] ss, Trie root, String s) {
-
-        int i = 0;
-
-        return i;
+    public static int query(String str, Trie root) {
+        Trie cur = root;
+        for (int i = str.length() - 1; i >= 0 && cur.next[str.charAt(i) - 'a'] != null; i--) {
+            cur = cur.next[str.charAt(i) - 'a'];
+        }
+        return cur.id;
     }
-
 
 }
