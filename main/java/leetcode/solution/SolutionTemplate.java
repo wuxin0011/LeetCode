@@ -66,7 +66,7 @@ public class SolutionTemplate extends LCCustom {
         } else if (cnt < 1000) {
             return "0" + cnt;
         } else {
-            return "" + cnt;
+            return String.valueOf(cnt);
         }
     }
 }
