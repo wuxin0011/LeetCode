@@ -1,6 +1,11 @@
 package code_generation.function;
+
 /**
  * @author: wuxin0011
  * @Description:
- */public interface ThrowableFunction {
+ */
+@FunctionalInterface
+public
+interface ThrowableFunction{
+    void apply() throws InterruptedException;
 }

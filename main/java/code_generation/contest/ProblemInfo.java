@@ -21,9 +21,16 @@ public class ProblemInfo {
 
 
     private void updateDir(String javaFile, String txtFile) {
+
+
+        if (javaFile.endsWith(".txt")) {
+            javaFile = javaFile.replace(".txt", ".java");
+        }
         if (!javaFile.endsWith(".java")) {
             javaFile = javaFile + ".java";
-
+        }
+        if (txtFile.endsWith(".java")) {
+            txtFile = txtFile.replace(".java", ".txt");
         }
         if (!txtFile.endsWith(".txt")) {
             txtFile = txtFile + ".txt";
@@ -39,7 +46,9 @@ public class ProblemInfo {
         this.testCase = testCase;
         this.classTemplate = classTemplate;
         updateDir(javaFile, txtFile);
+    }
 
+    public ProblemInfo() {
     }
 
     public ProblemInfo(String javaFile, String txtFile, String testCase, ClassTemplate classTemplate, Class<?> aClass) {

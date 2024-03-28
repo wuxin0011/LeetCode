@@ -1,11 +1,17 @@
 package code_generation.crwal.leetcode;
 
+import code_generation.contest.ClassTemplate;
 import code_generation.contest.Contest;
 import code_generation.contest.Problem;
+import code_generation.contest.ProblemInfo;
 import code_generation.crwal.TestCaseUtil;
+import code_generation.utils.ExceptionUtils;
 import code_generation.utils.IoUtil;
+import code_generation.utils.ReflectUtils;
+import code_generation.utils.StringUtils;
 
 import java.io.File;
+import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -13,6 +19,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 /**
@@ -69,6 +76,9 @@ public class WeekContest implements Contest {
     }
 
     private void createTestProblem(int No, String dir) {
+
+        int maxId = getId();
+
         System.out.println("==========================================" + No + " start ==========================================");
         List<Question> questions = getQuestions(No);
         if (questions.size() == 0) {
@@ -81,28 +91,99 @@ public class WeekContest implements Contest {
             if (question == null) {
                 continue;
             }
-            System.out.println("start parse question  " + question.getTitle());
-            // System.out.println("\n\n" + questions.get(i) + "\n\n");
-            String tc = "";
+            System.out.println("start parse question :  " + question.getTitle());
+            final int idx = i;
+
             try {
-                Thread.sleep((long) (Math.random() * 1000));
-                tc = getTestCase(questions.get(i).getUrl(), this.dirPrefix);
+                createContestTemplate(idx, dir, question);
             } catch (Exception e) {
-                System.err.println("\nparse testCase error , because :" + e.getMessage());
-                tc = "";
-            }
-            try {
-                Problem.create(i, dir, tc, "");
-            } catch (Exception e) {
-                // ignore
+                e.printStackTrace();
+                System.out.println("try use default contest template ");
+                AtomicReference<String> tc = new AtomicReference<>("");
+                ExceptionUtils.executeWithExceptionHandling(() -> {
+                    tc.set(getTestCase(questions.get(idx).getUrl()));
+                });
+                ExceptionUtils.executeWithExceptionHandling(() -> {
+                    Problem.create(idx, dir, tc.get(), "");
+                });
             }
 
+            // 是否取用最新版不使用template
+
+
+//            if (maxId == No) {
+//
+//                AtomicReference<String> tc = new AtomicReference<>("");
+//                ExceptionUtils.executeWithExceptionHandling(() -> {
+//                    tc.set(getTestCase(questions.get(idx).getUrl()));
+//                });
+//                ExceptionUtils.executeWithExceptionHandling(() -> {
+//                    Problem.create(idx, dir, tc.get(), "");
+//                });
+//            } else {
+//                ExceptionUtils.executeWithExceptionHandling(() -> {
+//                    createContestTemplate(idx, dir, question);
+//                });
+//            }
+
+
+            ExceptionUtils.sleep(Math.min(1, (int) (Math.random() * 5)));
         }
         // Problem.createProblems(problems, dir);
         System.out.println("==========================================" + No + " end ==========================================");
     }
 
-    private static String getTestCase(String s, String dirPrefix) {
+    private final LCTestCase lcTestCase = new LCTestCase();
+    private final LCTemplate lcTemplate = new LCTemplate();
+
+    public void createContestTemplate(int curId, String dir, Question question) {
+        if (question == null) {
+            return;
+        }
+        ClassTemplate classTemplate = new ClassTemplate();
+        String titleSlug = question.getTitle_slug();
+        // System.out.println("titleSlug : " + titleSlug);
+
+
+        String questionTranslationInfo = BuildUrl.questionTranslations(titleSlug);
+
+
+        // 获取测试案例
+        String testCase = getTestCase(question.getUrl());
+        String method = "";
+        String methodName = "";
+
+        try {
+            String code = BuildUrl.questionEditorData(titleSlug);
+            String s = lcTemplate.parseCodeTemplate(code);
+            method = StringUtils.getMethod(s);
+            methodName = StringUtils.getMethodName(method);
+        } catch (ParseException ignore) {
+
+        }
+
+        String className = Problem.createDir(curId, true);
+        String prefix = Problem.createDir(curId, true, Problem.createDir(curId, false, dir));
+        String javaFile = prefix + ".java";
+        String txtFile = prefix + ".txt";
+
+        String packageInfo = ReflectUtils.getPackageInfo(javaFile);
+        System.out.println("package info :" + packageInfo);
+
+
+        classTemplate.buildIsNeedMod(StringUtils.isNeedMOD(questionTranslationInfo))
+                .buildUrl(question.getUrl())
+                .buildMethod(method)
+                .buildMethodName(methodName)
+                .buildPackageInfo(packageInfo)
+                .buildClassName(className)
+                .buildTextFileName(className)
+                .buildTitle(question.getTitle());
+
+        Problem.create(new ProblemInfo(javaFile, txtFile, "", testCase, classTemplate, aClass));
+    }
+
+    private static String getTestCase(String s) {
         String contestHtml = BuildUrl.getContestQuestionPage(s);
         // System.out.println("html\n\n\n" + contestHtml);
         List<String> strings = TEST_CASE.parseContest(contestHtml);
@@ -137,12 +218,16 @@ public class WeekContest implements Contest {
 
 
     public void createNo() {
-        int NO;
+        int NO = Integer.MAX_VALUE;
         Scanner sc = new Scanner(System.in);
         while (true) {
-            System.out.print("place input a valid contest number : ");
+            System.out.print("place input a valid contest number , input NO break : ");
             try {
-                NO = sc.nextInt();
+                String next = sc.next();
+                if ("NO".equalsIgnoreCase(next)) {
+                    break;
+                }
+                NO = Integer.parseInt(next);
                 if (NO <= 0) {
                     continue;
                 }
@@ -161,6 +246,13 @@ public class WeekContest implements Contest {
      * @param NO
      */
     public void createNo(int NO) {
+        if (NO == Integer.MAX_VALUE) {
+            return;
+        }
+        int maxId = getId();
+        if (NO > maxId || NO < 0) {
+            throw new RuntimeException("max NO = " + maxId + ",you input No = " + NO);
+        }
         StringBuilder sb = new StringBuilder();
         sb.append(dir);
         sb.append(File.separator);
@@ -172,7 +264,6 @@ public class WeekContest implements Contest {
         sb.append(File.separator);
         String wrapperDir = sb.toString();
         createTestProblem(NO, wrapperDir);
-//        List<String> urls = getUrls(NO);
     }
 
 

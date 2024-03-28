@@ -769,8 +769,11 @@ public class ReflectUtils {
 
 
     public static String getPackageInfo(String classFile) {
+        if (classFile == null) {
+            throw new NullPointerException();
+        }
+        classFile = classFile.replace("\\\\\\", "\\").replace("\\\\", "\\");
         File file = new File(classFile);
-//       D:\desktop\project\Learn\leetcode\main\java\leetcode\everyday\day_000\Code_0026_2580.java
         String dir = "";
         if (file.exists()) {
             if (file.isFile()) {

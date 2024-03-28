@@ -99,7 +99,7 @@ public class Problem {
             "    }\n" +
             "}\n";
 
-    private static String createDir(int id, boolean isUpper) {
+    public static String createDir(int id, boolean isUpper) {
         if (id < 0 || id >= 26) {
             throw new RuntimeException("place input 0-25 number");
         }
@@ -107,12 +107,8 @@ public class Problem {
         return String.valueOf(c);
     }
 
-    private static String createDir(int id, boolean isUpper, String dir) {
-        if (id < 0 || id >= 26) {
-            throw new RuntimeException("place input 0-25 number");
-        }
-        char c = isUpper ? (char) (id + 'A') : (char) (id + 'a');
-        return dir + File.separatorChar + c;
+    public static String createDir(int id, boolean isUpper, String dir) {
+        return dir + File.separatorChar + createDir(id, isUpper);
     }
 
     public static void createProblems(int problems, String dir) {

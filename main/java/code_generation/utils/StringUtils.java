@@ -1,6 +1,7 @@
 package code_generation.utils;
 
 import code_generation.crwal.leetcode.BuildUrl;
+import code_generation.function.ThrowableFunction;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -371,6 +372,8 @@ public class StringUtils {
         return titleSlug.replace("-", "_");
 
     }
+
+
 
 
 }
