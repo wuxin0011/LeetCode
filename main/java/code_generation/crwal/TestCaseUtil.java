@@ -50,6 +50,7 @@ public class TestCaseUtil {
      */
     public static void startParseContestTestCase(String input, String startFlag, String endFlag, List<String> ans) {
         // System.out.println("input======>\n"+input);
+        input = input.replace("&quot;", "");
         char[] charArray = input.toCharArray();
         int deep = 0;
         StringBuilder sb = null;
@@ -189,6 +190,7 @@ public class TestCaseUtil {
 
     public static void parseDefaultTextCase(String input, List<String> ans) {
         input = input.replace("\\n", "");
+        input = input.replace("&quot;", "");
         if (checkHasUnicodeInputOutput(input)) {
             unicodeParseInputOutPut(input, ans);
         } else {

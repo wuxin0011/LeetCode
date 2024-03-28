@@ -80,6 +80,7 @@ public class LCTestCase implements TestCase {
 
     @Override
     public List<String> parseDefault(String input) {
+        input = input.replace("&quot;", "");
         // System.out.println("test cast input : " + input);
         // final String classSelector = "class=\"elfjS\" data-track-load=\"description_content\">";
         // input = TestCaseUtil.getTagContent(input, classSelector, 0, "<div", "</div");
@@ -188,8 +189,6 @@ public class LCTestCase implements TestCase {
 
     public static void main(String[] args) {
         String unicodeString = "\\u7ed9\\u4f60\\u4e00\\u4e2a\\u4e8c\\u7ef4\\u6574\\u6570\\u6570";
-
-
     }
 
 }

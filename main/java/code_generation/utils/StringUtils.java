@@ -1,7 +1,6 @@
 package code_generation.utils;
 
 import code_generation.crwal.leetcode.BuildUrl;
-import code_generation.function.ThrowableFunction;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,6 +71,12 @@ public class StringUtils {
         s = s.replace("<u>", "").replace("</u>", "");
         s = s.replace("<p>", "").replace("</p>", "");
         s = s.replace("<h>", "").replace("</h>", "");
+        // s = s.replace("\\n", "");
+        s = s.replace("&lt;", "");
+        s = s.replace("&gt;", "");
+        s = s.replace("&amp;", "");
+        s = s.replace("&quot;", "");
+        s = s.replace("&nbsp;", "");
         return s;
     }
 
@@ -94,7 +99,7 @@ public class StringUtils {
         if (input == null || input.length() == 0) {
             throw new NullPointerException("input content is null");
         }
-
+        input = input.replace("&quot;", "");
         char[] charArray = input.toCharArray();
         StringBuilder sb = new StringBuilder();
         for (char c : charArray) {
@@ -372,7 +377,6 @@ public class StringUtils {
         return titleSlug.replace("-", "_");
 
     }
-
 
 
 
