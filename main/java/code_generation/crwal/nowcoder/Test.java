@@ -1,4 +1,4 @@
-package code_generation.crwal.niuke;
+package code_generation.crwal.nowcoder;
 
 import code_generation.crwal.request.Request;
 
