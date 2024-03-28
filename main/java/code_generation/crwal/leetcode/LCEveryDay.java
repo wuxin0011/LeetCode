@@ -1,8 +1,9 @@
 package code_generation.crwal.leetcode;
 
 import code_generation.contest.ClassTemplate;
-import code_generation.contest.Problem;
+import code_generation.contest.Constant;
 import code_generation.contest.ProblemInfo;
+import code_generation.utils.ProblemEveryDayUtils;
 import code_generation.utils.StringUtils;
 
 /**
@@ -23,8 +24,33 @@ public class LCEveryDay extends LCCustom {
         // super.start(c, input);
     }
 
+
     @Override
-    public void create(ProblemInfo problemInfo) {
-        Problem.create(problemInfo);
+    public void next() {
+        int count = Math.max(ProblemEveryDayUtils.getJavaFileCount(aClass), 0);
+        String dir = ProblemEveryDayUtils.createPrefix(count);
+        String base = ProblemEveryDayUtils.convertDir(count);
+        String name = dir + Constant.FIlE_PREFIX + base;
+        name = name + "_" + this.frontendQuestionId;
+        String className = name.replace(dir, "").replace("\\", "");
+        classTemplate.buildClassName(className);
+
+        String javaPath = ProblemEveryDayUtils.buildJavaFilePath("", name);
+        String txtPath = ProblemEveryDayUtils.buildTxtFilePath(dir, name);
+        // System.out.println("name:" + name + ",txt path = " + txtPath);
+
+
+        // build txt
+        classTemplate.buildTextFileName(txtPath.replace(dir, ""));
+
+
+        // System.out.println(ClassTemplate.getTemplate(classTemplate));
+        ProblemInfo problemInfo = new ProblemInfo(javaPath, txtPath, testCase, classTemplate, aClass);
+
+        // System.out.println(problemInfo);
+        createTemplate(problemInfo);
     }
+
+
+
 }

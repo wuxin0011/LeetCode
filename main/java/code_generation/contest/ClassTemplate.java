@@ -110,10 +110,10 @@ public class ClassTemplate {
             "        IoUtil.testUtil(%s.class,%s,%s);\n" +
             "    }" +
             "\n" +
-            " %s " +
-            " \n" +
-            "//%s" +
-            "  \n" +
+            "\t %s " +
+            "\n\n" +
+            "\t //%s" +
+            "  \n\n" +
             "}";
 
     public static String getTemplate(ClassTemplate info) {
@@ -132,6 +132,10 @@ public class ClassTemplate {
         );
     }
 
+    @Override
+    public String toString() {
+        return ClassTemplate.getTemplate(this);
+    }
 
     public static void main(String[] args) {
         ClassTemplate classTemplate = new ClassTemplate();

@@ -1,10 +1,8 @@
 package leetcode.solution;
 
-import code_generation.contest.Problem;
 import code_generation.contest.ProblemInfo;
 import code_generation.crwal.leetcode.LCCustom;
 import code_generation.utils.IoUtil;
-import code_generation.utils.ReflectUtils;
 
 import java.io.File;
 
@@ -12,15 +10,21 @@ import java.io.File;
  * @author: wuxin0011
  * @Description:
  */
-public class Custom extends LCCustom {
+public class SolutionTemplate extends LCCustom {
 
 
     public static final String Custom_Prefix = "Solution";
 
-    private static final Custom custom = new Custom(Custom.class);
+    private static final SolutionTemplate SOLUTION_TEMPLATE = new SolutionTemplate(SolutionTemplate.class);
 
-    public Custom(Class<Custom> customClass) {
+    public SolutionTemplate(Class<SolutionTemplate> customClass) {
         super(customClass);
+    }
+
+
+    public static void main(String[] args) {
+        SOLUTION_TEMPLATE.start(SolutionTemplate.class, true);
+//        count();
     }
 
 
@@ -29,27 +33,15 @@ public class Custom extends LCCustom {
         // String name = StringUtils.toCaseName(this.classTemplate.title);
 //        String prefix_dir = "Solution_" + getDir() + "_" + name;
         String prefix_dir = Custom_Prefix + "_" + getDir();
-        String name = Custom_Prefix;
-        String packageInfo = ReflectUtils.getPackageInfo(IoUtil.wrapperAbsolutePath(aClass, prefix_dir));
-        this.classTemplate.buildPackageInfo(packageInfo);
+//        String packageInfo = ReflectUtils.getPackageInfo(IoUtil.wrapperAbsolutePath(aClass, prefix_dir));
+//        this.classTemplate.buildPackageInfo(packageInfo);
         // System.out.println(classTemplate);
-        ProblemInfo problemInfo = new ProblemInfo(name, IoUtil.DEFAULT_READ_FILE, prefix_dir, testCase, classTemplate, aClass);
-        create(problemInfo);
+        ProblemInfo problemInfo = new ProblemInfo(Custom_Prefix, IoUtil.DEFAULT_READ_FILE, prefix_dir, testCase, classTemplate, aClass);
+        createTemplate(problemInfo);
     }
-
-    @Override
-    public void create(ProblemInfo problemInfo) {
-        Problem.create(problemInfo);
-    }
-
-    public static void main(String[] args) {
-//        custom.start(Custom.class, true);
-        count();
-    }
-
 
     public static int count() {
-        String s = IoUtil.buildAbsolutePath(Custom.class);
+        String s = IoUtil.buildAbsolutePath(SolutionTemplate.class);
         File file = new File(s);
         int cnt = 0;
         File[] files = file.listFiles();

@@ -8,7 +8,7 @@ import java.util.Scanner;
 
 /**
  * @author: wuxin0011
- * @Description: 每日一题模板
+ * @Description: 默认的 每日一题模板
  */
 public class EveryDay implements CustomProblem {
 

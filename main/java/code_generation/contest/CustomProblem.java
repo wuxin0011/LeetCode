@@ -25,7 +25,7 @@ public interface CustomProblem {
      * 创建题目
      * @param problemInfo 题目信息
      */
-    default void create(ProblemInfo problemInfo) {
+    default void createTemplate(ProblemInfo problemInfo) {
         System.out.println("====info start ======");
         System.out.println(problemInfo);
         System.out.println("====end======");

@@ -4,7 +4,6 @@ import code_generation.utils.IoUtil;
 import code_generation.utils.StringUtils;
 
 import java.io.File;
-import java.util.StringJoiner;
 
 /**
  * @author: wuxin0011
@@ -100,13 +99,14 @@ public class ProblemInfo {
 
     @Override
     public String toString() {
-        return new StringJoiner(", ", ProblemInfo.class.getSimpleName() + "[", "]")
-                .add("javaFile='" + javaFile + "'")
-                .add("txtFile='" + txtFile + "'")
-                .add("testCase='" + testCase + "'")
-                .add("classTemplate=" + classTemplate)
-                .add("aClass=" + aClass)
-                .add("dirPrefix='" + dirPrefix + "'")
-                .toString();
+        System.out.println("\n====================================java file=========================\n");
+        System.out.println(javaFile);
+        System.out.println("\n====================================txt file=========================\n");
+        System.out.println(txtFile);
+        System.out.println("\n====================================template=========================\n");
+        System.out.println(classTemplate);
+        System.out.println("\n====================================template=========================\n");
+        System.out.println(testCase);
+        return "";
     }
 }

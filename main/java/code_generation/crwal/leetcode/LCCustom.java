@@ -1,12 +1,11 @@
 package code_generation.crwal.leetcode;
 
 import code_generation.contest.ClassTemplate;
-import code_generation.contest.Constant;
 import code_generation.contest.CustomProblem;
+import code_generation.contest.Problem;
 import code_generation.contest.ProblemInfo;
 import code_generation.crwal.TestCaseUtil;
 import code_generation.utils.IoUtil;
-import code_generation.utils.ProblemEveryDayUtils;
 import code_generation.utils.ReflectUtils;
 import code_generation.utils.StringUtils;
 
@@ -18,7 +17,7 @@ import java.util.Scanner;
  * @author: wuxin0011
  * @Description: Lc 自动抓取
  */
-public class LCCustom implements CustomProblem {
+public abstract class LCCustom implements CustomProblem {
 
     public static final LCTemplate lcTemplate = new LCTemplate();
     public static final LCTestCase lcTestCase = new LCTestCase();
@@ -58,6 +57,16 @@ public class LCCustom implements CustomProblem {
 
     public String testCase;
 
+
+    /**
+     * 根据标题生成 一下信息
+     * 方法
+     * 方法名
+     * 标题
+     * 是否需要取余
+     *
+     * @param titleSlug 标题链接
+     */
     public void createByTitleSlug(String titleSlug) {
         titleSlug = BuildUrl.buildTitleSlug(titleSlug);
         System.out.println("titleSlug: " + titleSlug);
@@ -93,37 +102,44 @@ public class LCCustom implements CustomProblem {
         next();
     }
 
-    public void next() {
-        int count = Math.max(ProblemEveryDayUtils.getJavaFileCount(aClass), 0);
-        String dir = ProblemEveryDayUtils.createPrefix(count);
-        String base = ProblemEveryDayUtils.convertDir(count);
-        String name = dir + Constant.FIlE_PREFIX + base;
-        name = name + "_" + this.frontendQuestionId;
-        String className = name.replace(dir, "").replace("\\", "");
-        classTemplate.buildClassName(className);
 
-        String javaPath = ProblemEveryDayUtils.buildJavaFilePath("", name);
-        String txtPath = ProblemEveryDayUtils.buildTxtFilePath(dir, name);
-        // System.out.println("name:" + name + ",txt path = " + txtPath);
+    /**
+     * 根据上面题目提供的信息
+     * 这个方法构造
+     * Java file name  => classTemplate.buildClassName
+     * txt  file name  => classTemplate.buildTextFileName
+     * prefix dir
+     * 包信息会自动更加 Java file 创建
+     */
+    public abstract void next();
 
 
-        String absolutePath = IoUtil.wrapperAbsolutePath(aClass, javaPath);
-
-        // build txt
-        classTemplate.buildTextFileName(txtPath.replace(dir, ""));
 
 
+    // next 方法实现后请不要忘记调用 createTemplate
+    @Override
+    public void createTemplate(ProblemInfo problemInfo) {
+        autoCreatePackageInfo(problemInfo);
+        Problem.create(problemInfo);
+    }
+
+
+    /**
+     * 自动封装 package 信息
+     *
+     * @param problemInfo info
+     */
+    public void autoCreatePackageInfo(ProblemInfo problemInfo) {
+        if (problemInfo == null) {
+            System.out.println("auto create package info fail , is null");
+            return;
+        }
+        String absolutePath = IoUtil.wrapperAbsolutePath(aClass, problemInfo.getJavaFile());
         // package info
         String packageInfo = ReflectUtils.getPackageInfo(absolutePath);
 
         classTemplate.buildPackageInfo(packageInfo);
-        // System.out.println(ClassTemplate.getTemplate(classTemplate));
-        ProblemInfo problemInfo = new ProblemInfo(javaPath, txtPath, testCase, classTemplate, aClass);
-
-        // System.out.println(problemInfo);
-        create(problemInfo);
     }
-
 
     public static boolean checkInputUrl(String url) {
         if (StringUtils.isEmpty(url)) {

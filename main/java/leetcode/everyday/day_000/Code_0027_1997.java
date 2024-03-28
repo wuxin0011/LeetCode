@@ -13,8 +13,8 @@ public class Code_0027_1997 {
     public static void main(String[] args) {
         IoUtil.testUtil(Code_0027_1997.class,"firstDayBeenInAllRooms","txt_file\\Code_0027_1997.txt");
     }
+	 private static final int MOD = (int)1e9 + 7; 
 
-    private static final int MOD = (int)1e9 + 7;
+	 //     public int firstDayBeenInAllRooms(int[] nextVisit) {    }  
 
- //      public int firstDayBeenInAllRooms(int[] nextVisit) {    }     
 }
