@@ -27,8 +27,8 @@
 - char
 - long
 - boolean
-- TreeNode (单链表)
-- ListNode (二叉树)
+- TreeNode (二叉树)
+- ListNode (单链表)
 - double
 - float
 - // ... 其他未知类型
