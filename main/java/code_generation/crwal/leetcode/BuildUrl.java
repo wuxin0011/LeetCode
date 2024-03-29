@@ -22,10 +22,10 @@ public class BuildUrl {
     public final static String BiWeeklyUrlPattern = LC_BI_WEEKLY_CONTEST_PREFIX + "-%s/problems/%s/";
 
 
-    // 默认从当前目录读取配置文件
+    // 默认从当前目录下的 request_config 目录读取配置文件 这个目录会自动过滤
     private static final Request request = new Request(BuildUrl.class);
 
-    // 如果为了保护隐私 可以使用 这样 cookies 就不会提交了自定义指定目录
+    // 如果自定义路径 ？
     // 一定要使用绝对路径！
     // private static final Request request = new Request("D:\\desktop\\config");
 
