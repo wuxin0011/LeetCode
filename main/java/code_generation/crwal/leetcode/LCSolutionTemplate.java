@@ -25,11 +25,12 @@ public class LCSolutionTemplate extends LCCustom {
     }
 
     public LCSolutionTemplate(Class<?> aClass, String prefix) {
+        super(aClass);
         this.aClass = aClass;
         this.prefix = StringUtils.isEmpty(prefix) ? Custom_Prefix : prefix;
     }
 
-    public LCSolutionTemplate() {
+    private LCSolutionTemplate() {
 
     }
 
