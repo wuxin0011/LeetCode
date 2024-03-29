@@ -5,6 +5,7 @@ import code_generation.utils.IoUtil;
 
 import java.io.BufferedInputStream;
 import java.io.DataOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -24,9 +25,13 @@ public class Request {
     public static final String applicationHtml = "text/html; charset=utf-8";
     public static final byte[] buff = new byte[1024 * 1024];
 
+    private static final String IGNORE_DIR = File.separator + "request_config" + File.separator;
+
 
     private Map<String, String> headers;
     private Class<?> aClass;
+
+    private String configPath;
 
     public Request() {
         this(Request.class);
@@ -34,8 +39,27 @@ public class Request {
 
     public Request(Class<?> aClass) {
         this.aClass = Objects.requireNonNull(aClass, "class not allow null");
-        Map<String, Map<String, String>> maps = Config.initConfig(aClass);
-        this.headers = maps.get(Constant.headers);
+        this.configPath = IoUtil.buildAbsolutePath(aClass) + IGNORE_DIR; // from default class path load config
+        checkConfig();
+    }
+
+
+    /**
+     * 自定义路径
+     *
+     * @param configPath 绝对路径
+     */
+    public Request(String configPath) {
+        this.configPath = configPath;
+        checkConfig();
+    }
+
+    public void checkConfig() {
+        if (!IoUtil.isAbsolutePath(configPath)) {
+            throw new RuntimeException("place use absolutePath !");
+        }
+        Map<String, Map<String, String>> maps = Config.initConfig(configPath);
+        this.headers = maps == null || maps.size() == 0 ? null : maps.get(Constant.headers);
     }
 
 

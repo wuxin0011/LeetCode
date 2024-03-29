@@ -3,6 +3,7 @@ package code_generation.crwal.request;
 import code_generation.crwal.Constant;
 import code_generation.utils.IoUtil;
 import code_generation.utils.ReflectUtils;
+import code_generation.utils.StringUtils;
 
 import java.io.*;
 import java.util.HashMap;
@@ -17,32 +18,208 @@ import java.util.Set;
 public class Config {
 
     public final static String config_suffix = ".properties";
+    private static final String cookieFile = Constant.cookies + ".txt";
 
     private Config() {
 
     }
 
-    public static Properties getConfig(Class<?> c) {
-        return getConfig(c, Constant.CONFIG_NAME);
+    /**
+     * 初始化读取配置文件 并 将配置文件内容加载到 map<String,String> 中保存
+     * 同时以配置文件 name 作为 key 方便后续获取
+     *
+     * @param absolutePath 绝对路径 如果不是绝对路径会报错
+     * @return map
+     */
+    public static Map<String, Map<String, String>> initConfig(String absolutePath) {
+        if (!IoUtil.isAbsolutePath(absolutePath)) {
+            throw new RuntimeException("path must be absolute path");
+        }
+        String[] configs = Constant.CONFIGS;
+        Map<String, Map<String, String>> maps = new HashMap<>(configs.length);
+        for (String configName : configs) {
+            maps.put(configName, configToMap(absolutePath, configName));
+        }
+        return maps;
     }
 
-    public static Properties getConfig(Class<?> c, String configName) {
+
+    public static Properties getConfig(String path, String configName) {
         try {
             File file = null;
             Properties properties = new Properties();
-            if ((file = createConfigFile(configName, c)) == null) {
+            if ((file = createConfigFile(path, configName)) == null) {
                 System.out.println("place config " + configName);
                 return properties;
             }
             properties.load(new FileReader(file));
             if (file.getName().equals(check(Constant.headers))) {
-                String cookieInfo = getCookieContent(c, properties);
+                String cookieInfo = getCookieContent(path, properties);
                 properties.setProperty("Cookie", cookieInfo);
             }
             return properties;
         } catch (IOException e) {
             return null;
         }
+    }
+
+
+    private static File createConfigFile(String path, String configName) {
+        configName = check(configName);
+
+        // if path contains xxxx.properties 将读取
+        if (path.contains(configName)) {
+            configName = path;
+        } else {
+            configName = path + File.separator + configName;
+        }
+        return createConfigFile(new File(configName));
+    }
+
+
+    @SuppressWarnings("all")
+    private static File createConfigFile(File file, Class<?> c) {
+        return createConfigFile(file);
+    }
+
+
+    @SuppressWarnings("all")
+    private static File createConfigFile(File file) {
+        BufferedWriter writer = null;
+        try {
+            if (file.exists()) {
+                return file;
+            }
+            file.createNewFile();
+            writer = new BufferedWriter(new FileWriter(file));
+            writer.write(defaultTemplate);
+            writer.flush();
+            writer.close();
+            System.out.println("create " + file.getAbsolutePath() + " success !");
+            return null;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            IoUtil.close(writer);
+        }
+    }
+
+
+    /**
+     * 指定 name 获取 map
+     *
+     * @param config config
+     * @param names  names[]
+     * @return map<String, String>
+     */
+    public static Map<String, String> configToMap(Properties config, String[] names) {
+        Map<String, String> map = new HashMap<>();
+        if (config == null) {
+            return map;
+        }
+        for (String name : names) {
+            if (!StringUtils.strictIsEmpty(name)) {
+                String property = config.getProperty(name);
+                if (!StringUtils.strictIsEmpty(property)) {
+                    map.put(name, config.getProperty(name));
+                }
+            }
+        }
+        return map;
+    }
+
+
+    /**
+     * 将 path 路径中 指定配置文件转换为 map
+     *
+     * @param path       路径
+     * @param configName 文件名
+     * @return map
+     */
+    public static Map<String, String> configToMap(String path, String configName) {
+        Properties config = getConfig(path, configName);
+        if (config == null) {
+            return new HashMap<>(0);
+        }
+        return configToMap(config);
+    }
+
+
+    /**
+     * 从配置文件中检查cookie
+     *
+     * @param configPath 路径 默认会读取 路径中的 cookies.txt 文件 作为 cookie 如果没有 在从 properties 中 读取
+     * @param properties config
+     * @return cookie
+     */
+    private static String getCookieContent(String configPath, final Properties properties) {
+        configPath = configPath.contains(cookieFile) ? configPath : (configPath + cookieFile);
+        if (!IoUtil.isAbsolutePath(configPath)) {
+            throw new RuntimeException("place use absolute path !");
+        }
+        String s = IoUtil.readContent(configPath);
+        // from cookies.txt read content is must high
+        if (s.length() > 0) {
+            s = ReflectUtils.toString(s);
+            checkCookie(s, configPath);
+            return s;
+        }
+        s = properties.getProperty("Cookie");
+        if (s != null && s.length() > 0) {
+            s = ReflectUtils.toString(s);
+            checkCookie(s, configPath);
+            return s;
+        }
+
+        // check cookie name is error try cookies
+        s = properties.getProperty(Constant.cookies);
+        if (s.length() > 0) {
+            s = ReflectUtils.toString(s);
+            checkCookie(s, configPath);
+            return s;
+        }
+        // if cookies.txt not exist create it
+        IoUtil.createFile(configPath + cookieFile);
+        System.out.println("place config your cookie in cookies.txt or !" + Constant.headers + ".properties file !");
+        return "";
+    }
+
+
+    private static void checkCookie(String cookie, String path) {
+        if (cookie == null || cookie.length() == 0 || cookie.equalsIgnoreCase("cookie") || cookie.equalsIgnoreCase(Constant.cookies)) {
+            throw new RuntimeException("place check your cookie ! in " + path);
+        }
+    }
+
+    private static String check(String name) {
+        return name.endsWith(config_suffix) ? name : (name + config_suffix);
+    }
+
+    /**
+     * 配置文件转换为map
+     *
+     * @param config 配置文件
+     * @return map
+     */
+    public static Map<String, String> configToMap(Properties config) {
+        if (config == null) {
+            return null;
+        }
+        Set<Map.Entry<Object, Object>> entries = config.entrySet();
+        Map<String, String> map = new HashMap<String, String>(config.size());
+        for (Map.Entry<Object, Object> entry : entries) {
+            String key = String.valueOf(entry.getKey());
+            String value = String.valueOf(entry.getValue());
+
+            // ignore null str
+            if (StringUtils.strictIsEmpty(key) || StringUtils.strictIsEmpty(value)) {
+                continue;
+            }
+
+            map.put(key, value);
+        }
+        return map;
     }
 
 
@@ -57,143 +234,5 @@ public class Config {
             "User-Agent=\"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36 Edg/116.0.1938.62\";\n" +
             "Accept-Language=zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6\n" +
             "Cache-Control=max-age=0";
-
-    private static File createConfigFile(String configName, Class<?> c) {
-        configName = check(configName);
-        configName = IoUtil.wrapperAbsolutePath(c, configName);
-        File file = new File(configName);
-        return createConfigFile(file, c);
-    }
-
-
-    @SuppressWarnings("all")
-    private static File createConfigFile(File file, Class<?> c) {
-        BufferedWriter writer = null;
-        try {
-            if (file.exists()) {
-                return file;
-            }
-            file.createNewFile();
-            writer = new BufferedWriter(new FileWriter(file));
-            writer.write(defaultTemplate);
-            writer.flush();
-            writer.close();
-            System.out.println("create " + file.getName() + " succcess !");
-            return null;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        } finally {
-            IoUtil.close(writer);
-        }
-    }
-
-
-    public static boolean isEmpty(String s) {
-        return s == null || s.length() == 0 || "null".equals(s);
-    }
-
-    private static void configTips() {
-
-    }
-
-
-    public static Map<String, String> configToMap(Class<?> c, String configName, String[] names) {
-        Properties config = getConfig(c, configName);
-        return configToMap(config, names);
-    }
-
-    public static Map<String, String> configToMap(Properties config, String[] names) {
-        Map<String, String> map = new HashMap<>();
-        if (config == null) {
-            return map;
-        }
-        for (String name : names) {
-            if (!Config.isEmpty(name)) {
-                String property = config.getProperty(name);
-                if (!Config.isEmpty(property)) {
-                    map.put(name, config.getProperty(name));
-                }
-            }
-        }
-        return map;
-    }
-
-
-    public static Map<String, String> configToMap(Class<?> c, String configName) {
-        Map<String, String> map = new HashMap<>(0);
-        Properties config = getConfig(c, configName);
-        if (config == null) {
-            return map;
-        }
-        Set<Map.Entry<Object, Object>> entries = config.entrySet();
-        for (Map.Entry<Object, Object> entry : entries) {
-            String key = String.valueOf(entry.getKey());
-            String value = String.valueOf(entry.getValue());
-
-            // ignore null str
-            if ("null".equals(key) || "null".equals(value)) {
-                continue;
-            }
-
-            map.put(key, value);
-        }
-        return map;
-    }
-
-    private static String check(String name) {
-        return name.endsWith(config_suffix) ? name : (name + config_suffix);
-    }
-
-
-    public static Map<String, Map<String, String>> initConfig(Class<?> aClass) {
-        String[] configs = Constant.CONFIGS;
-        Map<String, Map<String, String>> maps = new HashMap<>(configs.length);
-        for (String name : configs) {
-            maps.put(name, configToMap(aClass, name));
-        }
-        return maps;
-    }
-
-
-    private static String getCookieContent(final Class<?> aClass, final Properties properties) {
-        final String cookieFile = Constant.cookies + ".txt";
-
-        String s = IoUtil.readContent(aClass, cookieFile);
-        // from cookies.txt read content is must high
-
-
-        if (s.length() > 0) {
-            s = ReflectUtils.toString(s);
-            checkCookie(s);
-            return s;
-        }
-        s = properties.getProperty("Cookie");
-        if (s != null  && s.length() > 0) {
-            s = ReflectUtils.toString(s);
-            checkCookie(s);
-            return s;
-        }
-
-        // check cookie name is error try cookies
-        s = properties.getProperty(Constant.cookies);
-        if (s.length() > 0) {
-            s = ReflectUtils.toString(s);
-            checkCookie(s);
-            return s;
-        }
-        // if cookies.txt not exist create it
-        IoUtil.createFile(aClass, cookieFile);
-        System.out.println("place config your cookie in cookies.txt or !" + Constant.headers + ".properties file !");
-        return "";
-    }
-
-
-    public static void checkCookie(String cookie) {
-        if (cookie == null || cookie.length() == 0 || cookie.equalsIgnoreCase("cookie") || cookie.equalsIgnoreCase(Constant.cookies)) {
-            throw new RuntimeException("place check your cookie !");
-        }
-    }
-
 
 }

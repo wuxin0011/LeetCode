@@ -25,11 +25,15 @@ Cache-Control=max-age=0
 不会操作 ？ [点我](https://leetcode.cn/)，F12 打开控制台，网络->找到 https://leetcode.cn/ 请求的链接 复制 请求头中的
 cookie，如果过期了请登录后修改！cookie 全部复制也没关系！
 
+### 📚 配置 请求头
 
-如果认为 cookie 配置在 ``headers.properties`` 有点麻烦，可以删除Cookie ，手动创建 `cookies.txt`或者构建时会自动创建 `cookies.txt` 文件
+如果认为 cookie 配置在 ``headers.properties`` 有点麻烦，可以删除Cookie ，手动创建 `cookies.txt`
+或者构建时会自动创建 `cookies.txt` 文件
 
+**默认操作目录 当前类中的 `request_config` 这个目录中**
 
-> cookies.txt 的优先级最高 会直接覆盖 headers.properties 中的 Cookie 属性，在 cookies.txt 中不需要 Cookie=xxxx,直接是xxx 因此如果 cookie 过期了可以直接在 cookies.txt 中修改
+> cookies.txt 的优先级最高 会直接覆盖 headers.properties 中的 Cookie 属性，在 cookies.txt 中不需要 Cookie=xxxx,直接是xxx
+> 因此如果 cookie 过期了可以直接在 cookies.txt 中修改
 
 
 
@@ -65,4 +69,21 @@ VzdF90aW1lc3RhbXBfIjoxNzExNDEzODg1fQ.LpH1FF1nXCgR7jnrNR48Wy6wSqwOIKPJzJt2GQ9M5WM
 _cs1
 ```
 
+这是本人的cookie ，不负责已经过期了哦！😂
+
 **担心cookie格式？没必要！已经过滤了cookie中不必要的字符！**
+
+### 担心cookie泄露 ？
+
+[点我修改](./BuildUrl.java) 当前系统会默认过滤 ``request_config`` 这个目录 所以会自动保护隐私信息！！！
+
+自定义路径和当前路径演示
+
+```java
+    // 默认从当前类的目录下的 request_config 目录 中读取配置文件
+private static final Request request=new Request(BuildUrl.class);
+
+// 如果为了保护隐私 可以使用 这样 cookies 就不会提交了自定义指定目录
+// 一定要使用绝对路径！
+// private static final Request request = new Request("D:\\desktop\\config");
+```
