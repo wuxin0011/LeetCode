@@ -1,6 +1,7 @@
 package code_generation.contest;
 
 import code_generation.utils.IoUtil;
+import code_generation.utils.ReflectUtils;
 import code_generation.utils.StringUtils;
 
 import java.io.File;
@@ -35,8 +36,25 @@ public class ProblemInfo {
         if (!txtFile.endsWith(".txt")) {
             txtFile = txtFile + ".txt";
         }
+
+
+        // update java class Name
+        if (classTemplate != null) {
+            String tempJavaName = javaFile.replace(".java", "");
+            if (StringUtils.isEmpty(classTemplate.className) || !tempJavaName.equals(classTemplate.className)) {
+                classTemplate.buildClassName(tempJavaName);
+            }
+        }
+
+
         this.javaFile = IoUtil.wrapperAbsolutePath(aClass, StringUtils.isEmpty(dirPrefix) ? javaFile : (dirPrefix + File.separator + javaFile));
         this.txtFile = IoUtil.wrapperAbsolutePath(aClass, StringUtils.isEmpty(dirPrefix) ? txtFile : (dirPrefix + File.separator + txtFile));
+
+
+        // update package info
+        if (StringUtils.isEmpty(classTemplate.packageInfo)) {
+            classTemplate.buildPackageInfo(ReflectUtils.getPackageInfo(this.javaFile));
+        }
     }
 
 

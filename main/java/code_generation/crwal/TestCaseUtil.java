@@ -15,13 +15,21 @@ public class TestCaseUtil {
 
     // 输入 unicode
     public static final String inputUnicode = "\\u8f93\\u5165\\uff1a";
+    // 不包含:
+    public static final String inputUnicodeOld = "\\u8f93\\u5165";
 
     // 输出 unicode
+
     public static final String outputUnicode = "\\u8f93\\u51fa\\uff1a";
+
+    // 不包含:
+    public static final String outputUnicodeOld = "\\u8f93\\u51fa";
 
 
     // 解释 unicode
     public static final String explainUnicode = "\\u89e3\\u91ca\\uff1a";
+    // 不包含:
+    public static final String explainUnicodeOld = "\\u89e3\\u91ca";
 
 
     /**
@@ -279,19 +287,40 @@ public class TestCaseUtil {
         for (int i = 0; i < ans.size(); i++) {
             sb.append(ans.get(i));
             if (i != ans.size() - 1) {
-               sb.append("\n");
+                sb.append("\n");
             }
         }
         return sb.toString();
     }
 
+    public static int handlerUnicodeInputAndOutPut(String input, String newStr, String oldStr, boolean isAdd) {
+        int idx = StringUtils.kmpSearch(input, newStr);
+        if (idx != -1) {
+            return isAdd ? idx + newStr.length() : idx;
+        } else {
+            idx = StringUtils.kmpSearch(input, oldStr);
+            if (idx == -1) {
+                return -1;
+            }
+            return isAdd ? idx + oldStr.length() : idx;
+        }
+    }
+
 
     public static void unicodeParseInputOutPut(String input, List<String> ans) {
-
-        int a = StringUtils.kmpSearch(input, inputUnicode);
-        int b = StringUtils.kmpSearch(input, outputUnicode);
+        int a = handlerUnicodeInputAndOutPut(input, inputUnicode, inputUnicodeOld, true);
+        int b = handlerUnicodeInputAndOutPut(input, outputUnicode, outputUnicodeOld, false);
+        if (a == -1 || b == -1) {
+            System.err.println("Not find test case !");
+            return;
+        }
         int c = StringUtils.kmpSearch(input, explainUnicode);
+        if (c == -1) {
+            c = input.length();
+        }
         String inputStr = handlerIgnoreStr(input.substring(a, b));
+        // if not have explain
+        // c == -1 ? input.length() : c
         String outputStr = handlerIgnoreStr(input.substring(b, c));
         startParseContestTestCase(inputStr, LCTestCase.EqualFlag, LCTestCase.interFlag, ans);
         StringUtils.handlerResult(ans);
@@ -302,22 +331,24 @@ public class TestCaseUtil {
 
     // 是否是unicode格式
     public static boolean checkHasUnicodeInputOutput(String input) {
-        int a = StringUtils.kmpSearch(input, inputUnicode);
-        int b = StringUtils.kmpSearch(input, outputUnicode);
-        int c = StringUtils.kmpSearch(input, explainUnicode);
-        return a != -1 && b != -1 && c != -1 && a < b && b < c;
+        int a = StringUtils.kmpSearch(input, inputUnicodeOld);
+        int b = StringUtils.kmpSearch(input, outputUnicodeOld);
+        return a != -1 && b != -1 && a < b;
     }
 
 
     public static String handlerIgnoreStr(String s) {
         if (StringUtils.isEmpty(s)) return s;
         s = s.replace(inputUnicode, "").replace(outputUnicode, "").replace(explainUnicode, "");
+        s = s.replace(inputUnicodeOld, "").replace(outputUnicodeOld, "");
         s = s.replace("<b>", "").replace("</b>", "");
         s = s.replace("<p>", "").replace("</p>", "");
         s = s.replace("<span>", "").replace("</span>", "");
         s = s.replace("<strong>", "").replace("</strong>", "");
         s = s.replace("<div>", "").replace("</div>", "");
         s = s.replace("<br>", "").replace("</br>", "");
+        s = s.replace("<pre>", "").replace("</pre>", "");
+        s = s.replace("<pre", "").replace("/pre>", "");
         return s;
     }
 

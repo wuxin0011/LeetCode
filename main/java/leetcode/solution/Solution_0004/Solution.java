@@ -31,10 +31,10 @@ public class Solution {
         for (Map.Entry<Integer, Integer> item : map.entrySet()) {
             int v = item.getValue();
             if (v > 1) {
-                cnt += v * (v - 1) / 2;
+                cnt += v * (v - 1) / 2 * 8;
             }
         }
-        return cnt << 3;
+        return cnt;
     }
 
 

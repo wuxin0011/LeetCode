@@ -120,6 +120,7 @@ public abstract class LCCustom implements CustomProblem {
     @Override
     public void createTemplate(ProblemInfo problemInfo) {
         autoCreatePackageInfo(problemInfo);
+        updateClassName(problemInfo);
         Problem.create(problemInfo);
     }
 
@@ -139,6 +140,10 @@ public abstract class LCCustom implements CustomProblem {
         String packageInfo = ReflectUtils.getPackageInfo(absolutePath);
 
         classTemplate.buildPackageInfo(packageInfo);
+    }
+
+
+    public void updateClassName(ProblemInfo problemInfo){
     }
 
     public static boolean checkInputUrl(String url) {

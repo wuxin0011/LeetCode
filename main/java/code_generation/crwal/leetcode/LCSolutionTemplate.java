@@ -17,21 +17,30 @@ public class LCSolutionTemplate extends LCCustom {
     private Class<?> aClass;
     private String prefix;
 
+    private String className;
+    private String txtFile;
 
-    public LCSolutionTemplate(Class<?> aClass) {
-        super(aClass);
-        this.aClass = aClass;
-        this.prefix = Custom_Prefix;
-    }
-
-    public LCSolutionTemplate(Class<?> aClass, String prefix) {
-        super(aClass);
-        this.aClass = aClass;
-        this.prefix = StringUtils.isEmpty(prefix) ? Custom_Prefix : prefix;
-    }
 
     private LCSolutionTemplate() {
 
+    }
+
+
+    public LCSolutionTemplate(Class<?> aClass) {
+        this(aClass, null, null, null);
+    }
+
+
+    public LCSolutionTemplate(Class<?> aClass, String prefix) {
+        this(aClass, prefix, null, null);
+    }
+
+    public LCSolutionTemplate(Class<?> aClass, String prefix, String className, String txtFile) {
+        super(aClass);
+        this.aClass = aClass;
+        this.prefix = StringUtils.isEmpty(prefix) ? Custom_Prefix : prefix;
+        this.className = StringUtils.isEmpty(className) ? Custom_Prefix : className;
+        this.txtFile = StringUtils.isEmpty(txtFile) ? IoUtil.DEFAULT_READ_FILE : txtFile.lastIndexOf(".txt") != -1 ? txtFile : (txtFile + ".txt");
     }
 
 
@@ -43,7 +52,7 @@ public class LCSolutionTemplate extends LCCustom {
     @Override
     public void next() {
         String prefix_dir = this.prefix + "_" + getDir(count());
-        ProblemInfo problemInfo = new ProblemInfo(this.prefix, IoUtil.DEFAULT_READ_FILE, prefix_dir, testCase, classTemplate, aClass);
+        ProblemInfo problemInfo = new ProblemInfo(this.className, this.txtFile, prefix_dir, testCase, classTemplate, aClass);
         createTemplate(problemInfo);
     }
 

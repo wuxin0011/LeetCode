@@ -62,7 +62,11 @@ public class StringUtils {
 
     public static String replaceIgnoreContent(String s) {
         if (isEmpty(s)) {
-            return s;
+            return "\"\"";
+        }
+        // 迭代删除所以多余的换行
+        while (s.contains("\n\n\n")) {
+            s = s.replace("\n\n\n", "\n\n");
         }
         s = s.replace("<div>", "").replace("</div>", "");
         s = s.replace("<ul>", "").replace("</ul>", "");
@@ -71,6 +75,8 @@ public class StringUtils {
         s = s.replace("<u>", "").replace("</u>", "");
         s = s.replace("<p>", "").replace("</p>", "");
         s = s.replace("<h>", "").replace("</h>", "");
+        s = s.replace("<pre>", "").replace("</pre>", "");
+        s = s.replace("<pre", "").replace("/pre>", "");
         // s = s.replace("\\n", "");
         s = s.replace("&lt;", "");
         s = s.replace("&gt;", "");
