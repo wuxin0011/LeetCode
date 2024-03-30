@@ -82,4 +82,5 @@ public boolean check(int mid){
 - [爱吃香蕉的狒狒](https://leetcode.cn/problems/nZZqjQ/)
 - [分割数组的最大值](https://leetcode.cn/problems/split-array-largest-sum/)
 - [找出第 K 小的数对距离](https://leetcode.cn/problems/find-k-th-smallest-pair-distance)
+- [电脑工作最久时间](https://leetcode.cn/problems/maximum-running-time-of-n-computers)
 
