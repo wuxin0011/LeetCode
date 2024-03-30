@@ -32,8 +32,8 @@ public class LCEveryDay extends LCCustom {
         String base = ProblemEveryDayUtils.convertDir(count);
         String name = dir + Constant.FIlE_PREFIX + base;
         name = name + "_" + this.frontendQuestionId;
-        String className = name.replace(dir, "").replace("\\", "");
-        classTemplate.buildClassName(className);
+        // String className = name.replace(dir, "").replace("\\", "");
+        // classTemplate.buildClassName(className);
 
         String javaPath = ProblemEveryDayUtils.buildJavaFilePath("", name);
         String txtPath = ProblemEveryDayUtils.buildTxtFilePath(dir, name);

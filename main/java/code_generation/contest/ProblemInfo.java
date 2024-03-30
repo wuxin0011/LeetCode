@@ -30,6 +30,7 @@ public class ProblemInfo {
         if (!javaFile.endsWith(".java")) {
             javaFile = javaFile + ".java";
         }
+
         if (txtFile.endsWith(".java")) {
             txtFile = txtFile.replace(".java", ".txt");
         }
@@ -41,6 +42,10 @@ public class ProblemInfo {
         // update java class Name
         if (classTemplate != null) {
             String tempJavaName = javaFile.replace(".java", "");
+            if (tempJavaName.contains("\\")) {
+                String[] split = tempJavaName.split("\\\\");
+                tempJavaName = split[split.length - 1]; // last as className
+            }
             if (StringUtils.isEmpty(classTemplate.className) || !tempJavaName.equals(classTemplate.className)) {
                 classTemplate.buildClassName(tempJavaName);
             }

@@ -176,7 +176,7 @@ public class WeekContest implements Contest {
                 .buildMethod(method)
                 .buildMethodName(methodName)
                 .buildPackageInfo(packageInfo)
-                .buildClassName(className)
+                // .buildClassName(className)
                 .buildTextFileName(className)
                 .buildTitle(question.getTitle());
 
