@@ -303,8 +303,9 @@ public class ReflectUtils {
         }
         char[] charArray = input.toCharArray();
         StringBuilder sb = new StringBuilder();
+        char st = input.charAt(0);
         for (char c : charArray) {
-            if (StringUtils.isIgnoreStrict(c)) continue;
+            if (StringUtils.isIgnore(c, st)) continue;
             sb.append(c);
         }
         return sb.toString();
@@ -657,8 +658,9 @@ public class ReflectUtils {
         char startFlag = flag[0];
         char endFlag = flag[1];
         char interruptFlag = flag[2];
+        char stChar = input.charAt(0);
         for (char c : charArray) {
-            if (StringUtils.isIgnoreStrict(c)) continue;
+            if (StringUtils.isIgnore(c, stChar)) continue;
             if (c == startFlag) {
                 sk.push(c);
                 if (sk.size() == 2) {

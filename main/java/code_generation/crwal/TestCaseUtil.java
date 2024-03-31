@@ -59,14 +59,16 @@ public class TestCaseUtil {
     public static void startParseContestTestCase(String input, String startFlag, String endFlag, List<String> ans) {
         // System.out.println("input======>\n"+input);
         input = input.replace("&quot;", "");
+        input = input.replace("\\n", "");
         char[] charArray = input.toCharArray();
         int deep = 0;
+        int line = 0;
         StringBuilder sb = null;
         if (StringUtils.kmpSearch(input, "=") == -1 && StringUtils.kmpSearch(input, ":") == -1) {
             ans.add(input);
         } else {
             for (char c : charArray) {
-                if (StringUtils.isIgnore(c)) {
+                if (c != '\\' && StringUtils.isIgnore(c)) {
                     continue;
                 }
                 switch (c) {
@@ -77,6 +79,7 @@ public class TestCaseUtil {
                         break;
                     case '[':
                     case '{':
+
                     case '\u3010':
                         if (deep == 0 && sb == null) {
                             sb = new StringBuilder();
@@ -102,12 +105,22 @@ public class TestCaseUtil {
                     case ',':
                     case '\uFF0C':
                         if (sb != null) {
-                            if (deep == 0) {
+                            if (deep == 0 && line == 0) {
                                 ans.add(sb.toString());
                                 sb = new StringBuilder();
                             } else {
                                 sb.append(c);
                             }
+                        }
+                        break;
+                    case '\\': // 特殊情况 https://leetcode.cn/problems/verify-preorder-serialization-of-a-binary-tree/description/
+                        line++;
+                        if (line == 1) {
+                            sb = new StringBuilder();
+                        } else if (line == 2 && sb != null) {
+                            ans.add(sb.toString());
+                            line = 0;
+                            sb = null;
                         }
                         break;
                     default:
@@ -197,8 +210,10 @@ public class TestCaseUtil {
 
 
     public static void parseDefaultTextCase(String input, List<String> ans) {
-        input = input.replace("\\n", "");
-        input = input.replace("&quot;", "");
+        input = input.replaceAll("\\n", "");
+        input = input.replaceAll("&quot;", "");
+        input = input.replaceAll("<code>", "");
+        input = input.replaceAll("</code>", "");
         if (checkHasUnicodeInputOutput(input)) {
             unicodeParseInputOutPut(input, ans);
         } else {
@@ -212,9 +227,10 @@ public class TestCaseUtil {
             int end = Math.min(Math.max(input.length() - LCTestCase.pre_end.length(), 1), input.length());
             StringBuilder sb = null;
             int deep = 0, args = 0;
+            int line = 0;
             for (int i = i1; i < end; i++) {
                 char c = input.charAt(i);
-                if (StringUtils.isIgnore(c)) {
+                if (c != '\\' && StringUtils.isIgnore(c)) {
                     if (sb != null && i == end - 1) {
                         temp.add(sb.toString());
                         sb = null;
@@ -254,9 +270,17 @@ public class TestCaseUtil {
                             sb = null;
                         }
                         break;
+                    case '\\':
+                        line++;
+                        if (line == 1) {
+                            sb = new StringBuilder();
+                        } else if (line == 2 && sb != null) {
+                            ans.add(sb.toString());
+                            line = 0;
+                        }
                     case ',':
                         if (sb != null) {
-                            if (deep == 0) {
+                            if (deep == 0 && line == 0) {
                                 temp.add(sb.toString());
                                 if (args > 0) args--;
                                 sb = null;

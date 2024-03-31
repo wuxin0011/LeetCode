@@ -43,6 +43,15 @@ public class StringUtils {
         return c == '\r' || c == '\n' || c == '\t' || c == '\b' || c == '\f' || c == '\0' || c == '\\' || c == ' ' || c == '\'' || c == '\"';
     }
 
+    // https://leetcode.cn/problems/verify-preorder-serialization-of-a-binary-tree/submissions/
+    // 由于 # 这个符号与之前设计符号冲突了，加入特殊情况判断
+    public static boolean isIgnore(char c, char st) {
+        if (st == '#' && isIgnoreStrict(c)) {
+            return true;
+        }
+        return st != '#' && isIgnore(c);
+    }
+
     public static boolean isIgnoreStrict(char c) {
         return isIgnore(c) || isIgnoreStrict(c, '#');
     }
