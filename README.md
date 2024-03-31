@@ -21,7 +21,7 @@
 
 ## TODO
  - [x] 准备写个支持本地对拍的code [点解查看详情😅](./main/java/code_generation/utils/readme.md)
- - [x] 准备实现自动解析。[点解查看详情😅](main/java/code_generation/crwal/readme.md)
+ - [x] 准备实现自动解析。[点解查看详情😅](main/java/code_generation/crwal/leetcode/readme.md)
 
 
 
