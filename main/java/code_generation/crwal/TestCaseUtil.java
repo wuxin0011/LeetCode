@@ -285,8 +285,15 @@ public class TestCaseUtil {
             return sb.toString();
         }
         for (int i = 0; i < ans.size(); i++) {
-            sb.append(ans.get(i));
-            if (i != ans.size() - 1) {
+            String s = ans.get(i);
+            if (s == null || s.contains("font-family")) {
+                continue;
+            }
+            if (s.length() == 0) {
+                sb.append("\"\"");
+            }
+            sb.append(s);
+            if (i != ans.size() - 1 && !s.equals("\n")) {
                 sb.append("\n");
             }
         }

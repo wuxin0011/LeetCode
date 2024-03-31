@@ -210,8 +210,14 @@ public class StringUtils {
     }
 
     public static String jsonStrGetValueByKey(String jsonStr, String key) {
-        key = wrapperKey(key);
-        int find = jsonStr.indexOf(key);
+        return jsonStrGetValueByKey(jsonStr, key, true);
+    }
+
+    public static String jsonStrGetValueByKey(String jsonStr, String key, boolean isWrapper) {
+        if (isWrapper) {
+            key = wrapperKey(key);
+        }
+        int find = kmpSearch(jsonStr, key);
         if (find == -1) {
             System.out.println("Not find key " + key);
             return "";
@@ -249,6 +255,7 @@ public class StringUtils {
         }
         return sb.toString().replaceAll("\"", "").replace(":", "");
     }
+
 
     private static boolean isMatchingPair(char left, char right) {
         return (left == '{' && right == '}') || (left == '[' && right == ']') || (left == '(' && right == ')');
@@ -317,7 +324,7 @@ public class StringUtils {
     public static String getMethodName(String codeContent) {
         int st = kmpSearch(codeContent, "(");
         if (st == -1) {
-            return "defaultMethodName";
+            return "IoUtil.DEFAULT_METHOD_NAME";
         }
         StringBuilder sb = new StringBuilder();
         for (int i = st - 1; i >= 0; i--) {

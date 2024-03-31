@@ -11,7 +11,6 @@ import code_generation.utils.ReflectUtils;
 import code_generation.utils.StringUtils;
 
 import java.io.File;
-import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -75,9 +74,43 @@ public class WeekContest implements Contest {
         createTestProblem(getId(), getProblemDir());
     }
 
+    private String username;
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+
+    // 如果最新一次周赛获取不到 可以使用这个模板
+    public void useOldTemplate(int No, int maxId, int idx, Question question) {
+        if (maxId == No) {
+            AtomicReference<String> tc = new AtomicReference<>("");
+            ExceptionUtils.executeWithExceptionHandling(() -> {
+                tc.set(question.getUrl());
+            });
+            ExceptionUtils.executeWithExceptionHandling(() -> {
+                Problem.create(idx, dir, tc.get(), "");
+            });
+        } else {
+            this.useDefaultTemplate(idx, question);
+        }
+    }
+
+
+    public void useDefaultTemplate(int idx, Question question) {
+        ExceptionUtils.executeWithExceptionHandling(() -> {
+            createContestTemplate(idx, dir, question);
+        });
+    }
+
     private void createTestProblem(int No, String dir) {
 
         int maxId = getId();
+
 
         System.out.println("==========================================" + No + " start ==========================================");
         List<Question> questions = getQuestions(No);
@@ -85,19 +118,31 @@ public class WeekContest implements Contest {
             System.out.println("No contest !" + No);
             return;
         }
+
+        // not setting username
+        // form network get
+        if (StringUtils.isEmpty(username)) {
+            this.username = getUserName();
+        }
+
+
+        if (!StringUtils.isEmpty(username)) {
+            System.out.println("\n welcome coming " + username + " \n");
+        }
         System.out.println("fetch problems urls success ! start parse problems ");
         for (int i = 0; i < questions.size(); i++) {
             Question question = questions.get(i);
             if (question == null) {
                 continue;
             }
-            System.out.println("start parse question :  " + question.getTitle());
+            System.out.println("\nstart parse question :  " + (StringUtils.isEmpty(question.getTitle()) ? question.getTitle_slug() : question.getTitle()));
             final int idx = i;
 
             try {
                 createContestTemplate(idx, dir, question);
             } catch (Exception e) {
                 e.printStackTrace();
+                // if error use default template
                 System.out.println("try use default contest template ");
                 AtomicReference<String> tc = new AtomicReference<>("");
                 ExceptionUtils.executeWithExceptionHandling(() -> {
@@ -109,22 +154,7 @@ public class WeekContest implements Contest {
             }
 
             // 是否取用最新版不使用template
-
-
-//            if (maxId == No) {
-//
-//                AtomicReference<String> tc = new AtomicReference<>("");
-//                ExceptionUtils.executeWithExceptionHandling(() -> {
-//                    tc.set(getTestCase(questions.get(idx).getUrl()));
-//                });
-//                ExceptionUtils.executeWithExceptionHandling(() -> {
-//                    Problem.create(idx, dir, tc.get(), "");
-//                });
-//            } else {
-//                ExceptionUtils.executeWithExceptionHandling(() -> {
-//                    createContestTemplate(idx, dir, question);
-//                });
-//            }
+            // useOldTemplate(maxId,No,idx,question);
 
 
             ExceptionUtils.sleep(Math.min(1, (int) (Math.random() * 5)));
@@ -138,29 +168,37 @@ public class WeekContest implements Contest {
 
     public void createContestTemplate(int curId, String dir, Question question) {
         if (question == null) {
-            return;
+            throw new NullPointerException();
         }
         ClassTemplate classTemplate = new ClassTemplate();
         String titleSlug = question.getTitle_slug();
-        // System.out.println("titleSlug : " + titleSlug);
+        String info = "";
+
+        String contestHtml = BuildUrl.getContestQuestionPage(question.getUrl());
+
+        // test case
+        List<String> strings = TEST_CASE.parseContest(contestHtml);
+        String testCase = TestCaseUtil.testCaseToString(strings);
 
 
-        String questionTranslationInfo = BuildUrl.questionTranslations(titleSlug);
-
-
-        // 获取测试案例
-        String testCase = getTestCase(question.getUrl());
-        String method = "";
-        String methodName = "";
-
-        try {
-            String code = BuildUrl.questionEditorData(titleSlug);
-            String s = lcTemplate.parseCodeTemplate(code);
-            method = StringUtils.getMethod(s);
-            methodName = StringUtils.getMethodName(method);
-        } catch (ParseException ignore) {
-
+        // important info
+        info = parseScriptCodeInfo(contestHtml);
+        if (StringUtils.isEmpty(info)) {
+            throw new RuntimeException("parse error");
         }
+        String method = getMethod(info);
+        String methodName = StringUtils.getMethodName(method);
+        String title = question.title;
+        if (StringUtils.isEmpty(title)) {
+            title = getTitle(info);
+        }
+
+        if (StringUtils.isEmpty(title)) {
+            title = titleSlug;
+        }
+        question.buildTitle(title);
+        classTemplate.buildTitle(title);
+
 
         String className = Problem.createDir(curId, true);
         String prefix = Problem.createDir(curId, true, Problem.createDir(curId, false, dir));
@@ -168,17 +206,19 @@ public class WeekContest implements Contest {
         String txtFile = prefix + ".txt";
 
         String packageInfo = ReflectUtils.getPackageInfo(javaFile);
-        System.out.println("package info :" + packageInfo);
+        // System.out.println("package info :" + packageInfo);
 
 
-        classTemplate.buildIsNeedMod(StringUtils.isNeedMOD(questionTranslationInfo))
+        classTemplate.buildIsNeedMod(StringUtils.isNeedMOD(info))
                 .buildUrl(question.getUrl())
                 .buildMethod(method)
+                .buildAuthor(this.username)
                 .buildMethodName(methodName)
                 .buildPackageInfo(packageInfo)
                 // .buildClassName(className)
                 .buildTextFileName(className)
                 .buildTitle(question.getTitle());
+
 
         Problem.create(new ProblemInfo(javaFile, txtFile, "", testCase, classTemplate, aClass));
     }
@@ -243,7 +283,7 @@ public class WeekContest implements Contest {
     /**
      * 自定义生成
      *
-     * @param NO
+     * @param NO 周赛序号
      */
     public void createNo(int NO) {
         if (NO == Integer.MAX_VALUE) {
@@ -334,5 +374,88 @@ public class WeekContest implements Contest {
     public static boolean isBiWeekContest(String prefix) {
         return prefix != null && prefix.equals(BI_WEEKLY_PREFIX);
     }
+
+
+    @SuppressWarnings("all")
+    public static String parseScriptCodeInfo(String input) {
+        int i = StringUtils.kmpSearch(input, "var pageData");
+        if (i == -1) {
+            return "";
+        }
+        input = input.substring(i);
+        i = StringUtils.kmpSearch(input, "</script>");
+        if (i == -1) {
+            return "";
+        }
+        input = input.substring(0, i);
+        return input;
+    }
+
+    @SuppressWarnings("all")
+    public static String getTitle(String input) {
+        final String key = "questionTitle:";
+        int i = StringUtils.kmpSearch(input, key);
+        if (i == -1) {
+            return "";
+        }
+        int i2 = StringUtils.kmpSearch(input, i, ",");
+        if (i2 == -1) {
+            return "";
+        }
+        String title = input.substring(i + key.length(), i2);
+        title = title.replace(",", "");
+        title = title.replace("\'", "");
+        title = title.replace("\"", "");
+        return title;
+    }
+
+    @SuppressWarnings("all")
+    public static String getMethod(String input) {
+        final String t = "{'value': 'java', 'text': 'Java', 'defaultCode':";
+        int i = StringUtils.kmpSearch(input, t);
+        if (i == -1) {
+            return "";
+        }
+        int deep = 0;
+        StringBuilder sb = null;
+        i += t.length();
+        for (; i < input.length(); i++) {
+            char c = input.charAt(i);
+            if (c == '{') {
+                deep++;
+                if (sb == null) sb = new StringBuilder();
+            } else if (c == '}') {
+                deep--;
+                if (sb != null) {
+                    sb.append(c);
+                }
+                if (deep == 0) {
+                    break;
+                }
+            } else {
+                if (sb != null) sb.append(c);
+            }
+        }
+        input = sb != null ? sb.toString() : null;
+        if (input != null) {
+            input = input.replace("\\u000A", "");
+            input = input.replace("\\u003C", "<");
+            input = input.replace("\\u003E", ">");
+            input = input.replace("\\u0028", "(");
+            input = input.replace("\\u0029", ")");
+        }
+        return input;
+    }
+
+    public static String getUserName() {
+        final String key = "username";
+        // String key = "realName";
+        // String key = "userSlug";
+        String userStatusInfo = BuildUrl.userStatus();
+        // System.out.println(userStatus);
+        return StringUtils.jsonStrGetValueByKey(userStatusInfo, key);
+
+    }
+
 
 }

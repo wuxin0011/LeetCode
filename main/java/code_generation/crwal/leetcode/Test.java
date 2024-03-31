@@ -23,6 +23,8 @@ public class Test {
     public static final LCTestCase testCase = new LCTestCase();
 
 
+
+
     static void testPost() {
 
         final String title_url = "count-submatrices-with-top-left-element-and-sum-less-than-k";
@@ -116,6 +118,10 @@ public class Test {
     public static void testUserStatus() {
         String s = BuildUrl.userStatus();
         System.out.println(s);
+        System.out.println(StringUtils.jsonStrGetValueByKey(s,"username"));
+        System.out.println(StringUtils.jsonStrGetValueByKey(s,"realName"));
+        System.out.println(StringUtils.jsonStrGetValueByKey(s,"avatar"));
+        System.out.println(StringUtils.jsonStrGetValueByKey(s,"userSlug"));
     }
 
     public static void testCodeSnippets() {
@@ -144,6 +150,19 @@ public class Test {
         String questionTranslationInfo = BuildUrl.questionTranslations(t);
         String s = StringUtils.jsonStrGetValueByKey(questionTranslationInfo, "translatedContent");
         testCase.parseDefault(s);
+    }
+
+    public static void getContestCode() throws ParseException {
+        // https://leetcode.cn/contest/biweekly-contest-127/problems/find-the-sum-of-subsequence-powers/
+        // String url = BuildUrl.getBiWeeklyContestProblem("127", "find-the-sum-of-subsequence-powers");
+        String input = request.requestGet("https://leetcode.cn/contest/biweekly-contest-127/problems/find-the-sum-of-subsequence-powers/");
+        // System.out.println(html);
+        int i1 = StringUtils.kmpSearch(input, "var pageData");
+        System.out.println(i1);
+        input = input.substring(i1);
+        int i11 = StringUtils.kmpSearch(input, "</script>");
+        input = input.substring(0, i11);
+        System.out.println(input);
     }
 
 
@@ -198,7 +217,7 @@ public class Test {
 
         // parseUrls();
 
-         testDefaultProblems();
+        // testDefaultProblems();
 
         // testCodeSnippets();
 
@@ -206,12 +225,15 @@ public class Test {
 
         // testQuestionEditorData();
 
-        // testUserStatus();
+         testUserStatus();
 
 
         // testResult2();
 
-        testQuestionTranslations();
+        // testQuestionTranslations();
+
+        // getContestCode();
+        //
     }
 
 

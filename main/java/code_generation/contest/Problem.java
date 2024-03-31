@@ -76,7 +76,7 @@ public class Problem {
                 classTempalte = String.format(pattern, packageInfo, name, name, txtFile);
             }
             IoUtil.writeContent(classFilePath, classTempalte);
-            System.out.println(classFilePath + "  create success !");
+            System.out.println(classFilePath + "  create success !\n");
         } catch (Exception e) {
             e.printStackTrace();
         }

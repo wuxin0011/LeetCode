@@ -8,6 +8,13 @@ import code_generation.utils.StringUtils;
  * @Description:
  */
 public class ClassTemplate {
+
+    private final static String default_author = "wuxin0011";
+    private final static String default_methodName = "IoUtil.DEFAULT_METHOD_NAME";
+    private final static String default_className = "Solution";
+    private final static String MOD = "private static final int MOD = (int)1e9 + 7;";
+
+    public String author;
     public String method;
     public String methodName;
     public String className;
@@ -20,8 +27,9 @@ public class ClassTemplate {
 
     public ClassTemplate() {
         this.method = "";
-        this.methodName = "IoUtil.DEFAULT_METHOD_NAME";
-        this.className = "Solution";
+        this.methodName = default_methodName;
+        this.className = default_className;
+        this.author = default_author;
         this.textFileName = StringUtils.wrapperKey(IoUtil.DEFAULT_READ_FILE);
         this.title = "";
         this.url = "";
@@ -41,7 +49,7 @@ public class ClassTemplate {
 
     public ClassTemplate buildClassName(String className) {
         if (StringUtils.isEmpty(className)) {
-            className = "Solution";
+            className = default_className;
         }
         if (className.endsWith(".class")) {
             className = className.replace(".class", "");
@@ -60,6 +68,11 @@ public class ClassTemplate {
 
     public ClassTemplate buildUrl(String url) {
         this.url = url;
+        return this;
+    }
+
+    public ClassTemplate buildAuthor(String author) {
+        this.author = StringUtils.isEmpty(author) ? default_author : author;
         return this;
     }
 
@@ -91,16 +104,13 @@ public class ClassTemplate {
     }
 
 
-    private final static String MOD = "private static final int MOD = (int)1e9 + 7;";
-
-
     final static String TEMPLATE_PATTERN = "package %s;\n" +
             "\n" +
             "import code_generation.utils.IoUtil;\n" +
             "import java.util.*;\n" +
             "%s" +
             "/**\n" +
-            " * @author: wuxin0011\n" +
+            " * @author: %s\n" +
             " * @Description:\n" +
             " * @url:   %s\n" +
             " * @title: %s\n" +
@@ -121,6 +131,7 @@ public class ClassTemplate {
                 TEMPLATE_PATTERN,
                 info.packageInfo,
                 info.importInfo,
+                info.author,
                 info.url,
                 info.title,
                 info.className,
