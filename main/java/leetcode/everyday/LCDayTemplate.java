@@ -5,7 +5,7 @@ import code_generation.crwal.leetcode.LCEveryDay;
 
 /**
  * @author: wuxin0011
- * @Description:
+ * @Description: 自动获取每日一题
  */
 public class LCDayTemplate {
 

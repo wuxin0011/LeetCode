@@ -1,35 +1,22 @@
 # 练习题笔记
 
-## Java版本信息
+## 👜Java版本信息
 
 - JDK1.8
 - [官方链接](https://leetcode.cn/)
 - [中文接口文档](https://www.matools.com/api/java8)
 
-## 更新日志
+
+## 📦LeetCode验证失败 ？
+
+[点我查看配置](./main/java/code_generation/crwal/readme.md)
 
 
+## 🚀推荐链接
 
-
-- 2024/3/27 基本完成自动案例功能
-- 2024/3/19 破坏性调整目录结构，新增代码`template`自动生成[点我查看](./main/java/code_generation/contest/Problem.java)、 以及 [LC周赛类](./main/java/code_generation/crwal/leetcode/WeekContest.java )
-- 2024/2/15 调整目录结构，为`ACM`模式做预留。另外 好像大部分题目都没有写，有点懒了，算了🤣。
-- 不知道啥时候首次提交了
-
-
-
-
-## TODO
- - [x] 准备写个支持本地对拍的code [点解查看详情😅](./main/java/code_generation/utils/readme.md)
- - [x] 准备实现自动解析。[点解查看详情😅](main/java/code_generation/crwal/leetcode/readme.md)
-
-
-
-
-
-## 推荐链接
-
-- [题单](https://doocs.gitee.io/leetcode/tags.html)
+- [灵茶山艾府](https://leetcode.cn/u/endlesscheng/)
+  - 点击讨论发布查看题单
+  - 关于[bilibili](https://space.bilibili.com/206214)
 - 大数据[zerotrac](https://zerotrac.github.io/leetcode_problem_rating/#/)
 - 分数分类[rating](https://huxulm.github.io/lc-rating/)
 
@@ -61,3 +48,18 @@ console.table(ans)
 
 ```
 
+将内容复制到本地保存为 xxx.json 文件
+
+
+## 📚完整题单推荐
+
+- [题单](https://doocs.gitee.io/leetcode/tags.html)
+
+
+## 📘更新日志
+
+
+- 2024/3/27 基本完成自动案例功能
+- 2024/3/19 破坏性调整目录结构，新增代码`template`自动生成
+- 2024/2/15 调整目录结构，为`ACM`模式做预留。另外 好像大部分题目都没有写，有点懒了，算了🤣。
+- 2023/6/18 不知道啥时候首次提交了

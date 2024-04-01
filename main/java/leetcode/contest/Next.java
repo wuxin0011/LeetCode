@@ -2,7 +2,7 @@ package leetcode.contest;
 
 /**
  * @author: wuxin0011
- * @Description: 生成 template 类
+ * @Description: 自动获取当前正在进行的比赛
  */
 public class Next {
 

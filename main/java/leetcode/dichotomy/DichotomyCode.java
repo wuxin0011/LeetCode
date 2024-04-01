@@ -4,7 +4,7 @@ import code_generation.crwal.leetcode.LCSolutionTemplate;
 
 /**
  * @author: wuxin0011
- * @Description:
+ * @Description: 二分
  */
 public class DichotomyCode {
     public static void main(String[] args) {

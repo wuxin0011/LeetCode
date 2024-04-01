@@ -1,4 +1,4 @@
-- 测试主要是Cookie中内容
+- 经过测试，访问网站信息主要是Cookie中内容
     - `csrftoken`
     - `LEETCODE_SESSION`
 

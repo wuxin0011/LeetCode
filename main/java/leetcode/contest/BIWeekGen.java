@@ -2,7 +2,7 @@ package leetcode.contest;
 
 /**
  * @author: wuxin0011
- * @Description:
+ * @Description: 通过输入序号获取双周赛
  */
 public class BIWeekGen {
 
