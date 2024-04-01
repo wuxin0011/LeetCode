@@ -88,6 +88,7 @@ public class StringUtils {
         s = s.replace("<pre", "").replace("/pre>", "");
         // s = s.replace("\\n", "");
         s = s.replace("&lt;", "");
+        s = s.replace("\\", "");
         s = s.replace("&gt;", "");
         s = s.replace("&amp;", "");
         s = s.replace("&quot;", "");
