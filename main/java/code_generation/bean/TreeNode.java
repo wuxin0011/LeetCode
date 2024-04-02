@@ -1,5 +1,7 @@
 package code_generation.bean;
 
+import code_generation.utils.StringUtils;
+
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.StringJoiner;
@@ -106,7 +108,7 @@ public class TreeNode {
     // "null" support lc
     // "#" supprot niuke
     private static boolean isNullNode(String s) {
-        return "null".equals(s) || "#".equals(s);
+        return s == null || s.length() == 0 || "null".equals(s) || "#".equals(s);
     }
 
 

@@ -266,6 +266,8 @@ public class ReflectUtils {
     public static <T> Object toList(Class<T> t, String methodName, String type, String input, int idx, int argsSize) {
         String listType = IoUtil.findListReturnTypeMethod(t, methodName, type, idx, argsSize);
         switch (listType) {
+            case "List<TreeNode>":
+                return parseListTreeNode(input); // 4.2日 新增
             case "List<String>":
                 return parseListString(input);
             case "List<List<String>>":
@@ -294,6 +296,18 @@ public class ReflectUtils {
                 System.err.println("NOT implement " + listType + ",place implement this ,default convert string list");
                 return parseListString(input);
         }
+    }
+
+    private static List<TreeNode> parseListTreeNode(String input) {
+
+        List<TreeNode> treeNodes = new ArrayList<>();
+        String[][] strings = doubleStringArray(input);
+        for (int i = 0; i < strings.length; i++) {
+
+            TreeNode treeNode = TreeNode.widthBuildTreeNode(strings[i]);
+            treeNodes.add(treeNode);
+        }
+        return treeNodes;
     }
 
 

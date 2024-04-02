@@ -335,7 +335,11 @@ public class StringUtils {
             char c = classStr.charAt(i);
             if (c == '{') {
                 deep++;
-                if (deep==1 && sb == null) sb = new StringBuilder();
+                if (deep==1 && sb == null){
+                    sb = new StringBuilder();
+                } else if( deep == 2 && sb != null){
+                    sb.append(c);
+                }
             } else if (c == '}') {
                 deep--;
                 if (deep == 0) {
