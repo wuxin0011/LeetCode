@@ -88,6 +88,8 @@ public abstract class LCCustom implements CustomProblem {
         String s = StringUtils.jsonStrGetValueByKey(questionTranslationInfo, "translatedContent");
         this.testCase = TestCaseUtil.testCaseToString(lcTestCase.parseDefault(s));
 
+//        BuildUrl.getDefaultQuestionDescription()
+
         // System.out.println(testCase);
 
 

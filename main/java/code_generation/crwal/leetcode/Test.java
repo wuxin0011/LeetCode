@@ -225,7 +225,7 @@ public class Test {
 
         // testQuestionEditorData();
 
-         testUserStatus();
+         // testUserStatus();
 
 
         // testResult2();
@@ -233,7 +233,21 @@ public class Test {
         // testQuestionTranslations();
 
         // getContestCode();
+
+
+        getProblemsTitle();
         //
+    }
+
+    private static void getProblemsTitle() {
+        String s = request.requestGet("https://leetcode.cn/problems/all-possible-full-binary-trees/description/", Request.applicationHtml);
+        String titleFlag = "<title>";
+        String titleEnd = "</title>";
+        System.out.println(s);
+        int i1 = StringUtils.kmpSearch(s, titleFlag);
+        int i2 = StringUtils.kmpSearch(s, titleEnd);
+        // System.out.println(s.substring(i1+titleFlag.length(),i2));
+
     }
 
 

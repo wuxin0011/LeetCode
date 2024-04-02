@@ -93,3 +93,4 @@ private static final Request request=new Request(BuildUrl.class);
 ``request_config``
  - headers.properties 配置网站请求头信息包括cookie，如果担心cookie太长可以配置在 cookies.txt 这个文件中
  - cookies.txt 优先级最高 如果该文件不为空，会以该文件的内容作为 Cookie 来访问
+
