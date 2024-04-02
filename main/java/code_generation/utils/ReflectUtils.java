@@ -299,7 +299,6 @@ public class ReflectUtils {
     }
 
     private static List<TreeNode> parseListTreeNode(String input) {
-
         List<TreeNode> treeNodes = new ArrayList<>();
         String[][] strings = doubleStringArray(input);
         for (int i = 0; i < strings.length; i++) {
