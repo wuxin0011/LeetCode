@@ -39,7 +39,17 @@ public class ClassTemplate {
 
     public ClassTemplate buildMethod(String method) {
         this.method = method;
-        return this;
+        int i = StringUtils.kmpSearch(method, "TreeNode");
+        if(i!=-1){
+            this.buildImportInfo("import code_generation.bean.TreeNode;\n");
+            return this;
+        }else{
+            i = StringUtils.kmpSearch(method, "ListNode");
+            if(i!=-1){
+                this.buildImportInfo("import code_generation.bean.ListNode;\n");
+            }
+            return this;
+        }
     }
 
     public ClassTemplate buildMethodName(String methodName) {

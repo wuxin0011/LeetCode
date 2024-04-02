@@ -13,7 +13,6 @@ public interface ConvertList<S extends List<?>, T> extends Convert<T> {
         return parseList(input, '[', ']', ',');
     }
 
-    ;
 
     /**
      * 将输入内容按照指定格式解析

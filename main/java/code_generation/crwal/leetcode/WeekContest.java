@@ -5,10 +5,7 @@ import code_generation.contest.Contest;
 import code_generation.contest.Problem;
 import code_generation.contest.ProblemInfo;
 import code_generation.crwal.TestCaseUtil;
-import code_generation.utils.ExceptionUtils;
-import code_generation.utils.IoUtil;
-import code_generation.utils.ReflectUtils;
-import code_generation.utils.StringUtils;
+import code_generation.utils.*;
 
 import java.io.File;
 import java.time.LocalDate;
@@ -127,7 +124,7 @@ public class WeekContest implements Contest {
 
 
         if (!StringUtils.isEmpty(username)) {
-            System.out.println("\n welcome coming " + username + " \n");
+            System.out.println("\n welcome coming " + CustomColor.success(username) + " \n");
         }
         System.out.println("fetch problems urls success ! start parse problems ");
         for (int i = 0; i < questions.size(); i++) {
@@ -412,39 +409,7 @@ public class WeekContest implements Contest {
     @SuppressWarnings("all")
     public static String getMethod(String input) {
         final String t = "{'value': 'java', 'text': 'Java', 'defaultCode':";
-        int i = StringUtils.kmpSearch(input, t);
-        if (i == -1) {
-            return "";
-        }
-        int deep = 0;
-        StringBuilder sb = null;
-        i += t.length();
-        for (; i < input.length(); i++) {
-            char c = input.charAt(i);
-            if (c == '{') {
-                deep++;
-                if (sb == null) sb = new StringBuilder();
-            } else if (c == '}') {
-                deep--;
-                if (sb != null) {
-                    sb.append(c);
-                }
-                if (deep == 0) {
-                    break;
-                }
-            } else {
-                if (sb != null) sb.append(c);
-            }
-        }
-        input = sb != null ? sb.toString() : null;
-        if (input != null) {
-            input = input.replace("\\u000A", "");
-            input = input.replace("\\u003C", "<");
-            input = input.replace("\\u003E", ">");
-            input = input.replace("\\u0028", "(");
-            input = input.replace("\\u0029", ")");
-        }
-        return input;
+        return StringUtils.getMethod(input,t);
     }
 
     public static String getUserName() {

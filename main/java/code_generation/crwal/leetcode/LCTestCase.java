@@ -50,9 +50,6 @@ public class LCTestCase implements TestCase {
         if (ans.size() == 0) {
             handlerOldOutPut(input, ans);
         }
-//        if (ans.size() > 0 && (ans.size() & 1) == 1) {
-//            throw new ParseException("parse result fail", 0);
-//        }
         StringUtils.handlerResult(ans);
         return ans;
     }
@@ -67,7 +64,6 @@ public class LCTestCase implements TestCase {
             System.out.println("not find any output testcase");
             return;
         }
-        StringBuilder sb = null;
         // System.out.println("len = " + input.length());
         for (int i = 0; i < input_pos.size(); i++) {
             parseInputTestCase(input.substring(input_pos.get(i), output_pos.get(i)), ans);
@@ -81,17 +77,6 @@ public class LCTestCase implements TestCase {
     @Override
     public List<String> parseDefault(String input) {
         input = input.replace("&quot;", "");
-        // System.out.println("test cast input : " + input);
-        // final String classSelector = "class=\"elfjS\" data-track-load=\"description_content\">";
-        // input = TestCaseUtil.getTagContent(input, classSelector, 0, "<div", "</div");
-        // String example = "class=\"example\"";
-        // int i2 = StringUtils.kmpSearch(input, example);
-        // System.out.println("i2 = > " + (i2 == -1 ? "Not found " : "yes"));
-        // if (i2 != -1) {
-        //    input = input.substring(i2);
-        // }
-
-        // parse1(input);
         List<Integer> preList = StringUtils.kmpSearchList(input, pre_start);
         List<Integer> preEndList = StringUtils.kmpSearchList(input, pre_end);
         if (preList.size() != preEndList.size()) {
@@ -102,15 +87,9 @@ public class LCTestCase implements TestCase {
             int st = preList.get(idx);
             int end = preEndList.get(idx);
             String target = input.substring(st, end + pre_end.length());
-            // System.out.println("target" + target);
             TestCaseUtil.parseDefaultTextCase(target, ans);
-
-//            return strings;
         }
         StringUtils.handlerResult(ans);
-//        for (String s : ans) {
-//            System.out.println(s);
-//        }
         return ans;
     }
 

@@ -19,7 +19,7 @@ public class LCTemplate implements ParseCodeTemplate {
         if (StringUtils.isEmpty(input)) {
             return input;
         }
-        return StringUtils.parseCodeSnippets(input, JAVA_CODE_PATTERN, startFlag, endFlag);
+        return StringUtils.getMethod(input, JAVA_CODE_PATTERN);
     }
 
 

@@ -88,7 +88,9 @@ public class Request {
 
     public static HttpURLConnection getConnection(String url) {
         try {
-            System.out.println("access url : " + url);
+            if(!(url.contains("api/info/") || url.contains("https://leetcode.cn/graphql/"))){
+                System.out.println("access url : " + url);
+            }
             URL apiUrl = new URL(url);
             return (HttpURLConnection) apiUrl.openConnection();
         } catch (IOException e) {

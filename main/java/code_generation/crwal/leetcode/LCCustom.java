@@ -76,8 +76,7 @@ public abstract class LCCustom implements CustomProblem {
         String methodName = "";
 
         try {
-            String s = lcTemplate.parseCodeTemplate(code);
-            method = StringUtils.getMethod(s);
+            method = lcTemplate.parseCodeTemplate(code);
             methodName = StringUtils.getMethodName(method);
         } catch (ParseException ignore) {
 

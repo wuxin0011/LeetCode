@@ -1,6 +1,7 @@
 package code_generation.utils;
 
 import code_generation.crwal.leetcode.BuildUrl;
+import code_generation.crwal.leetcode.LCTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -162,49 +163,6 @@ public class StringUtils {
     }
 
 
-//    public static String jsonStrGetValueByKey(String jsonStr, String key) {
-//        key = "\"" + key + "\"";
-//        int find = jsonStr.indexOf(key);
-//        if (find == -1) {
-//            System.out.println("Not find key " + key);
-//            return "";
-//        }
-//        int startIndex = find + key.length();
-//
-//        StringBuilder sb = null;
-//        int deep = 0;
-//        for (int i = startIndex; i < jsonStr.length(); i++) {
-//            char c = jsonStr.charAt(i);
-//            if (c == ':') {
-//                sb = new StringBuilder();
-//            } else if (c == ' ') {
-//                // ignore ...
-//            } else if (c == ',') {
-//                break;
-//            } else if (c == '\"' || c == '\'') {
-//                deep++;
-//                if (deep == 2) {
-//                    break;
-//                }
-//            } else {
-//                if (sb != null) {
-//                    sb.append(c);
-//                }
-//            }
-//        }
-//        String s = sb == null ? "" : sb.toString();
-//        if (s.length() == 0) {
-//            return s;
-//        } else {
-//            int endIndex = jsonStr.indexOf(",", startIndex);
-//            if (endIndex == -1) {
-//                endIndex = jsonStr.indexOf("}", startIndex);
-//            }
-//            return jsonStr.substring(startIndex, endIndex).replace(":", "").replaceAll("\"", "");
-//        }
-//
-//    }
-
 
     public static String wrapperKey(String key) {
         if (isEmpty(key)) {
@@ -283,44 +241,43 @@ public class StringUtils {
     }
 
 
-    public static String parseCodeSnippets(String input, String pattern) {
-        return parseCodeSnippets(input, pattern, '{', '}');
+
+
+    // 处理方法中的特殊unicode
+    public static String handerMethodString(String input){
+        if(isEmpty(input)) return input;
+        input = input.replace("\\u000A", "");
+        input = input.replace("\\u003C", "<");
+        input = input.replace("\\u003E", ">");
+        input = input.replace("\\u0028", "(");
+        input = input.replace("\\u0029", ")");
+        input = input.replace("&lt;", "<");
+        input = input.replace("&gt;", ">");
+        input = input.replace("&amp;", "&");
+        input = input.replace("&quot;", "");
+        input = input.replace("&nbsp;", "");
+        input = input.replace("\\n", "");
+        return input;
     }
 
 
-    /**
-     * 解析代码块
-     *
-     * @param input
-     * @param pattern
-     * @param st
-     * @param ed
-     * @return
-     */
-    public static String parseCodeSnippets(String input, String pattern, char st, char ed) {
-        int i = kmpSearch(input, pattern);
-        if (i == -1) {
-            throw new RuntimeException("Not fond CodeSnippets " + pattern);
+    public static String handlerAnnotationTemplate(String input){
+        int classIdx = kmpSearch(input,"Solution");
+        if(classIdx != -1){
+            return input.substring(classIdx);
         }
-        StringBuilder sb = new StringBuilder();
-        int deep = 0;
-        i += pattern.length();
-        for (; i < input.length(); i++) {
-            char c = input.charAt(i);
-            if (c == '\"') {
-                continue;
-            }
-            if (c == st) {
-                deep++;
-            } else if (c == ed) {
-                deep--;
-                if (deep == 0) {
-                    break;
-                }
-            }
-            sb.append(c);
-        }
-        return sb.toString();
+//        if(kmpSearch(input,"TreeNode") == -1 || kmpSearch(input, "ListNode") == -1 ){
+//            return input;
+//        }
+//        int has = kmpSearch(input, "/*");
+//        if(has == -1){
+//            return input;
+//        }
+//        int i = kmpSearch(input, has + 2, "*/");
+//        if(i != -1){
+//            return input.substring(i+2);
+//        }
+        return input;
     }
 
 
@@ -349,6 +306,10 @@ public class StringUtils {
         return sb.toString();
     }
 
+    public static String getMethod(String classStr) {
+        return getMethod(classStr, LCTemplate.JAVA_CODE_PATTERN);
+    }
+
 
     /**
      * 这部分主要是替换代码 生成代码模板
@@ -357,16 +318,39 @@ public class StringUtils {
      * @param classStr 类 template
      * @return
      */
-    public static String getMethod(String classStr) {
-        if (isEmpty(classStr)) return classStr;
-        classStr = classStr.replace("class", "");
-        classStr = classStr.replace("Solution {\\n", "");
-        classStr = classStr.replace("\\n", "");
-        classStr = classStr.replace("&lt;", "<");
-        classStr = classStr.replace("&gt;", ">");
-        classStr = classStr.replace("&amp;", "&");
-        classStr = classStr.replace("&quot;", "\"");
-        classStr = classStr.replace("&nbsp;", " ");
+    public static String getMethod(String classStr,String javaCodeFlag) {
+        if (isEmpty(javaCodeFlag) || isEmpty(classStr)) return classStr;
+
+        // 查找含有Java code 的标志
+        int i = StringUtils.kmpSearch(classStr, javaCodeFlag);
+        if (i == -1) {
+            return "";
+        }
+        classStr = classStr.substring(i+javaCodeFlag.length());
+        // 如果有注释先处理注释
+        classStr = StringUtils.handlerAnnotationTemplate(classStr);
+        int deep = 0;
+        StringBuilder sb = null;
+        for (i = 0; i < classStr.length(); i++) {
+            char c = classStr.charAt(i);
+            if (c == '{') {
+                deep++;
+                if (deep==1 && sb == null) sb = new StringBuilder();
+            } else if (c == '}') {
+                deep--;
+                if (deep == 0) {
+                    break;
+                }
+                if (sb != null) {
+                    sb.append(c);
+                }
+
+            } else {
+                if (sb != null) sb.append(c);
+            }
+        }
+        classStr = sb != null ? sb.toString() : null;
+        classStr = StringUtils.handerMethodString(classStr);
         return classStr;
     }
 
