@@ -303,7 +303,6 @@ public class ReflectUtils {
         List<TreeNode> treeNodes = new ArrayList<>();
         String[][] strings = doubleStringArray(input);
         for (int i = 0; i < strings.length; i++) {
-
             TreeNode treeNode = TreeNode.widthBuildTreeNode(strings[i]);
             treeNodes.add(treeNode);
         }
