@@ -257,6 +257,7 @@ public class StringUtils {
         input = input.replace("&quot;", "");
         input = input.replace("&nbsp;", "");
         input = input.replace("\\n", "");
+        input = input.replace("\n", "");
         return input;
     }
 

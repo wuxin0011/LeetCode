@@ -588,6 +588,10 @@ public class ReflectUtils {
 
     public static List<String> parseListString(String input) {
         List<String> ls = new ArrayList<>();
+        if (!input.contains("[") && !input.contains("]")) {
+            ls.add(input);
+            return ls;
+        }
         char[] flag = getFlag(input);
         char startFlag = flag[0];
         char endFlag = flag[1];

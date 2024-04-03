@@ -60,6 +60,7 @@ public class TestCaseUtil {
         // System.out.println("input======>\n"+input);
         input = input.replace("&quot;", "");
         input = input.replace("\\n", "");
+        input = input.replace("\n", "");
         char[] charArray = input.toCharArray();
         int deep = 0;
         int line = 0;
@@ -79,7 +80,6 @@ public class TestCaseUtil {
                         break;
                     case '[':
                     case '{':
-
                     case '\u3010':
                         if (deep == 0 && sb == null) {
                             sb = new StringBuilder();
@@ -345,14 +345,9 @@ public class TestCaseUtil {
             System.err.println("Not find test case !");
             return;
         }
-        int c = StringUtils.kmpSearch(input, explainUnicode);
-        if (c == -1) {
-            c = input.length();
-        }
+        int c = handlerUnicodeInputAndOutPut(input, explainUnicode, explainUnicodeOld, false);
         String inputStr = handlerIgnoreStr(input.substring(a, b));
-        // if not have explain
-        // c == -1 ? input.length() : c
-        String outputStr = handlerIgnoreStr(input.substring(b, c));
+        String outputStr = handlerIgnoreStr(input.substring(b, c == -1 ? input.length() : c));
         startParseContestTestCase(inputStr, LCTestCase.EqualFlag, LCTestCase.interFlag, ans);
         StringUtils.handlerResult(ans);
         startParseContestTestCase(outputStr, LCTestCase.EqualFlag, LCTestCase.interFlag, ans);
