@@ -639,8 +639,10 @@ public class ReflectUtils {
                 if (!sk.isEmpty()) {
                     sk.pop();
                 }
-                if (sb != null && temp != null) {
-                    temp.add(sb.toString());
+                if (sk != null && !sk.isEmpty() && temp != null) {
+                    if(sb != null){
+                        temp.add(sb.toString());
+                    }
                     ls.add(temp);
                 }
                 sb = null;
