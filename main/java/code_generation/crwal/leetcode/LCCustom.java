@@ -82,9 +82,9 @@ public abstract class LCCustom implements CustomProblem {
         String methodName = "";
 
         try {
-            method = lcTemplate.parseCodeTemplate(code);
+            method = StringUtils.getMethod(code);
             methodName = StringUtils.getMethodName(method);
-        } catch (ParseException ignore) {
+        } catch (Exception ignore) {
 
         }
         String url = BuildUrl.LC_PROBLEM_PREFIX + "/" + titleSlug;

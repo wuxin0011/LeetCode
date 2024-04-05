@@ -8,5 +8,5 @@ import java.text.ParseException;
  */
 public interface ParseCodeTemplate {
 
-    String parseCodeTemplate(String input) throws ParseException;
+    ParseCodeInfo parseCodeTemplate(String input) throws ParseException;
 }

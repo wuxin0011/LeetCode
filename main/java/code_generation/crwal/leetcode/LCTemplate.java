@@ -1,7 +1,7 @@
 package code_generation.crwal.leetcode;
 
+import code_generation.contest.ParseCodeInfo;
 import code_generation.contest.ParseCodeTemplate;
-import code_generation.utils.StringUtils;
 
 import java.text.ParseException;
 
@@ -11,15 +11,18 @@ import java.text.ParseException;
  */
 public class LCTemplate implements ParseCodeTemplate {
     public static final String JAVA_CODE_PATTERN = "\"langSlug\":\"java\",\"code\":";
+    public static final String EXPECT_CLASS_NAME = "Solution";
     public static final char startFlag = '{';
     public static final char endFlag = '}';
 
     @Override
-    public String parseCodeTemplate(String input) throws ParseException {
-        if (StringUtils.isEmpty(input)) {
-            return input;
-        }
-        return StringUtils.getMethod(input, JAVA_CODE_PATTERN);
+    public ParseCodeInfo parseCodeTemplate(String input) throws ParseException {
+        ParseCodeInfo info = new ParseCodeInfo(EXPECT_CLASS_NAME);
+        info.setClassName(EXPECT_CLASS_NAME);
+        info.setMethod("dfs");
+        info.setMethodName("");
+        info.setOrigin(input);
+        return info;
     }
 
 
