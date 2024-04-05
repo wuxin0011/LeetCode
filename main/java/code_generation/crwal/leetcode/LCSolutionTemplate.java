@@ -44,10 +44,6 @@ public class LCSolutionTemplate extends LCCustom {
     }
 
 
-    public void run() {
-        start(aClass, true);
-    }
-
 
     @Override
     public void next() {

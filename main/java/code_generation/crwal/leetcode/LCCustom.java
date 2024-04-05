@@ -22,15 +22,20 @@ public abstract class LCCustom implements CustomProblem {
     public static final LCTemplate lcTemplate = new LCTemplate();
     public static final LCTestCase lcTestCase = new LCTestCase();
     public ClassTemplate classTemplate = new ClassTemplate();
-    public Class<?> aClass;
-
-    public String frontendQuestionId;
+    public Class<?> aClass; // 生成在那个类路径下
+    public String frontendQuestionId; // 题目编号
+    public String testCase; // test case
+    public String titleSlug; // title name
 
     public LCCustom() {
     }
 
     public LCCustom(Class<?> aClass) {
         this.aClass = aClass;
+    }
+
+    public void run() {
+        this.start(this.aClass, true);
     }
 
 
@@ -55,7 +60,7 @@ public abstract class LCCustom implements CustomProblem {
         createByTitleSlug(url);
     }
 
-    public String testCase;
+
 
 
     /**
@@ -69,6 +74,7 @@ public abstract class LCCustom implements CustomProblem {
      */
     public void createByTitleSlug(String titleSlug) {
         titleSlug = BuildUrl.buildTitleSlug(titleSlug);
+        this.titleSlug = titleSlug;
         System.out.println("titleSlug: " + titleSlug);
         String code = BuildUrl.questionEditorData(titleSlug);
         this.testCase = "";

@@ -7,10 +7,9 @@ import code_generation.crwal.leetcode.LCSolutionTemplate;
  * @Description:
  */
 public class SolutionTest {
-    private static final LCSolutionTemplate LC_SOLUTION_TEMPLATE = new LCSolutionTemplate(SolutionTest.class, "Solution");
 
     public static void main(String[] args) {
 
-        LC_SOLUTION_TEMPLATE.run();
+        new LCSolutionTemplate(SolutionTest.class, "Solution").run();
     }
 }

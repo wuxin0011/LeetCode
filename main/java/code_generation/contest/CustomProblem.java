@@ -17,6 +17,8 @@ public interface CustomProblem {
      *
      * @param c     类
      * @param input 是否需要输入
+     * @see code_generation.crwal.leetcode.LCCustom#start(Class, boolean)
+     * @see code_generation.crwal.leetcode.LCEveryDay#start(Class, boolean)
      */
     void start(Class<?> c, boolean input);
 
@@ -24,6 +26,7 @@ public interface CustomProblem {
     /**
      * 创建题目
      * @param problemInfo 题目信息
+     * @see code_generation.crwal.leetcode.LCEveryDay#createTemplate(ProblemInfo)
      */
     default void createTemplate(ProblemInfo problemInfo) {
         System.out.println("====info start ======");
