@@ -1,9 +1,6 @@
 package code_generation.crwal.leetcode;
 
-import code_generation.contest.ClassTemplate;
-import code_generation.contest.Contest;
-import code_generation.contest.Problem;
-import code_generation.contest.ProblemInfo;
+import code_generation.contest.*;
 import code_generation.crwal.TestCaseUtil;
 import code_generation.utils.*;
 
@@ -160,8 +157,8 @@ public class WeekContest implements Contest {
         System.out.println("==========================================" + No + " end ==========================================");
     }
 
-    private final LCTestCase lcTestCase = new LCTestCase();
-    private final LCTemplate lcTemplate = new LCTemplate();
+    private static final LCTestCase lcTestCase = new LCTestCase();
+    private static final LCTemplate lcTemplate = new LCTemplate("{'value': 'java', 'text': 'Java', 'defaultCode':");
 
     public void createContestTemplate(int curId, String dir, Question question) {
         if (question == null) {
@@ -183,8 +180,15 @@ public class WeekContest implements Contest {
         if (StringUtils.isEmpty(info)) {
             throw new RuntimeException("parse error");
         }
-        String method = getMethod(info);
-        String methodName = StringUtils.getMethodName(method);
+
+        // 旧版 这个其实也可以 但是没有返回值
+        // String method = getMethod(info);
+        // String methodName = StringUtils.getMethodName(method);
+
+        // 新方式处理 有返回值
+        ParseCodeInfo parseCodeInfo = lcTemplate.parseCodeTemplate(info);
+        String method = parseCodeInfo.getMethod();
+        String methodName = parseCodeInfo.getMethodName();
         String title = question.title;
         if (StringUtils.isEmpty(title)) {
             title = getTitle(info);
@@ -194,7 +198,9 @@ public class WeekContest implements Contest {
             title = titleSlug;
         }
         question.buildTitle(title);
-        classTemplate.buildTitle(title);
+
+        // title
+        classTemplate.buildTitle(title).buildCodeInfo(parseCodeInfo);
 
 
         String className = Problem.createDir(curId, true);

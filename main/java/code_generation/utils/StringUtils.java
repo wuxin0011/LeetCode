@@ -356,7 +356,7 @@ public class StringUtils {
         }
         classStr = sb != null ? sb.toString() : null;
         classStr = StringUtils.handerMethodString(classStr);
-        return classStr;
+        return "// " + classStr;
     }
 
 

@@ -1,6 +1,8 @@
 package code_generation.utils;
 
 
+import code_generation.contest.ParseCodeInfo;
+
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -141,23 +143,30 @@ public class IoUtil {
                 }
             }
 
-            for (Method method : methods) {
+            List<String> inputList = readFile(c, fileName, openLongContent);
+            if (inputList == null) {
+                System.exit(0);
+            }
 
-                if (!method.getName().equals(methodName)) {
-                    continue;
-                }
-                if ("main".equals(method.getName())) {
-                    continue;
-                }
+            // 构造类对拍
+            if (ParseCodeInfo.ConstructorClass.equals(methodName)) {
                 find = true;
-                method.setAccessible(true);
-                List<String> inputList = readFile(c, fileName, openLongContent);
-                if (inputList == null) {
-                    // System.out.println("read content is null");
-                    System.exit(0);
-                    break;
+                handlerConstructorValid(c, inputList, methodName);
+            } else {
+                // 普通类对拍
+                for (Method method : methods) {
+                    if (!method.getName().equals(methodName)) {
+                        continue;
+                    }
+                    if ("main".equals(method.getName())) {
+                        continue;
+                    }
+                    find = true;
+                    method.setAccessible(true);
+                    // 普通对拍开始
+                    startValid(obj, method, inputList, isStrict);
                 }
-                startValid(obj, method, inputList, isStrict);
+
             }
             if (!find) {
                 System.err.println("check methodName ,not found " + methodName + " method !");
@@ -165,6 +174,18 @@ public class IoUtil {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    // 构造类函数对拍
+    public static void handlerConstructorValid(Class<?> c, List<String> inputList, String methodName) {
+
+        String runMethodNames = "";
+        String textcase = "";
+        String expect = "";
+        if (ParseCodeInfo.ConstructorClass.equals(methodName)) {
+            throw new RuntimeException("this is construnctor class current NO implements =>" + c.getSimpleName());
+        }
+
     }
 
     public static <T> void startValid(Object obj, Method method, List<String> inputList, boolean isStrict) {

@@ -11,7 +11,7 @@ import code_generation.utils.StringUtils;
 public class LCProblemTemplate extends LCCustom {
 
     private String className = "Solution";
-    private String txtName = IoUtil.DEFAULT_METHOD_NAME;
+    private String txtName = IoUtil.DEFAULT_READ_FILE;
 
     public LCProblemTemplate(Class<?> aClass, String className, String txtName) {
         super(aClass);

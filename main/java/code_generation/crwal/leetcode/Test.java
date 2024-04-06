@@ -134,14 +134,16 @@ public class Test {
         final String t = "longest-common-prefix";
 
 
-        String code = BuildUrl.questionEditorData(t);
-//        String code = IoUtil.readContent(Test.class, "./test_file/code.txt");
+        // String code = BuildUrl.questionEditorData(t);
+        // String code = IoUtil.readContent(Test.class, "./test_file/code.txt");
+        String code = IoUtil.readContent(Test.class, "./test_file/constructor-code.txt");
 
-         System.out.println(code);
+        System.out.println(code);
         LCTemplate lcTemplate = new LCTemplate();
-        String questionTranslationInfo = BuildUrl.questionTranslations(t);
-        String s = StringUtils.jsonStrGetValueByKey(questionTranslationInfo, "translatedContent");
-        testCase.parseDefault(s);
+        System.out.println(lcTemplate.parseCodeTemplate(code));
+//        String questionTranslationInfo = BuildUrl.questionTranslations(t);
+//        String s = StringUtils.jsonStrGetValueByKey(questionTranslationInfo, "translatedContent");
+//        testCase.parseDefault(s);
     }
 
     public static void getContestCode() throws ParseException {
@@ -222,7 +224,7 @@ public class Test {
 
         // testResult2();
 
-        // testQuestionTranslations();
+        testQuestionTranslations();
 
         // getContestCode();
 
@@ -232,7 +234,7 @@ public class Test {
 
         // 测试构造函数类
         // testConstructor();
-        testConstructor2();
+        // testConstructor2();
     }
 
     private static void getProblemsTitle() {
@@ -314,10 +316,8 @@ public class Test {
         String code = BuildUrl.questionEditorData(url);
         System.out.println(code);
         LCTemplate lcTemplate = new LCTemplate();
-        System.out.println(StringUtils.getMethod(code));
-
-
-        System.out.println(new LCTestCase().parseDefault(translations));
+        System.out.println(lcTemplate.parseCodeTemplate(code));
+        // System.out.println(new LCTestCase().parseDefault(translations));
     }
 
 

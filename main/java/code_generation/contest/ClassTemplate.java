@@ -11,6 +11,8 @@ public class ClassTemplate {
 
     private final static String default_author = "wuxin0011";
     private final static String default_methodName = "IoUtil.DEFAULT_METHOD_NAME";
+    private final static String default_constructor_methodName = "ParseCodeInfo.ConstructorClass";
+    private final static String default_constructor_info = "import code_generation.contest.ParseCodeInfo;\n";
     private final static String default_className = "Solution";
     private final static String MOD = "private static final int MOD = (int)1e9 + 7;";
 
@@ -24,6 +26,9 @@ public class ClassTemplate {
     public String packageInfo;
     public String importInfo;
     public boolean isNeedMod = false;
+
+
+    public ParseCodeInfo codeInfo;
 
     public ClassTemplate() {
         this.method = "";
@@ -91,6 +96,11 @@ public class ClassTemplate {
         return this;
     }
 
+    public ClassTemplate buildCodeInfo(ParseCodeInfo codeInfo) {
+        this.codeInfo = codeInfo;
+        return this;
+    }
+
     public ClassTemplate buildTextFileName(String txtFile) {
         if (StringUtils.isEmpty(txtFile)) {
             txtFile = IoUtil.DEFAULT_READ_FILE;
@@ -113,6 +123,15 @@ public class ClassTemplate {
         return this;
     }
 
+    // 构造类模板
+    final static String CONSTRUCTOR_CLASS = "public static class %s { \n" +
+            "    %s" +
+            "\n\t}";
+
+    public static String createConstructorClassTemplate(String className, String method) {
+        return String.format(CONSTRUCTOR_CLASS, className, method);
+    }
+
 
     final static String TEMPLATE_PATTERN = "package %s;\n" +
             "\n" +
@@ -132,26 +151,35 @@ public class ClassTemplate {
             "\n" +
             "\t %s " +
             "\n\n" +
-            "\t //%s" +
+            "\t %s" +
             "  \n\n" +
             "}";
 
+
     public static String getTemplate(ClassTemplate info) {
+        ParseCodeInfo codeInfo = info.codeInfo;
+        String originClassName = info.className;
+        boolean isNot = codeInfo == null || !codeInfo.isConstructor();
+        String className = isNot ? info.className : codeInfo.getClassName();
+        String method = isNot ? info.method : createConstructorClassTemplate(codeInfo.getClassName(), codeInfo.getMethod());
+        String importInfo = isNot ? info.importInfo : info.importInfo + "\n" + default_constructor_info;
+        String methodName = isNot ? info.methodName : default_constructor_methodName;
         return String.format(
                 TEMPLATE_PATTERN,
                 info.packageInfo,
-                info.importInfo,
+                importInfo,
                 info.author,
                 info.url,
                 info.title,
-                info.className,
-                info.className,
-                info.methodName,
+                originClassName,
+                className,
+                methodName,
                 info.textFileName,
                 info.isNeedMod ? MOD : "",
-                info.method
+                method
         );
     }
+
 
     @Override
     public String toString() {
@@ -161,7 +189,7 @@ public class ClassTemplate {
     public static void main(String[] args) {
         ClassTemplate classTemplate = new ClassTemplate();
         String methodName = "longestCommonPrefix";
-        String method = "public String longestCommonPrefix(String[] ss) {    }";
+        String method = "public String longestCommonPrefix(String[] ss) {   \n\n return null;\n}";
         classTemplate.buildClassName("Solution")
                 .buildUrl("https://leetcode.cn/problems/longest-common-prefix/")
                 .buildTitle(methodName)

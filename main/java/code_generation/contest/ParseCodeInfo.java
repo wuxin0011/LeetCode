@@ -11,6 +11,8 @@ import java.util.StringJoiner;
  */
 public class ParseCodeInfo {
 
+    public final static String ConstructorClass = "__ConstructorClass__";
+
 
     // 原始字符串
     // 可能有其他添加补充
@@ -18,6 +20,7 @@ public class ParseCodeInfo {
     private String origin;
 
     // 匹配到的类名
+    // 如果是构造类这个类名可能会使用到
     private String className;
 
 
@@ -86,9 +89,8 @@ public class ParseCodeInfo {
     }
 
     public void setMethodName(String methodName) {
-        if (!isConstructor) {
-            this.methodName = methodName;
-        }
+        this.methodName = isConstructor ? ConstructorClass :  methodName;
+
     }
 
     public String getMethod() {
@@ -96,9 +98,6 @@ public class ParseCodeInfo {
     }
 
     public void setMethod(String method) {
-        if (isConstructor) {
-            this.methodName = "";
-        }
         this.method = method;
     }
 

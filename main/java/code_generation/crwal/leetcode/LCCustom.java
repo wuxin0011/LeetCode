@@ -1,9 +1,6 @@
 package code_generation.crwal.leetcode;
 
-import code_generation.contest.ClassTemplate;
-import code_generation.contest.CustomProblem;
-import code_generation.contest.Problem;
-import code_generation.contest.ProblemInfo;
+import code_generation.contest.*;
 import code_generation.crwal.TestCaseUtil;
 import code_generation.utils.IoUtil;
 import code_generation.utils.ReflectUtils;
@@ -26,6 +23,7 @@ public abstract class LCCustom implements CustomProblem {
     public String frontendQuestionId; // 题目编号
     public String testCase; // test case
     public String titleSlug; // title name
+    public  ParseCodeInfo parseCodeInfo; // parseCodeInfo
 
     public LCCustom() {
     }
@@ -77,32 +75,27 @@ public abstract class LCCustom implements CustomProblem {
         this.titleSlug = titleSlug;
         System.out.println("titleSlug: " + titleSlug);
         String code = BuildUrl.questionEditorData(titleSlug);
-        this.testCase = "";
-        String method = "";
-        String methodName = "";
+        ParseCodeInfo parseCodeInfo = lcTemplate.parseCodeTemplate(code);
+        this.parseCodeInfo = parseCodeInfo;
+        String method = parseCodeInfo.getMethod();
+        String methodName = parseCodeInfo.getMethodName();
 
-        try {
-            method = StringUtils.getMethod(code);
-            methodName = StringUtils.getMethodName(method);
-        } catch (Exception ignore) {
-
-        }
         String url = BuildUrl.LC_PROBLEM_PREFIX + "/" + titleSlug;
 
+        //
         String questionTranslationInfo = BuildUrl.questionTranslations(titleSlug);
+
         boolean isNeedMod = StringUtils.isNeedMOD(questionTranslationInfo);
+
         String s = StringUtils.jsonStrGetValueByKey(questionTranslationInfo, "translatedContent");
         this.testCase = TestCaseUtil.testCaseToString(lcTestCase.parseDefault(s));
-
-//        BuildUrl.getDefaultQuestionDescription()
-
-        // System.out.println(testCase);
 
 
         classTemplate.buildIsNeedMod(isNeedMod)
                 .buildTitle(titleSlug)
                 .buildUrl(url)
                 .buildMethod(method)
+                .buildCodeInfo(parseCodeInfo)
                 .buildMethodName(methodName);
 
 

@@ -66,7 +66,56 @@ public class TestCaseUtil {
         int line = 0;
         StringBuilder sb = null;
         if (StringUtils.kmpSearch(input, "=") == -1 && StringUtils.kmpSearch(input, ":") == -1) {
-            ans.add(input);
+            // ans.add(input);
+            sb = new StringBuilder();
+            for (char c : charArray) {
+                if (StringUtils.isIgnore(c)) {
+                    continue;
+                }
+                switch (c) {
+                    case '[':
+                    case '{':
+                    case '\u3010':
+                        if (deep == 0 && sb == null) {
+                            sb = new StringBuilder();
+                        }
+                        if (sb != null) {
+                            sb.append(c);
+                        }
+                        deep++;
+                        break;
+                    case ']':
+                    case '}':
+                    case '\u3011':
+                        deep--;
+                        if (sb != null) {
+                            sb.append(c);
+                            if (deep == 0) {
+                                ans.add(sb.toString());
+                                sb = null;
+                            }
+                        }
+
+                        break;
+                    case ',':
+                    case '\uFF0C':
+                        if (sb != null) {
+                            if (deep == 0) {
+                                ans.add(sb.toString());
+                                sb = new StringBuilder();
+                            } else {
+                                sb.append(c);
+                            }
+                        }
+                        break;
+                    default:
+                        if (sb != null) {
+                            sb.append(c);
+                        }
+                }
+
+
+            }
         } else {
             for (char c : charArray) {
                 if (c != '\\' && StringUtils.isIgnore(c)) {
@@ -100,7 +149,6 @@ public class TestCaseUtil {
                                 sb = null;
                             }
                         }
-
                         break;
                     case ',':
                     case '\uFF0C':
