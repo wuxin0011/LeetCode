@@ -176,17 +176,16 @@ public class WeekContest implements Contest {
 
 
         // important info
-        info = parseScriptCodeInfo(contestHtml);
-        if (StringUtils.isEmpty(info)) {
-            throw new RuntimeException("parse error");
-        }
-
+        // info = parseScriptCodeInfo(contestHtml);
+        // if (StringUtils.isEmpty(info)) {
+        //     throw new RuntimeException("parse error");
+        // }
         // 旧版 这个其实也可以 但是没有返回值
         // String method = getMethod(info);
         // String methodName = StringUtils.getMethodName(method);
 
         // 新方式处理 有返回值
-        ParseCodeInfo parseCodeInfo = lcTemplate.parseCodeTemplate(info);
+        ParseCodeInfo parseCodeInfo = this.parseCodeTemplate(contestHtml);
         String method = parseCodeInfo.getMethod();
         String methodName = parseCodeInfo.getMethodName();
         String title = question.title;
@@ -348,9 +347,14 @@ public class WeekContest implements Contest {
     }
 
     @Override
-    public String parseCodeTemplate(String input) {
-        this.code = "";
-        return "";
+    public ParseCodeInfo parseCodeTemplate(String contestHtml) {
+        // important info
+        String info = parseScriptCodeInfo(contestHtml);
+        if (StringUtils.isEmpty(info)) {
+            throw new RuntimeException("parse error");
+        }
+        // 新方式处理 有返回值
+        return lcTemplate.parseCodeTemplate(info);
     }
 
 

@@ -38,7 +38,7 @@ public interface Contest {
      *
      * @return 返回代码快内容
      */
-    String parseCodeTemplate(String input);
+    Object parseCodeTemplate(String input);
 
 
     /**
