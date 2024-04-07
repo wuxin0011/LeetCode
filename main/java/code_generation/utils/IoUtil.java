@@ -186,6 +186,12 @@ public class IoUtil {
         // 是否是测试阶段
         boolean isTest = true;
 
+
+
+        if(isTest){
+            System.err.println("constructor class is test ... ");
+        }
+
         final String className = c.getSimpleName();
 
         Constructor constructor = c.getDeclaredConstructors()[0];
