@@ -149,9 +149,9 @@ public class ClassTemplate {
             "        IoUtil.testUtil(%s.class,%s,%s);\n" +
             "    }" +
             "\n" +
-            "\t %s " +
+            "    %s " +
             "\n\n" +
-            "   %s" +
+            "    %s" +
             "  \n\n" +
             "}";
 

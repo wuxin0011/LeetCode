@@ -245,7 +245,7 @@ public class StringUtils {
 
     // 处理方法中的特殊unicode
     public static String handerMethodString(String input){
-        if(isEmpty(input)) return input;
+        if (isEmpty(input)) return input;
         input = input.replace("\\u000A", "");
         input = input.replace("\\u003C", "<");
         input = input.replace("\\u003E", ">");
@@ -258,6 +258,15 @@ public class StringUtils {
         input = input.replace("&nbsp;", "");
         input = input.replace("\\n", "");
         input = input.replace("\n", "");
+        int i = 0;
+        // 移出前面的空格
+        while (i < input.length()) {
+            if (!StringUtils.isIgnore(input.charAt(i))) {
+                break;
+            }
+            i++;
+        }
+        input = input.substring(i);
         return input;
     }
 

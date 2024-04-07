@@ -1,14 +1,19 @@
 abciiidef
 3
+3
 
 aeiou
+2
 2
 
 leetcode
 3
+2
 
 rhythms
 4
+0
 
 tryhard
 4
+1

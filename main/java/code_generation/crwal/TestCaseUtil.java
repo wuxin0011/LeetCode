@@ -116,6 +116,9 @@ public class TestCaseUtil {
 
 
             }
+            if(sb != null){
+                ans.add(sb.toString());
+            }
         } else {
             for (char c : charArray) {
                 if (c != '\\' && StringUtils.isIgnore(c)) {

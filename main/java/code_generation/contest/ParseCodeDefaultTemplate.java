@@ -116,6 +116,7 @@ public class ParseCodeDefaultTemplate implements ParseCodeTemplate {
     }
 
     public void setMethod() {
+
         String methodStr = this.input;
         String className = this.info.getClassName();
         int i = StringUtils.kmpSearch(methodStr, className);
@@ -218,7 +219,7 @@ public class ParseCodeDefaultTemplate implements ParseCodeTemplate {
 
     private String build(String s) {
         boolean is = this.info.isConstructor();
-        final String p = "\n\n" + (is ? "\t  " : " ") + "       %s \n   \t\t  }";
+        final String p = "\n\n" + (is ? "\t  " : " ") + "       %s \n" + (is ? "\t  " : "\t") + "}";
         return String.format(p, s);
     }
 
