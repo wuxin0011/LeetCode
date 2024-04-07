@@ -219,12 +219,12 @@ public class Test {
 
         // testQuestionEditorData();
 
-        // testUserStatus();
+        testUserStatus();
 
 
         // testResult2();
 
-        testQuestionTranslations();
+        // testQuestionTranslations();
 
         // getContestCode();
 

@@ -90,12 +90,23 @@ public class Config {
             if (file.exists()) {
                 return file;
             }
+            File parentFile = file.getParentFile();
+            if (!parentFile.exists()) {
+                parentFile.mkdirs();
+            }
             file.createNewFile();
             writer = new BufferedWriter(new FileWriter(file));
             writer.write(defaultTemplate);
             writer.flush();
             writer.close();
             System.out.println("create " + file.getAbsolutePath() + " success !");
+
+
+            // check cookies.txt
+            File cookiesFile = new File(parentFile.getAbsolutePath() + File.separator + Constant.cookies + ".txt");
+            if (!cookiesFile.exists()) {
+                cookiesFile.createNewFile();
+            }
             return null;
         } catch (IOException e) {
             e.printStackTrace();
