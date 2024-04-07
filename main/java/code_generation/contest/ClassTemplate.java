@@ -151,7 +151,7 @@ public class ClassTemplate {
             "\n" +
             "\t %s " +
             "\n\n" +
-            "\t %s" +
+            "   %s" +
             "  \n\n" +
             "}";
 

@@ -218,7 +218,7 @@ public class ParseCodeDefaultTemplate implements ParseCodeTemplate {
 
     private String build(String s) {
         boolean is = this.info.isConstructor();
-        final String p = "\n\n\t" + (is ? "       " : "") + "       %s \n   \t\t}";
+        final String p = "\n\n" + (is ? "\t  " : " ") + "       %s \n   \t\t  }";
         return String.format(p, s);
     }
 
