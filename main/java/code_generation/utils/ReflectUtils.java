@@ -9,6 +9,7 @@ import java.io.File;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Stack;
 
 
@@ -152,7 +153,7 @@ public class ReflectUtils {
     }
 
 
-    public static <T> Object parseArg(Object src, String methodName, Class<T> c, String input, int idx,int argsSize) {
+    public static <T> Object parseArg(Object src, String methodName, Class<T> c, String input, int idx, int argsSize) {
         return parseArg(src, methodName, c.getSimpleName(), input, idx, argsSize);
     }
 
@@ -444,9 +445,6 @@ public class ReflectUtils {
     }
 
 
-
-
-
     public static List<Integer> parseListInteger(String input) {
         List<String> strings = parseListString(input);
         ArrayList<Integer> ans = new ArrayList<>();
@@ -588,14 +586,14 @@ public class ReflectUtils {
 
     public static List<String> parseListString(String input) {
         List<String> ls = new ArrayList<>();
-        if (!input.contains("[") && !input.contains("]")) {
-            ls.add(input);
-            return ls;
-        }
         char[] flag = getFlag(input);
         char startFlag = flag[0];
         char endFlag = flag[1];
         char interruptFlag = flag[2];
+        if (!input.contains(String.valueOf(startFlag)) && !input.contains(String.valueOf(endFlag))) {
+            ls.add(input);
+            return ls;
+        }
         String nullStr = new String(new char[]{startFlag, endFlag});
         if (nullStr.equals(input)) return ls;
         StringBuilder sb = null;
@@ -640,7 +638,7 @@ public class ReflectUtils {
                     sk.pop();
                 }
                 if (sk != null && !sk.isEmpty() && temp != null) {
-                    if(sb != null){
+                    if (sb != null) {
                         temp.add(sb.toString());
                     }
                     ls.add(temp);
@@ -842,4 +840,92 @@ public class ReflectUtils {
     }
 
 
+    // constructor class parse
+    public static String[] parseConstrunctorClassString(String s) {
+        int st = 0, ed = s.length() - 1;
+        char[] flag = ReflectUtils.getFlag(s);
+        char start = flag[0];
+        char end = flag[1];
+        char inter = flag[2];
+        while (st < s.length() && s.charAt(st) != start) {
+            st++;
+        }
+        while (ed >= 0 && s.charAt(ed) != end) {
+            ed--;
+        }
+        int deep = 0;
+        List<String> ans = new ArrayList<>();
+        StringBuilder sb = new StringBuilder();
+        for (int i = st + 1; i < ed; i++) {
+            char c = s.charAt(i);
+            if (c == start) {
+                deep++;
+                if (sb == null) sb = new StringBuilder();
+                sb.append(c);
+            } else if (c == end) {
+                deep--;
+                if (sb != null) {
+                    sb.append(c);
+                }
+                if (deep == 0) {
+                    ans.add(sb.toString());
+                    sb = null;
+                }
+            } else if (c == inter) {
+                if (sb != null) {
+                    if (deep == 0) {
+                        ans.add(sb.toString());
+                        sb = null;
+                    } else {
+                        sb.append(c);
+                    }
+                } else {
+                    sb = new StringBuilder();
+                }
+            } else {
+                if (sb == null) {
+                    sb = new StringBuilder();
+                }
+                sb.append(c);
+
+            }
+
+
+        }
+        if (sb != null) {
+            ans.add(sb.toString());
+        }
+
+        String[] strings = new String[ans.size()];
+        for (int i = 0; i < ans.size(); i++) {
+            strings[i] = ans.get(i);
+        }
+
+        return strings;
+    }
+
+
+    public static void handlerConstructorInput(String s, Class[] parameterTypes, Object[] args) {
+        Objects.requireNonNull(parameterTypes, "parameterTypes is null");
+        Objects.requireNonNull(args, "args is null");
+        for (Class parameterType : parameterTypes) {
+            System.out.println("parameterTypes:" + parameterType.getSimpleName());
+        }
+        // TODO 待实现
+        // throw new RuntimeException("this method not implement");
+        int deep = 0;
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            if (StringUtils.isIgnore(c)) {
+                continue;
+            }
+
+        }
+    }
+
+    public static void handlerConstructorMethodInput(String arg, List<String> result, Method method) {
+    }
+
+    public static void handlerConstructorMethodOutput(String exp, List<String> result, Method method) {
+    }
 }

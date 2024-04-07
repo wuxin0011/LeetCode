@@ -4,14 +4,12 @@ package code_generation.utils;
 import code_generation.contest.ParseCodeInfo;
 
 import java.io.*;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Stack;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -28,6 +26,12 @@ public class IoUtil {
      * 默认方法名
      */
     public static final String DEFAULT_METHOD_NAME = "null";
+
+
+    /**
+     * 空类型或者不填充参数
+     */
+    public static final String VOID_OR_ARGS = "null";
 
     /**
      * 默认文件名
@@ -77,11 +81,6 @@ public class IoUtil {
     }
 
 
-    public static void main(String[] args) {
-        //IoUtil.testUtil(IoUtil.class, "t1", "test.txt", true);
-    }
-
-
     public static <T> void testUtil(Class<T> c) {
         testUtil(c, DEFAULT_METHOD_NAME, DEFAULT_READ_FILE);
     }
@@ -124,35 +123,36 @@ public class IoUtil {
      */
     public static <T> void testUtil(Class<T> c, String methodName, String fileName, boolean openLongContent, boolean isStrict) {
         check(c, methodName, fileName);
+        boolean find = false;
         try {
-            T obj = c.newInstance();
-
-            Method[] methods = c.getDeclaredMethods();
-            boolean find = false;
-            List<String> names = new ArrayList<>();
-            for (Method method : methods) {
-                names.add(method.getName());
-            }
-            // System.out.println("names = " + names);
-            if (names.size() > 0 && DEFAULT_METHOD_NAME.equals(methodName) || "main".equals(methodName)) {
-                for (String name : names) {
-                    if (name.equals("main") || name.startsWith("lambda$") || "f".equals(name) || "dfs".equals(name)) {
-                        continue;
-                    }
-                    methodName = name;
-                }
-            }
 
             List<String> inputList = readFile(c, fileName, openLongContent);
             if (inputList == null) {
                 System.exit(0);
             }
-
             // 构造类对拍
             if (ParseCodeInfo.ConstructorClass.equals(methodName)) {
                 find = true;
-                handlerConstructorValid(c, inputList, methodName);
+                handlerConstructorValid(c, inputList, methodName, isStrict);
             } else {
+                T obj = c.newInstance();
+
+                Method[] methods = c.getDeclaredMethods();
+
+                List<String> names = new ArrayList<>();
+                for (Method method : methods) {
+                    names.add(method.getName());
+                }
+                // System.out.println("names = " + names);
+                if (names.size() > 0 && DEFAULT_METHOD_NAME.equals(methodName) || "main".equals(methodName)) {
+                    for (String name : names) {
+                        if (name.equals("main") || name.startsWith("lambda$") || "f".equals(name) || "dfs".equals(name)) {
+                            continue;
+                        }
+                        methodName = name;
+                    }
+                }
+
                 // 普通类对拍
                 for (Method method : methods) {
                     if (!method.getName().equals(methodName)) {
@@ -177,20 +177,115 @@ public class IoUtil {
     }
 
     // 构造类函数对拍
-    public static void handlerConstructorValid(Class<?> c, List<String> inputList, String methodName) {
+    public static void handlerConstructorValid(Class<?> c, List<String> inputList, String methodName, boolean isStrict) {
 
-        String runMethodNames = "";
-        String textcase = "";
-        String expect = "";
-        if (ParseCodeInfo.ConstructorClass.equals(methodName)) {
-            throw new RuntimeException("this is construnctor class current NO implements =>" + c.getSimpleName());
+
+        String[] names = null, args = null, expect = null;
+
+
+        // 是否是测试阶段
+        boolean isTest = true;
+
+        final String className = c.getSimpleName();
+
+        Constructor constructor = c.getDeclaredConstructors()[0];
+        constructor.setAccessible(true);
+
+        Class[] parameterTypes = constructor.getParameterTypes();
+        Object[] constructorArgs = null;
+
+
+        Method[] declaredMethods = c.getDeclaredMethods();
+
+
+        List<String> result = null;
+
+        Map<String, Method> map = new HashMap<>();
+        for (Method method : declaredMethods) {
+            method.setAccessible(true);
+            map.put(method.getName(), method);
         }
 
+        int t = 0;
+        int compareTimes = 1;
+        for (int k = 0; k < inputList.size(); k++) {
+            String s = inputList.get(k);
+            if (StringUtils.isEmpty(s)) {
+                continue;
+            }
+            // System.out.println(s);
+            t++;
+            if (t % 3 == 1) {
+                names = ReflectUtils.oneStringArray(s);
+            } else if (t % 3 == 2) {
+                args = ReflectUtils.parseConstrunctorClassString(s);
+            } else if (t % 3 == 0) {
+                expect = ReflectUtils.parseConstrunctorClassString(s);
+            }
+
+
+            // 每三行内容为一组 需要填充调用的方法名，填入结果 以及期望结果
+            if (t % 3 == 0) {
+                Object obj = null;
+                int a = 0, b = 0, deep = 0;
+
+
+                // check
+                if (args.length != expect.length || args.length != names.length || expect.length != names.length) {
+                    throw new RuntimeException("result not mathch palce check");
+                }
+                for (int index = 0; index < names.length; index++) {
+                    String name = names[index];
+
+                    if (StringUtils.isEmpty(name)) {
+                        continue;
+                    }
+
+
+                    if (isTest) {
+                        System.out.println();
+                        System.out.println("name   =   " + name);
+                        System.out.println("args   =   " + args[index]);
+                        System.out.println("exp    =   " + expect[index]);
+                        // continue;
+                    }
+
+                    if (name.equals(className)) {
+                        // TODO 构造函数实例化
+                        try {
+                            constructorArgs = new Object[parameterTypes.length];
+                            ReflectUtils.handlerConstructorInput(args[index], parameterTypes, constructorArgs);
+                            obj = constructor.newInstance(constructorArgs);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            obj = null;
+                        }
+                    } else {
+                        if (!map.containsKey(name)) {
+                            throw new RuntimeException("not find method " + name + ", place check your format !");
+                        }
+                        result = new ArrayList<>();
+                        ReflectUtils.handlerConstructorMethodInput(args[index], result, map.get(name));
+                        ReflectUtils.handlerConstructorMethodOutput(expect[index], result, map.get(name));
+                        startValid(obj, map.get(name), result, isStrict);
+                    }
+                }
+
+                // clear
+                args = names = expect = null;
+                result = null;
+
+                compareTimes++;
+            }
+        }
     }
 
+
     public static <T> void startValid(Object obj, Method method, List<String> inputList, boolean isStrict) {
+        Objects.requireNonNull(obj, "obj is null");
         Class<?>[] parameterTypes = method.getParameterTypes();
-        Object[] args = new Object[parameterTypes.length];
+        Object[] args = null;
+        String returnName = method.getReturnType().getSimpleName();
         int size = inputList.size();
         String read = null;
 
@@ -200,21 +295,39 @@ public class IoUtil {
         for (int idx = 0; idx < size; ) {
             // 填充参数信息
             boolean isFill = false; // 参数校验标志信息
-            for (int i = 0; i < parameterTypes.length && idx < size; i++, idx++) {
-                // 允许答案和输入参数之间有间隙
+
+            if (parameterTypes == null || parameterTypes.length == 0) {
                 while (idx < size && ((read = inputList.get(idx)) == null || read.length() == 0)) {
                     idx++;
                 }
-                if (idx == size) {
-                    break;
+
+                if (!VOID_OR_ARGS.equals(read)) {
+                    throw new RuntimeException("NO args fill, should null");
+                } else {
+                    isFill = true;
                 }
-                if (idx != size && (read == null || read.length() == 0)) {
-                    throw new RuntimeException("result not match place check your ans !");
+
+
+            } else {
+                args = new Object[parameterTypes.length];
+                for (int i = 0; i < parameterTypes.length && idx < size; i++, idx++) {
+                    // 允许答案和输入参数之间有间隙
+                    while (idx < size && ((read = inputList.get(idx)) == null || read.length() == 0)) {
+                        idx++;
+                    }
+                    if (idx == size) {
+                        break;
+                    }
+                    if (idx != size && (read == null || read.length() == 0)) {
+                        throw new RuntimeException("result not match place check your ans !");
+                    }
+                    isFill = true;
+                    args[i] = ReflectUtils.parseArg(obj, method.getName(), parameterTypes[i], read, i, parameterTypes.length);
+                    read = null;
                 }
-                isFill = true;
-                args[i] = ReflectUtils.parseArg(obj, method.getName(), parameterTypes[i], read, i, parameterTypes.length);
-                read = null;
+
             }
+
 
             if (idx >= size) {
                 if (isFill) {
@@ -227,28 +340,53 @@ public class IoUtil {
             // 分析该方法执行参数信息
             Object result = null;
             try {
-                result = method.invoke(obj, args);
-                // 对比预期结果和实际结果
-                String returnName = method.getReturnType().getSimpleName();
-                if ("void".equals(returnName) && result == null) {
-                    // todo 没有返回值时候如何处理呢 ？
-                    // 暂时处理成如果是 void 类型，将转换成第一个参数类型然后比较
-                    returnName = parameterTypes[0].getSimpleName();
-                    result = args[0];
+
+                if (parameterTypes == null || parameterTypes.length == 0) {
+                    result = method.invoke(obj);
+                } else {
+                    result = method.invoke(obj, args);
                 }
+
 
                 // 允许答案和输入参数之间有间隙
                 while (idx < inputList.size() && ((read = inputList.get(idx)) == null || read.length() == 0)) {
                     idx++;
                 }
+
+
                 // 结果不匹配
-                if (read == null || read.length() == 0) {
-                    throw new RuntimeException("result not match place check your ans !");
+                if (read == null) {
+                    if ("string".equalsIgnoreCase(returnName)) {
+                        read = "";
+                    } else {
+                        throw new RuntimeException("result not match place check your ans !");
+                    }
+
                 }
+                if ("void".equalsIgnoreCase(returnName) && result == null) {
+
+                    // 如果结果为null说明只是调用改方法 并且返回值为 void
+                    // 这次就不参与比较了
+                    if (VOID_OR_ARGS.equals(read)) {
+                        idx++; // match ok
+                        compareTimes++; // 比较次数
+                        continue;
+                    }
+
+                    // todo 没有返回值时候如何处理呢 ？
+                    // 暂时处理成如果是 void 类型，将转换成第一个参数类型然后比较
+                    if (args != null && args.length > 0) {
+                        returnName = parameterTypes[0].getSimpleName();
+                        result = args[0];
+                    }
+                }
+
+
                 Object expect = ReflectUtils.parseArg(obj, method.getName(), returnName, read, -1, -1);
                 if (expect != null && !TestUtils.valid(result, expect, returnName, isStrict)) {
                     errorTimes.add(compareTimes); // save error
                 }
+                args = null;
                 read = null;
             } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
                 e.printStackTrace();

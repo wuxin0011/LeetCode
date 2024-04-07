@@ -1,7 +1,6 @@
 package leetcode.contest.weekly.w_300.w_379.b;
 
 import code_generation.utils.IoUtil;
-import java.util.*;
 /**
  * @author: agitated-curranfnd
  * @Description:
@@ -11,15 +10,37 @@ import java.util.*;
 public class B {
 
     public static void main(String[] args) {
-        IoUtil.testUtil(B.class,"minMovesToCaptureTheQueen","B.txt");
+        IoUtil.testUtil(B.class, "minMovesToCaptureTheQueen", "B.txt");
     }
-	  
 
-	     public int minMovesToCaptureTheQueen(int a, int b, int c, int d, int e, int f) {    
 
-	       return 0; 
-   		}
+    public int minMovesToCaptureTheQueen(int a, int b, int c, int d, int e, int f) {
 
-  
+        // a b => 车
+        // c d => 象
+        // e f => 黑
+        // 分为 在同一行
+        // 1、不在同一行
+        // 2、在同一行 但是 列合法
+        if (a == e && (c != e || check(b,d,f)) || b == f && (d != f || check(a,c,e))) {
+            return 1;
+        }
+
+        if (
+                c - d == e - f && (c - d != a - b || check(c,a,e))
+                        ||
+                        c + d == e + f && (c + d != a + b || check(c,a,e))
+
+        ) {
+            return 1;
+        }
+
+        return 2;
+    }
+
+    public boolean check(int i, int j, int k) {
+        return !(j >= Math.min(i, k) && j <= Math.max(i, k));
+    }
+
 
 }
