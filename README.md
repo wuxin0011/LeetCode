@@ -52,34 +52,44 @@
   - 关于[bilibili](https://space.bilibili.com/206214)
 - 大数据[zerotrac](https://zerotrac.github.io/leetcode_problem_rating/#/)
 - 分数分类[rating](https://huxulm.github.io/lc-rating/)
-
-
+- [lc-to-markdown-txt-html](https://greasyfork.org/scripts/491969/feedback) 可将题目描述复制为 md 或 txt 格式
 
 由于网络问题经常访问不了，可以尝试保存在本地 [点我测试🚀](https://huxulm.github.io/lc-rating/)
 
 打开浏览器控制将下面内容复制到控制台run
 
-```js
-const trs = document.querySelectorAll('table tbody tr')
 
-let ans = []
-Array.from(trs).forEach(tr=>{
-	const tds = tr.querySelectorAll('td')
-	const title = tds[2].querySelector('a').textContent
-	const url = tds[2].querySelector('a').href
-	const score = tds[3].querySelector('div').textContent
-	// console.log(title,url,score)
-	let obj = {
-		title,
-		score,
-		url
-	}
-	ans.push(obj)
-})
-// console.log(ans)
-console.table(ans)
 
-```
+
+
+<details>
+  <summary>查看代码</summary>
+  <pre >
+      <code class="language-javascript">
+          const trs = document.querySelectorAll('table tbody tr')
+          let ans = []
+          Array.from(trs).forEach(tr=>{
+          const tds = tr.querySelectorAll('td')
+          const title = tds[2].querySelector('a').textContent
+          const url = tds[2].querySelector('a').href
+          const score = tds[3].querySelector('div').textContent
+          // console.log(title,url,score)
+            let obj = {
+                title,
+                score,
+                url
+              }
+          ans.push(obj)
+          })
+          // console.log(ans)
+          console.table(ans)
+      </code>
+  
+  </pre>
+
+</details>
+
+
 
 将内容复制到本地保存为 xxx.json 文件
 

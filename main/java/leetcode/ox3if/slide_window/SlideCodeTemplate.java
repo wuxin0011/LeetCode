@@ -1,6 +1,5 @@
 package leetcode.ox3if.slide_window;
 
-import code_generation.crwal.leetcode.LCProblemTemplate;
 import code_generation.crwal.leetcode.LCSolutionTemplate;
 
 /**
