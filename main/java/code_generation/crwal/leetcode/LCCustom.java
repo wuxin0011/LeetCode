@@ -6,7 +6,6 @@ import code_generation.utils.IoUtil;
 import code_generation.utils.ReflectUtils;
 import code_generation.utils.StringUtils;
 
-import java.text.ParseException;
 import java.util.Objects;
 import java.util.Scanner;
 
@@ -54,7 +53,7 @@ public abstract class LCCustom implements CustomProblem {
                 System.out.print("place input a problem url ,input NO break : ");
                 url = scanner.next();
                 if("NO".equalsIgnoreCase(url)){
-                    break;
+                   System.exit(0);
                 }
             } while (!checkInputUrl(url));
         }
@@ -79,6 +78,7 @@ public abstract class LCCustom implements CustomProblem {
         System.out.println("titleSlug: " + titleSlug);
         String code = BuildUrl.questionEditorData(titleSlug);
         ParseCodeInfo parseCodeInfo = lcTemplate.parseCodeTemplate(code);
+        Objects.requireNonNull(parseCodeInfo,"parseCodeInfo is null");
         this.parseCodeInfo = parseCodeInfo;
         String method = parseCodeInfo.getMethod();
         String methodName = parseCodeInfo.getMethodName();
