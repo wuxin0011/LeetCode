@@ -86,7 +86,7 @@ public class StringUtils {
         s = s.replace("<p>", "").replace("</p>", "");
         s = s.replace("<h>", "").replace("</h>", "");
         s = s.replace("<pre>", "").replace("</pre>", "");
-        s = s.replace("<pre", "").replace("/pre>", "");
+        s = s.replace("<em>", "").replace("/em>", "");
         // s = s.replace("\\n", "");
         s = s.replace("&lt;", "");
         s = s.replace("\\", "");

@@ -51,8 +51,11 @@ public abstract class LCCustom implements CustomProblem {
         if (input) {
             Scanner scanner = new Scanner(System.in);
             do {
-                System.out.print("place input a problem url :  ");
+                System.out.print("place input a problem url ,input NO break : ");
                 url = scanner.next();
+                if("NO".equalsIgnoreCase(url)){
+                    break;
+                }
             } while (!checkInputUrl(url));
         }
         createByTitleSlug(url);
@@ -122,6 +125,7 @@ public abstract class LCCustom implements CustomProblem {
         autoCreatePackageInfo(problemInfo);
         updateClassName(problemInfo);
         Problem.create(problemInfo);
+        start(aClass,true);
     }
 
 

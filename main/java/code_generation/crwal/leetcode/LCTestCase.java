@@ -77,6 +77,7 @@ public class LCTestCase implements TestCase {
     @Override
     public List<String> parseDefault(String input) {
         input = input.replace("&quot;", "");
+        input = input.replace("<em>;", "").replace("</em>;", "");
         List<Integer> preList = StringUtils.kmpSearchList(input, pre_start);
         List<Integer> preEndList = StringUtils.kmpSearchList(input, pre_end);
         if (preList.size() != preEndList.size()) {

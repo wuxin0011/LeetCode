@@ -1,0 +1,11 @@
+TTFF
+2
+4
+
+TFFT
+1
+3
+
+TTFTTFTT
+1
+5

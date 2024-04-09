@@ -59,6 +59,7 @@ public class TestCaseUtil {
     public static void startParseContestTestCase(String input, String startFlag, String endFlag, List<String> ans) {
         // System.out.println("input======>\n"+input);
         input = input.replace("&quot;", "");
+        input = input.replace("<em>;", "").replace("</em>;", "");
         input = input.replace("\\n", "");
         input = input.replace("\n", "");
         char[] charArray = input.toCharArray();
@@ -265,6 +266,7 @@ public class TestCaseUtil {
         input = input.replaceAll("&quot;", "");
         input = input.replaceAll("<code>", "");
         input = input.replaceAll("</code>", "");
+        input = input.replace("<em>;", "").replace("</em>;", "");
         if (checkHasUnicodeInputOutput(input)) {
             unicodeParseInputOutPut(input, ans);
         } else {
@@ -425,7 +427,7 @@ public class TestCaseUtil {
         s = s.replace("<div>", "").replace("</div>", "");
         s = s.replace("<br>", "").replace("</br>", "");
         s = s.replace("<pre>", "").replace("</pre>", "");
-        s = s.replace("<pre", "").replace("/pre>", "");
+        s = s.replace("<em>", "").replace("/em>", "");
         return s;
     }
 
