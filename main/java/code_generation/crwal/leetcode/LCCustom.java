@@ -75,7 +75,7 @@ public abstract class LCCustom implements CustomProblem {
             createByTitleSlug(lcUrl);
             // System.out.println("run url : " + lcUrl);
         }
-        start(aClass, true);
+        // start(aClass, true);
     }
 
 
