@@ -400,5 +400,24 @@ public class StringUtils {
     }
 
 
+    // 提取输入内容的所有链接
+    public static List<String> matchUrls(String s) {
+        List<String> urls = new ArrayList<>();
+        try {
+
+            Pattern pattern = Pattern.compile("https://(.*)/[^\\s\\)]+");
+            Matcher matcher = pattern.matcher(s);
+            while (matcher.find()) {
+                String url = matcher.group();
+                urls.add(url);
+                // System.out.println("URL: " + url);
+            }
+        } catch (Exception ignore) {
+
+        }
+
+        return urls;
+    }
+
 
 }

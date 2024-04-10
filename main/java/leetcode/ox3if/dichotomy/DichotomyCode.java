@@ -1,4 +1,4 @@
-package leetcode.dichotomy;
+package leetcode.ox3if.dichotomy;
 
 import code_generation.crwal.leetcode.LCSolutionTemplate;
 

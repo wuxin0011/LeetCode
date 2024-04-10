@@ -2,12 +2,13 @@ package code_generation.crwal.leetcode;
 
 import code_generation.contest.*;
 import code_generation.crwal.TestCaseUtil;
+import code_generation.utils.ExceptionUtils;
 import code_generation.utils.IoUtil;
 import code_generation.utils.ReflectUtils;
 import code_generation.utils.StringUtils;
 
-import java.util.Objects;
-import java.util.Scanner;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author: wuxin0011
@@ -46,18 +47,35 @@ public abstract class LCCustom implements CustomProblem {
     public void start(Class<?> c, boolean input) {
         Objects.requireNonNull(c, "class not allow null");
         this.aClass = c;
-        String url = "";
+
+        List<String> urls = new ArrayList<>();
         if (input) {
             Scanner scanner = new Scanner(System.in);
-            do {
-                System.out.print("place input a problem url ,input NO break : ");
-                url = scanner.next();
-                if("NO".equalsIgnoreCase(url)){
-                   System.exit(0);
+            System.out.print("input a content contains https://leetcode.cn/problems/xxxxxx/ text and input NO exit: \n");
+
+            // 读取所有输入内容
+            StringBuilder inputContent = new StringBuilder();
+            String line = "";
+            while (!StringUtils.isEmpty((line = scanner.nextLine()))) {
+                if (StringUtils.isEmpty(line)) {
+                    break;
                 }
-            } while (!checkInputUrl(url));
+                if ("NO".equalsIgnoreCase(line) || "exit".equalsIgnoreCase(line)) {
+                    System.exit(0);
+                }
+                inputContent.append(line).append("\n");
+            }
+
+            // 匹配LeetCode URL
+            urls.addAll(matchLeetCodeUrls(inputContent.toString()));
         }
-        createByTitleSlug(url);
+        int sleepTime = urls.size() > 10 ? 10 : 5;
+        for (String lcUrl : urls) {
+            ExceptionUtils.sleep(sleepTime);
+            createByTitleSlug(lcUrl);
+            // System.out.println("run url : " + lcUrl);
+        }
+        start(aClass, true);
     }
 
 
@@ -125,7 +143,7 @@ public abstract class LCCustom implements CustomProblem {
         autoCreatePackageInfo(problemInfo);
         updateClassName(problemInfo);
         Problem.create(problemInfo);
-        start(aClass,true);
+        // start(aClass,true);
     }
 
 
@@ -147,14 +165,23 @@ public abstract class LCCustom implements CustomProblem {
     }
 
 
-    public void updateClassName(ProblemInfo problemInfo){
+    public void updateClassName(ProblemInfo problemInfo) {
     }
 
-    public static boolean checkInputUrl(String url) {
-        if (StringUtils.isEmpty(url)) {
-            return false;
+
+    /**
+     * 匹配所有的链接
+     *
+     * @param s 输入内容
+     * @return 返回一个 urls
+     */
+
+    public static List<String> matchLeetCodeUrls(String s) {
+        if (StringUtils.isEmpty(s)) {
+            return Collections.emptyList();
         }
-        return url.startsWith(BuildUrl.LC_PROBLEM_PREFIX);
+        List<String> urls = StringUtils.matchUrls(s);
+        return urls.stream().filter(url -> !StringUtils.isEmpty(s) && url.startsWith(BuildUrl.LC_PROBLEM_PREFIX)).collect(Collectors.toList());
     }
 
 }

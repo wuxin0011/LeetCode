@@ -20,6 +20,8 @@ public class LCSolutionTemplate extends LCCustom {
     private String className;
     private String txtFile;
 
+    private boolean createReadme; // 是否创建 readme.md 文件
+
 
     private LCSolutionTemplate() {
 
@@ -30,25 +32,37 @@ public class LCSolutionTemplate extends LCCustom {
         this(aClass, null, null, null);
     }
 
+    public LCSolutionTemplate(Class<?> aClass, boolean createReadme) {
+        this(aClass, null, null, null, createReadme);
+    }
 
     public LCSolutionTemplate(Class<?> aClass, String prefix) {
         this(aClass, prefix, null, null);
     }
 
+
     public LCSolutionTemplate(Class<?> aClass, String prefix, String className, String txtFile) {
+        this(aClass, prefix, className, txtFile, false);
+    }
+
+    public LCSolutionTemplate(Class<?> aClass, String prefix, String className, String txtFile, boolean createReadme) {
         super(aClass);
         this.aClass = aClass;
         this.prefix = StringUtils.isEmpty(prefix) ? Custom_Prefix : prefix;
         this.className = StringUtils.isEmpty(className) ? Custom_Prefix : className;
         this.txtFile = StringUtils.isEmpty(txtFile) ? IoUtil.DEFAULT_READ_FILE : txtFile.lastIndexOf(".txt") != -1 ? txtFile : (txtFile + ".txt");
+        this.createReadme = createReadme;
     }
-
 
 
     @Override
     public void next() {
         String prefix_dir = this.prefix + "_" + getDir(count());
         ProblemInfo problemInfo = new ProblemInfo(this.className, this.txtFile, prefix_dir, testCase, classTemplate, aClass);
+        // create readme
+        if (createReadme) {
+            IoUtil.writeContent(aClass, prefix_dir + File.separator + "readme.md", "");
+        }
         createTemplate(problemInfo);
     }
 

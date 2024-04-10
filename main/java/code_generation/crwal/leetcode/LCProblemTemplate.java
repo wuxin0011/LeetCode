@@ -28,7 +28,7 @@ public class LCProblemTemplate extends LCCustom {
         String prefix_dir = StringUtils.toCaseName(this.titleSlug);
         ProblemInfo problemInfo = new ProblemInfo(this.className, this.txtName, prefix_dir, testCase, classTemplate, aClass);
         createTemplate(problemInfo);
-        start(aClass,true);
+        // start(aClass,true);
     }
 
 }

@@ -345,7 +345,9 @@ public class IoUtil {
 
             // 分析该方法执行参数信息
             Object result = null;
+
             try {
+
 
                 if (parameterTypes == null || parameterTypes.length == 0) {
                     result = method.invoke(obj);
@@ -358,8 +360,6 @@ public class IoUtil {
                 while (idx < inputList.size() && ((read = inputList.get(idx)) == null || read.length() == 0)) {
                     idx++;
                 }
-
-
                 // 结果不匹配
                 if (read == null) {
                     if ("string".equalsIgnoreCase(returnName)) {
@@ -394,7 +394,7 @@ public class IoUtil {
                 }
                 args = null;
                 read = null;
-            } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
                 exceptionTime = compareTimes;
                 break;
@@ -402,7 +402,7 @@ public class IoUtil {
             idx++; // match ok
             compareTimes++; // 比较次数
         }
-        if (errorTimes.size() == 0) {
+        if (errorTimes.size() == 0 && exceptionTime == -1) {
             System.out.println("Accepted!");
         } else {
             for (int error : errorTimes) {
