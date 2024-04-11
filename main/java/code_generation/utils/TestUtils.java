@@ -114,7 +114,7 @@ public class TestUtils {
         }
         if (a == null || b == null || a.length != b.length) {
             System.out.println(" result = " + Arrays.toString(a) + ",length = " + a.length);
-            System.out.println(" expect = " + Arrays.toString(b) + ",legnth = " + b.length);
+            System.out.println(" expect = " + Arrays.toString(b) + ",length = " + b.length);
             return false;
         }
         if (isStrict) {

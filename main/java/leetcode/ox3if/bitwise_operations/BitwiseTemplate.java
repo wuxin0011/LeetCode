@@ -1,4 +1,4 @@
-package leetcode.bitwise_operations;
+package leetcode.ox3if.bitwise_operations;
 
 import code_generation.crwal.leetcode.LCSolutionTemplate;
 
@@ -9,6 +9,6 @@ import code_generation.crwal.leetcode.LCSolutionTemplate;
 public class BitwiseTemplate {
 
     public static void main(String[] args) {
-        new LCSolutionTemplate(BitwiseTemplate.class, "Bitwise").run();
+        new LCSolutionTemplate(BitwiseTemplate.class, "bitwise").run();
     }
 }
