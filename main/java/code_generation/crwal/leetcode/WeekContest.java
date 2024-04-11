@@ -121,7 +121,7 @@ public class WeekContest implements Contest {
 
 
         if (!StringUtils.isEmpty(username)) {
-            System.out.println("\n welcome coming " + CustomColor.success(username) + " \n");
+            System.out.println("\n welcome coming " + CustomColor.error(username) + " \n");
         }
         System.out.println("fetch problems urls success ! start parse problems ");
         for (int i = 0; i < questions.size(); i++) {
@@ -129,7 +129,8 @@ public class WeekContest implements Contest {
             if (question == null) {
                 continue;
             }
-            System.out.println("\nstart parse question :  " + (StringUtils.isEmpty(question.getTitle()) ? question.getTitle_slug() : question.getTitle()));
+            String tempTitle = (StringUtils.isEmpty(question.getTitle()) ? question.getTitle_slug() : question.getTitle());
+            System.out.println("\nstart parse question :  " + CustomColor.pink(tempTitle));
             final int idx = i;
 
             try {

@@ -131,7 +131,7 @@ public abstract class LCCustom implements CustomProblem {
         String tempUnicodeTitle  = StringUtils.unicodeToChinese(translatedTitle);
         titleSlug = !StringUtils.isEmpty(tempUnicodeTitle) ? tempUnicodeTitle : titleSlug;
 
-        CustomColor.error("\n正在解析题目: " + titleSlug + "\n");
+        System.out.println("\n正在解析题目: " + CustomColor.error(titleSlug) + "\n");;
 
 
         // 构建模板
