@@ -2,10 +2,7 @@ package code_generation.crwal.leetcode;
 
 import code_generation.contest.*;
 import code_generation.crwal.TestCaseUtil;
-import code_generation.utils.ExceptionUtils;
-import code_generation.utils.IoUtil;
-import code_generation.utils.ReflectUtils;
-import code_generation.utils.StringUtils;
+import code_generation.utils.*;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -23,6 +20,9 @@ public abstract class LCCustom implements CustomProblem {
     public String frontendQuestionId; // 题目编号
     public String testCase; // test case
     public String titleSlug; // title name
+
+    public String translatedTitle; // 题目title 获取到是一个 unicode格式
+    public String translatedContent; // 题目描述
     public  ParseCodeInfo parseCodeInfo; // parseCodeInfo
 
     public LCCustom() {
@@ -93,25 +93,48 @@ public abstract class LCCustom implements CustomProblem {
     public void createByTitleSlug(String titleSlug) {
         titleSlug = BuildUrl.buildTitleSlug(titleSlug);
         this.titleSlug = titleSlug;
-        System.out.println("titleSlug: " + titleSlug);
+
+        // 获取题目代码快内容
         String code = BuildUrl.questionEditorData(titleSlug);
+
+        // 解析题目代码快内容
         ParseCodeInfo parseCodeInfo = lcTemplate.parseCodeTemplate(code);
+
         Objects.requireNonNull(parseCodeInfo,"parseCodeInfo is null");
+
+
         this.parseCodeInfo = parseCodeInfo;
         String method = parseCodeInfo.getMethod();
         String methodName = parseCodeInfo.getMethodName();
 
+        if(StringUtils.isEmpty(this.frontendQuestionId)){
+            this.frontendQuestionId = StringUtils.jsonStrGetValueByKey(code, "questionFrontendId");
+        }
         String url = BuildUrl.LC_PROBLEM_PREFIX + "/" + titleSlug;
 
-        //
+        // 获取题目信息 title desc test case 等
         String questionTranslationInfo = BuildUrl.questionTranslations(titleSlug);
 
+        // 是否需要取余
         boolean isNeedMod = StringUtils.isNeedMOD(questionTranslationInfo);
 
-        String s = StringUtils.jsonStrGetValueByKey(questionTranslationInfo, "translatedContent");
-        this.testCase = TestCaseUtil.testCaseToString(lcTestCase.parseDefault(s));
+        // 题目描述
+        this.translatedContent = StringUtils.jsonStrGetValueByKey(questionTranslationInfo, "translatedContent");
+
+        // 标题 是一个unicode格式的
+        this.translatedTitle = StringUtils.jsonStrGetValueByKey(questionTranslationInfo, "translatedTitle");
+
+        // 获取测试案例
+        this.testCase = TestCaseUtil.testCaseToString(lcTestCase.parseDefault(translatedContent));
+
+        // 获取中文标题
+        String tempUnicodeTitle  = StringUtils.unicodeToChinese(translatedTitle);
+        titleSlug = !StringUtils.isEmpty(tempUnicodeTitle) ? tempUnicodeTitle : titleSlug;
+
+        CustomColor.error("\n正在解析题目: " + titleSlug + "\n");
 
 
+        // 构建模板
         classTemplate.buildIsNeedMod(isNeedMod)
                 .buildTitle(titleSlug)
                 .buildUrl(url)
@@ -119,7 +142,7 @@ public abstract class LCCustom implements CustomProblem {
                 .buildCodeInfo(parseCodeInfo)
                 .buildMethodName(methodName);
 
-
+        // 接下来需要做上面之自定义实现 基本测试信息都已经获取到了
         next();
     }
 

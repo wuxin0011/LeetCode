@@ -5,15 +5,14 @@ import code_generation.crwal.leetcode.LCEveryDay;
 
 /**
  * @author: wuxin0011
- * @Description: 自动获取每日一题
+ * @Description: 自动获取每日一题 ， 执行该函数会自动拉去 今天的 《每日一题》
  */
 public class LCDayTemplate {
 
-    private static final LCEveryDay EVERY_DAY = new LCEveryDay();
 
 
     public static void main(String[] args) {
-        EVERY_DAY.start(LCDayTemplate.class);
+        LCEveryDay.everyDay.start(LCDayTemplate.class);
     }
 
 

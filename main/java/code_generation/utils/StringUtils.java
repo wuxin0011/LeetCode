@@ -182,46 +182,50 @@ public class StringUtils {
     }
 
     public static String jsonStrGetValueByKey(String jsonStr, String key, boolean isWrapper) {
-        if (isWrapper) {
-            key = wrapperKey(key);
-        }
-        int find = kmpSearch(jsonStr, key);
-        if (find == -1) {
-            System.out.println("Not find key " + key);
-            return "";
-        }
-        int startIndex = find + key.length();
-
-        StringBuilder sb = new StringBuilder();
-        boolean foundValue = false;
-        boolean inQuotes = false;
-        Stack<Character> stack = new Stack<>();
-
-        for (int i = startIndex; i < jsonStr.length(); i++) {
-            char c = jsonStr.charAt(i);
-            if (c == '\"' && jsonStr.charAt(i - 1) != '\\') {
-                inQuotes = !inQuotes;
+        try {
+            if (isWrapper) {
+                key = wrapperKey(key);
             }
-            if (!inQuotes) {
-                if (c == '{' || c == '[' || c == '(') {
-                    stack.push(c);
-                } else if (c == '}' || c == ']' || c == ')') {
-                    sb.append(c);
-                    if (stack.isEmpty() || !isMatchingPair(stack.peek(), c)) {
+            int find = kmpSearch(jsonStr, key);
+            if (find == -1) {
+                System.out.println("Not find key " + key);
+                return "";
+            }
+            int startIndex = find + key.length();
+
+            StringBuilder sb = new StringBuilder();
+            boolean foundValue = false;
+            boolean inQuotes = false;
+            Stack<Character> stack = new Stack<>();
+
+            for (int i = startIndex; i < jsonStr.length(); i++) {
+                char c = jsonStr.charAt(i);
+                if (c == '\"' && jsonStr.charAt(i - 1) != '\\') {
+                    inQuotes = !inQuotes;
+                }
+                if (!inQuotes) {
+                    if (c == '{' || c == '[' || c == '(') {
+                        stack.push(c);
+                    } else if (c == '}' || c == ']' || c == ')') {
+                        sb.append(c);
+                        if (stack.isEmpty() || !isMatchingPair(stack.peek(), c)) {
+                            break;
+                        }
+                        stack.pop();
+                    } else if (c == ':' && stack.isEmpty()) {
+                        foundValue = true;
+                    } else if (c == ',' && stack.isEmpty()) {
                         break;
                     }
-                    stack.pop();
-                } else if (c == ':' && stack.isEmpty()) {
-                    foundValue = true;
-                } else if (c == ',' && stack.isEmpty()) {
-                    break;
+                }
+                if (foundValue && !Character.isWhitespace(c)) {
+                    sb.append(c);
                 }
             }
-            if (foundValue && !Character.isWhitespace(c)) {
-                sb.append(c);
-            }
+            return sb.toString().replaceAll("\"", "").replace(":", "");
+        } catch (Exception ignore) {
+            return "";
         }
-        return sb.toString().replaceAll("\"", "").replace(":", "");
     }
 
 
@@ -417,6 +421,24 @@ public class StringUtils {
         }
 
         return urls;
+    }
+
+
+    // 将 unicode转换为中文
+    public static String unicodeToChinese(String unicodeStr) {
+        StringBuilder sb = new StringBuilder();
+
+        try {
+            String[] hex = unicodeStr.split("\\\\u");
+            for (int i = 1; i < hex.length; i++) {
+                int data = Integer.parseInt(hex[i], 16);
+                sb.append((char) data);
+            }
+        } catch (Exception e) {
+            return "";
+        }
+
+        return sb.toString();
     }
 
 

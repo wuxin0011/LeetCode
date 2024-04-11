@@ -6,6 +6,9 @@ import code_generation.contest.ProblemInfo;
 import code_generation.utils.ProblemEveryDayUtils;
 import code_generation.utils.StringUtils;
 
+import java.util.Objects;
+import java.util.Scanner;
+
 /**
  * @author: wuxin0011
  * @Description: LeetCode 每日一题
@@ -13,15 +16,36 @@ import code_generation.utils.StringUtils;
 public class LCEveryDay extends LCCustom {
 
 
+    public static LCEveryDay everyDay  = new LCEveryDay();
+
+
     @Override
     public void start(Class<?> c, boolean input) {
+        Objects.requireNonNull(c,"class not allow NULL");
         this.aClass = c;
         this.classTemplate = new ClassTemplate();
         String questionOfToday = BuildUrl.questionOfToday();
         this.frontendQuestionId = StringUtils.jsonStrGetValueByKey(questionOfToday, "frontendQuestionId");
         String titleSlug = StringUtils.jsonStrGetValueByKey(questionOfToday, "titleSlug");
         createByTitleSlug(titleSlug);
-        // super.start(c, input);
+    }
+
+
+    public void custom(Class<?> c) {
+        Objects.requireNonNull(c,"class not allow NULL");
+        this.aClass = c;
+        this.classTemplate = new ClassTemplate();
+        Scanner scanner = new Scanner(System.in);
+
+        String titleSlug = "";
+        do {
+            System.out.print("input a url https://leetcode.cn/problems/xxxxxx/ text and input NO exit: \n");
+            titleSlug = scanner.next();
+            if ("exit".equalsIgnoreCase(titleSlug) || "NO".equalsIgnoreCase(titleSlug)) {
+                System.exit(-1);
+            }
+        } while (StringUtils.isEmpty(titleSlug) || !titleSlug.startsWith("https://leetcode.cn/problems/"));
+        createByTitleSlug(titleSlug);
     }
 
 
