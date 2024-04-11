@@ -13,8 +13,14 @@ public class Code_0039_2529 {
     public static void main(String[] args) {
         IoUtil.testUtil(Code_0039_2529.class,"maximumCount","txt_file\\Code_0039_2529.txt");
     }
-     
 
+
+    /**
+     * 
+     * @param nums
+     * @see leetcode.ox3if.dichotomy.Dichotomy_0007.Solution#maximumCount(int[]) 
+     * @return
+     */
     public int maximumCount(int[] nums) {    
 
         return 0; 
