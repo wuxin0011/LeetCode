@@ -56,31 +56,5 @@ public abstract class NCCustom implements CustomProblem {
     public abstract boolean support(String s);
 
 
-    public int count() {
-        String s = IoUtil.buildAbsolutePath(this.aClass);
-        File file = new File(s);
-        int cnt = 0;
-        File[] files = file.listFiles();
-        if (files != null) {
-            for (File file1 : files) {
-                if (file1 != null && file1.isDirectory() && file1.getName().startsWith(this.prefix)) {
-                    cnt++;
-                }
-            }
-        }
-        return cnt;
-    }
 
-
-    public String getDir(int cnt) {
-        if (cnt < 10) {
-            return "000" + cnt;
-        } else if (cnt < 100) {
-            return "00" + cnt;
-        } else if (cnt < 1000) {
-            return "0" + cnt;
-        } else {
-            return String.valueOf(cnt);
-        }
-    }
 }

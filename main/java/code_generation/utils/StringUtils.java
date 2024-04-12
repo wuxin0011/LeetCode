@@ -3,6 +3,7 @@ package code_generation.utils;
 import code_generation.crwal.leetcode.BuildUrl;
 import code_generation.crwal.leetcode.LCTemplate;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
@@ -443,6 +444,31 @@ public class StringUtils {
 
         return sb.toString();
     }
+
+
+    public static String getDirCount(Class<?> aclass,String prefix)  {
+        String s = IoUtil.buildAbsolutePath(aclass);
+        File file = new File(s);
+        int cnt = 0;
+        File[] files = file.listFiles();
+        if (files != null) {
+            for (File file1 : files) {
+                if (file1 != null && file1.isDirectory() && file1.getName().startsWith(prefix)) {
+                    cnt++;
+                }
+            }
+        }
+        if (cnt < 10) {
+            return "000" + cnt;
+        } else if (cnt < 100) {
+            return "00" + cnt;
+        } else if (cnt < 1000) {
+            return "0" + cnt;
+        } else {
+            return String.valueOf(cnt);
+        }
+    }
+
 
 
 }

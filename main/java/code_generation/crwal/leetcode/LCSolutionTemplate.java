@@ -57,41 +57,13 @@ public class LCSolutionTemplate extends LCCustom {
 
     @Override
     public void next() {
-        String prefix_dir = this.prefix + "_" + getDir(count());
+        String prefix_dir = this.prefix + "_" + StringUtils.getDirCount(aClass, prefix);
         ProblemInfo problemInfo = new ProblemInfo(this.className, this.txtFile, prefix_dir, testCase, classTemplate, aClass);
         // create readme
         if (createReadme) {
             IoUtil.writeContent(aClass, prefix_dir + File.separator + "readme.md", "");
         }
         createTemplate(problemInfo);
-    }
-
-    public int count() {
-        String s = IoUtil.buildAbsolutePath(this.aClass);
-        File file = new File(s);
-        int cnt = 0;
-        File[] files = file.listFiles();
-        if (files != null) {
-            for (File file1 : files) {
-                if (file1 != null && file1.isDirectory() && file1.getName().startsWith(this.prefix)) {
-                    cnt++;
-                }
-            }
-        }
-        return cnt;
-    }
-
-
-    public String getDir(int cnt) {
-        if (cnt < 10) {
-            return "000" + cnt;
-        } else if (cnt < 100) {
-            return "00" + cnt;
-        } else if (cnt < 1000) {
-            return "0" + cnt;
-        } else {
-            return String.valueOf(cnt);
-        }
     }
 
 

@@ -62,7 +62,7 @@ public class NCPractice extends NCCustom {
                 .buildMethodName(parseCodeInfo.getMethodName())
                 .buildTextFileName(txtFile)
                 .buildUrl(url);
-        String prefix_dir = this.prefix + "_" + getDir(count());
+        String prefix_dir = this.prefix + "_" + StringUtils.getDirCount(aClass, prefix);
         ProblemInfo problemInfo = new ProblemInfo(className, txtFile, prefix_dir, test, classTemplate, aClass);
         this.info = problemInfo;
         createTemplate(problemInfo);
