@@ -310,9 +310,12 @@ public class StringUtils {
         StringBuilder sb = new StringBuilder();
         for (int i = st - 1; i >= 0; i--) {
             char c = codeContent.charAt(i);
-            if (c == ' ') {
+            if (c == ' ' && !StringUtils.isEmpty(sb.toString())) {
                 //return sb.toString();
                 break;
+            }
+            if (c == ' ') {
+                continue;
             }
             sb.append(c);
         }

@@ -16,6 +16,10 @@ public class ParseCodeDefaultTemplate implements ParseCodeTemplate {
     public final static String ConstructorClass = ParseCodeInfo.ConstructorClass;
 
 
+    public static final String leftFlag = "/*";
+    public static final String rightFlag = "*/";
+
+
     public ParseCodeInfo info;
 
     public String input;
@@ -123,6 +127,7 @@ public class ParseCodeDefaultTemplate implements ParseCodeTemplate {
         if (i != -1) {
             methodStr = methodStr.substring(i + className.length());
         }
+
         int deep = 0;
         StringBuilder sb = null;
         for (i = 0; i < methodStr.length(); i++) {
@@ -150,6 +155,8 @@ public class ParseCodeDefaultTemplate implements ParseCodeTemplate {
         methodStr = sb != null ? sb.toString() : null;
         methodStr = StringUtils.handerMethodString(methodStr);
         methodStr = handlerReturnType(methodStr);
+        // 移出方法注释内容
+        methodStr = removeComment(methodStr);
         this.info.setMethod(methodStr);
     }
 
@@ -262,6 +269,15 @@ public class ParseCodeDefaultTemplate implements ParseCodeTemplate {
                 break;
         }
         return m;
+    }
+
+    public static String removeComment(String methodStr){
+        int commentLeft = StringUtils.kmpSearch(methodStr, leftFlag);
+        int commentRight = StringUtils.kmpSearch(methodStr, rightFlag);
+        if(commentLeft != -1 && commentRight != -1){
+            methodStr = methodStr.substring(rightFlag.length()+commentRight);
+        }
+        return methodStr;
     }
 
 
