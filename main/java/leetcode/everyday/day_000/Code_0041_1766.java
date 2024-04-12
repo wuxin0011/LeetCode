@@ -36,7 +36,9 @@ public class Code_0041_1766 {
     }
      
 
-    public int[] getCoprimes(int[] nums, int[][] edges) {    
+    public int[] getCoprimes(int[] nums, int[][] edges) {
+
+        // TODO 等待完成
 
         return null; 
 	}
