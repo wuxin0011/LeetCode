@@ -1,7 +1,6 @@
 package leetcode.ox3if.dichotomy.Dichotomy_0017;
 
 import code_generation.utils.IoUtil;
-import java.util.*;
 /**
  *
  * 1482. 制作 m 束花所需的最少天数
@@ -30,22 +29,90 @@ import java.util.*;
  *
  *
  * @author: wuxin0011
- * @Description:
- * @url:   https://leetcode.cn/problems/minimum-number-of-days-to-make-m-bouquets
+ * @Description: 滑动窗口 + 二分
+ * @url: https://leetcode.cn/problems/minimum-number-of-days-to-make-m-bouquets
  * @title: minimum-number-of-days-to-make-m-bouquets
  */
 public class Solution {
 
     public static void main(String[] args) {
-        IoUtil.testUtil(Solution.class,"minDays","in.txt");
+        IoUtil.testUtil(Solution.class, "minDays", "in.txt");
     }
-     
 
-    public int minDays(int[] bloomDay, int m, int k) {    
 
-        return 0; 
-	}
+    public int minDays(int[] bloomDay, int m, int k) {
 
-  
+        long tot = (long) k * m;
+        if (bloomDay == null || bloomDay.length == 0 || bloomDay.length < tot) {
+            return -1;
+        }
+
+        int mx = 1;
+        int mi = Integer.MAX_VALUE;
+        for (int b : bloomDay) {
+            if (mx < b) mx = b;
+            if (mi > b) mi = b;
+        }
+        if (bloomDay.length == tot) {
+            return mx;
+        }
+        int r = mx, l = mi;
+        while (l <= r) {
+            int mid = l + ((r - l) >> 1);
+            if (check2(bloomDay, mid, m, k)) {
+                r = mid - 1;
+            } else {
+                l = mid + 1;
+            }
+        }
+        return l;
+    }
+
+
+    public static boolean check(int[] b, int day, int m, int k) {
+        int cnt = 0;
+        int n = b.length;
+        int r = 0, l = 0;
+        while (r < n) {
+            while (r < n) {
+                if (b[r] > day) {
+                    break;
+                }
+                if (r - l + 1 == k) {
+                    cnt++;
+                    break;
+                }
+                r++;
+            }
+            if (cnt >= m) {
+                return true;
+            }
+            r++;
+            l = r; // 闭区间 []
+        }
+        return false;
+    }
+
+
+    // 二分 + 滑动窗口
+    public static boolean check2(int[] b, int day, int m, int k) {
+        int cnt = 0;
+        int n = b.length;
+        int r = 0, l = 0;
+        while (r < n) {
+            if (b[r] > day) {
+                l = r + 1;
+            } else if (r - l + 1 == k) {
+                cnt++;
+                l = r + 1;
+                if (cnt >= m) {
+                    return true;
+                }
+            }
+            r++;
+        }
+        return false;
+    }
+
 
 }

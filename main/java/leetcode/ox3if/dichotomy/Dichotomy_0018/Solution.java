@@ -32,13 +32,75 @@ public class Solution {
 
     public static void main(String[] args) {
         IoUtil.testUtil(Solution.class,"furthestBuilding","in.txt");
+        System.out.println("==========================================");
+        IoUtil.testUtil(Solution.class,"furthestBuilding1","in.txt");
     }
-    private static final int MOD = (int)1e9 + 7; 
+    private static final int MOD = (int)1e9 + 7;
 
-    public int furthestBuilding(int[] heights, int bricks, int ladders) {    
+    // 反悔贪心做法
+    // 开始使用梯子 当梯子不够才开始使用砖块
+    // 梯子能够达到无限高度但是一个梯子只能只用一次
+    // 砖块可以按照高度合适时候使用
+    // [1,2,3,4,100] bricks = 4 ladders =1
+    // 先梯子 后面梯子不够，才开始使用砖块 砖块在堆中位最大值(这个最大值应该是消耗梯子)
+    // 相似题目 https://leetcode.cn/problems/p0NxJO/description/
+    public int furthestBuilding(int[] heights, int bricks, int ladders) {
+        int n = heights.length;
+        PriorityQueue<Integer> q = new PriorityQueue<>();
+        for (int i = 1; i < n ; i++) {
+            int need = heights[i]-heights[i-1];
+            if(need<=0){
+                continue;
+            }
+            q.add(need);
+            if(q.size()>ladders && !q.isEmpty()){
+                bricks -= q.poll();
+            }
+            if(bricks<0){
+                return i-1;
+            }
+        }
+        return n - 1;
+    }
 
-        return 0; 
-	}
+
+
+    // 二分做法
+    public int furthestBuilding1(int[] heights, int bricks, int ladders) {
+        int n = heights.length;
+        int l = 1,r = n - 1;
+        while(l<=r){
+            int mid = l + ((r - l)>>1);
+            if(check(heights,mid,bricks,ladders)) {
+                l = mid + 1;
+            }else{
+                r = mid - 1;
+            }
+        }
+        return r;
+    }
+
+    public static boolean check(int[] h,int k,int bricks,int ladders){
+        long tot = 0;
+        int[] temp = new int[k+1];
+        for (int i = 1; i <= k; i++) {
+            int diff = h[i] - h[i-1];
+            if(diff>0){
+                temp[i] = diff;
+                tot += diff;
+            }
+        }
+        // 消耗砖块数量 不使用梯子就够了
+        if(tot<=bricks){
+            return true;
+        }
+        Arrays.sort(temp);
+        for(int i = temp.length - 1;i>=0 && ladders>0;i--){
+            tot -= temp[i];
+            ladders--;
+        }
+        return tot <= bricks;
+    }
 
   
 

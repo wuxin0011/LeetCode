@@ -16,9 +16,37 @@ import java.util.regex.Pattern;
  */
 public class StringUtils {
 
+
     public static final String mod_unicode = "\\u53d6\\u4f59";
     public static final String mod_ans_unicode = "\\u7b54\\u6848\\u53ef\\u80fd\\u5f88\\u5927";
 
+
+    // 输入 unicode
+    public static final String inputUnicode = "\\u8f93\\u5165\\uff1a";
+    // 不包含:
+    public static final String inputUnicodeOld = "\\u8f93\\u5165";
+
+    // 输出 unicode
+
+    public static final String outputUnicode = "\\u8f93\\u51fa\\uff1a";
+
+    // 不包含:
+    public static final String outputUnicodeOld = "\\u8f93\\u51fa";
+
+
+    // 解释 unicode
+    public static final String explainUnicode = "\\u89e3\\u91ca\\uff1a";
+    // 不包含:
+    public static final String explainUnicodeOld = "\\u89e3\\u91ca";
+
+
+    public static final String DOT = ":";
+    public static final String Input = "Input";
+    public static final String Output = "Output";
+    public static final String Explanation = "Explanation";
+    public static final String OutputDot = Output + DOT;
+    public static final String InputDot = Input + DOT;
+    public static final String ExplanationDot = Explanation + DOT;
 
     public static boolean isEmpty(String s) {
         return s == null || s.length() == 0;
@@ -469,6 +497,36 @@ public class StringUtils {
         }
     }
 
+
+    // 输入输出的unicode替换位英文表示
+    public static String inputOrOutputUnicodeConvertEnglish(String input) {
+        if (StringUtils.isEmpty(input)) {
+            return input;
+        }
+        input = input.replace(inputUnicodeOld, Input);
+        input = input.replace(outputUnicodeOld, Output);
+        input = input.replace(inputUnicode, InputDot);
+        input = input.replace(outputUnicode, OutputDot);
+        input = input.replace(explainUnicodeOld, Explanation);
+        input = input.replace(explainUnicode, ExplanationDot);
+        return input;
+    }
+
+    // 输入输出的的英文用unicode表示
+    public static String inputOrOutputConvertUnicode(String input) {
+        if (StringUtils.isEmpty(input)) {
+            return input;
+        }
+        input = input.replace("input", Input);
+        input = input.replace("output", Output);
+        input = input.replace(Input, inputUnicodeOld);
+        input = input.replace(Output, outputUnicodeOld);
+        input = input.replace(InputDot, inputUnicode);
+        input = input.replace(OutputDot, outputUnicode);
+        input = input.replace(Explanation, explainUnicodeOld);
+        input = input.replace(ExplanationDot, explainUnicode);
+        return input;
+    }
 
 
 }

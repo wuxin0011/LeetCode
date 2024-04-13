@@ -6,6 +6,7 @@ import code_generation.utils.StringUtils;
 import java.util.ArrayList;
 import java.util.List;
 
+
 /**
  * @author: wuxin0011
  * @Description:
@@ -13,23 +14,6 @@ import java.util.List;
 public class TestCaseUtil {
 
 
-    // 输入 unicode
-    public static final String inputUnicode = "\\u8f93\\u5165\\uff1a";
-    // 不包含:
-    public static final String inputUnicodeOld = "\\u8f93\\u5165";
-
-    // 输出 unicode
-
-    public static final String outputUnicode = "\\u8f93\\u51fa\\uff1a";
-
-    // 不包含:
-    public static final String outputUnicodeOld = "\\u8f93\\u51fa";
-
-
-    // 解释 unicode
-    public static final String explainUnicode = "\\u89e3\\u91ca\\uff1a";
-    // 不包含:
-    public static final String explainUnicodeOld = "\\u89e3\\u91ca";
 
 
     /**
@@ -267,6 +251,10 @@ public class TestCaseUtil {
         input = input.replaceAll("<code>", "");
         input = input.replaceAll("</code>", "");
         input = input.replace("<em>;", "").replace("</em>;", "");
+
+        // 混合模式
+        // https://leetcode.cn/problems/earliest-second-to-mark-indices-i/description/
+        input = StringUtils.inputOrOutputConvertUnicode(input);
         if (checkHasUnicodeInputOutput(input)) {
             unicodeParseInputOutPut(input, ans);
         } else {
@@ -392,13 +380,13 @@ public class TestCaseUtil {
 
 
     public static void unicodeParseInputOutPut(String input, List<String> ans) {
-        int a = handlerUnicodeInputAndOutPut(input, inputUnicode, inputUnicodeOld, true);
-        int b = handlerUnicodeInputAndOutPut(input, outputUnicode, outputUnicodeOld, false);
+        int a = handlerUnicodeInputAndOutPut(input, StringUtils.inputUnicode, StringUtils.inputUnicodeOld, true);
+        int b = handlerUnicodeInputAndOutPut(input, StringUtils.outputUnicode, StringUtils.outputUnicodeOld, false);
         if (a == -1 || b == -1) {
             System.err.println("Not find test case !");
             return;
         }
-        int c = handlerUnicodeInputAndOutPut(input, explainUnicode, explainUnicodeOld, false);
+        int c = handlerUnicodeInputAndOutPut(input, StringUtils.explainUnicode, StringUtils.explainUnicodeOld, false);
         String inputStr = handlerIgnoreStr(input.substring(a, b));
         String outputStr = handlerIgnoreStr(input.substring(b, c == -1 ? input.length() : c));
         startParseContestTestCase(inputStr, LCTestCase.EqualFlag, LCTestCase.interFlag, ans);
@@ -410,16 +398,16 @@ public class TestCaseUtil {
 
     // 是否是unicode格式
     public static boolean checkHasUnicodeInputOutput(String input) {
-        int a = StringUtils.kmpSearch(input, inputUnicodeOld);
-        int b = StringUtils.kmpSearch(input, outputUnicodeOld);
+        int a = StringUtils.kmpSearch(input, StringUtils.inputUnicodeOld);
+        int b = StringUtils.kmpSearch(input, StringUtils.outputUnicodeOld);
         return a != -1 && b != -1 && a < b;
     }
 
 
     public static String handlerIgnoreStr(String s) {
         if (StringUtils.isEmpty(s)) return s;
-        s = s.replace(inputUnicode, "").replace(outputUnicode, "").replace(explainUnicode, "");
-        s = s.replace(inputUnicodeOld, "").replace(outputUnicodeOld, "");
+        s = s.replace(StringUtils.inputUnicode, "").replace(StringUtils.outputUnicode, "").replace(StringUtils.explainUnicode, "");
+        s = s.replace(StringUtils.inputUnicodeOld, "").replace(StringUtils.outputUnicodeOld, "");
         s = s.replace("<b>", "").replace("</b>", "");
         s = s.replace("<p>", "").replace("</p>", "");
         s = s.replace("<span>", "").replace("</span>", "");
@@ -430,6 +418,8 @@ public class TestCaseUtil {
         s = s.replace("<em>", "").replace("/em>", "");
         return s;
     }
+
+
 
 
 }
