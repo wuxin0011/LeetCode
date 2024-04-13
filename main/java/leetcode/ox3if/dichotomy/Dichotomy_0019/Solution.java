@@ -2,8 +2,6 @@ package leetcode.ox3if.dichotomy.Dichotomy_0019;
 
 import code_generation.utils.IoUtil;
 
-import java.lang.reflect.Array;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -47,6 +45,7 @@ public class Solution {
 
     public static void main(String[] args) {
         IoUtil.testUtil(Solution.class, "maxNumberOfAlloys", "in.txt");
+        IoUtil.testUtil(Solution.class, "maxNumberOfAlloys2", "in.txt");
     }
 
 
@@ -98,6 +97,46 @@ public class Solution {
             }
         }
         return new int[]{(int) sum, rest};
+    }
+
+
+    public int maxNumberOfAlloys2(int n, int k, int budget, List<List<Integer>> composition, List<Integer> stock, List<Integer> cost) {
+        int[] stock_array = stock.stream().mapToInt(Integer::intValue).toArray();
+        int[] cost_array = cost.stream().mapToInt(Integer::intValue).toArray();
+        int ans = 0;
+        for (List<Integer> com : composition) {
+            int[] com_array = com.stream().mapToInt(Integer::intValue).toArray();
+            int l = 1, r = Integer.MAX_VALUE;
+            while (l <= r) {
+                int mid = l + ((r - l) >> 1);
+                if (check2(mid, budget, com_array, stock_array, cost_array)) {
+                    l = mid + 1;
+                } else {
+                    r = mid - 1;
+                }
+            }
+            ans = Math.max(ans,r);
+        }
+        return ans;
+    }
+
+
+    public static boolean check2(int count, int budget, int[] com, int[] stock, int[] cost) {
+        // 最大化就是合理利用 stock  剩余尽可能小
+        int n = stock.length;
+        long sum = 0;
+        for (int i = 0; i < n; i++) {
+            long need = (long) com[i] * count;
+            if (stock[i] - need >= 0) {
+                continue;
+            }
+            sum += (need - stock[i]) * cost[i];
+            // 方案不可行
+            if (sum > budget) {
+                return false;
+            }
+        }
+        return true;
     }
 
 

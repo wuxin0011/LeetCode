@@ -104,6 +104,7 @@ public class TestCaseUtil {
             if(sb != null){
                 ans.add(sb.toString());
             }
+            ans.add("\n");
         } else {
             for (char c : charArray) {
                 if (c != '\\' && StringUtils.isIgnore(c)) {
@@ -170,7 +171,6 @@ public class TestCaseUtil {
             if (sb != null) {
                 ans.add(sb.toString());
             }
-            ans.add("\n");
         }
     }
 
@@ -392,7 +392,6 @@ public class TestCaseUtil {
         startParseContestTestCase(inputStr, LCTestCase.EqualFlag, LCTestCase.interFlag, ans);
         StringUtils.handlerResult(ans);
         startParseContestTestCase(outputStr, LCTestCase.EqualFlag, LCTestCase.interFlag, ans);
-        ans.add("\n");
     }
 
 

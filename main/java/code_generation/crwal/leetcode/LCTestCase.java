@@ -40,10 +40,8 @@ public class LCTestCase implements TestCase {
         List<String> ans = new ArrayList<>();
         while (m.find()) {
             String result = m.group(1);
-            if (result.contains(EqualFlag) || result.contains(OtherFlag)) {
-                TestCaseUtil.startParseContestTestCase(result, EqualFlag, interFlag, ans);
-            } else {
-                ans.add(result);
+            TestCaseUtil.startParseContestTestCase(result, EqualFlag, interFlag, ans);
+            if (!(result.contains(EqualFlag) || result.contains(OtherFlag))) {
                 ans.add("\n");
             }
         }
@@ -167,8 +165,5 @@ public class LCTestCase implements TestCase {
     }
 
 
-    public static void main(String[] args) {
-        String unicodeString = "\\u7ed9\\u4f60\\u4e00\\u4e2a\\u4e8c\\u7ef4\\u6574\\u6570\\u6570";
-    }
 
 }
