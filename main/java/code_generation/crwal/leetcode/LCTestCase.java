@@ -41,9 +41,6 @@ public class LCTestCase implements TestCase {
         while (m.find()) {
             String result = m.group(1);
             TestCaseUtil.startParseContestTestCase(result, EqualFlag, interFlag, ans);
-            if (!(result.contains(EqualFlag) || result.contains(OtherFlag))) {
-                ans.add("\n");
-            }
         }
         if (ans.size() == 0) {
             handlerOldOutPut(input, ans);
