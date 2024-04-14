@@ -204,7 +204,21 @@ public abstract class LCCustom implements CustomProblem {
             return Collections.emptyList();
         }
         List<String> urls = StringUtils.matchUrls(s);
-        return urls.stream().filter(url -> !StringUtils.isEmpty(s) && url.startsWith(BuildUrl.LC_PROBLEM_PREFIX)).collect(Collectors.toList());
+        return urls.stream().filter(
+                        url -> {
+                            if (StringUtils.isEmpty(url)) {
+                                return false;
+                            }
+                            if (url.startsWith(BuildUrl.LC_PROBLEM_PREFIX)) {
+                                return true;
+                            }
+                            if (url.startsWith(BuildUrl.LC_WEEKLY_CONTEST_PREFIX)) {
+                                return true;
+                            }
+                            return url.startsWith(BuildUrl.LC_BI_WEEKLY_CONTEST_PREFIX);
+                        }
+                ).
+                collect(Collectors.toList());
     }
 
 }

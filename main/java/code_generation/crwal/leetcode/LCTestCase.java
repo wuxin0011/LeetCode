@@ -34,6 +34,7 @@ public class LCTestCase implements TestCase {
         input = TestCaseUtil.getTagContent(input, "class=\"question-content source-content\"", 0, "<div", "</div");
         input = input.replace("&quot;", "");
         String pattern = "<span\\s+class=\"example-io\">(.*?)</span>";
+        // String pattern = "<span\\\\s*class=(?:\\\"|')?example-io(?:\\\"|')?>(.*?)</span>";
         //System.out.println(input);
         Pattern r = Pattern.compile(pattern, Pattern.DOTALL);
         Matcher m = r.matcher(input);
@@ -56,7 +57,9 @@ public class LCTestCase implements TestCase {
         List<Integer> output_pos = StringUtils.kmpSearchList(input, output_flag);
         int size = output_pos.size();
         if (size == 0) {
-            System.out.println("not find any output testcase");
+//            if(TestCaseUtil.checkHasUnicodeInputOutput(input)){
+//                TestCaseUtil.unicodeParseInputOutPut(input,ans);
+//            }
             return;
         }
         // System.out.println("len = " + input.length());
@@ -84,6 +87,12 @@ public class LCTestCase implements TestCase {
             int end = preEndList.get(idx);
             String target = input.substring(st, end + pre_end.length());
             TestCaseUtil.parseDefaultTextCase(target, ans);
+        }
+        if (ans.size() == 0) {
+            handlerOldOutPut(input, ans);
+        }
+        if (ans.size() == 0) { // 尝试其他方式3
+            return parseContest(input);
         }
         StringUtils.handlerResult(ans);
         return ans;

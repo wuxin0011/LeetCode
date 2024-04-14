@@ -1,6 +1,6 @@
 package code_generation.contest;
 
-import code_generation.crwal.leetcode.WeekContest;
+import code_generation.crwal.leetcode.LCContest;
 import code_generation.utils.IoUtil;
 import code_generation.utils.ReflectUtils;
 import code_generation.utils.StringUtils;
@@ -233,7 +233,7 @@ public class Problem {
      */
     public static void customContest(int problems, int year, int month, int day, String dirPrefix, String dirName, Class<?> c) {
         if (c == null) {
-            c = WeekContest.class;
+            c = LCContest.class;
         }
         if (!dirPrefix.endsWith("_")) {
             dirPrefix = dirPrefix + "_";

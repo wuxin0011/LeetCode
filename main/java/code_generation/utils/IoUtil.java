@@ -5,7 +5,6 @@ import code_generation.contest.ParseCodeInfo;
 
 import java.io.*;
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -86,7 +85,6 @@ public class IoUtil {
     }
 
 
-
     public static <T> void testUtil(Class<T> c, String fileName, boolean openLongContent) {
         testUtil(c, DEFAULT_METHOD_NAME, fileName, openLongContent);
     }
@@ -114,30 +112,29 @@ public class IoUtil {
     /**
      * 对拍核心方法
      *
-     * @param c               反射的类
+     * @param src             反射的类
      * @param methodName      方法名 但传入默认的时候 自动调用 除 "main" 方法外的一个方法，唯有只有一个其他方法适用
      * @param fileName        读取文件名
      * @param openLongContent 开启##解析
      * @param isStrict        是否开启严格相等 如果不开启元素顺序，希望 为 false
-     * @param <T>             T
      */
-    public static <T> void testUtil(Class<T> c, String methodName, String fileName, boolean openLongContent, boolean isStrict) {
-        check(c, methodName, fileName);
+    public static <T> void testUtil(Class<T> src, String methodName, String fileName, boolean openLongContent, boolean isStrict) {
+        check(src, methodName, fileName);
         boolean find = false;
         try {
 
-            List<String> inputList = readFile(c, fileName, openLongContent);
+            List<String> inputList = readFile(src, fileName, openLongContent);
             if (inputList == null) {
                 System.exit(0);
             }
             // 构造类对拍
             if (ParseCodeInfo.ConstructorClass.equals(methodName)) {
                 find = true;
-                handlerConstructorValid(c, inputList, methodName, isStrict);
+                handlerConstructorValid(src, inputList, methodName, isStrict);
             } else {
-                T obj = c.newInstance();
+                Object obj = src.newInstance();
 
-                Method[] methods = c.getDeclaredMethods();
+                Method[] methods = src.getDeclaredMethods();
 
                 List<String> names = new ArrayList<>();
                 for (Method method : methods) {
@@ -176,32 +173,27 @@ public class IoUtil {
         }
     }
 
+
     // 构造类函数对拍
-    public static void handlerConstructorValid(Class<?> c, List<String> inputList, String methodName, boolean isStrict) {
-
-
+    public static void handlerConstructorValid(Class<?> src, List<String> inputList, String methodName, boolean isStrict) {
         String[] names = null, args = null, expect = null;
-
-
         // 是否是测试阶段
-        boolean isTest = true;
+        boolean isTest = false;
 
-
-
-        if(isTest){
+        if (isTest) {
             System.err.println("constructor class is test ... ");
         }
 
-        final String className = c.getSimpleName();
+        final String className = src.getSimpleName();
 
-        Constructor constructor = c.getDeclaredConstructors()[0];
+        Constructor constructor = src.getDeclaredConstructors()[0];
         constructor.setAccessible(true);
 
         Class[] parameterTypes = constructor.getParameterTypes();
         Object[] constructorArgs = null;
 
 
-        Method[] declaredMethods = c.getDeclaredMethods();
+        Method[] declaredMethods = src.getDeclaredMethods();
 
 
         List<String> result = null;
@@ -214,6 +206,7 @@ public class IoUtil {
 
         int t = 0;
         int compareTimes = 1;
+        List<Integer> errorTimes = new ArrayList<>();
         for (int k = 0; k < inputList.size(); k++) {
             String s = inputList.get(k);
             if (StringUtils.isEmpty(s)) {
@@ -234,7 +227,6 @@ public class IoUtil {
             if (t % 3 == 0) {
                 Object obj = null;
                 int a = 0, b = 0, deep = 0;
-
 
                 // check
                 if (args.length != expect.length || args.length != names.length || expect.length != names.length) {
@@ -259,41 +251,102 @@ public class IoUtil {
                     if (name.equals(className)) {
                         // TODO 构造函数实例化
                         try {
-                            constructorArgs = new Object[parameterTypes.length];
-                            ReflectUtils.handlerConstructorInput(args[index], parameterTypes, constructorArgs);
-                            obj = constructor.newInstance(constructorArgs);
+                            result = new ArrayList<>();
+                            ReflectUtils.handlerConstructorMethodInput(args[index], result);
+                            obj = handlerConstructorMethod(constructor, result, src);
                         } catch (Exception e) {
                             e.printStackTrace();
                             obj = null;
                         }
                     } else {
+                        Objects.requireNonNull(obj, "obj is null");
+                        Method method = map.get(name);
                         if (!map.containsKey(name)) {
                             throw new RuntimeException("not find method " + name + ", place check your format !");
                         }
                         result = new ArrayList<>();
-                        ReflectUtils.handlerConstructorMethodInput(args[index], result, map.get(name));
-                        ReflectUtils.handlerConstructorMethodOutput(expect[index], result, map.get(name));
-                        startValid(obj, map.get(name), result, isStrict);
+                        ReflectUtils.handlerConstructorMethodInput(args[index], result, method);
+                        ReflectUtils.handlerConstructorMethodOutput(expect[index], result, method);
+                        boolean isOk = startValid(obj, map.get(name), result, isStrict);
+                        if (!isOk) {
+                            errorTimes.add(compareTimes);
+                        }
+                        compareTimes++;
                     }
                 }
 
                 // clear
                 args = names = expect = null;
                 result = null;
+            }
+        }
 
-                compareTimes++;
+
+        if (errorTimes.size() == 0) {
+            System.out.println("Accepted!");
+        } else {
+            for (Integer time : errorTimes) {
+                System.out.println("valid error in " + time);
             }
         }
     }
 
+    public static Object handlerConstructorMethod(Constructor<?> constructor, List<String> inputList, Class<?> aclass) {
+        Object obj = null;
+        Class<?>[] parameterTypes = constructor.getParameterTypes();
+        if (parameterTypes == null || parameterTypes.length == 0) {
+            try {
+                obj = constructor.newInstance();
+                return obj;
+            } catch (Exception e) {
+                return null;
+            }
+        }
+        Object[] args = null;
 
-    public static <T> void startValid(Object obj, Method method, List<String> inputList, boolean isStrict) {
+        int size = inputList.size();
+        String read = null;
+        for (int idx = 0; idx < size; ) {
+            args = new Object[parameterTypes.length];
+            for (int i = 0; i < parameterTypes.length && idx < size; i++, idx++) {
+                // 允许答案和输入参数之间有间隙
+                while (idx < size && ((read = inputList.get(idx)) == null || read.length() == 0)) {
+                    idx++;
+                }
+                if (idx == size) {
+                    break;
+                }
+                if (idx != size && (read == null || read.length() == 0)) {
+                    throw new RuntimeException("result not match place check your ans !");
+                }
+                args[i] = ReflectUtils.parseArg(aclass, constructor.getName(), parameterTypes[i], read, i, parameterTypes.length);
+                read = null;
+            }
+
+            try {
+                obj = constructor.newInstance(args);
+                return obj;
+            } catch (Exception e) {
+                return null;
+            }
+        }
+        return obj;
+
+
+    }
+
+
+    public static boolean startValid(Object obj, Method method, List<String> inputList, boolean isStrict) {
         Objects.requireNonNull(obj, "obj is null");
         Class<?>[] parameterTypes = method.getParameterTypes();
+        Class<?> origin = ReflectUtils.loadOrigin(obj.getClass());
         Object[] args = null;
         String returnName = method.getReturnType().getSimpleName();
         int size = inputList.size();
         String read = null;
+
+
+        boolean isConstrunctorClass = !origin.getSimpleName().equals(obj.getClass().getSimpleName());
 
         List<Integer> errorTimes = new ArrayList<>();
         int exceptionTime = -1;
@@ -306,14 +359,13 @@ public class IoUtil {
                 while (idx < size && ((read = inputList.get(idx)) == null || read.length() == 0)) {
                     idx++;
                 }
-
-                if (!VOID_OR_ARGS.equals(read)) {
-                    throw new RuntimeException("NO args fill, should null");
-                } else {
+                if (VOID_OR_ARGS.equals(read)) {
                     isFill = true;
+                    read = null;
+                    idx++;
+                } else {
+                    throw new RuntimeException("NO args fill, should null");
                 }
-
-
             } else {
                 args = new Object[parameterTypes.length];
                 for (int i = 0; i < parameterTypes.length && idx < size; i++, idx++) {
@@ -328,7 +380,7 @@ public class IoUtil {
                         throw new RuntimeException("result not match place check your ans !");
                     }
                     isFill = true;
-                    args[i] = ReflectUtils.parseArg(obj, method.getName(), parameterTypes[i], read, i, parameterTypes.length);
+                    args[i] = ReflectUtils.parseArg(origin, method.getName(), parameterTypes[i], read, i, parameterTypes.length);
                     read = null;
                 }
 
@@ -354,7 +406,6 @@ public class IoUtil {
                 } else {
                     result = method.invoke(obj, args);
                 }
-
 
                 // 允许答案和输入参数之间有间隙
                 while (idx < inputList.size() && ((read = inputList.get(idx)) == null || read.length() == 0)) {
@@ -388,7 +439,7 @@ public class IoUtil {
                 }
 
 
-                Object expect = ReflectUtils.parseArg(obj, method.getName(), returnName, read, -1, -1);
+                Object expect = ReflectUtils.parseArg(origin, method.getName(), returnName, read, -1, -1);
                 if (expect != null && !TestUtils.valid(result, expect, returnName, isStrict)) {
                     errorTimes.add(compareTimes); // save error
                 }
@@ -402,7 +453,8 @@ public class IoUtil {
             idx++; // match ok
             compareTimes++; // 比较次数
         }
-        if (errorTimes.size() == 0 && exceptionTime == -1) {
+
+        if (errorTimes.size() == 0 && exceptionTime == -1 && !isConstrunctorClass) {
             System.out.println("Accepted!");
         } else {
             for (int error : errorTimes) {
@@ -412,16 +464,16 @@ public class IoUtil {
                 System.out.println("exception times :" + exceptionTime);
             }
         }
-
+        return errorTimes.size() == 0 && exceptionTime == -1;
     }
 
 
-    public static <T> List<String> readFile(Class<T> c, String filename, boolean openLongContent) {
-        return readFile(buildAbsolutePath(c), filename, openLongContent);
+    public static List<String> readFile(Class<?> c, String filename, boolean openLongContent) {
+        return readFile(buildAbsolutePath(ReflectUtils.loadOrigin(c)), filename, openLongContent);
     }
 
-    public static <T> List<String> readFile(Class<T> c, String filename) {
-        return readFile(buildAbsolutePath(c), filename, false);
+    public static List<String> readFile(Class<?> c, String filename) {
+        return readFile(buildAbsolutePath(ReflectUtils.loadOrigin(c)), filename, false);
     }
 
     public static List<String> readFile(String path, String fileName) {
@@ -499,8 +551,8 @@ public class IoUtil {
     }
 
 
-    public static <T> void check(Class<T> c, String methodName, String fileName) {
-        Objects.requireNonNull(c, "className not null");
+    public static void check(Class<?> src, String methodName, String fileName) {
+        Objects.requireNonNull(src, "className not null");
         Objects.requireNonNull(methodName, "methodName not null");
         Objects.requireNonNull(fileName, "fileName  not null");
     }
@@ -605,11 +657,12 @@ public class IoUtil {
      * @param <T>
      * @return
      */
-    public static <T> String findListReturnTypeMethod(Class<T> c, String name, String returnType, int idx, int argsSize) {
+    public static String findListReturnTypeMethod(Class<?> c, String name, String returnType, int idx, int argsSize) {
         if (c == null) {
             System.out.println("error t is null");
             return defaultContent;
         }
+        c = ReflectUtils.loadOrigin(c);
         String path = buildAbsolutePath(c) + c.getSimpleName() + ".java";
         File file = new File(path);
         if (!file.exists()) {

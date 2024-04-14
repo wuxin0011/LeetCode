@@ -13,8 +13,8 @@ public class BuildUrl {
     public final static String LC_PROBLEM_PREFIX = LC_PREFIX + "/problems";
     public final static String graphql = LC_PREFIX + "/graphql/";
     public final static String API_PREFIX = LC_PREFIX + "/contest/api/info/";
-    public final static String LC_WEEKLY_CONTEST_PREFIX = LC_PREFIX + "/weekly-contest";
-    public final static String LC_BI_WEEKLY_CONTEST_PREFIX = LC_PREFIX + "/biweekly-contest";
+    public final static String LC_WEEKLY_CONTEST_PREFIX = LC_PREFIX + "/contest/weekly-contest";
+    public final static String LC_BI_WEEKLY_CONTEST_PREFIX = LC_PREFIX + "/contest/biweekly-contest";
 
     public final static String QuestionWeeklyUrlsPattern = API_PREFIX + "weekly-contest-%s/";
     public final static String QuestionBiWeeklyUrlsPattern = API_PREFIX + "biweekly-contest-%s/";
@@ -173,6 +173,13 @@ public class BuildUrl {
         }
         if (titleSlug.startsWith(LC_PROBLEM_PREFIX)) {
             titleSlug = titleSlug.replace(LC_PROBLEM_PREFIX + "/", "");
+        }
+        if (titleSlug.startsWith(LC_WEEKLY_CONTEST_PREFIX) || titleSlug.startsWith(LC_BI_WEEKLY_CONTEST_PREFIX)) {
+            if (!titleSlug.contains("/problems/")) {
+                throw new RuntimeException("NOT support" + titleSlug);
+            }
+            String[] split = titleSlug.split("/problems/");
+            titleSlug = split[1];
         }
         String[] split = titleSlug.split("/");
         return split[0];

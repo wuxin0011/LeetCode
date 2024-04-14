@@ -1,5 +1,7 @@
 package leetcode.contest;
 
+import code_generation.crwal.leetcode.WeekContest;
+
 /**
  * @author: wuxin0011
  * @Description: 通过输入序号获取双周赛
@@ -7,6 +9,6 @@ package leetcode.contest;
 public class BIWeekGen {
 
     public static void main(String[] args) {
-        WeekContestTest.BI_WEEK_CONTEST.createNo();
+        WeekContest.BI_WEEK_CONTEST.createNo(BIWeekGen.class);
     }
 }

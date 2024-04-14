@@ -153,11 +153,11 @@ public class ReflectUtils {
     }
 
 
-    public static <T> Object parseArg(Object src, String methodName, Class<T> c, String input, int idx, int argsSize) {
-        return parseArg(src, methodName, c.getSimpleName(), input, idx, argsSize);
+    public static Object parseArg(Class<?> origin, String methodName, Class<?> src, String input, int idx, int argsSize) {
+        return parseArg(origin, methodName, src.getSimpleName(), input, idx, argsSize);
     }
 
-    public static Object parseArg(Object src, String methodName, String type, String input, int idx, int argsSize) {
+    public static Object parseArg(Class<?> src, String methodName, String type, String input, int idx, int argsSize) {
         if (input == null || "".equals(input) || input.length() == 0) {
             System.out.println("read content is null");
             return null;
@@ -229,7 +229,7 @@ public class ReflectUtils {
                     return ListNode.createListNode(oneIntArray(input));
                 case "List":
                 case "ArrayList":
-                    return toList(src.getClass(), methodName, type, input, idx, argsSize);
+                    return toList(src, methodName, type, input, idx, argsSize);
                 default:
                     System.out.println(type + " not implement ,place implement!");
                     return null;
@@ -264,7 +264,7 @@ public class ReflectUtils {
     }
 
 
-    public static <T> Object toList(Class<T> t, String methodName, String type, String input, int idx, int argsSize) {
+    public static Object toList(Class<?> t, String methodName, String type, String input, int idx, int argsSize) {
         String listType = IoUtil.findListReturnTypeMethod(t, methodName, type, idx, argsSize);
         switch (listType) {
             case "List<TreeNode>":
@@ -770,7 +770,8 @@ public class ReflectUtils {
                 break;
             }
         }
-        char[] flag = new char[3];
+        char[] flag = new char[4];
+        flag[3] = 'Y';
         if (st == '{') {
             flag[0] = '{';
             flag[1] = '}';
@@ -780,7 +781,8 @@ public class ReflectUtils {
             flag[1] = ']';
             flag[2] = ',';
         } else {
-            throw new RuntimeException("NO this parse format, place implement ,start flag is " + st);
+            flag[3] = 'N';
+            //  throw new RuntimeException("NO this parse format, place implement ,start flag is " + st);
         }
         return flag;
     }
@@ -843,15 +845,26 @@ public class ReflectUtils {
     // constructor class parse
     public static String[] parseConstrunctorClassString(String s) {
         int st = 0, ed = s.length() - 1;
+        char start = 0;
+        char end = 0;
+        char inter = 0;
         char[] flag = ReflectUtils.getFlag(s);
-        char start = flag[0];
-        char end = flag[1];
-        char inter = flag[2];
-        while (st < s.length() && s.charAt(st) != start) {
-            st++;
-        }
-        while (ed >= 0 && s.charAt(ed) != end) {
-            ed--;
+        if (flag[3] == 'Y') {
+            start = flag[0];
+            end = flag[1];
+            inter = flag[2];
+            while (st < s.length() && s.charAt(st) != start) {
+                st++;
+            }
+            while (ed >= 0 && s.charAt(ed) != end) {
+                ed--;
+            }
+        } else {
+            start = '[';
+            end = ']';
+            inter = ',';
+            ed = s.length();
+            st = -1;
         }
         int deep = 0;
         List<String> ans = new ArrayList<>();
@@ -906,6 +919,9 @@ public class ReflectUtils {
 
 
     public static void handlerConstructorInput(String s, Class[] parameterTypes, Object[] args) {
+        if (parameterTypes == null || parameterTypes.length == 0) {
+            return;
+        }
         Objects.requireNonNull(parameterTypes, "parameterTypes is null");
         Objects.requireNonNull(args, "args is null");
         for (Class parameterType : parameterTypes) {
@@ -913,19 +929,47 @@ public class ReflectUtils {
         }
         // TODO 待实现
         // throw new RuntimeException("this method not implement");
-        int deep = 0;
-        for (int i = 0; i < s.length(); i++) {
-            char c = s.charAt(i);
-            if (StringUtils.isIgnore(c)) {
-                continue;
-            }
-
-        }
+        String[] argsString = parseConstrunctorClassString(s);
     }
 
     public static void handlerConstructorMethodInput(String arg, List<String> result, Method method) {
+        String[] ss = parseConstrunctorClassString(arg);
+        for (String s : ss) {
+            result.add(s);
+        }
     }
 
+    public static void handlerConstructorMethodInput(String arg, List<String> result) {
+        handlerConstructorMethodInput(arg, result, null);
+    }
+
+
+
     public static void handlerConstructorMethodOutput(String exp, List<String> result, Method method) {
+        Class<?> returnType = method.getReturnType();
+        String returnName = returnType.getSimpleName();
+        if (returnName.contains("[]") || returnName.contains("List") || returnName.contains("ArrayList")) {
+            result.add(exp);
+        } else {
+            String s = parseConstrunctorClassString(exp)[0];
+            result.add(s);
+        }
+    }
+
+    public static <T> Class<?> loadOrigin(Class<T> src) {
+        if (src == null) {
+            return null;
+        }
+        String name = src.getName();
+        if (name.contains("$")) {
+            String[] ss = name.split("\\$");
+            try {
+                return Class.forName(ss[0]);
+            } catch (ClassNotFoundException e) {
+                return src;
+            }
+        } else {
+            return src;
+        }
     }
 }

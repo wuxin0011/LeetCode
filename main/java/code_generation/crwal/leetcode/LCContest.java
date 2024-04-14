@@ -9,6 +9,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
@@ -19,9 +20,35 @@ import java.util.stream.Collectors;
  * @author: wuxin0011
  * @Description:
  */
-public class WeekContest implements Contest {
+public class LCContest implements Contest {
 
     private static final LocalDate NOW = LocalDate.now();
+
+
+    public static final String WEEK_DRI = "weekly";
+    public static final String BI_WEEK_DRI = "biweekly";
+
+
+    public static final String WEEKLY_PREFIX = "w_";
+    public static final String BI_WEEKLY_PREFIX = "bi_";
+
+
+    /**
+     * 周赛
+     */
+    public static final LCContest WEEK_CONTEST = new LCContest(380, "2024-01-14 10:30:00", 4, WEEKLY_PREFIX, WEEK_DRI, 1, null);
+
+
+    /**
+     * 双周赛
+     */
+    public static final LCContest BI_WEEK_CONTEST = new LCContest(1, "2019-06-01 22:30:00", 4, BI_WEEKLY_PREFIX, BI_WEEK_DRI, 2, null);
+
+
+    private final static int[] DAYS = {0, 7, 1, 2, 3, 4, 5, 6};
+
+
+    private String originDir;
 
     private int lastestDateNo; // 最近一次比赛编号
     private LocalDate lastestDate; // 最近一次比赛时间
@@ -33,8 +60,9 @@ public class WeekContest implements Contest {
     private Class<?> aClass; // 加载到那个类目录下
 
 
-    public WeekContest(int no, String lastestDate, int problems, String dirPrefix, String dir, int times, Class<?> c) {
+    public LCContest(int no, String lastestDate, int problems, String dirPrefix, String dir, int times, Class<?> c) {
         this.lastestDateNo = no;
+        this.originDir = dir;
         this.dir = dir;
         this.lastestDate = Objects.requireNonNull(parse(lastestDate), "date format is fail");
         this.setClass(c, dir);
@@ -51,8 +79,8 @@ public class WeekContest implements Contest {
      * @param _dir
      */
     public void setClass(Class<?> c, String _dir) {
-        this.aClass = c == null ? WeekContest.class : c;
-        this.dir = IoUtil.wrapperAbsolutePath(aClass, _dir);
+        this.aClass = c == null ? LCContest.class : c;
+        this.dir = IoUtil.wrapperAbsolutePath(aClass, StringUtils.isEmpty(_dir) ? !StringUtils.isEmpty(originDir) ? originDir : dir : _dir);
     }
 
     /**
@@ -130,7 +158,7 @@ public class WeekContest implements Contest {
                 continue;
             }
             String tempTitle = (StringUtils.isEmpty(question.getTitle()) ? question.getTitle_slug() : question.getTitle());
-            System.out.println("\nstart parse question :  " + CustomColor.pink(tempTitle));
+            System.out.println("\nstart parse question :  " + CustomColor.pink(tempTitle) + ",credit: " + question.getCredit());
             final int idx = i;
 
             try {
@@ -260,7 +288,8 @@ public class WeekContest implements Contest {
     }
 
 
-    public void createNo() {
+    public void createNo(Class<?> aClass) {
+        this.setClass(aClass, null);
         int NO = Integer.MAX_VALUE;
         Scanner sc = new Scanner(System.in);
         while (true) {
@@ -368,8 +397,7 @@ public class WeekContest implements Contest {
     }
 
 
-    public static final String WEEKLY_PREFIX = "w_";
-    public static final String BI_WEEKLY_PREFIX = "bi_";
+
 
 
     private List<Question> questionList;
@@ -431,6 +459,52 @@ public class WeekContest implements Contest {
         // System.out.println(userStatus);
         return StringUtils.jsonStrGetValueByKey(userStatusInfo, key);
 
+    }
+
+
+    public static void main(String[] args) {
+        System.out.println("WEEK_CONTEST Next is: " + WEEK_CONTEST.getId());
+        System.out.println("BI_WEEK_CONTEST Next is :" + BI_WEEK_CONTEST.getId());
+    }
+
+    public static void autoCreateNext(Class<?> aClass) {
+        Objects.requireNonNull(aClass,"class not allow null");
+        Calendar calendar = Calendar.getInstance();
+        int today = calendar.get(Calendar.DAY_OF_WEEK);
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        int minute = calendar.get(Calendar.MINUTE);
+        if (hour >= 10 && hour <= 12 && DAYS[today] == 7) {
+            if (minute >= 30) {
+                System.out.println("weekly contest start !");
+                LCContest.WEEK_CONTEST.setClass(aClass, null);
+                LCContest.WEEK_CONTEST.next();
+            } else {
+                continueRun(minute, aClass);
+            }
+        } else if (hour >= 22 && DAYS[today] == 6) {
+            if (minute >= 30) {
+                System.out.println("biweekly contest start !");
+                LCContest.WEEK_CONTEST.setClass(aClass, null);
+                LCContest.BI_WEEK_CONTEST.next();
+            } else {
+                continueRun(minute, aClass);
+            }
+        } else {
+            System.out.println("Not contest will start !");
+        }
+    }
+
+
+    public static void continueRun(int minute, Class<?> aClass) {
+        int rest = 30 - minute;
+        System.out.println("contest rest " + (rest) + " min will start ~");
+        try {
+            // sleep 1 min
+            Thread.sleep(1000L * 60);
+        } catch (InterruptedException ignored) {
+
+        }
+        autoCreateNext(aClass);
     }
 
 

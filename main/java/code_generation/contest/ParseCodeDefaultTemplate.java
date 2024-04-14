@@ -184,7 +184,13 @@ public class ParseCodeDefaultTemplate implements ParseCodeTemplate {
         StringBuilder result = new StringBuilder();
 
         for (String s : split) {
-            if (s == null) {
+            if (StringUtils.isEmpty(s)) {
+                continue;
+            }
+            if(s.contains(this.info.getClassName())){
+                s += buildReturnType("");
+                result.append(s);
+                result.append("\n\n");
                 continue;
             }
             // System.out.println("origin : " + s);
