@@ -17,9 +17,9 @@ import java.util.List;
  */
 @Description
         (
-                value = "N皇后",
+                value = "N Queue",
                 diff = Difficulty.HARD,
-                customTag = "八皇后",
+                customTag = "BACKTRACk",
                 types = {Type.MATH, Type.BACKTRACk},
                 url = "https://leetcode.cn/problems/n-queens/"
         )
@@ -37,13 +37,9 @@ public class NQueens implements LogarithmicDevice {
                         Arrays.fill(t, ".");
                         g[i] = t;
                 }
-                // 列是否已经有值
                 boolean[] col = new boolean[n];
-                // 斜线是否已经有值
                 boolean[] dg = new boolean[2 * n];
-                // 反斜线是否已经有值
                 boolean[] udg = new boolean[2 * n];
-                // 从第一行开始搜索
                 dfs(0, n, col, dg, udg, g, res);
                 return res;
         }
@@ -70,7 +66,6 @@ public class NQueens implements LogarithmicDevice {
 
         @Override
         public void logarithmicDevice() {
-                // 8 皇后共有92中解法 此处作为判断依据
                 int size = this.solveNQueens(8).size();
                 System.out.println("size"+size);
                 TestUtils.testBoolean(size == 92, true, "ok");

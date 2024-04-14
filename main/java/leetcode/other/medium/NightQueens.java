@@ -8,7 +8,7 @@ import code_generation.proxy.LogarithmicDevice;
  * @author: wuxin0011
  * @Description:
  */
-@Description(value = "�˻ʺ�", views = {"https://zhuanlan.zhihu.com/p/99209213", "https://zhuanlan.zhihu.com/p/262001022"})
+@Description(value = "NightQueens", views = {"https://zhuanlan.zhihu.com/p/99209213", "https://zhuanlan.zhihu.com/p/262001022"})
 public class NightQueens implements LogarithmicDevice {
 
     public static void main(String[] args) {
@@ -24,24 +24,19 @@ public class NightQueens implements LogarithmicDevice {
         y = new int[N + 1]; //
         int x = 1;
         while (x > 0) {
-            // ��ǰ����һ��
             y[x]++;
-            // ���λ���Ƿ���� ��λ�ú���ʱ���Ƴ�ѭ��
             while ((y[x] <= N) && (!check(x))) {
-                //�ҵ����ʵ�λ��
                 y[x]++;
             }
 
-            // �߽������
             if (y[x] <= N) {
-                if (x == N) {   // ����ҵ���һ�����ûʺ��������������+1����ӡ���
+                if (x == N) {
                     count++;
                     print();
                 } else {
-                    x++;// ��û�ҵ���������������Ѱ����һ���ʺ�λ�á�
+                    x++;
                 }
             } else {
-                //  ����λ�þ�����ȫ�����ݡ�
                 y[x] = 0;
                 x--;
             }
@@ -49,12 +44,6 @@ public class NightQueens implements LogarithmicDevice {
     }
 
 
-    /**
-     * ��鵱ǰ�����Ƿ�Ϸ�
-     *
-     * @param k λ����Ϣ
-     * @return boolean
-     */
     private boolean check(int k) {
         for (int j = 1; j < k; j++) {
             if ((Math.abs(k - j) == Math.abs(y[j] - y[k])) || (y[j] == y[k])) {
