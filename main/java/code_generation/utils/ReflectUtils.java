@@ -918,19 +918,6 @@ public class ReflectUtils {
     }
 
 
-    public static void handlerConstructorInput(String s, Class[] parameterTypes, Object[] args) {
-        if (parameterTypes == null || parameterTypes.length == 0) {
-            return;
-        }
-        Objects.requireNonNull(parameterTypes, "parameterTypes is null");
-        Objects.requireNonNull(args, "args is null");
-        for (Class parameterType : parameterTypes) {
-            System.out.println("parameterTypes:" + parameterType.getSimpleName());
-        }
-        // TODO 待实现
-        // throw new RuntimeException("this method not implement");
-        String[] argsString = parseConstrunctorClassString(s);
-    }
 
     public static void handlerConstructorMethodInput(String arg, List<String> result, Method method) {
         String[] ss = parseConstrunctorClassString(arg);
