@@ -935,7 +935,14 @@ public class ReflectUtils {
     public static void handlerConstructorMethodOutput(String exp, List<String> result, Method method) {
         Class<?> returnType = method.getReturnType();
         String returnName = returnType.getSimpleName();
-        if (returnName.contains("[]") || returnName.contains("List") || returnName.contains("ArrayList")) {
+        if (returnName.contains("[]")
+                || returnName.contains("List")
+                || returnName.contains("ArrayList")
+                || returnName.contains("TreeNode")
+                || returnName.contains("LinkedList")
+                || returnName.contains("ListNode")
+                || returnName.contains("Queue")
+        ) {
             result.add(exp);
         } else {
             String s = parseConstrunctorClassString(exp)[0];
