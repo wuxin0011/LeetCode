@@ -107,6 +107,10 @@ public class StringUtils {
         while (s.contains("\n\n\n")) {
             s = s.replace("\n\n\n", "\n\n");
         }
+        s = s.replace(inputUnicodeOld, "");
+        s = s.replace(outputUnicodeOld, "");
+        s = s.replace(explainUnicodeOld, "");
+        s = s.replace("uff1a", "");
         s = s.replace("<div>", "").replace("</div>", "");
         s = s.replace("<ul>", "").replace("</ul>", "");
         s = s.replace("<li>", "").replace("</li>", "");
