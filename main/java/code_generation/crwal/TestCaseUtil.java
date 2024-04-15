@@ -152,13 +152,18 @@ public class TestCaseUtil {
                         break;
                     case '\\': // 特殊情况 https://leetcode.cn/problems/verify-preorder-serialization-of-a-binary-tree/description/
                         line++;
-                        if (line == 1) {
-                            sb = new StringBuilder();
-                        } else if (line == 2 && sb != null) {
-                            ans.add(sb.toString());
-                            line = 0;
-                            sb = null;
+                        if(deep==0){ // 如果不加这个会解析失败  https://leetcode.cn/problems/nearest-exit-from-entrance-in-maze/
+                            if (line == 1) {
+                                sb = new StringBuilder();
+                            } else if (line == 2 && sb != null) {
+                                ans.add(sb.toString());
+                                line = 0;
+                                sb = null;
+                            }
+                        }else {
+                            break;
                         }
+
                         break;
                     default:
                         if (sb != null) {
@@ -313,12 +318,15 @@ public class TestCaseUtil {
                         break;
                     case '\\':
                         line++;
-                        if (line == 1) {
-                            sb = new StringBuilder();
-                        } else if (line == 2 && sb != null) {
-                            ans.add(sb.toString());
-                            line = 0;
+                        if(deep==0){
+                            if (line == 1) {
+                                sb = new StringBuilder();
+                            } else if (line == 2 && sb != null) {
+                                ans.add(sb.toString());
+                                line = 0;
+                            }
                         }
+                        break;
                     case ',':
                         if (sb != null) {
                             if (deep == 0 && line == 0) {
