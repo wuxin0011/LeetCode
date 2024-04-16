@@ -33,9 +33,6 @@ import code_generation.utils.IoUtil;
  * 提示：
  * 1 <= pressedKeys.length <= 10^5
  * pressedKeys 只包含数字'2'到'9'。
- * <p>
- * <p>
- * https://leetcode.cn/problems/count-number-of-texts/
  *
  * @author: wuxin0011
  * @Description:
