@@ -253,10 +253,8 @@ public class TestCaseUtil {
     public static void parseDefaultTextCase(String input, List<String> ans) {
         input = input.replaceAll("\\n", "");
         input = input.replaceAll("&quot;", "");
-        input = input.replaceAll("<code>", "");
-        input = input.replaceAll("</code>", "");
-        input = input.replace("<em>;", "").replace("</em>;", "");
-
+        input = input.replaceAll("<code>", "").replaceAll("</code>", "");
+        input = input.replace("<em>", "").replace("</em>", "");
         // 混合模式
         // https://leetcode.cn/problems/earliest-second-to-mark-indices-i/description/
         input = StringUtils.inputOrOutputConvertUnicode(input);

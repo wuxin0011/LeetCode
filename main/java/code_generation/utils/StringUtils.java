@@ -127,6 +127,8 @@ public class StringUtils {
         s = s.replace("&amp;", "");
         s = s.replace("&quot;", "");
         s = s.replace("&nbsp;", "");
+        s = s.replace("<strong>", "").replace("</strong>", "");
+        s = s.replace("<", "").replace(">", "");
         return s;
     }
 
