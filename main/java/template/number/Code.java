@@ -91,13 +91,52 @@ public class Code {
     }
 
 
-    public static void main(String[] args) {
-        for (int i = 0; i < 10000; i++) {
-            if (isPalindrome(i)) {
-                System.out.println(i);
-            }
+    /**
+     * 上取整
+     *
+     * @param a int
+     * @param b int
+     * @return int
+     */
+    public static int ceil(int a, int b) {
+        if (a == 0 || b == 0) {
+            return 0;
         }
+        if (a > 0) {
+            return (a + b - 1) / b;
+        } else {
+            return a / b;
+        }
+    }
+
+
+    /**
+     * 下取整
+     *
+     * @param a int
+     * @param b int
+     * @return int
+     */
+    public static int floor(int a, int b) {
+        if (a == 0 || b == 0) {
+            return 0;
+        }
+        if (a > 0 ) {
+            return a / b;
+        } else {
+            return (a - b + 1) / b;
+        }
+    }
+
+
+    public static void main(String[] args) {
         System.out.println(1 << 10); // 1 左移10位
         System.out.println(10 << 1); //10 左移1位数
+        System.out.println("ceil and floor");
+        System.out.println(ceil(11, 10));
+        System.out.println(ceil(-11, -10));
+        System.out.println(floor(11, 10));
+        System.out.println(floor(-11, -10));
+        System.out.println("=======end========");
     }
 }
