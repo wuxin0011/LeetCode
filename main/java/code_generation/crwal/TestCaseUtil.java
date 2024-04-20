@@ -52,6 +52,7 @@ public class TestCaseUtil {
         StringBuilder sb = null;
         if (StringUtils.kmpSearch(input, "=") == -1 && StringUtils.kmpSearch(input, ":") == -1) {
             // ans.add(input);
+
             sb = new StringBuilder();
             for (char c : charArray) {
                 if (StringUtils.isIgnore(c)) {

@@ -1,4 +1,4 @@
-package leetcode.top_interview_150.backtracking.minimum_genetic_mutation;
+package leetcode.top_interview_150.minimum_genetic_mutation;
 
 import code_generation.utils.IoUtil;
 

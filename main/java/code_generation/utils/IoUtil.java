@@ -161,7 +161,7 @@ public class IoUtil {
                     find = true;
                     method.setAccessible(true);
                     // 普通对拍开始
-                    startValid(obj, method, inputList, isStrict);
+                    startValid(obj, method, inputList, isStrict, true);
                 }
 
             }
@@ -267,7 +267,7 @@ public class IoUtil {
                         result = new ArrayList<>();
                         ReflectUtils.handlerConstructorMethodInput(args[index], result, method);
                         ReflectUtils.handlerConstructorMethodOutput(expect[index], result, method);
-                        boolean isOk = startValid(obj, map.get(name), result, isStrict);
+                        boolean isOk = startValid(obj, map.get(name), result, isStrict, false);
                         if (!isOk) {
                             errorTimes.add(compareTimes);
                         }
@@ -336,12 +336,14 @@ public class IoUtil {
     }
 
 
-    public static boolean startValid(Object obj, Method method, List<String> inputList, boolean isStrict) {
+    public static boolean startValid(Object obj, Method method, List<String> inputList, boolean isStrict, boolean newObj) {
         Objects.requireNonNull(obj, "obj is null");
         Class<?>[] parameterTypes = method.getParameterTypes();
+        Class<?> srcClass = obj.getClass();
         Class<?> origin = ReflectUtils.loadOrigin(obj.getClass());
         Object[] args = null;
         String returnName = method.getReturnType().getSimpleName();
+        final String tempRetrunName = returnName;
         int size = inputList.size();
         String read = null;
 
@@ -352,6 +354,19 @@ public class IoUtil {
         int exceptionTime = -1;
         int compareTimes = 1;
         for (int idx = 0; idx < size; ) {
+            if (newObj) {
+                try {
+                    // 如果不是构造类型对拍，定义普通类型属性会影响下次对拍 因此重新初始化
+                    // 就是上次数据影响这次对拍
+                    // example: leetcode.everyday.Code_0049_39
+                    obj = srcClass.newInstance();
+                } catch (Exception ignore) {
+                    obj = null;
+                }
+            }
+
+            Objects.requireNonNull(obj,"obj is null");
+
             // 填充参数信息
             boolean isFill = false; // 参数校验标志信息
 
@@ -450,6 +465,7 @@ public class IoUtil {
                 exceptionTime = compareTimes;
                 break;
             }
+            returnName = tempRetrunName; // origin return name
             idx++; // match ok
             compareTimes++; // 比较次数
         }
