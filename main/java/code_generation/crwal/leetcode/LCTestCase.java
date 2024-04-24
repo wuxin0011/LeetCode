@@ -55,11 +55,11 @@ public class LCTestCase implements TestCase {
 
         List<Integer> input_pos = StringUtils.kmpSearchList(input, input_flag);
         List<Integer> output_pos = StringUtils.kmpSearchList(input, output_flag);
-        int size = output_pos.size();
-        if (size == 0) {
-//            if(TestCaseUtil.checkHasUnicodeInputOutput(input)){
-//                TestCaseUtil.unicodeParseInputOutPut(input,ans);
-//            }
+        if (input_pos.size() == 0 || output_pos.size() == 0) {
+            input_pos = StringUtils.kmpSearchList(input, StringUtils.inputUnicodeOld);
+            output_pos = StringUtils.kmpSearchList(input, StringUtils.outputUnicodeOld);
+        }
+        if (input_pos.size() == 0 || output_pos.size() == 0) {
             return;
         }
         // System.out.println("len = " + input.length());
@@ -76,13 +76,14 @@ public class LCTestCase implements TestCase {
     public List<String> parseDefault(String input) {
         input = input.replace("&quot;", "");
         input = input.replace("<em>", "").replace("</em>", "");
-
+        List<String> ans = new ArrayList<>();
         List<Integer> preList = StringUtils.kmpSearchList(input, pre_start);
         List<Integer> preEndList = StringUtils.kmpSearchList(input, pre_end);
         if (preList.size() != preEndList.size()) {
-            throw new RuntimeException("error");
+            System.err.println("parse default testcase is error because pre code size not equal , use default testcase ");
+            return parseContest(input);
         }
-        List<String> ans = new ArrayList<>();
+
         for (int idx = 0; idx < preList.size(); idx++) {
             int st = preList.get(idx);
             int end = preEndList.get(idx);
