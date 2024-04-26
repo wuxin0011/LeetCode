@@ -371,10 +371,10 @@ public class IoUtil {
             boolean isFill = false; // 参数校验标志信息
 
             if (parameterTypes == null || parameterTypes.length == 0) {
-                while (idx < size && ((read = inputList.get(idx)) == null || read.length() == 0)) {
+                while (idx < size && ((read = inputList.get(idx)) == null)) {
                     idx++;
                 }
-                if (VOID_OR_ARGS.equals(read)) {
+                if (VOID_OR_ARGS.equals(read) || read.length() == 0) {
                     isFill = true;
                     read = null;
                     idx++;
