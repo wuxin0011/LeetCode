@@ -415,10 +415,11 @@ public class StringUtils {
         if (isEmpty(desc)) {
             return false;
         }
-        int a = kmpSearch(desc, "10<sup>9");
-        if (a != -1) {
-            return true;
-        }
+        int a = -1;
+//        int a = kmpSearch(desc, "10<sup>9");
+//        if (a != -1) {
+//            return true;
+//        }
         a = kmpSearch(desc, mod_unicode);
         if (a != -1) {
             return true;

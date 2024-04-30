@@ -6,6 +6,7 @@ import code_generation.contest.ParseCodeInfo;
 import java.io.*;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.*;
@@ -132,7 +133,13 @@ public class IoUtil {
                 find = true;
                 handlerConstructorValid(src, inputList, methodName, isStrict);
             } else {
-                Object obj = src.newInstance();
+                Object obj = null;
+                try {
+                    obj = src.newInstance();
+                } catch (Exception ignore) {
+
+                }
+
 
                 Method[] methods = src.getDeclaredMethods();
 
@@ -336,6 +343,15 @@ public class IoUtil {
     }
 
 
+    /**
+     * 对拍核心方法
+     * @param obj 对象
+     * @param method 方法
+     * @param inputList 输入输出
+     * @param isStrict 是否要求顺序
+     * @param newObj 每次执行是否创建新对象
+     * @return
+     */
     public static boolean startValid(Object obj, Method method, List<String> inputList, boolean isStrict, boolean newObj) {
         Objects.requireNonNull(obj, "obj is null");
         Class<?>[] parameterTypes = method.getParameterTypes();
@@ -347,6 +363,7 @@ public class IoUtil {
         int size = inputList.size();
         String read = null;
 
+        boolean isStatic = Modifier.isStatic(method.getModifiers()); // 是否是静态方法
 
         boolean isConstrunctorClass = !origin.getSimpleName().equals(obj.getClass().getSimpleName());
 
@@ -359,13 +376,15 @@ public class IoUtil {
                     // 如果不是构造类型对拍，定义普通类型属性会影响下次对拍 因此重新初始化
                     // 就是上次数据影响这次对拍
                     // example: leetcode.everyday.Code_0049_39
-                    obj = srcClass.newInstance();
+                    if(!isStatic){
+                        obj = srcClass.newInstance();
+                    }
                 } catch (Exception ignore) {
                     obj = null;
                 }
             }
 
-            Objects.requireNonNull(obj,"obj is null");
+            Objects.requireNonNull(obj, "obj is null");
 
             // 填充参数信息
             boolean isFill = false; // 参数校验标志信息
@@ -417,10 +436,11 @@ public class IoUtil {
 
 
                 if (parameterTypes == null || parameterTypes.length == 0) {
-                    result = method.invoke(obj);
+                    result = method.invoke(isStatic ? null : obj);
                 } else {
-                    result = method.invoke(obj, args);
+                    result = method.invoke(isStatic ? null : obj, args);
                 }
+
 
                 // 允许答案和输入参数之间有间隙
                 while (idx < inputList.size() && ((read = inputList.get(idx)) == null || read.length() == 0)) {
@@ -482,6 +502,8 @@ public class IoUtil {
         }
         return errorTimes.size() == 0 && exceptionTime == -1;
     }
+
+
 
 
     public static List<String> readFile(Class<?> c, String filename, boolean openLongContent) {

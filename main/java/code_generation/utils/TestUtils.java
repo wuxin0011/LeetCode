@@ -349,6 +349,16 @@ public class TestUtils {
                     Character[][][] r = covert((char[][][]) result);
                     return deepEqual(r, e, isStrict);
                 }
+                case "boolean[]": {
+                    Boolean[] e = covert((boolean[]) expect);
+                    Boolean[] r = covert((boolean[]) result);
+                    return deepEqual(r, e, isStrict);
+                }
+                case "boolean[][]": {
+                    Boolean[][] e = covert((boolean[][]) expect);
+                    Boolean[][] r = covert((boolean[][]) result);
+                    return deepEqual(r, e, isStrict);
+                }
                 case "TreeNode": {
                     TreeNode e = (TreeNode) expect;
                     TreeNode r = (TreeNode) result;
@@ -383,6 +393,26 @@ public class TestUtils {
             return false;
         }
     }
+
+
+    public static Boolean[] covert(boolean[] a) {
+        Boolean[] t = new Boolean[a.length];
+        for (int i = 0; i < a.length; i++) {
+            t[i] = a[i];
+        }
+        return t;
+    }
+
+    public static Boolean[][] covert(boolean[][] a) {
+        Boolean[][] t = new Boolean[a.length][a[0].length];
+        for (int i = 0; i < a.length; i++) {
+            for (int j = 0; j < a[0].length; j++) {
+                t[i][j] = a[i][j];
+            }
+        }
+        return t;
+    }
+
 
     public static Integer[] covert(int[] a) {
         Integer[] t = new Integer[a.length];

@@ -9,7 +9,6 @@ import java.io.File;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Stack;
 
 
@@ -181,6 +180,9 @@ public class ReflectUtils {
                 case "boolean[]":
                 case "Boolean[]":
                     return oneBooleanArray(input);
+                case "boolean[][]":
+                case "Boolean[][]":
+                    return doubleBooleanArray(input);
                 case "double":
                     return Double.parseDouble(input);
                 case "double[]":
@@ -266,6 +268,10 @@ public class ReflectUtils {
 
     public static Object toList(Class<?> t, String methodName, String type, String input, int idx, int argsSize) {
         String listType = IoUtil.findListReturnTypeMethod(t, methodName, type, idx, argsSize);
+        String originType = listType;
+        if (listType.contains("ArrayList")) {
+            listType = listType.replace("ArrayList", "List");
+        }
         switch (listType) {
             case "List<TreeNode>":
                 return parseListTreeNode(input); // 4.2日 新增
@@ -281,6 +287,8 @@ public class ReflectUtils {
                 return parseListLong(input);
             case "List<Boolean>":
                 return parseListBoolean(input);
+            case "List<List<Boolean>>":
+                return parseDoubleBoolean(input);
             case "List<Double>":
                 return parseDoubleList(input);
             case "List<List<Integer>>":
@@ -294,7 +302,7 @@ public class ReflectUtils {
             case "List<List<List<Character>>>":
                 return parseThreeCharArray(input);
             default:
-                System.err.println("NOT implement " + listType + ",place implement this ,default convert string list");
+                System.err.println("NOT implement " + originType + ",place implement this ,default convert string list");
                 return parseListString(input);
         }
     }
@@ -312,7 +320,8 @@ public class ReflectUtils {
 
     public static String toString(String input) {
         if (input == null || input.length() == 0) {
-            throw new NullPointerException("input content is null");
+            // throw new NullPointerException("input content is null");
+            return "";
         }
         char[] charArray = input.toCharArray();
         StringBuilder sb = new StringBuilder();
@@ -330,6 +339,36 @@ public class ReflectUtils {
         boolean[] ans = new boolean[ls.size()];
         for (int i = 0; i < ls.size(); i++) {
             ans[i] = ls.get(i);
+        }
+        return ans;
+    }
+
+    public static boolean[][] doubleBooleanArray(String input) {
+        List<List<Boolean>> ls = parseDoubleBoolean(input);
+        boolean[][] ans = new boolean[ls.size()][ls.get(0).size()];
+        for (int i = 0; i < ls.size(); i++) {
+            for (int j = 0; j < ls.get(0).size(); j++) {
+                ans[i][j] = ls.get(i).get(j);
+            }
+        }
+        return ans;
+    }
+
+    private static List<List<Boolean>> parseDoubleBoolean(String input) {
+        List<List<String>> doubles = parseDoubleString(input);
+        List<List<Boolean>> ans = new ArrayList<>();
+        int m = doubles.size(), n = doubles.get(0).size();
+        for (int i = 0; i < m; i++) {
+            ArrayList<Boolean> temp = new ArrayList<>();
+            for (int j = 0; j < n; j++) {
+                String s = doubles.get(i).get(j);
+                if (s.contains("t")) {
+                    temp.add(true);
+                } else {
+                    temp.add(false);
+                }
+            }
+            ans.add(temp);
         }
         return ans;
     }
@@ -369,7 +408,13 @@ public class ReflectUtils {
     }
 
     public static int[] oneIntArray(String input) {
+        if ("[]".equals(input) || "{}".equals(input)) {
+            return new int[]{};
+        }
         List<Integer> ls = parseListInteger(input);
+        if (ls.size() == 0) {
+            return new int[]{};
+        }
         int[] ans = new int[ls.size()];
         for (int i = 0; i < ls.size(); i++) {
             ans[i] = ls.get(i);
@@ -378,7 +423,13 @@ public class ReflectUtils {
     }
 
     public static int[][] doubleIntArray(String input) {
+        if ("[]".equals(input) || "[[]]".equals(input) || "{}".equals(input) || "{{}}".equals(input)) {
+            return new int[][]{};
+        }
         List<List<Integer>> ls = parseListDoubleInteger(input);
+        if (ls.size() == 0 || ls.get(0).size() == 0) {
+            return new int[][]{};
+        }
         int row = ls.size(), col = ls.get(0).size();
         int[][] ans = new int[row][col];
         for (int i = 0; i < row; i++) {
@@ -448,6 +499,9 @@ public class ReflectUtils {
     public static List<Integer> parseListInteger(String input) {
         List<String> strings = parseListString(input);
         ArrayList<Integer> ans = new ArrayList<>();
+        if ("[]".equals(input) || "{}".equals(input)) {
+            return ans;
+        }
         for (String s : strings) {
             try {
                 ans.add(Integer.parseInt(s));
@@ -459,7 +513,11 @@ public class ReflectUtils {
     }
 
     public static List<List<Integer>> parseListDoubleInteger(String input) {
+
         List<List<Integer>> ls = new ArrayList<>();
+        if ("[]".equals(input) || "[[]]".equals(input) || "{}".equals(input) || "{{}}".equals(input)) {
+            return new ArrayList<>();
+        }
         List<List<String>> lists = parseDoubleString(input);
         for (List<String> row : lists) {
             if (row == null) {
