@@ -184,12 +184,17 @@ public class ReflectUtils {
                 case "Boolean[][]":
                     return doubleBooleanArray(input);
                 case "double":
-                    return Double.parseDouble(input);
+                    return parseDouble(input);
                 case "double[]":
                     return oneDoubleArray(input);
+                case "double[][]":
+                    return doubleDoubleArray(input);
                 case "long[]":
                 case "Long[]":
                     return oneLongArray(input);
+                case "long[][]":
+                case "Long[][]":
+                    return doubleLongArray(input);
                 case "float":
                     return Float.parseFloat(input);
                 case "int[]":
@@ -244,6 +249,42 @@ public class ReflectUtils {
 
     }
 
+    private static long[][] doubleLongArray(String input) {
+        List<List<Long>> longList = parseDoubleLongList(input);
+        long[][] longs = new long[longList.size()][longList.get(0).size()];
+        for(int i = 0;i<longList.size();i++) {
+            for(int j = 0;j<longList.get(0).size();j++) {
+                longs[i][j] = longList.get(i).get(j);
+            }
+        }
+        return longs;
+    }
+
+    private static List<List<Long>> parseDoubleLongList(String input) {
+        List<List<String>> list = parseDoubleString(input);
+        List<List<Long>> longs = new ArrayList<>();
+        for (List<String> one : list) {
+            List<Long> temp = new ArrayList<>();
+            for (String s : one) {
+                temp.add(Long.parseLong(s));
+            }
+            longs.add(temp);
+        }
+        return longs;
+    }
+
+    private static double[][] doubleDoubleArray(String input) {
+        List<List<Double>> doubleDoubleList = parseDoubleDoubleList(input);
+        double[][] doubles = new double[doubleDoubleList.size()][doubleDoubleList.get(0).size()];
+        for(int i = 0;i<doubleDoubleList.size();i++) {
+            for(int j = 0;j<doubleDoubleList.get(0).size();j++) {
+                doubles[i][j] = doubleDoubleList.get(i).get(j);
+            }
+        }
+        return doubles;
+    }
+
+
     private static Object oneLongArray(String input) {
         List<Long> ls = parseListLong(input);
         long[] res = new long[ls.size()];
@@ -291,6 +332,8 @@ public class ReflectUtils {
                 return parseDoubleBoolean(input);
             case "List<Double>":
                 return parseDoubleList(input);
+            case "List<List<Double>>":
+                return parseDoubleDoubleList(input);
             case "List<List<Integer>>":
                 return parseListDoubleInteger(input);
             case "List<List<List<Integer>>>":
@@ -399,7 +442,7 @@ public class ReflectUtils {
         ArrayList<Double> doubles = new ArrayList<>();
         for (String s : list) {
             try {
-                doubles.add(Double.parseDouble(s));
+                doubles.add(parseDouble(s));
             } catch (NumberFormatException e) {
                 // ignore
             }
@@ -407,6 +450,18 @@ public class ReflectUtils {
         return doubles;
     }
 
+    private static List<List<Double>> parseDoubleDoubleList(String input) {
+        List<List<String>> list = parseDoubleString(input);
+        List<List<Double>> doubles = new ArrayList<>();
+        for (List<String> one : list) {
+            List<Double> temp = new ArrayList<>();
+            for (String s : one) {
+                temp.add(parseDouble(s));
+            }
+            doubles.add(temp);
+        }
+        return doubles;
+    }
     public static int[] oneIntArray(String input) {
         if ("[]".equals(input) || "{}".equals(input)) {
             return new int[]{};
@@ -1023,5 +1078,15 @@ public class ReflectUtils {
         } else {
             return src;
         }
+    }
+
+    public static double parseDouble(String d) {
+        return parseDouble(Double.parseDouble(d));
+    }
+
+    // https://leetcode.cn/problems/minimum-cost-to-hire-k-workers
+    // 结果保留五位小数
+    public static double parseDouble(double d) {
+        return Double.parseDouble(String.format("%.5f", d));
     }
 }

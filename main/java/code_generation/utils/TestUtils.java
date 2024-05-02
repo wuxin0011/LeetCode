@@ -315,9 +315,26 @@ public class TestUtils {
                     Long[] r = covert((long[]) result);
                     return deepEqual(r, e, isStrict);
                 }
+                case "Long[][]":
+                case "long[][]": {
+                    Long[][] e = covert((long[][]) expect);
+                    Long[][] r = covert((long[][]) result);
+                    return deepEqual(r, e, isStrict);
+                }
+                case "Double":
+                case "double": {
+                    double r = ReflectUtils.parseDouble( String.valueOf(result));
+                    double e = ReflectUtils.parseDouble( String.valueOf(expect));
+                    return r == e;
+                }
                 case "double[]": {
                     Double[] e = covert((double[]) expect);
                     Double[] r = covert((double[]) result);
+                    return deepEqual(r, e, isStrict);
+                }
+                case "double[][]": {
+                    Double[][] e = covert((double[][]) expect);
+                    Double[][] r = covert((double[][]) result);
                     return deepEqual(r, e, isStrict);
                 }
                 case "float[]": {
@@ -430,6 +447,16 @@ public class TestUtils {
         return t;
     }
 
+    public static Long[][] covert(long[][] a) {
+        Long[][] t = new Long[a.length][a[0].length];
+        for (int i = 0; i < a.length; i++) {
+            for(int j = 0;j<a[0].length;j++){
+                t[i][j] = a[i][j];
+            }
+        }
+        return t;
+    }
+
 
     public static Float[] covert(float[] a) {
         Float[] t = new Float[a.length];
@@ -446,7 +473,15 @@ public class TestUtils {
         }
         return t;
     }
-
+    public static Double[][] covert(double[][] a) {
+        Double[][] t = new Double[a.length][a[0].length];
+        for (int i = 0; i < a.length; i++) {
+            for(int j = 0;j<a[0].length;j++) {
+                t[i][j] = a[i][j];
+            }
+        }
+        return t;
+    }
     public static Character[] covert(char[] a) {
         Character[] t = new Character[a.length];
         for (int i = 0; i < a.length; i++) {
