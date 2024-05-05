@@ -15,10 +15,25 @@ public class Solution {
     }
      
 
-    public int minOperations(int[] nums, int k) {    
-
-        return 0; 
-	}
+    public int minOperations(int[] nums, int k) {
+        PriorityQueue<Long> queue = new PriorityQueue<>(Long::compare);
+        for (int num : nums) {
+            queue.add(num*1L);
+        }
+        int cnt = 0;
+        while(queue.size()>=2) {
+            if(queue.peek()>=k) {
+                break;
+            }
+            long x = queue.poll();
+            assert !queue.isEmpty();
+            long y = queue.poll();
+            long v = y + x * 2;
+            queue.add(v);
+            cnt++;
+        }
+        return cnt;
+    }
 
   
 

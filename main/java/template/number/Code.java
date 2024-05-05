@@ -102,6 +102,9 @@ public class Code {
         if (a == 0 || b == 0) {
             return 0;
         }
+        if (a % b == 0) {
+            return a / b;
+        }
         if (a > 0) {
             return (a + b - 1) / b;
         } else {
@@ -121,7 +124,10 @@ public class Code {
         if (a == 0 || b == 0) {
             return 0;
         }
-        if (a > 0 ) {
+        if (a % b == 0) {
+            return a / b;
+        }
+        if (a > 0) {
             return a / b;
         } else {
             return (a - b + 1) / b;

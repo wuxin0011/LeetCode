@@ -1,35 +1,13 @@
-package leetcode.ox3if.data_struct.heap.base.Solution_0008;
+package template.heap;
 
-import code_generation.utils.IoUtil;
 /**
  * @author: wuxin0011
  * @Description:
- * @url: https://leetcode.cn/problems/maximum-product-after-k-increments
- * @title: 次增加后的最大乘积
  */
-public class Solution {
+public class HeapInt {
 
-    public static void main(String[] args) {
-        IoUtil.testUtil(Solution.class, "maximumProduct", "in.txt");
-    }
 
-    private static final int MOD = (int) 1e9 + 7;
-
-    public int maximumProduct(int[] nums, int k) {
-        buildHeap(nums);
-        while (k > 0) {
-            nums[0] += 1;
-            heapify(nums, 0, nums.length);
-            k--;
-        }
-        long ans = 1;
-        for (int num : nums) {
-            ans = ( ans * num) % MOD;
-        }
-        return (int) ans;
-    }
-
-    private final static boolean isBigHeap = false; // 最大堆
+    private final static boolean isBigHeap = true; // 最大堆
 
     // 构建堆
     public static void buildHeap(int[] arr) {
@@ -62,8 +40,9 @@ public class Solution {
 
     }
 
-    public static void heapify(int[] arr){
-        heapify(arr,0,arr.length);
+
+    public static void heapify(int[] arr) {
+        heapify(arr, 0, arr.length);
     }
 
     public static void heapify(int[] arr, int i, int size) {
@@ -94,5 +73,16 @@ public class Solution {
         return arr[0];
     }
 
-
+//    public static void heapSort(int[] arr) {
+//        int n = arr.length;
+//        for (int i = 0; i < n; i++) {
+//            heapInsert(arr, i);
+//        }
+//        int size = n;
+//        while (size > 0) {
+//            swap(arr, 0, size - 1);
+//            heapify(arr, 0, size - 1);
+//            size--;
+//        }
+//    }
 }
