@@ -1,7 +1,6 @@
 package leetcode.ox3if.data_struct.heap.base.Solution_0010;
 
 import code_generation.utils.IoUtil;
-import java.util.*;
 /**
  *
  * 1801. 积压订单中的订单总数
@@ -45,21 +44,247 @@ import java.util.*;
  *
  * @author: wuxin0011
  * @Description:
- * @url:   https://leetcode.cn/problems/number-of-orders-in-the-backlog
+ * @url: https://leetcode.cn/problems/number-of-orders-in-the-backlog
  * @title: 积压订单中的订单总数
  */
 public class Solution {
 
     public static void main(String[] args) {
-        IoUtil.testUtil(Solution.class,"getNumberOfBacklogOrders","in.txt");
+        // IoUtil.testUtil(Solution.class, "getNumberOfBacklogOrders", "in.txt");
+        IoUtil.testUtil(Solution.class, "getNumberOfBacklogOrders2", "in.txt");
     }
-    private static final int MOD = (int)1e9 + 7; 
 
-    public int getNumberOfBacklogOrders(int[][] orders) {    
+    private static final int MOD = (int) 1e9 + 7;
+//
+//    public int getNumberOfBacklogOrders(int[][] orders) {
+//
+//        PriorityQueue<int[]> p1 = new PriorityQueue<>(Comparator.comparingInt(a -> a[0])); // 销售订单 积压订单
+//        PriorityQueue<int[]> p2 = new PriorityQueue<>((a, b) -> b[0] - a[0]); // 采购订单 积压订单
+//        for (int[] o : orders) {
+//            if (o[2] == 0) {
+//                // 采购
+//                while (!p1.isEmpty() && o[1] > 0 && p1.peek()[0] <= o[0]) {
+//                    if (o[1] == p1.peek()[1]) {
+//                        o[1] = 0;
+//                        p1.poll();
+//                    } else if (o[1] > p1.peek()[1]) {
+//                        o[1] -= p1.poll()[1];
+//                    } else {
+//                        p1.peek()[1] -= o[1];
+//                        o[1] = 0;
+//                    }
+//                }
+//
+//                if (o[1] > 0) {
+//                    p2.add(o);
+//                }
+//            } else {
+//                // 销售
+//                while (!p2.isEmpty() && o[1] > 0 && p2.peek()[0] >= o[0]) {
+//                    if (o[1] == p2.peek()[1]) {
+//                        o[1] = 0;
+//                        p2.poll();
+//                    } else if (o[1] > p2.peek()[1]) {
+//                        o[1] -= p2.poll()[1];
+//                    } else {
+//                        p2.peek()[1] -= o[1];
+//                        o[1] = 0;
+//                    }
+//                }
+//
+//                if (o[1] > 0) {
+//                    p1.add(o);
+//                }
+//            }
+//
+//
+//        }
+//        long cnt = 0;
+//        while (!p1.isEmpty()) cnt = (cnt + p1.poll()[1]) % MOD;
+//        while (!p2.isEmpty()) cnt = (cnt + p2.poll()[1]) % MOD;
+//        return (int) cnt;
+//    }
 
-        return 0; 
-	}
 
-  
+    static int MAXL = 100001;
+    static int MAXN = 3;
+    static int[][] a = new int[MAXL][MAXN];
+    static int[][] b = new int[MAXL][MAXN];
+    static Heap p1 = new Heap(a, 0, false); //
+    static Heap p2 = new Heap(b, 0, true);
+
+    public int getNumberOfBacklogOrders2(int[][] orders) {
+        for (int[] o : orders) {
+            if (o[2] == 0) {
+                // 采购
+                while (!p1.isEmpty() && o[1] > 0 && p1.peek()[0] <= o[0]) {
+                    if (o[1] == p1.peek()[1]) {
+                        o[1] = 0;
+                        p1.poll();
+                    } else if (o[1] > p1.peek()[1]) {
+                        o[1] -= p1.poll()[1];
+                    } else {
+                        p1.peek()[1] -= o[1];
+                        o[1] = 0;
+                    }
+                }
+
+                if (o[1] > 0) {
+                    p2.add(o);
+                }
+            } else {
+                // 销售
+                while (!p2.isEmpty() && o[1] > 0 && p2.peek()[0] >= o[0]) {
+                    if (o[1] == p2.peek()[1]) {
+                        o[1] = 0;
+                        p2.poll();
+                    } else if (o[1] > p2.peek()[1]) {
+                        o[1] -= p2.poll()[1];
+                    } else {
+                        p2.peek()[1] -= o[1];
+                        o[1] = 0;
+                    }
+                }
+
+                if (o[1] > 0) {
+                    p1.add(o);
+                }
+            }
+
+
+        }
+        long cnt = 0;
+        while (!p1.isEmpty()) cnt = (cnt + p1.poll()[1]) % MOD;
+        while (!p2.isEmpty()) cnt = (cnt + p2.poll()[1]) % MOD;
+        return (int) cnt;
+    }
+
+    static class Heap {
+        private boolean isBigHeap = true; // 最大堆
+        public int size;
+        int[][] arr;
+
+
+
+        public Heap(int[][] arr) {
+            this(arr,arr.length, true);
+        }
+
+        public Heap(int[][] arr, int size, boolean isBigHeap) {
+            this.arr = arr;
+            this.size = size;
+            this.isBigHeap = isBigHeap;
+            buildHeap(size);
+        }
+
+        // 构建堆
+        public void buildHeap(int n) {
+            for (int i = 0; i < n; i++) {
+                heapInsert(i);
+            }
+        }
+
+
+        public void heapInsert(int i) {
+            while (i > 0 && cmp(arr[i], arr[(i - 1) / 2]) > 0) {
+                swap(i, (i - 1) / 2);
+                i = (i - 1) / 2;
+            }
+
+        }
+
+
+        /**
+         * 针对不同情况请自定义实现堆排序比较器
+         * @param a 强大的
+         * @param b 弱小的
+         * @return int
+         */
+        public int cmp(int[] a, int[] b) {
+            // a compare b
+            int c = a[0] - b[0];
+            if (c == 0) {
+                return 0;
+            } else if (c > 0) {
+                return isBigHeap ? 1 : -1;
+            } else {
+                return isBigHeap ? -1 : 1;
+            }
+
+        }
+
+        public void heapify() {
+            heapify(0, arr.length);
+        }
+
+        public void heapify(int i, int size) {
+            int l = i * 2 + 1;
+            while (l < size) {
+                int best = 0;
+                if (l + 1 < size && cmp(arr[l + 1], arr[l]) > 0) {
+                    best = l + 1;
+                } else {
+                    best = l;
+                }
+                if (cmp(arr[i], arr[best]) >= 0) {
+                    break;
+                }
+                swap(i, best);
+                i = best;
+                l = 2 * i + 1;
+            }
+        }
+
+        public void swap(int i, int j) {
+            int[] temp = arr[i];
+            arr[i] = arr[j];
+            arr[j] = temp;
+        }
+
+        public int[] peek() {
+            return arr[0];
+        }
+
+        public int[] poll() {
+            if(isEmpty()) {
+                throw new IndexOutOfBoundsException();
+            }
+            int[] temp = arr[0]; // 取出堆顶元素
+            size--;
+            swap(0, size);
+            heapify(0, size); // 下沉
+            return temp;
+        }
+
+        public void add(int[] newData) {
+            if(size>=arr.length) {
+                throw new IndexOutOfBoundsException();
+            }
+            arr[size] = newData;
+            heapInsert(size);
+            size++;
+        }
+
+        public int size() {
+            return this.size;
+        }
+
+        public boolean isEmpty() {
+            return this.size == 0;
+        }
+
+        /**
+         * 堆排序
+         */
+        public void heapSort() {
+            buildHeap(size);
+            int cur = size;
+            while(cur>0) {
+                cur--;
+                swap(0,cur);
+                heapify(0,cur);
+            }
+        }
+    }
 
 }
