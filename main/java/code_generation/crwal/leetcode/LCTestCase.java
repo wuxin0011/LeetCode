@@ -2,6 +2,7 @@ package code_generation.crwal.leetcode;
 
 import code_generation.contest.TestCase;
 import code_generation.crwal.TestCaseUtil;
+import code_generation.utils.CustomColor;
 import code_generation.utils.StringUtils;
 
 import java.util.ArrayList;
@@ -33,41 +34,69 @@ public class LCTestCase implements TestCase {
     public List<String> parseContest(String input) {
         input = TestCaseUtil.getTagContent(input, "class=\"question-content source-content\"", 0, "<div", "</div");
         input = input.replace("&quot;", "");
-        String pattern = "<span\\s+class=\"example-io\">(.*?)</span>";
-        // String pattern = "<span\\\\s*class=(?:\\\"|')?example-io(?:\\\"|')?>(.*?)</span>";
-        //System.out.println(input);
-        Pattern r = Pattern.compile(pattern, Pattern.DOTALL);
-        Matcher m = r.matcher(input);
         List<String> ans = new ArrayList<>();
-        while (m.find()) {
-            String result = m.group(1);
-            TestCaseUtil.startParseContestTestCase(result, EqualFlag, interFlag, ans);
-        }
+        handlerOldOutPut(input, ans);
+        // 有时候获取不到测试案例 或者测试案例获取不全面
+        // 这里尝试将周赛测试案例方式移动到后面检查
         if (ans.size() == 0) {
-            handlerOldOutPut(input, ans);
+            matchExampleAll(input, ".*<span\\s+class=\"example-io\".*>(.*?)</span>", ans);
+            matchExampleAll(input, ".*<span\\s+class=\"example.*\".*>(.*?)</span>", ans);
         }
+
+
+//        之前处理方案
+//        String pattern = "<span\\s+class=\"example-io\">(.*?)</span>";
+//        // String pattern = "<span\\\\s*class=(?:\\\"|')?example-io(?:\\\"|')?>(.*?)</span>";
+//        //System.out.println(input);
+//        Pattern r = Pattern.compile(pattern, Pattern.DOTALL);
+//        Matcher m = r.matcher(input);
+//        while (m.find()) {
+//            String result = m.group(1);
+//            TestCaseUtil.startParseContestTestCase(result, EqualFlag, interFlag, ans);
+//        }
+//        if (ans.size() == 0) {
+//            handlerOldOutPut(input, ans);
+//        }
         StringUtils.handlerResult(ans);
         return ans;
     }
 
 
-    public static void handlerOldOutPut(String input, List<String> ans) {
+    public static int findOutput(String next, String... flags) {
+        int idx = -1;
+        for (String flag : flags) {
+            idx = StringUtils.kmpSearch(next, flag);
+            if (idx != -1) {
+                break;
+            }
+        }
+        return idx;
+    }
 
+
+    public static void handlerOldOutPut(String input, List<String> ans) {
         List<Integer> input_pos = StringUtils.kmpSearchList(input, input_flag);
         List<Integer> output_pos = StringUtils.kmpSearchList(input, output_flag);
         if (input_pos.size() == 0 || output_pos.size() == 0) {
             input_pos = StringUtils.kmpSearchList(input, StringUtils.inputUnicodeOld);
             output_pos = StringUtils.kmpSearchList(input, StringUtils.outputUnicodeOld);
         }
-        if (input_pos.size() == 0 || output_pos.size() == 0) {
+        if (input_pos.size() != output_pos.size()) {
+            System.out.printf("parse test case is error, %s\n", CustomColor.error("place Try copying manually"));
             return;
         }
         // System.out.println("len = " + input.length());
         for (int i = 0; i < input_pos.size(); i++) {
             parseInputTestCase(input.substring(input_pos.get(i), output_pos.get(i)), ans);
-            int j = StringUtils.kmpSearch(input.substring(output_pos.get(i)), strong_start);
+            String next = input.substring(output_pos.get(i));
+            // Explanation 为测试案例解释标识符  Explanation 或者 inputUnicodeOld 字符
+            // 如果上面两个都没找到 则说明该测试没有解释 尝试直接 找到下一行 输出标识符 Input 或者 inputUnicodeOld
+            int j = findOutput(next, StringUtils.Explanation, StringUtils.explainUnicodeOld, StringUtils.Input, StringUtils.inputUnicodeOld);
             if (j != -1) {
-                parseOutputTestCase(input.substring(output_pos.get(i), j + output_pos.get(i) + strong_start.length()), ans);
+                parseOutputTestCase(next.substring(0, j), ans);
+            } else {
+                // 第几个测试案例错误
+                System.out.printf("parse test case find error in %s times, %s\n", CustomColor.error(i + 1), CustomColor.error("place Try copying manually"));
             }
         }
     }
@@ -103,6 +132,8 @@ public class LCTestCase implements TestCase {
 
     public static void parseInputTestCase(String s, List<String> ans) {
         s = s.replace(input_flag, "").replace(output_flag, "").replace(strong_start, "").replace(strong_end, "");
+        s = matchExample(s);
+        s = s.replace("\\n", "");
         // System.out.println("input s => " + s);
         StringBuilder sb = null;
         int deep = 0;
@@ -149,29 +180,43 @@ public class LCTestCase implements TestCase {
     }
 
     public static void parseOutputTestCase(String s, List<String> ans) {
-        s = s.replace(input_flag, "").replace(output_flag, "");
-        StringBuilder sb = null;
-        for (int i = 0; i < s.length(); i++) {
-            char c = s.charAt(i);
-            if (StringUtils.isIgnore(c)) {
-                continue;
-            }
-            if (c == '>') {
-                sb = new StringBuilder();
-            } else if (c == '<') {
-                if (sb != null) {
-                    sb.append("\n");
-                    ans.add(sb.toString());
-                    break;
-                }
-            } else {
-                if (sb != null) {
-                    sb.append(c);
+        s = matchExample(s);
+        s = StringUtils.replaceIgnoreContent(s);
+        if (!StringUtils.isEmpty(s)) {
+            s = StringUtils.ingoreString(s);
+        }
+        ans.add(s);
+        ans.add("\n");
+    }
+
+    public static String matchExample(String input) {
+        String regex_format = ".*<span\\s+class=\"%s\".*>(.*?)</span>";
+        String[] HTML_SPAN_CLASSNAME = {"example-io", "example.*"};
+        for (String className : HTML_SPAN_CLASSNAME) {
+            Pattern r = Pattern.compile(String.format(regex_format, className), Pattern.DOTALL);
+            Matcher m = r.matcher(input);
+            if (m.find()) {
+                try {
+                    return m.group(1);
+                } catch (Exception ignore) {
+
                 }
             }
         }
+        return input;
     }
 
+    public static void matchExampleAll(String input, String pattern, List<String> ans) {
+        if (StringUtils.isEmpty(pattern)) {
+            pattern = ".*<span\\s+class=\"example.*\".*>(.*?)</span>";
+        }
+        Pattern r = Pattern.compile(pattern, Pattern.DOTALL);
+        Matcher m = r.matcher(input);
+        while (m.find()) {
+            String result = m.group(1);
+            TestCaseUtil.startParseContestTestCase(result, EqualFlag, interFlag, ans);
+        }
+    }
 
 
 }

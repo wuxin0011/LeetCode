@@ -1,6 +1,6 @@
 package test;
 
-import java.awt.*;
+import code_generation.crwal.leetcode.LCTestCase;
 
 /**
  * @author: wuxin0011
@@ -27,11 +27,13 @@ public class T1 {
 //        classias[1][0] += 1;
 //        classias[1][1] += 1;
 //        System.out.println(avage(classias));
-        System.out.println(avage(classias,-1,0));
-        System.out.println(avage(classias,0,1));
-        System.out.println(avage(classias,1,1));
-        System.out.println(avage(classias,0,2));
-        System.out.println(avage(classias,1,2));
+//        System.out.println(avage(classias,-1,0));
+//        System.out.println(avage(classias,0,1));
+//        System.out.println(avage(classias,1,1));
+//        System.out.println(avage(classias,0,2));
+//        System.out.println(avage(classias,1,2));
+
+        testInput();
     }
 
     public static double avage(int[][] classias) {
@@ -58,6 +60,25 @@ public class T1 {
             }
         }
         return tot / n;
+    }
+
+    public static void testInput() {
+        String input = " <span class=\"example-io\" style=\"\n" +
+                "    font-family: Menlo,sans-serif;\n" +
+                "    font-size: 0.85rem;\n" +
+                "\">nums1 = [2,6,4], nums2 = [9,7,5]</span></p>\n" +
+                "\n" +
+                "<p>";
+        String s = LCTestCase.matchExample(input);
+        System.out.println(s);
+        input = " <span class=\"example\" style=\"\n" +
+                "    font-family: Menlo,sans-serif;\n" +
+                "    font-size: 0.85rem;\n" +
+                "\">nums1 = [2,6,4], nums2 = [9,7,5]</span></p>\n" +
+                "\n" +
+                "<p>";
+        s = LCTestCase.matchExample(input);
+        System.out.println(s);
     }
 
 }

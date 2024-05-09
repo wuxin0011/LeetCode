@@ -72,6 +72,7 @@ public abstract class LCCustom implements CustomProblem {
         int sleepTime = urls.size() > 10 ? 10 : 5;
         System.out.println("=======================start==================\n");
         for (String lcUrl : urls) {
+            System.out.printf("access url :  %s  place wait %d s\n",lcUrl,sleepTime);
             ExceptionUtils.sleep(sleepTime);
             createByTitleSlug(lcUrl);
         }
@@ -131,7 +132,7 @@ public abstract class LCCustom implements CustomProblem {
         String tempUnicodeTitle  = StringUtils.unicodeToChinese(translatedTitle);
         titleSlug = !StringUtils.isEmpty(tempUnicodeTitle) ? tempUnicodeTitle : titleSlug;
 
-        System.out.println("\n正在解析题目: " + CustomColor.error(titleSlug) + "\n");;
+        System.out.println("正在解析题目: " + CustomColor.error(titleSlug));;
 
 
         // 构建模板
