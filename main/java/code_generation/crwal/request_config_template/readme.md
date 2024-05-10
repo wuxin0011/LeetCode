@@ -13,3 +13,26 @@
 
 ![](./config.png)
 
+### 批量测试
+
+引用这个类 [LCSolutionTemplate](../leetcode/LCSolutionTemplate.java)
+
+> 引入
+```java
+import code_generation.crwal.leetcode.LCSolutionTemplate;
+
+/**
+ * @author: wuxin0011
+ * @Description:
+ */
+public class CodeTemplate {
+    public static void main(String[] args) {
+        new LCSolutionTemplate(CodeTemplate.class).run();
+    }
+}
+
+```
+
+> 演示
+
+![template urls](./custom-template-urls.png)
