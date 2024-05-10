@@ -140,36 +140,12 @@ public class IoUtil {
 
                 }
 
-
-                Method[] methods = src.getDeclaredMethods();
-
-                List<String> names = new ArrayList<>();
-                for (Method method : methods) {
-                    names.add(method.getName());
-                }
-                // System.out.println("names = " + names);
-                if (names.size() > 0 && DEFAULT_METHOD_NAME.equals(methodName) || "main".equals(methodName)) {
-                    for (String name : names) {
-                        if (name.equals("main") || name.startsWith("lambda$") || "f".equals(name) || "dfs".equals(name)) {
-                            continue;
-                        }
-                        methodName = name;
-                    }
-                }
-
-                // 普通类对拍
-                for (Method method : methods) {
-                    if (!method.getName().equals(methodName)) {
-                        continue;
-                    }
-                    if ("main".equals(method.getName())) {
-                        continue;
-                    }
+                Method method = findMethodName(src, methodName);
+                if (method != null) {
                     find = true;
-                    method.setAccessible(true);
-                    // 普通对拍开始
                     startValid(obj, method, inputList, isStrict, true);
                 }
+
 
             }
             if (!find) {
@@ -504,6 +480,175 @@ public class IoUtil {
     }
 
 
+    // TODO 无尽对拍
+
+    /**
+     * 通过调用两个函数一般认为一个是暴力方法 一个是优化后的方法， 暴力方法容易书写，优化后的方法但是数据量太小不太容易比较 为此写一个测试方法
+     * <p>
+     * 通过输入fileName方法 可以试试特殊的测试用例
+     *
+     * @param A                A 类
+     * @param methodNameA      方法A
+     * @param B                B 类
+     * @param methodNameB      方法B
+     * @param maxCount         最大数据量
+     * @param minRunTimes      最少执行次数
+     * @param fileName         如果文件不为空 可以读取数据后在比较 但是读取内容不能有期望值
+     * @param ifVoidCompareArg 如果没有返回值 将会通过那个参数来比较
+     */
+    public static void upd(Class<?> A, String methodNameA, Class<?> B, String methodNameB, int maxCount, int minRunTimes, String fileName, int ifVoidCompareArg) {
+        boolean isTest = true;
+        if (isTest) {
+            System.out.println("this api is test ...");
+        }
+        if (A == null && B == null) {
+            throw new NullPointerException("class type not allow null");
+        }
+        if (A == null && B != null) {
+            A = B;
+        } else if (B == null && A != null) {
+            B = A;
+        }
+        Method m1 = findMethodName(A, methodNameA);
+        if (m1 == null) {
+            throw new NullPointerException();
+        }
+        Method m2 = findMethodName(B, methodNameB);
+        if (m2 == null) {
+            throw new NullPointerException();
+        }
+        if (A == B && methodNameB.equals(methodNameA)) {
+            System.out.println("class type and method name is same");
+            return;
+        }
+        Class<?>[] p1 = m1.getParameterTypes();
+        Class<?>[] p2 = m2.getParameterTypes();
+
+
+        int L = p1.length;
+
+        String[] argsType1 = buildArgsType(A, p1, m1);
+        String[] argsType2 = buildArgsType(B, p2, m2);
+        if (!TestUtils.deepEqual(argsType1, argsType2, true)) {
+            throw new RuntimeException("args type not equal");
+        }
+        String[] argsType = Arrays.copyOf(argsType1, L);
+
+
+        Object obj1 = null, obj2 = null; // 调用对象
+
+        boolean isVoid = m1.getReturnType().getSimpleName().equals("void");
+
+
+        boolean isStatic1 = Modifier.isStatic(m1.getModifiers());
+        boolean isStatic2 = Modifier.isStatic(m2.getModifiers());
+        Object[] args = new Object[L];
+        for (int i = 0; i < 10000; i++) {
+            buildParamaters(argsType, args);
+            Object r = invokeObjectMethod(A, m1, args, ifVoidCompareArg, isStatic1, isVoid);
+            Object e = invokeObjectMethod(B, m2, args, ifVoidCompareArg, isStatic1, isVoid);
+            if (r == e) {
+                continue;
+            }
+            if (r == null || e == null) {
+                throw new NullPointerException();
+            }
+        }
+    }
+
+    public static Object invokeObjectMethod(Class<?> src, Method m, Object[] args, int ifVoidCompareArgs, boolean isStatic, boolean isVoid) {
+        Object obj = null;
+        Object[] curArgs = Arrays.copyOf(args, args.length);
+        if (!isStatic) {
+            obj = loadObj(src);
+        }
+        if (!isStatic && obj == null) {
+            throw new NullPointerException("object is null");
+        }
+        Object result = null;
+        try {
+            result = m.invoke(obj, curArgs);
+        } catch (Exception ignore) {
+
+        }
+
+        if (isVoid) {
+            if (ifVoidCompareArgs >= curArgs.length) {
+                throw new IndexOutOfBoundsException();
+            }
+            return curArgs[ifVoidCompareArgs];
+        }
+        return result;
+    }
+
+    private static String[] buildArgsType(Class<?> a, Class<?>[] p, Method m) {
+        Objects.requireNonNull(a, "class is null");
+        Objects.requireNonNull(p, "parameter type is null");
+        Objects.requireNonNull(m, "method is null");
+        String[] argsType = new String[p.length + 1];
+        for (int i = 0; i <= p.length; i++) {
+            String typeName = i <= p.length - 1 ? p[i].getSimpleName() : m.getReturnType().getSimpleName();
+            if (typeName.contains("ArrayList") || typeName.contains("List")) {
+                typeName = IoUtil.findListReturnTypeMethod(a, m.getName(), typeName, i == p.length ? -1 : i, p.length);
+                typeName = typeName.replace("ArrayList", "List");
+            }
+            argsType[i] = typeName;
+        }
+        return argsType;
+    }
+
+
+    public static Object loadObj(Class<?> src) {
+        try {
+            return src.newInstance();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+
+    public static Object[] buildParamaters(String[] parameterTypes, Object[] args) {
+        int mxCnt = 10000000;
+        int ifVoidCompare = 0;
+        for (int i = 0; i < parameterTypes.length; i++) {
+            Object o = null;
+            args[i] = o;
+        }
+        return args;
+
+    }
+
+    public static Method findMethodName(Class<?> src, String methodName) {
+        boolean find = false;
+        Method[] methods = src.getDeclaredMethods();
+
+        List<String> names = new ArrayList<>();
+        for (Method method : methods) {
+            names.add(method.getName());
+        }
+
+        if (names.size() > 0 && DEFAULT_METHOD_NAME.equals(methodName) || "main".equals(methodName)) {
+            for (String name : names) {
+                if (name.equals("main") || name.startsWith("lambda$")) {
+                    continue;
+                }
+                methodName = name;
+            }
+        }
+
+        for (Method method : methods) {
+            if (!method.getName().equals(methodName)) {
+                continue;
+            }
+            if ("main".equals(method.getName())) {
+                continue;
+            }
+            find = true;
+            method.setAccessible(true);
+            return method;
+        }
+        return null;
+    }
 
 
     public static List<String> readFile(Class<?> c, String filename, boolean openLongContent) {
