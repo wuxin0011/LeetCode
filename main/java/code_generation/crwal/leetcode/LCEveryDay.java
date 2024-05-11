@@ -27,6 +27,7 @@ public class LCEveryDay extends LCCustom {
         String questionOfToday = BuildUrl.questionOfToday();
         this.frontendQuestionId = StringUtils.jsonStrGetValueByKey(questionOfToday, "frontendQuestionId");
         String titleSlug = StringUtils.jsonStrGetValueByKey(questionOfToday, "titleSlug");
+        System.out.printf("access today problem url : %s/%s\n", BuildUrl.LC_PROBLEM_PREFIX, titleSlug);
         createByTitleSlug(titleSlug);
     }
 

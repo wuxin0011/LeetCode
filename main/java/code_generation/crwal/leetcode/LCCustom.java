@@ -70,9 +70,11 @@ public abstract class LCCustom implements CustomProblem {
             urls.addAll(matchLeetCodeUrls(inputContent.toString()));
         }
         int sleepTime = urls.size() > 10 ? 10 : 5;
+        System.out.println("total problems : " + urls.size());
         System.out.println("=======================start==================\n");
-        for (String lcUrl : urls) {
-            System.out.printf("access url :  %s  place wait %d s\n",lcUrl,sleepTime);
+        for (int i = 0; i < urls.size(); i++) {
+            String lcUrl = urls.get(i);
+            System.out.printf("access url %d:  %s  place wait %d s\n",i+1,lcUrl,sleepTime);
             ExceptionUtils.sleep(sleepTime);
             createByTitleSlug(lcUrl);
         }
