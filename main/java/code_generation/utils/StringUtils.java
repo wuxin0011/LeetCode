@@ -156,7 +156,8 @@ public class StringUtils {
 
     public static String ingoreString(String input) {
         if (input == null || input.length() == 0) {
-            throw new NullPointerException("input content is null");
+            //throw new NullPointerException("input content is null");
+            return input;
         }
         input = input.replace("&quot;", "");
         char[] charArray = input.toCharArray();

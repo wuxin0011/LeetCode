@@ -232,8 +232,12 @@ public class ReflectUtils {
                     return threeStringArray(input);
                 case "TreeNode":
                     return TreeNode.widthBuildTreeNode(oneStringArray(input));
+                case "TreeNode[]":
+                    return createListTreeNodeArray(input);
                 case "ListNode":
                     return ListNode.createListNode(oneIntArray(input));
+                case "ListNode[]":
+                    return createListNodeArray(input);
                 case "List":
                 case "ArrayList":
                     return toList(src, methodName, type, input, idx, argsSize);
@@ -249,11 +253,46 @@ public class ReflectUtils {
 
     }
 
+    private static TreeNode[] createListTreeNodeArray(String input) {
+        List<List<String>> lists = parseDoubleString(input);
+        TreeNode[] nodes = new TreeNode[lists.size()];
+        for (int i = 0; i < lists.size(); i++) {
+            try {
+                int size = lists.get(i).size();
+                String[] ss = new String[size];
+                for (int k = 0; k < size; k++) {
+                    ss[k] = lists.get(i).get(i);
+                }
+                nodes[i] = TreeNode.widthBuildTreeNode(ss);
+            } catch (Exception e) {
+                nodes[i] = null;
+            }
+        }
+        return nodes;
+    }
+
+    //  // https://leetcode.cn/problems/merge-k-sorted-lists/
+    public static ListNode[] createListNodeArray(String input) {
+        List<List<Integer>> ls = parseListDoubleInteger(input);
+        int n = ls.size();
+        ListNode[] nodes = new ListNode[n];
+        for (int i = 0; i < n; i++) {
+            try {
+                if (ls.get(i) == null) continue;
+                int[] array = ls.get(i).stream().mapToInt(Integer::intValue).toArray();
+                nodes[i] = ListNode.createListNode(array);
+            } catch (Exception e) {
+                nodes[i] = null;
+            }
+        }
+        return nodes;
+    }
+
     private static long[][] doubleLongArray(String input) {
         List<List<Long>> longList = parseDoubleLongList(input);
         long[][] longs = new long[longList.size()][longList.get(0).size()];
-        for(int i = 0;i<longList.size();i++) {
-            for(int j = 0;j<longList.get(0).size();j++) {
+        for (int i = 0; i < longList.size(); i++) {
+            for (int j = 0; j < longList.get(0).size(); j++) {
                 longs[i][j] = longList.get(i).get(j);
             }
         }
@@ -1024,7 +1063,7 @@ public class ReflectUtils {
 
         String[] strings = new String[ans.size()];
         for (int i = 0; i < ans.size(); i++) {
-            strings[i] = ans.get(i);
+            strings[i] = StringUtils.ingoreString(ans.get(i));
         }
 
         return strings;

@@ -199,6 +199,9 @@ public class IoUtil {
             t++;
             if (t % 3 == 1) {
                 names = ReflectUtils.oneStringArray(s);
+                for (int i = 0; i < names.length; i++) {
+                    names[i] = StringUtils.ingoreString(names[i]);
+                }
             } else if (t % 3 == 2) {
                 args = ReflectUtils.parseConstrunctorClassString(s);
             } else if (t % 3 == 0) {
@@ -553,6 +556,8 @@ public class IoUtil {
             if (r == null || e == null) {
                 throw new NullPointerException();
             }
+
+            // deepEquals() // TODO 比较结果是否一致
         }
     }
 
@@ -607,15 +612,15 @@ public class IoUtil {
     }
 
 
-    public static Object[] buildParamaters(String[] parameterTypes, Object[] args) {
+    public static void buildParamaters(String[] parameterTypes, Object[] args) {
         int mxCnt = 10000000;
         int ifVoidCompare = 0;
+        // TODO 根据参数类型构造数据
+        // TODO 由于数据类型众多 仅仅是指出数据量是不正确的 后面再说吧该方法😂
         for (int i = 0; i < parameterTypes.length; i++) {
             Object o = null;
             args[i] = o;
         }
-        return args;
-
     }
 
     public static Method findMethodName(Class<?> src, String methodName) {
