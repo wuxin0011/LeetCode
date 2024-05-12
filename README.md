@@ -51,6 +51,7 @@
   - 点击讨论发布查看题单
   - 关于[bilibili](https://space.bilibili.com/206214)
 - 大数据[zerotrac](https://zerotrac.github.io/leetcode_problem_rating/#/)
+- [周赛分数预测](https://lccn.lbao.site/)
 - 分数分类[rating](https://huxulm.github.io/lc-rating/)
 - [lc-to-markdown-txt-html](https://greasyfork.org/scripts/491969/feedback) 可将题目描述复制为 md 或 txt 格式
 
