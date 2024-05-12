@@ -1,0 +1,7 @@
+abc
+bac
+2
+
+abcde
+edbac
+12
