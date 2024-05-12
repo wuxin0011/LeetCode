@@ -484,7 +484,7 @@ public class LCContest implements Contest {
         } else if (hour >= 22 && DAYS[today] == 6) {
             if (minute >= 30) {
                 System.out.println("biweekly contest start !");
-                LCContest.WEEK_CONTEST.setClass(aClass, null);
+                LCContest.BI_WEEK_CONTEST.setClass(aClass, null);
                 LCContest.BI_WEEK_CONTEST.next();
             } else {
                 continueRun(minute, aClass);
