@@ -43,84 +43,46 @@ public class D {
     }
 
 
-    public int[] findPermutation(int[] nums) {
-
-        // score(perm) = |perm[0] - nums[perm[1]]| + |perm[1] - nums[perm[2]]| + ... + |perm[n - 1] - nums[perm[0]]|
-        int[] map = new int[15];
-        this.nums = nums;
-        this.map = map;
-        for (int num : nums) {
-            map[num]++;
+    public int[] findPermutation(int[] a) {
+        int n = a.length;
+        int[][] memo = new int[1 << n][n];
+        for (int[] row : memo) {
+            Arrays.fill(row, -1); // -1 表示没有计算过
         }
-        // 2 <= n == nums.length <= 14
-        int[] path = new int[nums.length];
-        dfs(1, path, 0);
-
-//        System.out.println("nums = " + Arrays.toString(nums));
-//        System.out.println("prem = " + Arrays.toString(prem));
-//        for (int[] l : ls) {
-//            System.out.println(Arrays.toString(l));
-//        }
-        return prem;
+        int[] ans = new int[n];
+        makeAns(1, 0, a, memo, ans, 0);
+        return ans;
     }
 
-    int[] prem;
-    int[] nums;
-    int[] map;
+    private int dfs(int s, int j, int[] a, int[][] memo) {
+        if (s == (1 << a.length) - 1) {
+            return Math.abs(j - a[0]);
+        }
+        if (memo[s][j] != -1) { // 之前计算过
+            return memo[s][j];
+        }
+        int res = Integer.MAX_VALUE;
+        for (int k = 1; k < a.length; k++) {
+            if ((s >> k & 1) == 0) { // k 之前没填过
+                res = Math.min(res, dfs(s | 1 << k, k, a, memo) + Math.abs(j - a[k]));
+            }
+        }
+        memo[s][j] = res; // 记忆化
+        return res;
+    }
 
-    List<int[]> ls = new ArrayList<>();
-
-    long mi = Integer.MAX_VALUE;
-
-    public void dfs(int i, int[] path, long sc) {
-        if (sc > mi) {
+    private void makeAns(int s, int j, int[] a, int[][] memo, int[] ans, int i) {
+        ans[i] = j;
+        if (s == (1 << a.length) - 1) {
             return;
         }
-        //
-        if (i == path.length) {
-            // ls.add(Arrays.copyOf(path, path.length));
-            int[] t = Arrays.copyOf(path, path.length);
-            if (prem == null) {
-                prem = t;
-            } else {
-                if (check(prem,t)) {
-                    prem = t; // update small
-                }
+        int finalRes = dfs(s, j, a, memo);
+        for (int k = 1; k < a.length; k++) {
+            if ((s >> k & 1) == 0 && dfs(s | 1 << k, k, a, memo) + Math.abs(j - a[k]) == finalRes) {
+                makeAns(s | 1 << k, k, a, memo, ans, i + 1);
+                break;
             }
-            mi = sc;
-            return;
         }
-        for (int k = 0; k < map.length; k++) {
-            if (map[k] == 0) {
-                continue;
-            }
-            map[k]--;
-            path[i] = k;
-            if (i == path.length - 1) {
-                sc += Math.abs(nums[path[0]] - k);
-            } else {
-                if(i>0) {
-                    sc += Math.abs(nums[k] - path[i - 1]);
-                }
-
-            }
-            dfs(i + 1, path, sc);
-            map[k]++;
-        }
-
     }
-
-    // a > b ?
-    public static boolean check(int[] a, int[] b) {
-        int i = 0;
-        while (i < a.length) {
-            if (a[i] > b[i]) {
-                return true;
-            }
-            i++;
-        }
-        return false;
-    }
-
 
 }
