@@ -133,13 +133,7 @@ public class IoUtil {
                 find = true;
                 handlerConstructorValid(src, inputList, methodName, isStrict);
             } else {
-                Object obj = null;
-                try {
-                    obj = src.newInstance();
-                } catch (Exception ignore) {
-
-                }
-
+                Object obj = ReflectUtils.initObjcect(src, null);
                 Method method = findMethodName(src, methodName);
                 if (method != null) {
                     find = true;
@@ -311,9 +305,9 @@ public class IoUtil {
 
             try {
                 obj = constructor.newInstance(args);
-                return obj;
             } catch (Exception e) {
-                return null;
+                e.printStackTrace();
+                obj = null;
             }
         }
         return obj;
@@ -356,8 +350,9 @@ public class IoUtil {
                     // 就是上次数据影响这次对拍
                     // example: leetcode.everyday.Code_0049_39
                     if(!isStatic){
-                        obj = srcClass.newInstance();
+                        obj = ReflectUtils.initObjcect(srcClass, null);
                     }
+
                 } catch (Exception ignore) {
                     obj = null;
                 }
@@ -469,7 +464,7 @@ public class IoUtil {
             compareTimes++; // 比较次数
         }
 
-        if (errorTimes.size() == 0 && exceptionTime == -1 && !isConstrunctorClass) {
+        if (errorTimes.size() == 0 && exceptionTime == -1 && newObj) {
             System.out.println("Accepted!");
         } else {
             for (int error : errorTimes) {

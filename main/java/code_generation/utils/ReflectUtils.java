@@ -6,6 +6,7 @@ import code_generation.bean.TreeNode;
 import code_generation.enums.Type;
 
 import java.io.File;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
@@ -1127,5 +1128,27 @@ public class ReflectUtils {
     // 结果保留五位小数
     public static double parseDouble(double d) {
         return Double.parseDouble(String.format("%.5f", d));
+    }
+
+    public static Object initObjcect(Class<?> src,Object[] args) {
+        Object obj = null;
+
+        try {
+            obj = src.newInstance();
+        } catch (IllegalAccessException e) {
+            try {
+                Constructor<?> constructor = src.getDeclaredConstructor(null);
+                if (constructor != null) {
+                    constructor.setAccessible(true);
+                    obj = constructor.newInstance(args);
+                }
+            } catch (Exception ex) {
+
+            }
+        } catch (Exception e) {
+
+        }
+
+        return obj;
     }
 }
