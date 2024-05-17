@@ -344,18 +344,11 @@ public class IoUtil {
         int exceptionTime = -1;
         int compareTimes = 1;
         for (int idx = 0; idx < size; ) {
-            if (newObj) {
-                try {
-                    // 如果不是构造类型对拍，定义普通类型属性会影响下次对拍 因此重新初始化
-                    // 就是上次数据影响这次对拍
-                    // example: leetcode.everyday.Code_0049_39
-                    if(!isStatic){
-                        obj = ReflectUtils.initObjcect(srcClass, null);
-                    }
-
-                } catch (Exception ignore) {
-                    obj = null;
-                }
+            if (newObj && !isStatic) {
+                // 如果不是构造类型对拍，定义普通类型属性会影响下次对拍 因此重新初始化
+                // 就是上次数据影响这次对拍
+                // example: leetcode.everyday.Code_0049_39
+                obj = ReflectUtils.initObjcect(srcClass, null);
             }
 
             Objects.requireNonNull(obj, "obj is null");
