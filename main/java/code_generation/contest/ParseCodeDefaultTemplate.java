@@ -76,7 +76,7 @@ public class ParseCodeDefaultTemplate implements ParseCodeTemplate {
         }
         int i = StringUtils.kmpSearch(input, startFlag);
         if (i == -1) {
-            throw new RuntimeException("NOT find start flag " + startFlag);
+            throw new RuntimeException("parse code fail, not find code flag  " + startFlag + ",place check this problems is not membership question !");
         }
         // update input
         this.input = input.substring(i + startFlag.length());

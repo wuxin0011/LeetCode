@@ -1,4 +1,4 @@
-package leetcode.ox3if.data_struct.pre_sum.Solution_0002;
+package leetcode.ox3if.data_struct.pre_sum.base.Solution_0002;
 
 import code_generation.utils.IoUtil;
 

@@ -74,9 +74,13 @@ public abstract class LCCustom implements CustomProblem {
         System.out.println("=======================start==================\n");
         for (int i = 0; i < urls.size(); i++) {
             String lcUrl = urls.get(i);
-            System.out.printf("access url %d:  %s  place wait %d s\n",i+1,lcUrl,sleepTime);
+            System.out.printf("access url %d:  %s  place wait %d s\n", i + 1, lcUrl, sleepTime);
             ExceptionUtils.sleep(sleepTime);
-            createByTitleSlug(lcUrl);
+            try {
+                createByTitleSlug(lcUrl);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         System.out.println("\n=======================end==================");
     }

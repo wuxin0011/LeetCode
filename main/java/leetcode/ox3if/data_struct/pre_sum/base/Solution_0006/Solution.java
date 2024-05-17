@@ -1,7 +1,7 @@
-package leetcode.ox3if.data_struct.pre_sum.Solution_0006;
+package leetcode.ox3if.data_struct.pre_sum.base.Solution_0006;
 
 import code_generation.utils.IoUtil;
-import java.util.*;
+
 /**
  * @author: wuxin0011
  * @Description:
