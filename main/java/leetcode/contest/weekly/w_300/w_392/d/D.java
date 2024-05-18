@@ -5,7 +5,7 @@ import java.util.*;
 /**
  * @author: agitated-curranfnd
  * @Description:
- * @url:   https://leetcode.cn/contest/weekly-contest-392/problems/minimum-cost-walk-in-weighted-graph
+ * @url:   `https://leetcode.cn/contest/weekly-contest-392/problems/minimum-cost-walk-in-weighted-graph`
  * @title: 带权图里旅途的最小代价
  */
 public class D {

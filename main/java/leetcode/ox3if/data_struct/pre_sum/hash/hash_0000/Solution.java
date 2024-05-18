@@ -1,7 +1,9 @@
 package leetcode.ox3if.data_struct.pre_sum.hash.hash_0000;
 
 import code_generation.utils.IoUtil;
-import java.util.*;
+
+import java.util.HashMap;
+import java.util.Map;
 /**
  *
  * 930. 和相同的二元子数组
@@ -26,21 +28,27 @@ import java.util.*;
  *
  * @author: wuxin0011
  * @Description:
- * @url:   https://leetcode.cn/problems/binary-subarrays-with-sum
+ * @url: https://leetcode.cn/problems/binary-subarrays-with-sum
  * @title: 和相同的二元子数组
  */
 public class Solution {
 
     public static void main(String[] args) {
-        IoUtil.testUtil(Solution.class,"numSubarraysWithSum","in.txt");
+        IoUtil.testUtil(Solution.class, "numSubarraysWithSum", "in.txt");
     }
-     
 
-    public int numSubarraysWithSum(int[] nums, int goal) {    
 
-        return 0; 
-	}
+    public int numSubarraysWithSum(int[] nums, int goal) {
+        Map<Integer, Integer> map = new HashMap<>();
+        int cnt = 0;
+        int sum = 0;
+        for (int num : nums) {
+            map.put(sum, map.getOrDefault(sum, 0) + 1);
+            sum += num;
+            cnt += map.getOrDefault(sum - goal, 0);
+        }
+        return cnt;
+    }
 
-  
 
 }

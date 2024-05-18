@@ -2,9 +2,7 @@ package leetcode.contest.weekly.w_300.w_397.d;
 
 import code_generation.utils.IoUtil;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 /**
  * 100312. 找出分数最低的排列
@@ -32,56 +30,120 @@ import java.util.List;
  * nums 是 [0, 1, 2, ..., n - 1] 的一个排列。
  *
  * @author: agitated-curranfnd
- * @Description:
+ * @Description: 状压缩DP
  * @url: https://leetcode.cn/contest/weekly-contest-397/problems/find-the-minimum-cost-array-permutation
  * @title: 找出分数最低的排列
  */
 public class D {
 
-    public static void main(String[] args) {
-        IoUtil.testUtil(D.class, "findPermutation", "D.txt");
-    }
 
+    /**
+     * 记忆化搜索解法
+     */
+    public static class S1 {
+        public static void main(String[] args) {
+            IoUtil.testUtil(S1.class, "findPermutation", "D.txt");
+        }
 
-    public int[] findPermutation(int[] a) {
-        int n = a.length;
-        int[][] memo = new int[1 << n][n];
-        for (int[] row : memo) {
-            Arrays.fill(row, -1); // -1 表示没有计算过
-        }
-        int[] ans = new int[n];
-        makeAns(1, 0, a, memo, ans, 0);
-        return ans;
-    }
+        int n;
+        int[] ans;
+        int[][] memo;
+        int[] arr;
 
-    private int dfs(int s, int j, int[] a, int[][] memo) {
-        if (s == (1 << a.length) - 1) {
-            return Math.abs(j - a[0]);
-        }
-        if (memo[s][j] != -1) { // 之前计算过
-            return memo[s][j];
-        }
-        int res = Integer.MAX_VALUE;
-        for (int k = 1; k < a.length; k++) {
-            if ((s >> k & 1) == 0) { // k 之前没填过
-                res = Math.min(res, dfs(s | 1 << k, k, a, memo) + Math.abs(j - a[k]));
+        public int[] findPermutation(int[] arr) {
+            this.n = arr.length;
+            this.arr = arr;
+            this.memo = new int[n][1 << n];
+            for (int i = 0; i < n; i++) {
+                Arrays.fill(this.memo[i], -1);
             }
+            this.ans = new int[n];
+            build(0, 0, 1); // 第一个必须填写0
+            return ans;
+
         }
-        memo[s][j] = res; // 记忆化
-        return res;
+
+        private int dfs(int pre, int mask) {
+            if (mask == (1 << n) - 1) {
+                // System.out.println("dfs mask end " + mask);`
+                return Math.abs(pre - arr[0]);
+            }
+            if (memo[pre][mask] != -1) {
+                return memo[pre][mask];
+            }
+            int res = Integer.MAX_VALUE;
+            for (int k = 1; k < n; k++) {
+                if ((mask >> k & 1) == 1) {
+                    continue;
+                }
+                res = Math.min(res, dfs(k, mask | (1 << k)) + Math.abs(pre - arr[k]));
+            }
+            memo[pre][mask] = res;
+            return res;
+        }
+
+        private void build(int idx, int pre, int mask) {
+            ans[idx] = pre;
+            if (mask == (1 << n) - 1) {
+                // System.out.println("mask = " + mask + ",ans = " + Arrays.toString(ans));
+                return;
+            }
+            int res = dfs(pre, mask);
+            for (int k = 1; k < n; k++) {
+                if ((mask >> k & 1) == 1) {
+                    continue;
+                }
+                int val = dfs(k, mask | (1 << k)) + Math.abs(pre - arr[k]);
+                if (res == val) {
+                    build(idx + 1, k, mask | (1 << k));
+                    break;
+                }
+            }
+
+        }
     }
 
-    private void makeAns(int s, int j, int[] a, int[][] memo, int[] ans, int i) {
-        ans[i] = j;
-        if (s == (1 << a.length) - 1) {
-            return;
+    /**
+     * 递推解法
+     */
+    public static class S2 {
+
+        public static void main(String[] args) {
+            IoUtil.testUtil(S2.class, "findPermutation", "D.txt");
         }
-        int finalRes = dfs(s, j, a, memo);
-        for (int k = 1; k < a.length; k++) {
-            if ((s >> k & 1) == 0 && dfs(s | 1 << k, k, a, memo) + Math.abs(j - a[k]) == finalRes) {
-                makeAns(s | 1 << k, k, a, memo, ans, i + 1);
-                break;
+
+
+        public int[] findPermutation(int[] arr) {
+            // TODO 递推实现
+            int n = arr.length;
+            int[][] dp = new int[n][1 << n];
+            for (int i = 0; i < n; i++) {
+                Arrays.fill(dp[i], Integer.MAX_VALUE);
             }
+            for (int k = 0; k < n; k++) {
+                dp[k][(1 << n) - 1] = Math.abs(k - arr[0]);
+            }
+
+            for (int mask = (1 << n) - 2; mask >= 0; mask -= 2) {
+                for (int i = 0; i < n; i++) {
+                    // dp[k][mask] = Math.min(dp[k][mask], dp[k][mask | (1 << k)] + Math.abs(k - arr[k]));
+                    if ((mask >> i & 1) == 0) {
+                        continue;
+                    }
+                    for (int k = 0; k < n; k++) {
+                        if ((mask >> k & 1) == 1) {
+                            continue;
+                        }
+
+                    }
+
+                }
+            }
+
+            int[] ans = new int[n];
+
+            return ans;
+
         }
     }
 
