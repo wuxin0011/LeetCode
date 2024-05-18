@@ -35,102 +35,153 @@ import java.util.*;
  * 1 <= heights[i][j] <= 10^6
  *
  * @author: wuxin0011
- * @Description:
+ * @Description: disj 算法
  * @url: https://leetcode.cn/problems/path-with-minimum-effort
  * @title: 最小体力消耗路径
  */
 public class Solution {
 
-    public static void main(String[] args) {
-        IoUtil.testUtil(Solution.class, "minimumEffortPath", "in.txt");
-    }
+    static class S1 {
+        public static void main(String[] args) {
+            IoUtil.testUtil(S1.class, "minimumEffortPath", "in.txt");
+        }
 
-    public int minimumEffortPath(int[][] heights) {
-        int m = heights.length;
-        int n = heights[0].length;
-        List<Edge> edges = new ArrayList<>();
+        public int minimumEffortPath(int[][] heights) {
+            int m = heights.length;
+            int n = heights[0].length;
+            List<Edge> edges = new ArrayList<>();
 
-        for (int i = 0; i < m; i++) {
-            for (int j = 0; j < n; j++) {
-                int id = i * n + j;
-                if (i > 0) {
-                    edges.add(new Edge(id - n, id, Math.abs(heights[i][j] - heights[i - 1][j])));
+            for (int i = 0; i < m; i++) {
+                for (int j = 0; j < n; j++) {
+                    int id = i * n + j;
+                    if (i > 0) {
+                        edges.add(new Edge(id - n, id, Math.abs(heights[i][j] - heights[i - 1][j])));
+                    }
+                    if (j > 0) {
+                        edges.add(new Edge(id - 1, id, Math.abs(heights[i][j] - heights[i][j - 1])));
+                    }
                 }
-                if (j > 0) {
-                    edges.add(new Edge(id - 1, id, Math.abs(heights[i][j] - heights[i][j - 1])));
+            }
+
+            Collections.sort(edges);
+            UF uf = new UF(m * n);
+
+            for (Edge edge : edges) {
+                uf.unite(edge.x, edge.y);
+                if (uf.connected(0, m * n - 1)) {
+                    return edge.z;
                 }
             }
+
+            return 0;
         }
 
-        Collections.sort(edges);
-        UF uf = new UF(m * n);
 
-        for (Edge edge : edges) {
-            uf.unite(edge.x, edge.y);
-            if (uf.connected(0, m * n - 1)) {
-                return edge.z;
+        static class UF {
+            private final int[] fa;
+            private final int[] sz;
+            private int comp_cnt;
+
+            public UF(int _n) {
+                comp_cnt = _n;
+                fa = new int[_n];
+                sz = new int[_n];
+                Arrays.fill(sz, 1);
+                for (int i = 0; i < _n; i++) {
+                    fa[i] = i;
+                }
+            }
+
+            private int findset(int x) {
+                return fa[x] == x ? x : (fa[x] = findset(fa[x]));
+            }
+
+            public void unite(int x, int y) {
+                x = findset(x);
+                y = findset(y);
+                if (x == y) {
+                    return;
+                }
+                if (sz[x] < sz[y]) {
+                    int temp = x;
+                    x = y;
+                    y = temp;
+                }
+                fa[y] = x;
+                sz[x] += sz[y];
+                comp_cnt--;
+            }
+
+            public boolean connected(int x, int y) {
+                x = findset(x);
+                y = findset(y);
+                return x == y;
             }
         }
 
-        return 0;
+        static class Edge implements Comparable<Edge> {
+            int x, y, z;
+
+            Edge(int _x, int _y, int _z) {
+                x = _x;
+                y = _y;
+                z = _z;
+            }
+
+            @Override
+            public int compareTo(Edge that) {
+                return Integer.compare(z, that.z);
+            }
+        }
     }
 
+    public static class S2 {
 
-    static class UF {
-        private final int[] fa;
-        private final int[] sz;
-        private int comp_cnt;
+        public static void main(String[] args) {
+            IoUtil.testUtil(S2.class, "minimumEffortPath", "in.txt");
+        }
 
-        public UF(int _n) {
-            comp_cnt = _n;
-            fa = new int[_n];
-            sz = new int[_n];
-            Arrays.fill(sz, 1);
-            for (int i = 0; i < _n; i++) {
-                fa[i] = i;
+        @SuppressWarnings("all")
+        public int minimumEffortPath(int[][] heights) {
+            int m = heights.length, n = heights[0].length;
+            int[][] dis = new int[m][n];
+            for (int i = 0; i < m; i++) {
+                Arrays.fill(dis[i], Integer.MAX_VALUE);
             }
-        }
 
-        private int findset(int x) {
-            return fa[x] == x ? x : (fa[x] = findset(fa[x]));
-        }
+            PriorityQueue<int[]> q = new PriorityQueue<>(Comparator.comparingInt(a -> a[2]));
+            dis[0][0] = 0;
+            q.add(new int[]{0, 0, 0});
+            boolean[][] vis = new boolean[m][n];
+            int[] dirs = new int[]{-1, 0, 1, 0, -1};
+            while (!q.isEmpty()) {
+                int[] p = q.poll();
+                int x0 = p[0], y0 = p[1], cost = p[2];
+                if (x0 == m - 1 && y0 == n - 1) {
+                    return dis[x0][y0];
+                }
+                if (vis[x0][y0]) {
+                    continue;
+                }
+                vis[x0][y0] = true;
+                for (int k = 0; k <= 3; k++) {
+                    int x1 = dirs[k] + x0, y1 = dirs[k + 1] + y0;
+                    if (x1 < 0 || x1 >= m || y1 < 0 || y1 >= n || vis[x1][y1]) {
+                        continue;
+                    }
+                    // 高度差绝对值
+                    int w = Math.max(cost, Math.abs(heights[x1][y1] - heights[x0][y0]));
+                    if (w < dis[x1][y1]) {
+                        dis[x1][y1] = w;
+                        q.add(new int[]{x1, y1, w});
+                    }
 
-        public void unite(int x, int y) {
-            x = findset(x);
-            y = findset(y);
-            if (x == y) {
-                return;
+                }
+
             }
-            if (sz[x] < sz[y]) {
-                int temp = x;
-                x = y;
-                y = temp;
-            }
-            fa[y] = x;
-            sz[x] += sz[y];
-            comp_cnt--;
+            return Integer.MAX_VALUE;
         }
 
-        public boolean connected(int x, int y) {
-            x = findset(x);
-            y = findset(y);
-            return x == y;
-        }
-    }
-
-    static class Edge implements Comparable<Edge> {
-        int x, y, z;
-
-        Edge(int _x, int _y, int _z) {
-            x = _x;
-            y = _y;
-            z = _z;
-        }
-
-        @Override
-        public int compareTo(Edge that) {
-            return Integer.compare(z, that.z);
-        }
     }
 
 
