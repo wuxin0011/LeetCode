@@ -1,7 +1,6 @@
 package leetcode.contest.weekly.w_300.w_398.a;
 
 import code_generation.utils.IoUtil;
-import java.util.*;
 /**
  * @author: agitated-curranfnd
  * @Description:
@@ -15,10 +14,17 @@ public class A {
     }
      
 
-    public boolean isArraySpecial(int[] nums) {    
+    public boolean isArraySpecial(int[] nums) {
 
-        return false; 
-	}
+        int n = nums.length;
+        for (int i = 1; i < n; i++) {
+            if (nums[i - 1] % 2 == nums[i] % 2) {
+                return false;
+            }
+        }
+
+        return true;
+    }
 
   
 
