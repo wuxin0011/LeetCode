@@ -16,6 +16,14 @@ import java.util.regex.Pattern;
  */
 public class StringUtils {
 
+    static final String[] removeTagName = {"strong",
+            "abbr", "address", "br", "cite", "div", "ul", "span", "pre", "em", "b", "u", "li", "code", "data", "dd", "del", "p", "img", "src", "video",
+            "details", "dl", "dd", "html", "body", "footer", "h1", "h2", "h3", "h4", "h5", "p", "i", "link", "main", "map", "mark", "meta", "nav", "q"
+    };
+
+    // 后续可以添加
+    //
+
 
     public static final String mod_unicode = "\\u53d6\\u4f59";
     public static final String mod_ans_unicode = "\\u7b54\\u6848\\u53ef\\u80fd\\u5f88\\u5927";
@@ -112,26 +120,19 @@ public class StringUtils {
         s = s.replace(outputUnicodeOld, "");
         s = s.replace(explainUnicodeOld, "");
         s = s.replace("uff1a", "");
-        s = s.replace(InputDot, "").replace(Input,"");
-        s = s.replace(OutputDot, "").replace(Output,"");
-        s = s.replace("<div>", "").replace("</div>", "");
-        s = s.replace("<ul>", "").replace("</ul>", "");
-        s = s.replace("<li>", "").replace("</li>", "");
-        s = s.replace("<span>", "").replace("</span>", "");
-        s = s.replace("<u>", "").replace("</u>", "");
-        s = s.replace("<p>", "").replace("</p>", "");
-        s = s.replace("<h>", "").replace("</h>", "");
-        s = s.replace("<pre>", "").replace("</pre>", "");
-        s = s.replace("<em>", "").replace("/em>", "");
-        // s = s.replace("\\n", "");
+        s = s.replace(InputDot, "").replace(Input, "");
+        s = s.replace(OutputDot, "").replace(Output, "");
+        for (String tag : removeTagName) {
+            s = removeTag(s, tag);
+        }
         s = s.replace("&lt;", "");
-        s = s.replace("\\n;", "");
+        s = s.replace("\\\\n;", "").replace("\\\\n", "");
+        s = s.replace("\\n;", "").replace("\\n", "");
         s = s.replace("\\", "");
         s = s.replace("&gt;", "");
         s = s.replace("&amp;", "");
         s = s.replace("&quot;", "");
         s = s.replace("&nbsp;", "");
-        s = s.replace("<strong>", "").replace("</strong>", "");
         s = s.replace("<", "").replace(">", "");
         if (isEmpty(s)) {
             return "\"\"";
@@ -243,6 +244,10 @@ public class StringUtils {
 
             for (int i = startIndex; i < jsonStr.length(); i++) {
                 char c = jsonStr.charAt(i);
+                if (c == ' ') {
+                    sb.append(c);
+                    continue;
+                }
                 if (c == '\"' && jsonStr.charAt(i - 1) != '\\') {
                     inQuotes = !inQuotes;
                 }
@@ -541,6 +546,15 @@ public class StringUtils {
         input = input.replace(Explanation, explainUnicodeOld);
         input = input.replace(ExplanationDot, explainUnicode);
         return input;
+    }
+
+    public static String removeTag(String input, String tagName) {
+        if (StringUtils.kmpSearch(input, "<" + tagName) == -1 && StringUtils.kmpSearch(input, tagName + ">") == -1) {
+            return input;
+        }
+        Pattern pattern = Pattern.compile(String.format("</?%s[^>]*>", tagName));
+        Matcher matcher = pattern.matcher(input);
+        return matcher.replaceAll("");
     }
 
 

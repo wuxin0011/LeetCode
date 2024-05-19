@@ -198,6 +198,41 @@ public class Test {
             "}";
 
 
+    public static void queryNewContestQuestion() {
+        String info = BuildUrl.queryNewContestQuestion("https://leetcode.cn/contest/weekly-contest-398/problems/special-array-i/");
+
+//        String info = IoUtil.readContent(Test.class, "./test_file/newContestInfo.txt");
+        System.out.println("info");
+        String p = "\"lang\":\"Java\",\"langSlug\":\"java\"";
+        System.out.println(info);
+        System.out.println(findCode(info, StringUtils.kmpSearch(info, p)));
+        System.out.println(testCase.parseContest(StringUtils.jsonStrGetValueByKey(info, "translatedContent")));
+    }
+
+    public static String findCode(String codeInfo, int ed) {
+        int deep = 0;
+        StringBuilder sb = new StringBuilder();
+        boolean find = false;
+        final String classStr = "class";
+        for (int i = ed; i >= classStr.length(); i--) {
+            char c = codeInfo.charAt(i);
+            if (c == '}') {
+                deep++;
+                find = true;
+            } else if (c == '{') {
+                deep--;
+                find = true;
+            }
+            sb.append(c);
+            if (codeInfo.startsWith(classStr, i)) {
+                break;
+            }
+        }
+
+        return sb.reverse().toString();
+    }
+
+
     public static void main(String[] args) throws Exception {
 //        testPost();
 
@@ -219,7 +254,7 @@ public class Test {
 
         // testQuestionEditorData();
 
-        testUserStatus();
+        // testUserStatus();
 
 
         // testResult2();
@@ -235,6 +270,10 @@ public class Test {
         // 测试构造函数类
         // testConstructor();
         // testConstructor2();
+
+
+        // 测试新版本接口
+        queryNewContestQuestion();
     }
 
     private static void getProblemsTitle() {

@@ -194,4 +194,14 @@ public class BuildUrl {
     public static String questionTranslations(String titleSlug) {
         return getPost(LCJsonTemplate.questionTranslations(buildTitleSlug(titleSlug)));
     }
+
+
+    public static String queryNewContestQuestion(String contestUrl) {
+        String titleSlug = buildTitleSlug(contestUrl);
+        // https://leetcode.cn/contest/weekly-contest-398/problems/special-array-i/
+
+        String contestNo = contestUrl.replace(LC_PREFIX + "/contest/", "").split("/problems")[0];
+
+        return getPost(LCJsonTemplate.newContestQuestion(contestNo, titleSlug));
+    }
 }

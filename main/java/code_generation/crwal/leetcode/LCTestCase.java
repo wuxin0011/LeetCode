@@ -39,8 +39,8 @@ public class LCTestCase implements TestCase {
         // 有时候获取不到测试案例 或者测试案例获取不全面
         // 这里尝试将周赛测试案例方式移动到后面检查
         if (ans.size() == 0) {
-            matchExampleAll(input, ".*<span\\s+class=\"example-io\".*>(.*?)</span>", ans);
-            matchExampleAll(input, ".*<span\\s+class=\"example.*\".*>(.*?)</span>", ans);
+            // matchExampleAll(input, ".*<span\\s+class=\"example-io\".*>(.*?)</span>", ans);
+            matchExampleAll(input, null, ans);
         }
 
 
@@ -131,8 +131,9 @@ public class LCTestCase implements TestCase {
 
 
     public static void parseInputTestCase(String s, List<String> ans) {
-        s = s.replace(input_flag, "").replace(output_flag, "").replace(strong_start, "").replace(strong_end, "");
-        s = matchExample(s);
+        // s = s.replace(input_flag, "").replace(output_flag, "").replace(strong_start, "").replace(strong_end, "");
+        s = StringUtils.replaceIgnoreContent(s);
+        // s = matchExample(s);
         s = s.replace("\\n", "");
         // System.out.println("input s => " + s);
         StringBuilder sb = null;
@@ -180,7 +181,7 @@ public class LCTestCase implements TestCase {
     }
 
     public static void parseOutputTestCase(String s, List<String> ans) {
-        s = matchExample(s);
+        // s = matchExample(s);
         s = StringUtils.replaceIgnoreContent(s);
         if (!StringUtils.isEmpty(s)) {
             s = StringUtils.ingoreString(s);
@@ -190,25 +191,12 @@ public class LCTestCase implements TestCase {
     }
 
     public static String matchExample(String input) {
-        String regex_format = ".*<span\\s+class=\"%s\".*>(.*?)</span>";
-        String[] HTML_SPAN_CLASSNAME = {"example-io", "example.*"};
-        for (String className : HTML_SPAN_CLASSNAME) {
-            Pattern r = Pattern.compile(String.format(regex_format, className), Pattern.DOTALL);
-            Matcher m = r.matcher(input);
-            if (m.find()) {
-                try {
-                    return m.group(1);
-                } catch (Exception ignore) {
-
-                }
-            }
-        }
-        return input;
+        return StringUtils.replaceIgnoreContent(input);
     }
 
     public static void matchExampleAll(String input, String pattern, List<String> ans) {
         if (StringUtils.isEmpty(pattern)) {
-            pattern = ".*<span\\s+class=\"example.*\".*>(.*?)</span>";
+            pattern = "<span.*?>(.*?)</span>";
         }
         Pattern r = Pattern.compile(pattern, Pattern.DOTALL);
         Matcher m = r.matcher(input);

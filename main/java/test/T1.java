@@ -1,6 +1,8 @@
 package test;
 
 import code_generation.crwal.leetcode.LCTestCase;
+import code_generation.utils.StringUtils;
+import sun.java2d.pipe.SpanClipRenderer;
 
 /**
  * @author: wuxin0011
@@ -79,6 +81,14 @@ public class T1 {
                 "<p>";
         s = LCTestCase.matchExample(input);
         System.out.println(s);
+
+        // s = "\\135\\\\n";
+        // System.out.println();
+        System.out.println("origin str : \n");
+        System.out.println(input);
+        System.out.println("update str : \n");
+        System.out.println(StringUtils.removeTag(StringUtils.removeTag(input, "span"), "p"));
+
     }
 
 }

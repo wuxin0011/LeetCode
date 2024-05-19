@@ -358,7 +358,7 @@ public class TestCaseUtil {
         }
         for (int i = 0; i < ans.size(); i++) {
             String s = ans.get(i);
-            if (s == null || s.contains("font-family")) {
+            if (s == null || s.contains("font-family") || s.contains("example")) {
                 continue;
             }
             if (s.length() == 0) {

@@ -147,7 +147,6 @@ public class LCContest implements Contest {
             this.username = getUserName();
         }
 
-
         if (!StringUtils.isEmpty(username)) {
             System.out.println("\n welcome coming " + CustomColor.error(username) + " \n");
         }
@@ -158,7 +157,7 @@ public class LCContest implements Contest {
                 continue;
             }
             String tempTitle = (StringUtils.isEmpty(question.getTitle()) ? question.getTitle_slug() : question.getTitle());
-            System.out.println("\nstart parse question :  " + CustomColor.pink(tempTitle) + ",credit: " + question.getCredit());
+            System.out.println("\nstart parse question :  " + CustomColor.pink(tempTitle) + ", credit: " + (StringUtils.isEmpty(question.getCredit()) ? "unknown" : question.getCredit()));
             final int idx = i;
 
             try {
@@ -197,11 +196,9 @@ public class LCContest implements Contest {
         String titleSlug = question.getTitle_slug();
         String info = "";
 
-        String contestHtml = BuildUrl.getContestQuestionPage(question.getUrl());
-
         // test case
-        List<String> strings = TEST_CASE.parseContest(contestHtml);
-        String testCase = TestCaseUtil.testCaseToString(strings);
+        List<String> strings = null;
+        String testCase = null;
 
 
         // important info
@@ -214,7 +211,17 @@ public class LCContest implements Contest {
         // String methodName = StringUtils.getMethodName(method);
 
         // 新方式处理 有返回值
-        ParseCodeInfo parseCodeInfo = this.parseCodeTemplate(contestHtml);
+        ParseCodeInfo parseCodeInfo = null;
+        //使用新的接口 https://leetcode.cn/contest/weekly-contest-398/
+        parseCodeInfo = this.parseCodeTemplate(question);
+        if (parseCodeInfo != null) {
+            testCase = TestCaseUtil.testCaseToString(TEST_CASE.parseContest(StringUtils.jsonStrGetValueByKey(parseCodeInfo.getOrigin(), "translatedContent")));
+        } else {
+            String contestHtml = BuildUrl.getContestQuestionPage(question.getUrl());
+            testCase = TestCaseUtil.testCaseToString(TEST_CASE.parseContest(contestHtml));
+            parseCodeInfo = this.parseCodeTemplate(contestHtml);
+        }
+        Objects.requireNonNull(parseCodeInfo, "parse error");
         String method = parseCodeInfo.getMethod();
         String methodName = parseCodeInfo.getMethodName();
         String title = question.title;
@@ -256,7 +263,6 @@ public class LCContest implements Contest {
 
     private static String getTestCase(String s) {
         String contestHtml = BuildUrl.getContestQuestionPage(s);
-        // System.out.println("html\n\n\n" + contestHtml);
         List<String> strings = TEST_CASE.parseContest(contestHtml);
         return TestCaseUtil.testCaseToString(strings);
     }
@@ -376,12 +382,20 @@ public class LCContest implements Contest {
         return this.testCase;
     }
 
+
+    public ParseCodeInfo parseCodeTemplate(Question question) {
+        String info = BuildUrl.queryNewContestQuestion(question.getUrl());
+        String p = "\"lang\":\"Java\",\"langSlug\":\"java\"";
+        return lcTemplate.parseCodeTemplate(info, p, true);
+    }
+
+
     @Override
     public ParseCodeInfo parseCodeTemplate(String contestHtml) {
         // important info
         String info = parseScriptCodeInfo(contestHtml);
         if (StringUtils.isEmpty(info)) {
-            throw new RuntimeException("parse error");
+            return null;
         }
         // 新方式处理 有返回值
         return lcTemplate.parseCodeTemplate(info);

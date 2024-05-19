@@ -25,6 +25,8 @@ public class ParseCodeDefaultTemplate implements ParseCodeTemplate {
     public String input;
     public String startFlag;
 
+    public boolean isNewHandler;
+
 
     public ParseCodeDefaultTemplate(String startFlag) {
         this("", startFlag, null);
@@ -42,6 +44,12 @@ public class ParseCodeDefaultTemplate implements ParseCodeTemplate {
         this.startFlag = startFlag;
         this.info.setOrigin(input);
     }
+
+    public ParseCodeInfo parseCodeTemplate(String input, String startFlag, boolean isNewHandler) {
+        this.isNewHandler = isNewHandler;
+        return parseCodeTemplate(input, startFlag);
+    }
+
 
     public ParseCodeInfo parseCodeTemplate(String input, String startFlag) {
         try {
@@ -78,8 +86,11 @@ public class ParseCodeDefaultTemplate implements ParseCodeTemplate {
         if (i == -1) {
             throw new RuntimeException("parse code fail, not find code flag  " + startFlag + ",place check this problems is not membership question !");
         }
-        // update input
-        this.input = input.substring(i + startFlag.length());
+        if (isNewHandler) {
+            this.input = findNewHandlerCode(this.input, i);
+        } else {
+            this.input = input.substring(i + startFlag.length());
+        }
         parseProcess();
     }
 
@@ -277,13 +288,36 @@ public class ParseCodeDefaultTemplate implements ParseCodeTemplate {
         return m;
     }
 
-    public static String removeComment(String methodStr){
+    public static String removeComment(String methodStr) {
         int commentLeft = StringUtils.kmpSearch(methodStr, leftFlag);
         int commentRight = StringUtils.kmpSearch(methodStr, rightFlag);
-        if(commentLeft != -1 && commentRight != -1){
-            methodStr = methodStr.substring(rightFlag.length()+commentRight);
+        if (commentLeft != -1 && commentRight != -1) {
+            methodStr = methodStr.substring(rightFlag.length() + commentRight);
         }
         return methodStr;
+    }
+
+    public static String findNewHandlerCode(String codeInfo, int ed) {
+        int deep = 0;
+        StringBuilder sb = new StringBuilder();
+        boolean find = false;
+        final String classStr = "class";
+        for (int i = ed; i >= classStr.length(); i--) {
+            char c = codeInfo.charAt(i);
+            if (c == '}') {
+                deep++;
+                find = true;
+            } else if (c == '{') {
+                deep--;
+                find = true;
+            }
+            sb.append(c);
+            if (codeInfo.startsWith(classStr, i)) {
+                break;
+            }
+        }
+
+        return sb.reverse().toString();
     }
 
 

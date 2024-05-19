@@ -112,6 +112,25 @@ public class LCJsonTemplate {
 
 
     /**
+     * 新版本接口
+     * weekly-contest-398
+     * special-array-i
+     */
+    private static final String newContestQuestionJSONStr =
+            "{\n" +
+                    "    \"query\": \"\\n    query contestQuestion($contestSlug: String, $questionSlug: String) {\\n  contestDetail(contestSlug: $contestSlug) {\\n    startTime\\n    duration\\n    titleSlug\\n    failCount\\n    enableContestDynamicLayout\\n    isDynamicLayout\\n    hasCompletedContest\\n    isVirtualContest\\n  }\\n  contestQuestion(contestSlug: $contestSlug, questionSlug: $questionSlug) {\\n    totalAc\\n    totalSubmission\\n    totalTriedUser\\n    totalAcUser\\n    languageList {\\n      id\\n      name\\n      verboseName\\n    }\\n    submittableLanguageList {\\n      id\\n      name\\n      verboseName\\n    }\\n    question {\\n      status\\n      questionId\\n      questionFrontendId\\n      enableRunCode\\n      enableSubmit\\n      enableTestMode\\n      metaData\\n      title\\n      titleSlug\\n      difficulty\\n      categoryTitle\\n      codeSnippets {\\n        code\\n        lang\\n        langSlug\\n      }\\n      exampleTestcaseList\\n      canSeeQuestion\\n      envInfo\\n      content\\n      translatedTitle\\n      translatedContent\\n    }\\n  }\\n}\\n    \",\n" +
+                    "    \"variables\": {\n" +
+                    "        \"contestSlug\": \"%s\",\n" +
+                    "        \"questionSlug\": \"%s\"\n" +
+                    "    },\n" +
+                    "    \"operationName\": \"contestQuestion\"\n" +
+                    "}";
+    public static String newContestQuestion(String contestSlug,String questionSlug) {
+        return String.format(newContestQuestionJSONStr, contestSlug,questionSlug);
+    }
+
+
+    /**
      * 查询编辑器状态
      *
      * @param titleSlug

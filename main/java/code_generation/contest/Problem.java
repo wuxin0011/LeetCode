@@ -50,7 +50,8 @@ public class Problem {
             return txtFile;
         }
         if (testCase != null && testCase.length() > 0) {
-            IoUtil.writeContent(file, StringUtils.replaceIgnoreContent(testCase));
+            // IoUtil.writeContent(file, StringUtils.replaceIgnoreContent(testCase));
+            IoUtil.writeContent(file, testCase);
         }
         if (javaFilePath != null && file.getAbsolutePath().contains(javaFilePath.getParent())) {
             txtFile = "." + file.getAbsolutePath().replace(javaFilePath.getParent(), "").replace("\\", "\\\\");
