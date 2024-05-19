@@ -2,6 +2,8 @@ package leetcode.ox3if.dp.base.Solution_0006;
 
 import code_generation.utils.IoUtil;
 
+import java.util.Arrays;
+
 /**
  * 740. 删除并获得点数
  * <p>
@@ -37,10 +39,13 @@ public class Solution {
 
     public static void main(String[] args) {
         IoUtil.testUtil(Solution.class, "deleteAndEarn", "in.txt");
+        IoUtil.testUtil(Solution.class, "deleteAndEarn1", "in.txt");
+        IoUtil.testUtil(Solution.class, "deleteAndEarn2", "in.txt");
+        IoUtil.testUtil(Solution.class, "deleteAndEarn3", "in.txt");
     }
 
 
-    public int deleteAndEarn(int[] nums) {
+    public int deleteAndEarn1(int[] nums) {
 
         // 删除或者不删除
         if (nums == null || nums.length == 0) {
@@ -65,6 +70,104 @@ public class Solution {
             dp[i] = Math.max(dp[i - 1], dp[i - 2] + tot[i] * i);
         }
         return dp[dp.length - 1];
+    }
+
+
+    // 最优空间版本
+    public int deleteAndEarn(int[] nums) {
+
+        // 删除或者不删除
+        if (nums == null || nums.length == 0) {
+            return 0;
+        }
+        if (nums.length == 1) {
+            return nums[0];
+        }
+        int mx = nums[0];
+        for (int num : nums) {
+            if (num > mx) mx = num;
+        }
+        mx++;
+        int[] tot = new int[mx];
+        for (int num : nums) {
+            tot[num]++;
+        }
+        int prepre = 0;
+        int pre = tot[1]; // 点数为1的得分
+        int cur = 0;
+        for (int i = 2; i < tot.length; i++) {
+            cur = Math.max(pre, prepre + tot[i] * i);
+            prepre = pre;
+            pre = cur;
+        }
+        return cur;
+    }
+
+
+    public int deleteAndEarn2(int[] nums) {
+
+        // 删除或者不删除
+        if (nums == null || nums.length == 0) {
+            return 0;
+        }
+        if (nums.length == 1) {
+            return nums[0];
+        }
+        int mx = nums[0];
+        for (int num : nums) {
+            if (num > mx) mx = num;
+        }
+        mx++;
+        int[] tot = new int[mx];
+        for (int num : nums) {
+            tot[num]++;
+        }
+        return f1(tot.length - 1, tot);
+    }
+
+    public static int f1(int i, int[] tots) {
+        if (i < 0) {
+            return 0;
+        }
+        return Math.max(f1(i - 1, tots), f1(i - 2, tots) + tots[i] * i);
+    }
+
+
+    public int deleteAndEarn3(int[] nums) {
+
+        // 删除或者不删除
+        if (nums == null || nums.length == 0) {
+            return 0;
+        }
+        if (nums.length == 1) {
+            return nums[0];
+        }
+        int mx = nums[0];
+        for (int num : nums) {
+            if (num > mx) mx = num;
+        }
+        mx++;
+        int[] tot = new int[mx];
+        for (int num : nums) {
+            tot[num]++;
+        }
+        memo = new int[tot.length];
+        Arrays.fill(memo, -1);
+        return f1(tot.length - 1, tot);
+    }
+
+    int[] memo;
+
+    public int f2(int i, int[] tots) {
+        if (i < 0) {
+            return 0;
+        }
+        if (memo[i] != -1) {
+            return memo[i];
+        }
+        int cur = Math.max(f1(i - 1, tots), f1(i - 2, tots) + tots[i] * i);
+        memo[i] = cur;
+        return cur;
     }
 
 

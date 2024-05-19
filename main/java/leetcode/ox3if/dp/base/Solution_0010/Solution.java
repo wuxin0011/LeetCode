@@ -47,6 +47,7 @@ public class Solution {
 
     public static void main(String[] args) {
         IoUtil.testUtil(Solution.class, "maximumCostSubstring", "in.txt");
+        IoUtil.testUtil(Solution.class, "maximumCostSubstring2", "in.txt");
     }
 
 
@@ -67,9 +68,33 @@ public class Solution {
         }
         for (int i = 0; i < s.length(); i++) {
             char c = s.charAt(i);
-            tot += h[c-'a'];
-            ans = Math.max(tot,ans);
-            if(tot<=0){
+            tot += h[c - 'a'];
+            ans = Math.max(tot, ans);
+            if (tot <= 0) {
+                tot = 0;
+            }
+        }
+        return ans;
+    }
+
+    public int maximumCostSubstring2(String s, String chars, int[] vals) {
+        int ans = 0;
+        int tot = 0;
+        int[] h = new int[26];
+        for (int i = 0; i < h.length; i++) {
+            h[i] = i + 1;
+        }
+        for (int i = 0; i < chars.length(); i++) {
+            char c = chars.charAt(i);
+            int id = c - 'a';
+            h[id] = vals[i];
+        }
+
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            tot += h[c - 'a'];
+            ans = Math.max(tot, ans);
+            if (tot <= 0) {
                 tot = 0;
             }
         }

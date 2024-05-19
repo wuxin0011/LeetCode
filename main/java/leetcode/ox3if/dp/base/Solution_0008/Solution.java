@@ -32,6 +32,25 @@ public class Solution {
 
     public static void main(String[] args) {
         IoUtil.testUtil(Solution.class, "rob", "in.txt");
+        IoUtil.testUtil(Solution.class, "rob1", "in.txt");
+    }
+
+
+    public int rob1(int[] nums) {
+        int n = nums.length;
+        if (n == 0) return 0;
+        if (n == 1) return nums[0];
+        if (n == 2) return Math.max(nums[0], nums[1]);
+        return Math.max(helper1(nums, 0, n - 2), helper1(nums, 1, n - 1));
+    }
+
+
+    // 递归版本
+    public static int helper1(int[] nums, int st, int i) {
+        if (i < st) {
+            return 0;
+        }
+        return Math.max(helper1(nums, st, i - 1), helper1(nums, st, i - 2) + nums[i]);
     }
 
 
@@ -44,14 +63,35 @@ public class Solution {
     }
 
     public static int helper(int[] nums, int st, int ed) {
-        int n = nums.length - 1;
-        int[] dp = new int[n];
-        dp[0] = nums[st];
-        dp[1] = Math.max(nums[st], nums[st + 1]);
+        int prePre = nums[st];
+        int pre = Math.max(nums[st], st + 1 <= ed ? nums[st + 1] : nums[st]);
+        int cur = pre;
         for (int i = st + 2; i <= ed; i++) {
-            dp[i - st] = Math.max(dp[i - 1 - st], dp[i - 2 - st] + nums[i]);
+            cur = Math.max(pre, prePre + nums[i]);
+            prePre = pre;
+            pre = cur;
         }
-        return dp[n - 1];
+        return cur;
+    }
+
+
+    public int rob2(int[] nums) {
+        int n = nums.length;
+        if (n == 0) return 0;
+        if (n == 1) return nums[0];
+        if (n == 2) return Math.max(nums[0], nums[1]);
+        return Math.max(helper2(nums, 0, n - 2), helper2(nums, 1, n - 1));
+    }
+
+    public static int helper2(int[] nums, int st, int ed) {
+        int size = ed - st + 1;
+        int[] dp = new int[size];
+        dp[0] = nums[st];
+        dp[1] = Math.max(nums[st], st + 1 <= ed ? nums[st + 1] : 0);
+        for (int i = 2; i < size; i++) {
+            dp[i] = Math.max(dp[i - 1], dp[i - 2] + nums[i + st]);
+        }
+        return dp[size - 1];
     }
 
 

@@ -1,7 +1,10 @@
 package leetcode.ox3if.dp.base.Solution_0002;
 
 import code_generation.utils.IoUtil;
-import java.util.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  377. 组合总和 Ⅳ
 
@@ -46,7 +49,8 @@ import java.util.*;
 public class Solution {
 
     public static void main(String[] args) {
-        IoUtil.testUtil(Solution.class,"combinationSum4","in.txt");
+        IoUtil.testUtil(Solution.class, "combinationSum4", "in.txt");
+        IoUtil.testUtil(Solution.class, "combinationSum42", "in.txt");
     }
      
 
@@ -55,8 +59,8 @@ public class Solution {
         dp[0] = 1;
         for(int i = 1;i<=target;i++){
             for (int num : nums) {
-                if(num<=i){
-                    dp[i] += dp[i-num];
+                if (num <= i) {
+                    dp[i] += dp[i - num];
                 }
 
             }
@@ -64,6 +68,40 @@ public class Solution {
         return dp[target];
     }
 
-  
+
+
+
+    // 打印除路径
+    public int combinationSum42(int[] nums, int target) {
+        // System.out.println("nums = " + Arrays.toString(nums) + ",target = " + target);
+        int cur = f(nums, target,  new ArrayList<>());
+        // System.out.println("ans = " + cur);
+        System.out.println("target = " + target);
+        for (List<Integer> path : paths) {
+            System.out.println(path);
+        }
+        System.out.println();
+        return cur;
+    }
+
+    List<List<Integer>> paths = new ArrayList<>();
+
+    public int f(int[] nums, int sum, List<Integer> path) {
+        if (sum == 0) {
+            paths.add(new ArrayList<>(path));
+            return 1;
+        }
+        int v = 0;
+        for (int num : nums) {
+            if (sum < num) {
+                continue;
+            }
+            path.add(num);
+            v += f(nums, sum - num, path);
+            path.remove(path.size() - 1);
+        }
+        return v;
+    }
+
 
 }

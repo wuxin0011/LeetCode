@@ -1,7 +1,9 @@
 package leetcode.ox3if.dp.base.Solution_0005;
 
 import code_generation.utils.IoUtil;
-import java.util.*;
+
+import java.util.Arrays;
+
 /**
  *
  * 198. 打家劫舍
@@ -34,10 +36,14 @@ import java.util.*;
 public class Solution {
 
     public static void main(String[] args) {
-        IoUtil.testUtil(Solution.class,"rob","in.txt");
+        IoUtil.testUtil(Solution.class, "rob", "in.txt");
+        IoUtil.testUtil(Solution.class, "rob1", "in.txt");
+        IoUtil.testUtil(Solution.class, "rob2", "in.txt");
+        IoUtil.testUtil(Solution.class, "rob3", "in.txt");
     }
      
 
+    // 严格依赖一步一步递推版本
     public int rob(int[] nums) {
 
         if( nums == null || nums.length == 0 ) {
@@ -49,13 +55,66 @@ public class Solution {
         }
         int[] dp = new int[n];
         dp[0] = nums[0];
-        dp[1] = Math.max(nums[0],nums[1]);
+        dp[1] = Math.max(nums[0], nums[1]);
         for (int i = 2; i < n; i++) {
-            dp[i] = Math.max(dp[i-1],dp[i-2] + nums[i]);
+            dp[i] = Math.max(dp[i - 1], dp[i - 2] + nums[i]);
         }
-        return dp[n-1];
+        return dp[n - 1];
     }
 
-  
 
+    // 最优版本
+    public int rob1(int[] nums) {
+
+        if (nums == null || nums.length == 0) {
+            return 0;
+        }
+        int n = nums.length;
+        if (n == 1) {
+            return nums[0];
+        }
+        int prepre = nums[0];
+        int pre = Math.max(nums[0], nums[1]);
+        int cur = 0;
+        for (int i = 2; i < n; i++) {
+            cur = Math.max(pre, prepre + nums[i]);
+            prepre = pre;
+            pre = cur;
+        }
+        return cur;
+    }
+
+
+    // 基础递归版本
+    public int rob2(int[] nums) {
+        return f(nums.length - 1, nums);
+    }
+
+    public static int f(int i, int[] nums) {
+        if (i < 0) {
+            return 0;
+        }
+        return Math.max(f(i - 1, nums), f(i - 2, nums) + nums[i]);
+    }
+
+
+
+    // 递归基础上挂缓存
+    int[] memo;
+    public int rob3(int[] nums) {
+        memo = new int[nums.length];
+        Arrays.fill(memo,-1);
+        return f1(nums.length - 1, nums);
+    }
+
+    public  int f1(int i, int[] nums) {
+        if (i < 0) {
+            return 0;
+        }
+        if(memo[i]!=-1){
+            return memo[i];
+        }
+        memo[i] = Math.max(f1(i - 1, nums), f1(i - 2, nums) + nums[i]);
+        return memo[i];
+    }
 }

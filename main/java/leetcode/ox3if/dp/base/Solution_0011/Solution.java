@@ -2,8 +2,6 @@ package leetcode.ox3if.dp.base.Solution_0011;
 
 import code_generation.utils.IoUtil;
 
-import java.util.Arrays;
-
 /**
  * 1749. 任意子数组和的绝对值的最大值
  * <p>
@@ -40,20 +38,52 @@ public class Solution {
 
     public static void main(String[] args) {
         IoUtil.testUtil(Solution.class, "maxAbsoluteSum", "in.txt");
+        IoUtil.testUtil(Solution.class, "maxAbsoluteSum1", "in.txt");
     }
 
 
     public int maxAbsoluteSum(int[] nums) {
         int ans = 0,mx = 0,mi = 0;
-        for (int num : nums){
+        for (int num : nums) {
             ans += num;
-            if(ans>mx){
+            if (ans > mx) {
                 mx = ans;
-            }else if(ans < mi ){
+            } else if (ans < mi) {
                 mi = ans;
             }
         }
         return mx - mi;
+    }
+
+
+    public int maxAbsoluteSum1(int[] nums) {
+        return Math.max(Math.abs(findmax(nums)), Math.abs(findmin(nums)));
+    }
+
+    public static int findmin(int[] nums) {
+        int tot = 0;
+        int ans = 0;
+        for (int num : nums) {
+            tot += num;
+            ans = Math.min(ans, tot);
+            if (tot > 0) {
+                tot = 0;
+            }
+        }
+        return ans;
+    }
+
+    public static int findmax(int[] nums) {
+        int tot = 0;
+        int ans = 0;
+        for (int num : nums) {
+            tot += num;
+            ans = Math.max(ans, tot);
+            if (tot < 0) {
+                tot = 0;
+            }
+        }
+        return ans;
     }
 
 
