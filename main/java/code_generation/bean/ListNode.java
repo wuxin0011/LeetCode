@@ -42,18 +42,17 @@ public class ListNode {
      *
      * @param node
      */
-    public static void print(ListNode node) {
-        if (Objects.isNull(node)) {
-            System.out.println("node is null");
-            return;
-        }
+    public static String print(ListNode node) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("[");
         while (node != null) {
-            System.out.print(node.val);
+            sb.append(node.val);
             if (node.next != null) {
-                System.out.print(",");
+                sb.append(", ");
             }
             node = node.next;
         }
-        System.out.println();
+        sb.append("]");
+        return sb.toString();
     }
 }

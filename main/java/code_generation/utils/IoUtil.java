@@ -443,7 +443,8 @@ public class IoUtil {
 
                 Object expect = ReflectUtils.parseArg(origin, method.getName(), returnName, read, -1, -1);
                 if (expect != null && !TestUtils.valid(result, expect, returnName, isStrict)) {
-                    errorTimes.add(compareTimes); // save error
+                    System.out.println("compare " + compareTimes + " is Error , place check your program \n"); // save error
+                    errorTimes.add(compareTimes);
                 }
                 args = null;
                 read = null;
@@ -460,9 +461,9 @@ public class IoUtil {
         if (errorTimes.size() == 0 && exceptionTime == -1 && newObj) {
             System.out.println("Accepted!");
         } else {
-            for (int error : errorTimes) {
-                System.out.println("compare " + error + " is Error ,place check your program");
-            }
+//            for (int error : errorTimes) {
+//                System.out.println("compare " + error + " is Error ,place check your program");
+//            }
             if (exceptionTime != -1) {
                 System.out.println("exception times :" + exceptionTime);
             }
