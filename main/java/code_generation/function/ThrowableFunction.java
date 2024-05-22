@@ -7,5 +7,5 @@ package code_generation.function;
 @FunctionalInterface
 public
 interface ThrowableFunction{
-    void apply() throws InterruptedException;
+    void apply() throws Exception;
 }

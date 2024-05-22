@@ -1,5 +1,7 @@
 package code_generation.utils.ACM;
 
+import code_generation.utils.CustomColor;
+import code_generation.utils.ExceptionUtils;
 import code_generation.utils.IoUtil;
 import code_generation.utils.StringUtils;
 
@@ -118,6 +120,7 @@ public class ACMUtil {
             // 执行命令
             Process process = Runtime.getRuntime().exec(command);
 
+
 //            BufferedReader input = new BufferedReader(new InputStreamReader(process.getInputStream()));
 //            BufferedReader error = new BufferedReader(new InputStreamReader(process.getErrorStream()));
 //
@@ -130,7 +133,7 @@ public class ACMUtil {
 //                System.err.println(line);
 //            }
 
-            // int exitCode = process.waitFor();
+            int exitCode = process.waitFor();
             // System.out.println("\nExit Code: " + exitCode);
 
 
@@ -164,11 +167,17 @@ public class ACMUtil {
         if (out == null || temp == null) {
             return;
         }
+        // ExceptionUtils.sleep(2);
         File o = new File(out);
         File t = new File(temp);
-        if (!o.exists() || !t.exists()) {
-            return;
-        }
+        ExceptionUtils.executeWithExceptionHandling(() -> {
+            if (!o.exists()) {
+                o.createNewFile();
+            }
+            if (!t.exists()) {
+                t.createNewFile();
+            }
+        }, false);
         BufferedReader fis1 = null;
         BufferedReader fis2 = null;
         String a1 = null, b1 = null;
@@ -211,8 +220,8 @@ public class ACMUtil {
                 String a = m1.get(line);
                 String b = m2.get(line);
                 System.out.println("Diff Line " + line);
-                System.out.println("expect =  " + a);
-                System.out.println("result = " + b);
+                System.out.println("expect : " + ("\n".equals(a) ? "\\n" : a));
+                System.out.println("result : " + CustomColor.pink((b == null || "".equals(b) ? "is space black maybe you need \\n" : b)));
                 System.out.println();
             }
         }
