@@ -17,6 +17,8 @@ import java.util.*;
 public class ACMUtil {
 
 
+    public static final boolean isWin = System.getProperty("os.name").contains("Win") || System.getProperty("os.name").contains("win");
+    public static final String CHANGE_DIR_COMMAND = isWin ? "cmd /c cd" : "cd";
     public static final String DEFAULT_INPUT = "in.txt";
     public static final String DEFAULT_OUTPUT = "out.txt";
     public static final String DEFAULT_TEMP = "temp.txt";
@@ -102,9 +104,9 @@ public class ACMUtil {
             // only input
             if (outHomeDir != null) {
                 if (out == null) {
-                    command = String.format("cmd /c cd %s && java %s < %s", outHomeDir, name, in);
+                    command = String.format("%s %s && java %s < %s",CHANGE_DIR_COMMAND, outHomeDir, name, in);
                 } else {
-                    command = String.format("cmd /c cd %s & java %s < %s > %s", outHomeDir, name, in, temp);
+                    command = String.format("%s %s & java %s < %s > %s",CHANGE_DIR_COMMAND, outHomeDir, name, in, temp);
 
                     // if this project is git project,this command will run but not result
                     // command = String.format("cmd /c cd %s & java %s < %s > %s & cmd /c git diff %s %s", outHomeDir, name, in, temp, out, temp);
