@@ -29,7 +29,7 @@ public class ACMUtil {
         init();
     }
 
-    public static String init() {
+    private static void init() {
         String userHome = IoUtil.getWorkDir();
         Properties properties = System.getProperties();
         String classPathInfo = (String) properties.get("java.class.path");
@@ -40,7 +40,6 @@ public class ACMUtil {
                 break;
             }
         }
-        return outHomeDir;
     }
 
     public static void runOnlyInput(Class<?> c) {
@@ -67,7 +66,7 @@ public class ACMUtil {
 
 
     // handler abs
-    public static String getAbs(Class<?> c, String dir, String s) {
+    private static String getAbs(Class<?> c, String dir, String s) {
         check(c);
         if (StringUtils.isEmpty(s)) {
             return null;
@@ -152,7 +151,7 @@ public class ACMUtil {
 
     }
 
-    public static void check(Class<?> c) {
+    private static void check(Class<?> c) {
         if (c == null) {
             throw new NullPointerException("class not allow null");
         }
