@@ -655,19 +655,60 @@ public class TestUtils {
         StringBuilder rb = new StringBuilder();
         StringBuilder eb = new StringBuilder();
         int m = r.length(), n = e.length();
-        char rc, ec;
-        for (int i = 0, j = 0; i < m || j < n; ++i, ++j) {
-            rc = i < m ? r.charAt(i) : ' ';
-            ec = j < n ? e.charAt(j) : ' ';
-            if (!StringUtils.isIgnore(rc) && !StringUtils.isIgnore(ec) && ec != rc) {
-                rb.append(CustomColor.error(rc));
-            } else {
-                rb.append(rc);
+        if (("[]".equals(r) && !"[]".equals(e)) || ("null".equals(r) && !"null".equals(e))) {
+            rb.append(CustomColor.error(r));
+            eb.append(e);
+        } else {
+            for (int i = 0, j = 0; i < m || j < n; ++i, ++j) {
+
+                for (; i < m && isIgnore(r.charAt(i)); i++) {
+                    if (StringUtils.isIgnore(r.charAt(i))) continue;
+                    rb.append(r.charAt(i));
+                }
+                for (; j < n && isIgnore(e.charAt(j)); j++) {
+                    if (StringUtils.isIgnore(e.charAt(j))) continue;
+                    eb.append(e.charAt(j));
+                }
+
+                if (i >= m && j >= n) {
+                    break;
+                }
+
+                StringBuilder temp1 = new StringBuilder();
+                StringBuilder temp2 = new StringBuilder();
+
+                while (i < m && !isIgnore(r.charAt(i))) {
+                    temp1.append(r.charAt(i));
+                    i++;
+                }
+
+                while (j < n && !isIgnore(e.charAt(j))) {
+                    temp2.append(e.charAt(j));
+                    j++;
+                }
+
+
+                rb.append(temp2.equals(temp1) ? temp1.toString() : CustomColor.error(temp1.toString()));
+                eb.append(temp2.toString());
+
+                if (i < m) {
+                    rb.append(r.charAt(i));
+                    rb.append("");
+                }
+
+                if (j < n) {
+                    eb.append(e.charAt(j));
+                    eb.append("");
+                }
             }
-            eb.append(ec);
         }
+
         System.out.println("Expect: " + eb.toString());
         System.out.println("Result: " + rb.toString());
+    }
+
+    public static boolean isIgnore(char c) {
+        return StringUtils.isIgnore(c) || c == ']' || c == '[';
     }
 
 
