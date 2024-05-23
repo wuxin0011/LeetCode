@@ -286,11 +286,11 @@ public class TestUtils {
             return true;
         }
         if (result == null) {
-            System.out.println("result = null expect =" + expect);
+            System.out.println("result = " + CustomColor.error("null") + " expect =" + expect);
             return false;
         }
         if (returnType == null) {
-            System.out.println("not support result is null");
+            System.out.println(CustomColor.error("not support return type is null"));
             return false;
         }
 
