@@ -66,12 +66,13 @@ public class TestUtils {
     }
 
 
-    public static <T> boolean deepEqual(List<T> expect, List<T> b, boolean isStrict) {
+    public static <T> boolean deepEqual(List<T> b, List<T> expect, boolean isStrict) {
         if (expect == b) {
             return true;
         }
         if (expect == null || b == null || expect.size() != b.size()) {
-            System.out.println("result.size() != expect.size()");
+//            System.out.println("result.size() != expect.size()");
+            printDiffInfo(String.valueOf(expect), String.valueOf(b));
             return false;
         }
         int n = expect.size();
@@ -90,7 +91,8 @@ public class TestUtils {
                 return true;
             } else {
                 // System.out.println("error");
-                System.out.println("index = " + idx + ",Expect: " + expect.get(idx) + ",Result: " + CustomColor.error(b.get(idx)));
+                // System.out.println("index = " + idx + ",Expect: " + expect.get(idx) + ",Result: " + CustomColor.error(b.get(idx)));
+                printDiffInfo(String.valueOf(expect), String.valueOf(b));
                 return false;
             }
         } else {
