@@ -10,7 +10,7 @@ import java.util.Arrays;
  */
 public class C {
     public static void main(String[] args) {
-        IoUtil.testUtil(C.class,"findMaximumNumber","surrounded_regions.txt");
+        IoUtil.testUtil(C.class,"findMaximumNumber","in.txt");
     }
 
     public long findMaximumNumber(long k, int x) {
