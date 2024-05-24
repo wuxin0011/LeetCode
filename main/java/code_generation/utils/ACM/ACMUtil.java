@@ -221,8 +221,8 @@ public class ACMUtil {
                 String a = m1.get(line);
                 String b = m2.get(line);
                 System.out.println("Diff Line " + line);
-                System.out.println("expect : " + ("\n".equals(a) ? "\\n" : a));
-                System.out.println("result : " + CustomColor.pink((b == null || "".equals(b) ? "is space black maybe you need \\n" : b)));
+                System.out.println("Expect : " + ("\n".equals(a) ? "\\n" : a));
+                System.out.println("Result : " + CustomColor.pink((b == null || "".equals(b) ? "is space black maybe you need \\n" : b)));
                 System.out.println();
             }
         }

@@ -15,7 +15,7 @@ public class Code_0069_1542 {
     public static void main(String[] args) {
         // IoUtil.testUtil(Code_0069_1542.class, "longestAwesome", "txt_file\\Code_0069_1542.txt");
         // IoUtil.testUtil(Code_0069_1542.class, "longestAwesome1", "txt_file\\Code_0069_1542.txt");
-        IoUtil.testUtil(Code_0069_1542.class, "longestAwesome2", "txt_file\\Code_0069_1542.txt");
+        IoUtil.testUtil(Code_0069_1542.class, "longestAwesomeLongTimeError", "txt_file\\Code_0069_1542.txt");
     }
 
 
@@ -31,7 +31,7 @@ public class Code_0069_1542 {
      * @param s
      * @return
      */
-    public int longestAwesome1(String s) {
+    public int longestAwesomeLongTimeError(String s) {
         int[] map = new int[10];
         char[] chars = s.toCharArray();
         for (char c : chars) {
