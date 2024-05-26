@@ -2,6 +2,7 @@ package code_generation.crwal.request;
 
 import code_generation.crwal.Constant;
 import code_generation.utils.IoUtil;
+import code_generation.utils.StringUtils;
 
 import java.io.BufferedInputStream;
 import java.io.DataOutputStream;
@@ -9,6 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.StringJoiner;
@@ -77,7 +79,15 @@ public class Request {
 
 
     public void initHttpURLConnection(HttpURLConnection connection) {
+        initHttpURLConnection(connection, false);
+    }
+
+    public void initHttpURLConnection(HttpURLConnection connection, boolean removeCookie) {
         Objects.requireNonNull(connection, "HttpURLConnection connection not allow null !");
+        if (removeCookie) {
+            headers.remove("cookie");
+            headers.remove("Cookie");
+        }
         if (headers != null && headers.size() > 0) {
             this.headers.forEach(connection::setRequestProperty);
             // System.out.println(this.headers.get("Cookie"));
@@ -85,10 +95,9 @@ public class Request {
 
     }
 
-
     public static HttpURLConnection getConnection(String url) {
         try {
-            if(!(url.contains("api/info/") || url.contains("https://leetcode.cn/graphql/"))){
+            if (!(url.contains("api/info/") || url.contains("https://leetcode.cn/graphql/"))) {
                 System.out.println("access url : " + url);
             }
             URL apiUrl = new URL(url);
@@ -145,29 +154,7 @@ public class Request {
     }
 
     public String requestPost(String url, String ContentType, String jsonStr, Map<String, String> params) {
-        url = wrapperUrl(url, params);
-
-        try {
-            HttpURLConnection connection = getConnection(url);
-            if (connection == null) {
-                return "";
-            }
-            connection.setRequestProperty("Content-Type", ContentType == null ? applicationJSON : ContentType);
-            initHttpURLConnection(connection);
-            connection.setRequestMethod("POST");
-            if (jsonStr != null && jsonStr.length() > 0) {
-                connection.setDoOutput(true);
-                DataOutputStream outputStream = new DataOutputStream(connection.getOutputStream());
-                outputStream.writeBytes(jsonStr);
-                outputStream.flush();
-                outputStream.close();
-            }
-            return response(connection);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "";
-        }
-
+        return response(requestBefore(url, ContentType, jsonStr, null, params, false));
     }
 
 
@@ -197,23 +184,30 @@ public class Request {
         Objects.requireNonNull(map, "map not allow null");
         Objects.requireNonNull(connectionTag, "connectionTag not allow null");
         Objects.requireNonNull(endTag, "endTag not allow null");
-        int size = 0;
-        int end = map.size();
-        StringBuilder sb = new StringBuilder();
-        for (Map.Entry<String, String> item : map.entrySet()) {
-            sb.append(item.getKey());
-            sb.append(connectionTag);
-            sb.append(item.getValue());
-            if (size != end - 1) {
-                sb.append(endTag);
+        try {
+            int size = 0;
+            int end = map.size();
+            StringBuilder sb = new StringBuilder();
+            for (Map.Entry<String, String> item : map.entrySet()) {
+                sb.append(java.net.URLEncoder.encode(item.getKey(), "UTF-8"));
+                sb.append(connectionTag);
+                sb.append(java.net.URLEncoder.encode(item.getValue(), "UTF-8"));
+                if (size != end - 1) {
+                    sb.append(endTag);
+                }
+                size++;
             }
-            size++;
+            return sb.toString();
+        } catch (Exception e) {
+            return "";
         }
-        return sb.toString();
     }
 
 
     public static String response(HttpURLConnection connection) {
+        if (connection == null) {
+            return "";
+        }
         BufferedInputStream bis = null;
         try {
             bis = new BufferedInputStream(connection.getInputStream());
@@ -233,6 +227,70 @@ public class Request {
 
 
     }
+
+    public static void handlerDataOutPutStream(HttpURLConnection connection, String jsonStr) {
+        if (StringUtils.isEmpty(jsonStr) || connection == null) {
+            return;
+        }
+        try {
+            connection.setDoOutput(true);
+            DataOutputStream outputStream = new DataOutputStream(connection.getOutputStream());
+            outputStream.writeBytes(jsonStr);
+            outputStream.flush();
+            outputStream.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public HttpURLConnection requestBefore(String url, String ContentType, String jsonStr, String methodType, Map<String, String> params, boolean removeCookie) {
+
+
+        if (StringUtils.isEmpty(methodType)) {
+            methodType = "POST";
+        }
+
+        if (methodType.equals("GET")) {
+            url = wrapperUrl(url, params);
+        }
+
+        try {
+            HttpURLConnection connection = getConnection(url);
+            if (connection == null) {
+                throw new RuntimeException("response Error");
+            }
+            connection.setRequestProperty("Content-Type", ContentType == null ? applicationJSON : ContentType);
+            connection.setRequestMethod(methodType);
+            initHttpURLConnection(connection, removeCookie);
+            handlerDataOutPutStream(connection, jsonStr);
+            if (params != null && params.size() > 0) {
+                handlerDataOutPutStream(connection, buildString(params, "=", "&"));
+            }
+            return connection;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
+    public HttpURLConnection requestResponse(String url, String ContentType, String jsonStr, Map<String, String> params, boolean removeCookie) {
+        HttpURLConnection connection = requestBefore(url, ContentType, jsonStr, null, params, removeCookie);
+        return connection;
+    }
+
+
+    public Map<String, List<String>> requestPostResponse(String url, String ContentType, String jsonStr, Map<String, String> params, boolean removeCookie) {
+        HttpURLConnection connection = requestBefore(url, ContentType, jsonStr, null, params, removeCookie);
+        if (connection == null) {
+            return null;
+        }
+        Map<String, List<String>> headerFields = connection.getHeaderFields();
+        connection.disconnect();
+        return headerFields;
+    }
+
 
     @Override
     public String toString() {

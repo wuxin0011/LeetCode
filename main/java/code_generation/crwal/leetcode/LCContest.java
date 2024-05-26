@@ -185,7 +185,6 @@ public class LCContest implements Contest {
         System.out.println("==========================================" + No + " end ==========================================");
     }
 
-    private static final LCTestCase lcTestCase = new LCTestCase();
     private static final LCTemplate lcTemplate = new LCTemplate("{'value': 'java', 'text': 'Java', 'defaultCode':");
 
     public void createContestTemplate(int curId, String dir, Question question) {
@@ -221,14 +220,18 @@ public class LCContest implements Contest {
             testCase = TestCaseUtil.testCaseToString(TEST_CASE.parseContest(contestHtml));
             parseCodeInfo = this.parseCodeTemplate(contestHtml);
         }
-        Objects.requireNonNull(parseCodeInfo, "parse error");
+
+        if (parseCodeInfo == null) {
+            throw new RuntimeException("place check your cookie ! maybe already expire");
+        }
+
+
         String method = parseCodeInfo.getMethod();
         String methodName = parseCodeInfo.getMethodName();
         String title = question.title;
         if (StringUtils.isEmpty(title)) {
             title = getTitle(info);
         }
-
         if (StringUtils.isEmpty(title)) {
             title = titleSlug;
         }
@@ -385,6 +388,9 @@ public class LCContest implements Contest {
 
     public ParseCodeInfo parseCodeTemplate(Question question) {
         String info = BuildUrl.queryNewContestQuestion(question.getUrl());
+        if (StringUtils.kmpSearch(info, "authenticated") != -1) {
+            throw new RuntimeException("authenticated access ,place chceck your cookie ");
+        }
         String p = "\"lang\":\"Java\",\"langSlug\":\"java\"";
         return lcTemplate.parseCodeTemplate(info, p, true);
     }

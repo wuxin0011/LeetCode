@@ -4,6 +4,11 @@ package code_generation.crwal.leetcode;
 import code_generation.crwal.request.Request;
 import code_generation.utils.StringUtils;
 
+import java.net.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 /**
  * @author: wuxin0011
  * @Description:
@@ -11,6 +16,7 @@ import code_generation.utils.StringUtils;
 public class BuildUrl {
     public final static String LC_PREFIX = "https://leetcode.cn";
     public final static String LC_PROBLEM_PREFIX = LC_PREFIX + "/problems";
+    public final static String LC_LOGIN = LC_PREFIX + "/accounts/login/";
     public final static String graphql = LC_PREFIX + "/graphql/";
     public final static String API_PREFIX = LC_PREFIX + "/contest/api/info/";
     public final static String LC_WEEKLY_CONTEST_PREFIX = LC_PREFIX + "/contest/weekly-contest";
@@ -90,6 +96,17 @@ public class BuildUrl {
         return request.requestPost(graphql, jsonStr);
     }
 
+    /**
+     * 构造一个POSt请求
+     * 默认接口 url : <a href="https://leetcode.cn/graphql/">...</a>
+     *
+     * @param jsonStr jsonStr
+     * @return 返回一个json格式字符串
+     */
+    public static Map<String, List<String>> getResponse(String jsonStr) {
+        return request.requestPostResponse(graphql, Request.applicationJSON, jsonStr, null, true);
+    }
+
 
     public static String getWeeklyContestUrls(String id) {
         String url = String.format(QuestionWeeklyUrlsPattern, id);
@@ -143,6 +160,41 @@ public class BuildUrl {
     public static String questionEditorData(String titleSlug) {
         return getPost(LCJsonTemplate.questionEditorData(buildTitleSlug(titleSlug)));
     }
+
+
+    /**
+     * 查询token
+     *
+     * @return
+     */
+    public static String queryToken() {
+        Map<String, List<String>> response = getResponse(LCJsonTemplate.queryToken());
+        if (response == null) return "";
+        List<String> ls = response.get("Set-Cookie");
+        for (String s : ls) {
+            String[] splits = s.split(";");
+            for (String split : splits) {
+                if (StringUtils.isEmpty(split)) continue;
+                if (split.contains("csrftoken=")) {
+                    return split.replace("csrftoken=", "");
+                }
+            }
+        }
+        return "";
+    }
+
+
+    public static String login(String username, String password, String csrftoken) {
+        HashMap<String, String> map = new HashMap<>();
+        map.put("password", password);
+        map.put("login", username);
+        map.put("csrfmiddlewaretoken", csrftoken);
+        map.put("next", "/");
+        HttpURLConnection connection = request.requestBefore(LC_LOGIN, Request.applicationJSON, null, "POST", map, true);
+        System.out.println(connection);
+        return "";
+    }
+
 
     /**
      * 当前账号状态信息
@@ -203,5 +255,42 @@ public class BuildUrl {
         String contestNo = contestUrl.replace(LC_PREFIX + "/contest/", "").split("/problems")[0];
 
         return getPost(LCJsonTemplate.newContestQuestion(contestNo, titleSlug));
+    }
+
+
+    public static void requestLoginPage() {
+//        HttpURLConnection connection = request.requestBefore(LC_PREFIX, Request.applicationHtml, null, "GET", null, true);
+//        System.out.println(connection);
+//        Map<String, List<String>> stringListMap = connection.getHeaderFields();
+//        stringListMap.forEach((key, val) -> {
+//            System.out.println("==================");
+//            System.out.println("key = " + key + ",v = " + val);
+//        });
+        try {
+            URL loginURL = new URL(LC_LOGIN);
+            URI uri = loginURL.toURI();
+
+            // 创建一个 CookieManager 对象来管理 Cookie
+            CookieManager cookieManager = new CookieManager();
+            CookieHandler.setDefault(cookieManager);
+
+            // 获取 Cookie
+            HttpCookie targetCookie = null;
+            for (HttpCookie cookie : cookieManager.getCookieStore().get(uri)) {
+                if ("LEETCODE_SESSION".equals(cookie.getName())) {
+                    targetCookie = cookie;
+                    break;
+                }
+            }
+
+            if (targetCookie != null) {
+                // Cookie 存在，进行后续操作
+                // ...
+            }
+        } catch (Exception e) {
+            // 处理异常
+            e.printStackTrace();
+        }
+
     }
 }

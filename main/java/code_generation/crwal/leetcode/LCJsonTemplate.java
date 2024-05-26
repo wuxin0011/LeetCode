@@ -150,6 +150,16 @@ public class LCJsonTemplate {
         return userStatusStr;
     }
 
+    public static final String queryTokenStr = "{\n" +
+            "    \"operationName\": \"ipInfo\",\n" +
+            "    \"variables\": {},\n" +
+            "    \"query\": \"query ipInfo {\\n  ipInfo {\\n    country\\n    countryCode\\n    __typename\\n  }\\n}\\n\"\n" +
+            "}";
+
+    public static String queryToken() {
+        return queryTokenStr;
+    }
+
     public static void main(String[] args) {
         System.out.println(userStatusStr);
     }

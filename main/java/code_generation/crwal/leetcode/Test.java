@@ -5,6 +5,7 @@ import code_generation.utils.IoUtil;
 import code_generation.utils.StringUtils;
 
 import java.text.ParseException;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -233,6 +234,24 @@ public class Test {
     }
 
 
+    public static void testLoginInfo() {
+        Map<String, String> getenv = System.getenv();
+        // System.out.println(getenv);
+        String username = System.getenv("LEET_USERNAME");
+        String password = System.getenv("LEET_PASSWORD");
+        String csrftoken = BuildUrl.queryToken();
+        if (StringUtils.isEmpty(csrftoken)) {
+            System.out.println("is NULL");
+        } else {
+            System.out.println("csrftoken = " + csrftoken);
+            BuildUrl.login(username, password, csrftoken);
+            BuildUrl.requestLoginPage();
+        }
+
+
+    }
+
+
     public static void main(String[] args) throws Exception {
 //        testPost();
 
@@ -273,7 +292,10 @@ public class Test {
 
 
         // 测试新版本接口
-        queryNewContestQuestion();
+        // queryNewContestQuestion();
+
+
+        testLoginInfo();
     }
 
     private static void getProblemsTitle() {
