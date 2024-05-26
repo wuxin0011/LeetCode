@@ -690,8 +690,27 @@ public class TestUtils {
                 }
 
 
-                rb.append(temp2.equals(temp1) ? temp1.toString() : CustomColor.error(temp1.toString()));
-                eb.append(temp2.toString());
+                String result = temp1.toString();
+                String expectResult = temp2.toString();
+                boolean isEquals = (StringUtils.isEmpty(result) && StringUtils.isEmpty(expectResult)) || (!StringUtils.isEmpty(expectResult) && expectResult.equals(result));
+
+                boolean deleteDot = false;
+                boolean isDot = false;
+                if (!isEquals) {
+                    isDot = result.charAt(result.length() - 1) == ',';
+                    if (isDot) {
+                        result = result.substring(0, result.length() - 1);
+                    }
+
+                }
+
+                rb.append(isEquals ? result : CustomColor.error(result));
+
+                if (isDot) {
+                    rb.append(",");
+                }
+
+                eb.append(expectResult);
 
                 if (i < m) {
                     rb.append(r.charAt(i));
