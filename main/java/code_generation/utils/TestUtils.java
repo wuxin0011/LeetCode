@@ -289,7 +289,7 @@ public class TestUtils {
             return true;
         }
         if (result == null) {
-            System.out.println("result = " + CustomColor.error("null") + " expect =" + expect);
+            printDiffInfo(String.valueOf(expect), "null",isPrintInfo);
             return false;
         }
         if (returnType == null) {
@@ -664,7 +664,7 @@ public class TestUtils {
         StringBuilder rb = new StringBuilder();
         StringBuilder eb = new StringBuilder();
         int m = r.length(), n = e.length();
-        if (("[]".equals(r) && !"[]".equals(e)) || ("null".equals(r) && !"null".equals(e))) {
+        if (("[]".equals(r) && !"[]".equals(e)) || ("{}".equals(r) && !"{}".equals(e)) || ("null".equals(r) && !"null".equals(e))) {
             rb.append(CustomColor.error(r));
             eb.append(e);
         } else {
@@ -736,7 +736,7 @@ public class TestUtils {
     }
 
     public static boolean isIgnore(char c) {
-        return StringUtils.isIgnore(c) || c == ']' || c == '[';
+        return StringUtils.isIgnore(c) || c == '[' || c == ']' || c == '{' || c == '}';
     }
 
 
