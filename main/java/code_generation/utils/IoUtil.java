@@ -442,7 +442,7 @@ public class IoUtil {
 
 
                 Object expect = ReflectUtils.parseArg(origin, method.getName(), returnName, read, -1, -1);
-                if (expect != null && !TestUtils.valid(result, expect, returnName, isStrict)) {
+                if (expect != null && !TestUtils.valid(result, expect, returnName, isStrict,true)) {
                     System.out.println("compare " + compareTimes + " is Error , place check your program \n"); // save error
                     errorTimes.add(compareTimes);
                 }

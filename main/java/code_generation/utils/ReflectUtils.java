@@ -522,12 +522,13 @@ public class ReflectUtils {
             return new int[][]{};
         }
         List<List<Integer>> ls = parseListDoubleInteger(input);
-        if (ls.size() == 0 || ls.get(0).size() == 0) {
+        if (ls == null || ls.size() == 0) {
             return new int[][]{};
         }
-        int row = ls.size(), col = ls.get(0).size();
-        int[][] ans = new int[row][col];
+        int row = ls.size();
+        int[][] ans = new int[row][];
         for (int i = 0; i < row; i++) {
+            ans[i] = new int[ls.get(i).size()];
             for (int j = 0; j < ls.get(i).size(); j++) {
                 ans[i][j] = ls.get(i).get(j);
             }

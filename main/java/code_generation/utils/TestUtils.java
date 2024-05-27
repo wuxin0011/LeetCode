@@ -280,8 +280,11 @@ public class TestUtils {
 
     }
 
-
     public static boolean valid(Object result, Object expect, String returnType, boolean isStrict) {
+        return valid(result, expect, returnType, isStrict, false);
+    }
+
+    public static boolean valid(Object result, Object expect, String returnType, boolean isStrict, boolean isPrintInfo) {
         if (result == expect) {
             return true;
         }
@@ -303,7 +306,7 @@ public class TestUtils {
                     Integer[] r = covert((int[]) result);
                     ok = deepEqual(r, e, isStrict);
                     if (!ok) {
-                        printDiffInfo(Arrays.toString(e), Arrays.toString(r));
+                        printDiffInfo(Arrays.toString(e), Arrays.toString(r), isPrintInfo);
                     }
                     return ok;
                 }
@@ -312,7 +315,7 @@ public class TestUtils {
                     Integer[][] r = covert((int[][]) result);
                     ok = deepEqual(r, e, isStrict);
                     if (!ok) {
-                        printDiffInfo(Arrays.deepToString(e), Arrays.deepToString(r));
+                        printDiffInfo(Arrays.deepToString(e), Arrays.deepToString(r),isPrintInfo);
                     }
                     return ok;
                 }
@@ -321,7 +324,7 @@ public class TestUtils {
                     Integer[][][] r = covert((int[][][]) result);
                     ok = deepEqual(r, e, isStrict);
                     if (!ok) {
-                        printDiffInfo(Arrays.deepToString(e), Arrays.deepToString(r));
+                        printDiffInfo(Arrays.deepToString(e), Arrays.deepToString(r),isPrintInfo);
                     }
                     return ok;
                 }
@@ -331,7 +334,7 @@ public class TestUtils {
                     Long[] r = covert((long[]) result);
                     ok = deepEqual(r, e, isStrict);
                     if (!ok) {
-                        printDiffInfo(Arrays.toString(e), Arrays.toString(r));
+                        printDiffInfo(Arrays.toString(e), Arrays.toString(r),isPrintInfo);
                     }
                     return ok;
                 }
@@ -341,7 +344,7 @@ public class TestUtils {
                     Long[][] r = covert((long[][]) result);
                     ok = deepEqual(r, e, isStrict);
                     if (!ok) {
-                        printDiffInfo(Arrays.deepToString(e), Arrays.deepToString(r));
+                        printDiffInfo(Arrays.deepToString(e), Arrays.deepToString(r),isPrintInfo);
                     }
                     return ok;
                 }
@@ -361,7 +364,7 @@ public class TestUtils {
                     Double[] r = covert((double[]) result);
                     ok = deepEqual(r, e, isStrict);
                     if (!ok) {
-                        printDiffInfo(Arrays.toString(e), Arrays.toString(r));
+                        printDiffInfo(Arrays.toString(e), Arrays.toString(r),isPrintInfo);
                     }
                     return ok;
                 }
@@ -370,7 +373,7 @@ public class TestUtils {
                     Double[][] r = covert((double[][]) result);
                     ok = deepEqual(r, e, isStrict);
                     if (!ok) {
-                        printDiffInfo(Arrays.deepToString(e), Arrays.deepToString(r));
+                        printDiffInfo(Arrays.deepToString(e), Arrays.deepToString(r),isPrintInfo);
                     }
                     return ok;
                 }
@@ -379,7 +382,7 @@ public class TestUtils {
                     Float[] r = covert((float[]) result);
                     ok = deepEqual(r, e, isStrict);
                     if (!ok) {
-                        printDiffInfo(Arrays.toString(e), Arrays.toString(r));
+                        printDiffInfo(Arrays.toString(e), Arrays.toString(r),isPrintInfo);
                     }
                     return ok;
                 }
@@ -388,20 +391,20 @@ public class TestUtils {
                     String[] e = (String[]) expect;
                     ok = deepEqual(r, e, isStrict);
                     if (!ok) {
-                        printDiffInfo(Arrays.toString(e), Arrays.toString(r));
+                        printDiffInfo(Arrays.toString(e), Arrays.toString(r),isPrintInfo);
                     }
                     return ok;
                 }
                 case "String[][]":
                     ok = deepEqual((String[][]) result, (String[][]) expect, isStrict);
                     if (!ok) {
-                        printDiffInfo(Arrays.deepToString((String[][]) expect), Arrays.deepToString((String[][]) result));
+                        printDiffInfo(Arrays.deepToString((String[][]) expect), Arrays.deepToString((String[][]) result),isPrintInfo);
                     }
                     return ok;
                 case "String[][][]":
                     ok = deepEqual((String[][][]) result, (String[][][]) expect, isStrict);
                     if (!ok) {
-                        printDiffInfo(Arrays.deepToString((String[][][]) expect), Arrays.deepToString((String[][][]) result));
+                        printDiffInfo(Arrays.deepToString((String[][][]) expect), Arrays.deepToString((String[][][]) result),isPrintInfo);
                     }
                     return ok;
                 case "char[]": {
@@ -409,7 +412,7 @@ public class TestUtils {
                     Character[] r = covert((char[]) result);
                     ok = deepEqual(r, e, isStrict);
                     if (!ok) {
-                        printDiffInfo(Arrays.toString(e), Arrays.toString(r));
+                        printDiffInfo(Arrays.toString(e), Arrays.toString(r),isPrintInfo);
                     }
                     return ok;
                 }
@@ -418,7 +421,7 @@ public class TestUtils {
                     Character[][] r = covert((char[][]) result);
                     ok = deepEqual(r, e, isStrict);
                     if (!ok) {
-                        printDiffInfo(Arrays.deepToString(e), Arrays.deepToString(r));
+                        printDiffInfo(Arrays.deepToString(e), Arrays.deepToString(r),isPrintInfo);
                     }
                     return ok;
                 }
@@ -427,7 +430,7 @@ public class TestUtils {
                     Character[][][] r = covert((char[][][]) result);
                     ok = deepEqual(r, e, isStrict);
                     if (!ok) {
-                        printDiffInfo(Arrays.deepToString(e), Arrays.deepToString(r));
+                        printDiffInfo(Arrays.deepToString(e), Arrays.deepToString(r),isPrintInfo);
                     }
                     return ok;
                 }
@@ -436,7 +439,7 @@ public class TestUtils {
                     Boolean[] r = covert((boolean[]) result);
                     ok = deepEqual(r, e, isStrict);
                     if (!ok) {
-                        printDiffInfo(Arrays.toString(e), Arrays.toString(r));
+                        printDiffInfo(Arrays.toString(e), Arrays.toString(r),isPrintInfo);
                     }
                     return ok;
                 }
@@ -445,7 +448,7 @@ public class TestUtils {
                     Boolean[][] r = covert((boolean[][]) result);
                     ok = deepEqual(r, e, isStrict);
                     if (!ok) {
-                        printDiffInfo(Arrays.deepToString(e), Arrays.deepToString(r));
+                        printDiffInfo(Arrays.deepToString(e), Arrays.deepToString(r),isPrintInfo);
                     }
                     return ok;
                 }
@@ -460,7 +463,7 @@ public class TestUtils {
                     ListNode r = (ListNode) result;
                     ok = deepEqual(r, e);
                     if (!ok) {
-                        printDiffInfo(ListNode.print(e), ListNode.print(r));
+                        printDiffInfo(ListNode.print(e), ListNode.print(r),isPrintInfo);
                     }
                     return ok;
                 }
@@ -475,12 +478,12 @@ public class TestUtils {
                         t = Arrays.deepEquals((Object[]) result, (Object[]) expect);
                         if (!t) {
                             // System.out.println("expect result = " + Arrays.deepToString((Object[]) expect) + ",but result = " + CustomColor.error(Arrays.deepToString((Object[]) result)));
-                            printDiffInfo(Arrays.deepToString((Object[]) expect), Arrays.deepToString((Object[]) result));
+                            printDiffInfo(Arrays.deepToString((Object[]) expect), Arrays.deepToString((Object[]) result),isPrintInfo);
                         }
                     } else {
                         if (!t) {
                             // System.out.println("expect result = " + expect + ",but result = " + CustomColor.error(result));
-                            printDiffInfo(String.valueOf(expect), String.valueOf(result));
+                            printDiffInfo(String.valueOf(expect), String.valueOf(result),isPrintInfo);
                         }
                     }
                     return t;
@@ -652,8 +655,12 @@ public class TestUtils {
         return cnt == aset.size();
     }
 
-
     public static void printDiffInfo(String e, String r) {
+        printDiffInfo(e, r, true);
+    }
+
+    public static void printDiffInfo(String e, String r, boolean isPrintInfo) {
+        if (!isPrintInfo) return;
         StringBuilder rb = new StringBuilder();
         StringBuilder eb = new StringBuilder();
         int m = r.length(), n = e.length();
