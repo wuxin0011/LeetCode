@@ -1,7 +1,9 @@
 package leetcode.ox3if.data_struct.pre_sum.hash.hash_0003;
 
 import code_generation.utils.IoUtil;
-import java.util.*;
+
+import java.util.HashMap;
+import java.util.Map;
 /**
  *
  * 974. 和可被 K 整除的子数组
@@ -38,14 +40,18 @@ public class Solution {
      
 
     public int subarraysDivByK(int[] nums, int k) {
-        int cnt = 0;
-        int tot = 0;
+        int ans = 0;
+        Map<Integer, Integer> map = new HashMap<>();
+        map.put(0, 1);
+        int sum = 0;
         for (int num : nums) {
-            tot += num;
-            int a = tot % k == 0 ? 1 : 0;
-
+            sum += num;
+            int val = (sum % k + k) % k;
+            int cnt = map.getOrDefault(val, 0);
+            ans += cnt;
+            map.put(val, cnt + 1);
         }
-        return cnt;
+        return ans;
     }
 
   

@@ -1,7 +1,10 @@
 package leetcode.ox3if.data_struct.pre_sum.hash.hash_0004;
 
 import code_generation.utils.IoUtil;
-import java.util.*;
+
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  *
  * 523. 连续的子数组和
@@ -35,20 +38,36 @@ import java.util.*;
  *
  * @author: wuxin0011
  * @Description:
- * @url:   https://leetcode.cn/problems/continuous-subarray-sum
+ * @url: https://leetcode.cn/problems/continuous-subarray-sum
  * @title: 连续的子数组和
  */
 public class Solution {
 
     public static void main(String[] args) {
-        IoUtil.testUtil(Solution.class,"checkSubarraySum","in.txt");
+        IoUtil.testUtil(Solution.class, "checkSubarraySum", "in.txt");
     }
-     
 
-    public boolean checkSubarraySum(int[] nums, int k) {    
 
-        return false; 
-	}
+    // n 为整数
+    // sum[i] - sum[i-1] = n * k
+    // sum[i] / k - sum[i-1] / k = n
+    // n 为整数
+    // => sum[i] % k = sum[i-1] % k
+
+
+    public boolean checkSubarraySum(int[] nums, int k) {
+
+        Set<Integer> set = new HashSet<>();
+        int pre = 0;
+        for (int i = 0; i < nums.length; i++) {
+            pre += nums[i];
+            if (i > 0 && set.contains(pre % k)) {
+                return true;
+            }
+            set.add((pre - nums[i]) % k);
+        }
+        return false;
+    }
 
   
 
