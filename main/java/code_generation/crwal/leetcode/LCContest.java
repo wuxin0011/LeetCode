@@ -389,7 +389,7 @@ public class LCContest implements Contest {
     public ParseCodeInfo parseCodeTemplate(Question question) {
         String info = BuildUrl.queryNewContestQuestion(question.getUrl());
         if (StringUtils.kmpSearch(info, "authenticated") != -1) {
-            throw new RuntimeException("authenticated access ,place chceck your cookie ");
+            throw new RuntimeException("authenticated access ,place check your cookie ");
         }
         String p = "\"lang\":\"Java\",\"langSlug\":\"java\"";
         return lcTemplate.parseCodeTemplate(info, p, true);
