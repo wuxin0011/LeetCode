@@ -291,9 +291,10 @@ public class ReflectUtils {
 
     private static long[][] doubleLongArray(String input) {
         List<List<Long>> longList = parseDoubleLongList(input);
-        long[][] longs = new long[longList.size()][longList.get(0).size()];
+        long[][] longs = new long[longList.size()][];
         for (int i = 0; i < longList.size(); i++) {
-            for (int j = 0; j < longList.get(0).size(); j++) {
+            longs[i] = new long[longList.get(i).size()];
+            for (int j = 0; j < longList.get(i).size(); j++) {
                 longs[i][j] = longList.get(i).get(j);
             }
         }
@@ -315,9 +316,10 @@ public class ReflectUtils {
 
     private static double[][] doubleDoubleArray(String input) {
         List<List<Double>> doubleDoubleList = parseDoubleDoubleList(input);
-        double[][] doubles = new double[doubleDoubleList.size()][doubleDoubleList.get(0).size()];
+        double[][] doubles = new double[doubleDoubleList.size()][];
         for(int i = 0;i<doubleDoubleList.size();i++) {
-            for(int j = 0;j<doubleDoubleList.get(0).size();j++) {
+            doubles[i] = new double[doubleDoubleList.get(i).size()];
+            for (int j = 0; j < doubleDoubleList.get(i).size(); j++) {
                 doubles[i][j] = doubleDoubleList.get(i).get(j);
             }
         }
@@ -428,9 +430,10 @@ public class ReflectUtils {
 
     public static boolean[][] doubleBooleanArray(String input) {
         List<List<Boolean>> ls = parseDoubleBoolean(input);
-        boolean[][] ans = new boolean[ls.size()][ls.get(0).size()];
+        boolean[][] ans = new boolean[ls.size()][];
         for (int i = 0; i < ls.size(); i++) {
-            for (int j = 0; j < ls.get(0).size(); j++) {
+            ans[i] = new boolean[ls.get(i).size()];
+            for (int j = 0; j < ls.get(i).size(); j++) {
                 ans[i][j] = ls.get(i).get(j);
             }
         }
@@ -565,10 +568,11 @@ public class ReflectUtils {
 
     public static char[][] doubleCharArray(String input) {
         List<List<Character>> ls = parseListDoubleChar(input);
-        int row = ls.size(), col = ls.get(0).size();
-        char[][] cs = new char[row][col];
+        int row = ls.size();
+        char[][] cs = new char[row][];
         for (int i = 0; i < row; i++) {
             List<Character> cc = ls.get(i);
+            cs[i] = new char[cc.size()];
             for (int j = 0; j < cc.size(); j++) {
                 cs[i][j] = cc.get(j);
             }
@@ -579,10 +583,12 @@ public class ReflectUtils {
 
     public static char[][][] threeCharArray(String input) {
         List<List<List<Character>>> lists = parseThreeCharArray(input);
-        int row = lists.size(), col = lists.get(0).size(), vol = lists.get(0).get(0).size();
-        char[][][] ans = new char[row][col][vol];
+        int row = lists.size();
+        char[][][] ans = new char[row][][];
         for (int i = 0; i < row; i++) {
+            ans[i] = new char[lists.get(i).size()][];
             for (int j = 0; j < lists.get(i).size(); j++) {
+                ans[i][j] = new char[lists.get(i).get(j).size()];
                 for (int z = 0; z < lists.get(i).get(j).size(); z++) {
                     ans[i][j][z] = lists.get(i).get(j).get(z);
                 }
@@ -713,9 +719,10 @@ public class ReflectUtils {
 
     public static String[][] doubleStringArray(String input) {
         List<List<String>> lists = parseDoubleString(input);
-        int row = lists.size(), col = lists.get(0).size();
-        String[][] ans = new String[row][col];
+        int row = lists.size();
+        String[][] ans = new String[row][];
         for (int i = 0; i < row; i++) {
+            ans[i] = new String[lists.get(i).size()];
             for (int j = 0; j < lists.get(i).size(); j++) {
                 ans[i][j] = lists.get(i).get(j);
             }
@@ -725,10 +732,12 @@ public class ReflectUtils {
 
     public static String[][][] threeStringArray(String input) {
         List<List<List<String>>> lists = parseThreeString(input);
-        int row = lists.size(), col = lists.get(0).size(), vol = lists.get(0).get(0).size();
-        String[][][] ans = new String[row][col][vol];
+        int row = lists.size();
+        String[][][] ans = new String[row][][];
         for (int i = 0; i < row; i++) {
+            ans[i] = new String[lists.get(i).size()][];
             for (int j = 0; j < lists.get(i).size(); j++) {
+                ans[i][j] = new String[lists.get(i).get(j).size()];
                 for (int z = 0; z < lists.get(i).get(j).size(); z++) {
                     ans[i][j][z] = lists.get(i).get(j).get(z);
                 }
