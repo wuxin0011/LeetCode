@@ -55,14 +55,14 @@ public class D {
         List<Boolean> ans = new ArrayList<>();
         int inf = 1000001;
         boolean[] vis = new boolean[inf];
-        for (int i = 0; i < queries.length; i++) {
-            int op = queries[i][0];
-            int x = queries[i][1];
+        for (int[] query : queries) {
+            int op = query[0];
+            int x = query[1];
             if (op == 1) {
                 vis[x] = false;
             } else {
-                int w = queries[i][2];
-                int l = 0;
+                int w = query[2];
+                int l = 1;
                 boolean ok = false;
                 for (int k = 0; k <= x; k++) {
                     if (!vis[k]) {

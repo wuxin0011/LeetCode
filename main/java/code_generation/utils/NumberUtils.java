@@ -39,11 +39,7 @@ public class NumberUtils {
         arr[j] = temp;
     }
 
-    public static void swap1(int[] arr, int i, int j) {
-        arr[i] = arr[i] ^ arr[j];
-        arr[j] = arr[i] ^ arr[j];
-        arr[i] = arr[i] ^ arr[j];
-    }
+
 
     public static int[] clone(int[] arr) {
         int[] ints = new int[arr.length];
