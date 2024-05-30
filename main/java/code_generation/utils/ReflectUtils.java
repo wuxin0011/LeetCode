@@ -1161,4 +1161,50 @@ public class ReflectUtils {
 
         return obj;
     }
+
+
+    public static boolean isBaseType(Class<?> c) {
+        if (c == null) {
+            return true;
+        }
+        String name = c.getSimpleName();
+
+        // char byte short int long double float
+        if ("char".equals(name) || "Character".equals(name)) {
+            return true;
+        }
+        if ("byte".equalsIgnoreCase(name)) {
+            return true;
+        }
+        if ("Integer".equals(name) || "int".equals(name)) {
+            return true;
+        }
+        if ("boolean".equalsIgnoreCase(name)) {
+            return true;
+        }
+        if ("long".equalsIgnoreCase(name)) {
+            return true;
+        }
+        if ("double".equalsIgnoreCase(name)) {
+            return true;
+        }
+        if ("float".equalsIgnoreCase(name)) {
+            return true;
+        }
+        return false;
+    }
+
+    public static int handlerVoidReturnType(Class<?>[] parameterTypes) {
+        if (parameterTypes == null) {
+            return -1;
+        }
+        for (int i = 0; i < parameterTypes.length; i++) {
+            if (isBaseType(parameterTypes[i])) {
+                continue;
+            }
+            return i;
+        }
+        return -1;
+    }
+
 }

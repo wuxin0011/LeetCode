@@ -336,6 +336,8 @@ public class IoUtil {
         int size = inputList.size();
         String read = null;
 
+        int typeId = -2; // 如果返回值是空类型 而且需要比较的标志
+
         boolean isStatic = Modifier.isStatic(method.getModifiers()); // 是否是静态方法
 
         boolean isConstrunctorClass = !origin.getSimpleName().equals(obj.getClass().getSimpleName());
@@ -432,11 +434,17 @@ public class IoUtil {
                         continue;
                     }
 
-                    // todo 没有返回值时候如何处理呢 ？
-                    // 暂时处理成如果是 void 类型，将转换成第一个参数类型然后比较
+                    //  没有返回值时候如何处理呢 ？
                     if (args != null && args.length > 0) {
-                        returnName = parameterTypes[0].getSimpleName();
-                        result = args[0];
+                        // 先处理成不是基本数据类型 因为基本数据类型是值传递 无法比较
+                        if (typeId == -2) {
+                            typeId = ReflectUtils.handlerVoidReturnType(parameterTypes);
+                        }
+                        if (typeId == -1) {
+                            throw new RuntimeException("unkonwn compare type");
+                        }
+                        returnName = parameterTypes[typeId].getSimpleName();
+                        result = args[typeId];
                     }
                 }
 
