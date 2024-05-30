@@ -1,8 +1,2 @@
-### 配置模板
-
-[模板](./request_config_template)
-
-### 配置参考
-
-[LeetCode](../crwal/leetcode)
+[内容已迁移 点我了解详情](../crwal/leetcode/readme.md)
 
