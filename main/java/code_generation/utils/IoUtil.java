@@ -175,6 +175,8 @@ public class IoUtil {
 
         List<String> result = null;
 
+        int runTimes = 0;
+
         Map<String, Method> map = new HashMap<>();
         for (Method method : declaredMethods) {
             method.setAccessible(true);
@@ -182,8 +184,8 @@ public class IoUtil {
         }
 
         int t = 0;
-        int compareTimes = 1;
-        List<Integer> errorTimes = new ArrayList<>();
+        int compareTimes = 0;
+        List<String> errorTimes = new ArrayList<>();
         for (int k = 0; k < inputList.size(); k++) {
             String s = inputList.get(k);
             if (StringUtils.isEmpty(s)) {
@@ -205,6 +207,7 @@ public class IoUtil {
 
             // 每三行内容为一组 需要填充调用的方法名，填入结果 以及期望结果
             if (t % 3 == 0) {
+
                 Object obj = null;
                 int a = 0, b = 0, deep = 0;
 
@@ -212,7 +215,12 @@ public class IoUtil {
                 if (args.length != expect.length || args.length != names.length || expect.length != names.length) {
                     throw new RuntimeException("result not mathch palce check");
                 }
+
+                compareTimes++;
+
+
                 for (int index = 0; index < names.length; index++) {
+
                     String name = names[index];
 
                     if (StringUtils.isEmpty(name)) {
@@ -225,7 +233,7 @@ public class IoUtil {
                         System.out.println("name   =   " + name);
                         System.out.println("args   =   " + args[index]);
                         System.out.println("exp    =   " + expect[index]);
-                         continue;
+                        continue;
                     }
 
                     if (name.equals(className)) {
@@ -249,9 +257,9 @@ public class IoUtil {
                         ReflectUtils.handlerConstructorMethodOutput(expect[index], result, method);
                         boolean isOk = startValid(obj, map.get(name), result, isStrict, false);
                         if (!isOk) {
-                            errorTimes.add(compareTimes);
+                            String errorInfo = "Run CompareTimes :  " + compareTimes + "\nCall Method      :  " + name + "\nArgs Index       :  " + index +  "\nArgs             :  " + args[index];
+                            errorTimes.add(errorInfo+"\n");
                         }
-                        compareTimes++;
                     }
                 }
 
@@ -265,8 +273,8 @@ public class IoUtil {
         if (errorTimes.size() == 0) {
             System.out.println("Accepted!");
         } else {
-            for (Integer time : errorTimes) {
-                System.out.println("valid error in " + time);
+            for (String errorInfo : errorTimes) {
+                System.out.println(errorInfo);
             }
         }
     }
@@ -451,7 +459,10 @@ public class IoUtil {
 
                 Object expect = ReflectUtils.parseArg(origin, method.getName(), returnName, read, -1, -1);
                 if (expect != null && !TestUtils.valid(result, expect, returnName, isStrict,true)) {
-                    System.out.println("compare " + compareTimes + " is Error , call method name : " + method.getName() + "\n"); // save error
+                    // 非构造类才输出错误信息
+                    if(newObj){
+                        System.out.println("compare " + compareTimes + " is Error , Run Method Name : " + method.getName() + "\n"); // save error
+                    }
                     errorTimes.add(compareTimes);
                 }
                 args = null;
