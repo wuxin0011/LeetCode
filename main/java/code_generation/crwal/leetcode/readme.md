@@ -12,11 +12,18 @@
 
 ### 1、 模板配置 
 
-爬取测试案例和模板需要配置本地`cookie` [查看配置](../request_config_template)
+爬取测试案例和模板需要配置本地`cookie` [查看配置](../request_config_template) 
+
+**如果不配置 运行会自动生成😅 不过应该会报错 提示你需要配置相关信息！**
 
 目前测试了两个平台
 
 目录 ``request_config_template`` 到对应平台目录下
+
+
+
+![..](../request_config_template/config.png)
+
 
 - **Leetcode**，请直接将  复制一份到 [leetcode](../leetcode) 目录下 并重命名为 `request_config`
 
@@ -34,9 +41,8 @@ User-Agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML,
 Accept-Language=zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6
 Cache-Control=max-age=0
 ```
-
-
 **别忘记配置Cookie了哦😵**
+
 
 
 
