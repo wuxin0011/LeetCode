@@ -1,0 +1,11 @@
+[LRUCache,put,put,get,put,get,put,get,get,get]
+[[2],[1,1],[2,2],[1],[3,3],[2],[4,4],[1],[3],[4]]
+[null,null,null,1,null,-1,null,-1,3,4]
+
+["LRUCache","put","get"]
+[[1],[2,1],[2]]
+[null,null,1]
+
+["LRUCache","put","get","put","get","get"]
+[[1],[2,1],[2],[3,2],[2],[3]]
+[null,null,1,null,-1,2]
