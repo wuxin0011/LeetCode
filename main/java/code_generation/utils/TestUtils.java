@@ -704,10 +704,15 @@ public class TestUtils {
                 boolean deleteDot = false;
                 boolean isDot = false;
                 if (!isEquals) {
-                    isDot = result.charAt(result.length() - 1) == ',';
-                    if (isDot) {
-                        result = result.substring(0, result.length() - 1);
+                    if (result.length() == 0) {
+                        result = "\"\"";
+                    } else {
+                        isDot = result.charAt(result.length() - 1) == ',';
+                        if (isDot) {
+                            result = result.substring(0, result.length() - 1);
+                        }
                     }
+
 
                 }
 
