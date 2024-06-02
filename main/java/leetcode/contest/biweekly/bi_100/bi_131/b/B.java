@@ -31,7 +31,7 @@ import code_generation.utils.IoUtil;
  *
  * @author: wuxin0011
  * @Description:
- * @url
+ * @url https://leetcode.cn/contest/biweekly-contest-131/problems/find-occurrences-of-an-element-in-an-array/
  * @title
  */
 public class B {

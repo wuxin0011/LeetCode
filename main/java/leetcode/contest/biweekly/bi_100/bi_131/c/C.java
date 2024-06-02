@@ -41,7 +41,7 @@ import java.util.Map;
  *
  * @author: wuxin0011
  * @Description:
- * @url
+ * @url https://leetcode.cn/contest/biweekly-contest-131/problems/find-the-number-of-distinct-colors-among-the-balls/
  * @title
  */
 public class C {

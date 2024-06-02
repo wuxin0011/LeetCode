@@ -51,34 +51,34 @@ public class D {
         return ans;
     }
 
-    public List<Boolean> getResults1(int[][] queries) {
-        List<Boolean> ans = new ArrayList<>();
-        int inf = 1000001;
-        boolean[] vis = new boolean[inf];
-        for (int[] query : queries) {
-            int op = query[0];
-            int x = query[1];
-            if (op == 1) {
-                vis[x] = false;
-            } else {
-                int w = query[2];
-                int l = 1;
-                boolean ok = false;
-                for (int k = 0; k <= x; k++) {
-                    if (!vis[k]) {
-                        l = 1;
-                        continue;
-                    }
-                    l++;
-                    if (l >= w) {
-                        ok = true;
-                        break;
-                    }
-                }
-                ans.add(ok);
-            }
-        }
-
-        return ans;
-    }
+//    public List<Boolean> getResults1(int[][] queries) {
+//        List<Boolean> ans = new ArrayList<>();
+//        int inf = 1000001;
+//        boolean[] vis = new boolean[inf];
+//        for (int[] query : queries) {
+//            int op = query[0];
+//            int x = query[1];
+//            if (op == 1) {
+//                vis[x] = false;
+//            } else {
+//                int w = query[2];
+//                int l = 1;
+//                boolean ok = false;
+//                for (int k = 0; k <= x; k++) {
+//                    if (!vis[k]) {
+//                        l = 1;
+//                        continue;
+//                    }
+//                    l++;
+//                    if (l >= w) {
+//                        ok = true;
+//                        break;
+//                    }
+//                }
+//                ans.add(ok);
+//            }
+//        }
+//
+//        return ans;
+//    }
 }

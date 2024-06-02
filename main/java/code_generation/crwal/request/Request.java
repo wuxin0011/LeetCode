@@ -155,7 +155,7 @@ public class Request {
 
     public String requestPost(String url, String ContentType, String jsonStr, Map<String, String> params) {
         return response(requestBefore(url, ContentType, jsonStr, null, params, false));
-    }
+}
 
 
     public static String wrapperUrl(String url, Map<String, String> params) {
