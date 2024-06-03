@@ -1,7 +1,7 @@
 package leetcode.ox3if.bitwise_operations.contribution.contribution_0004;
 
 import code_generation.utils.IoUtil;
-import java.util.*;
+
 /**
  * @author: wuxin0011
  * @Description:
@@ -15,10 +15,16 @@ public class Solution {
     }
      
 
-    public int getXORSum(int[] arr1, int[] arr2) {    
-
-        return 0; 
-	}
+    public int getXORSum(int[] arr1, int[] arr2) {
+        int a1 = arr1[0],a2 = arr2[0];
+        for (int i = 1; i < arr1.length; i++) {
+            a1 = a1 ^ arr1[i];
+        }
+        for (int i = 1; i < arr2.length; i++) {
+            a2 = a2 ^ arr2[i];
+        }
+        return a1 & a2;
+    }
 
   
 

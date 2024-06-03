@@ -5,9 +5,11 @@ import java.util.PriorityQueue;
 
 /**
  * @author: wuxin0011
- * @Description: dijkstra 是求最短路径(权重)的一种算法 具体配合是优先级队列 适用于网格图和
+ * @Description: dijkstra 是求最短路径(权重)的一种算法 具体配合是优先级队列 适用于网格图和图
  * @see leetcode.ox3if.graph.dijkstra
  * @see leetcode.ox3if.data_struct.heap.advanced.Solution_0005
+ * @see leetcode.ox3if.graph.dijkstra.Dijkstra_0000.Solution
+ * @see leetcode.contest.biweekly.bi_100.bi_128.c.C
  */
 public class Dijkstra {
 
@@ -22,6 +24,7 @@ public class Dijkstra {
      * @return
      * @see leetcode.ox3if.data_struct.heap.advanced.Solution_0004.Solution
      * @see leetcode.ox3if.data_struct.heap.advanced.Solution_0005.Solution
+
      */
     public static int dijkstraGrid(int[][] grid, int[] st, int[] ed) {
         int m = grid.length, n = grid[0].length;

@@ -1,8 +1,10 @@
 package leetcode.ox3if.data_struct.heap.advanced.Solution_0002;
 
 import code_generation.utils.IoUtil;
-import java.util.*;
-import code_generation.bean.ListNode;
+
+import java.util.Arrays;
+import java.util.PriorityQueue;
+
 /**
  *
  * 502. IPO
@@ -39,20 +41,43 @@ import code_generation.bean.ListNode;
  *
  * @author: wuxin0011
  * @Description:
- * @url:   https://leetcode.cn/problems/ipo
+ * @url: https://leetcode.cn/problems/ipo
  * @title: ipo
  */
 public class Solution {
 
     public static void main(String[] args) {
-        IoUtil.testUtil(Solution.class,"findMaximizedCapital","in.txt");
+        IoUtil.testUtil(Solution.class, "findMaximizedCapital", "in.txt");
     }
-     
+
 
     public int findMaximizedCapital(int k, int w, int[] profits, int[] capital) {
-        // todo
-        return 0; 
-	}
+        int n = profits.length;
+        Integer[] ids = new Integer[n];
+        Arrays.setAll(ids, i -> i);
+
+        Arrays.sort(ids, (a, b) -> capital[a] - capital[b]);
+        // 成本最小中找最大投资
+        PriorityQueue<Integer> q = new PriorityQueue<>((a, b) -> b - a);
+        int i = 0;
+        while (k > 0) {
+            // 先找成本最小的投资
+            while (i < n && w >= capital[ids[i]]) {
+                q.add(profits[ids[i]]);
+                i++;
+            }
+
+            // 没有任何可以投资的项目了
+            if (q.isEmpty()) {
+                break;
+            }
+
+
+            w += q.poll();
+            k--;
+        }
+        return w;
+    }
 
   
 

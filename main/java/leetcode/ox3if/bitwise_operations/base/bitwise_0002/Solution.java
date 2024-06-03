@@ -51,7 +51,6 @@ public class Solution {
         for (int num : nums) {
             eor ^= num;
         }
-
         int lowbit = eor & -eor;
         int[] ans = new int[2];
         for (int x : nums) {

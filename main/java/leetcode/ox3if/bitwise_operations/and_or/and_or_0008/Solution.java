@@ -2,9 +2,6 @@ package leetcode.ox3if.bitwise_operations.and_or.and_or_0008;
 
 import code_generation.utils.IoUtil;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  *
  * 1521. 找到最接近目标值的函数值
@@ -44,53 +41,28 @@ public class Solution {
 
     public static void main(String[] args) {
         IoUtil.testUtil(Solution.class, "closestToTarget", "in.txt");
-//        IoUtil.testUtil(Solution.class, "closestToTargetError", "in.txt");
     }
-
 
     public int closestToTarget(int[] arr, int target) {
-        int ans = Integer.MAX_VALUE;
-        // TODO
-
-        return ans;
+        return minimumDifference(arr, target);
     }
-
-
-    // 暴力
-    public int closestToTargetError(int[] arr, int target) {
-
+    // https://leetcode.cn/contest/weekly-contest-400/problems/find-subarray-with-bitwise-and-closest-to-k/
+    public int minimumDifference(int[] nums, int k) {
+        int n = nums.length;
         int ans = Integer.MAX_VALUE;
-        int n = arr.length;
-
-        int size = 0;
-
         for (int i = 0; i < n; i++) {
-            if (i > 0 && arr[i] == arr[i - 1]) {
+            int val = nums[i];
+            ans = Math.min(ans, Math.abs(val - k));
+            for (int j = i - 1; j >= 0; j--) {
 
-            }
-        }
-
-        for (int i = 0; i < n; i++) {
-            for (int j = i; j < n; j++) {
-                int v = Math.abs(query(arr, i, j) - target);
-                if (v < ans) {
-                    ans = v;
+                // 最核心的 部分
+                if ((val & nums[j]) == nums[j]) {
+                    break;
                 }
+                nums[j] &= val;
+                ans = Math.min(ans, Math.abs(nums[j] - k));
             }
         }
         return ans;
     }
-
-    public static int query(int[] arr, int l, int r) {
-        if (l > r) {
-            return -(int) 1e9;
-        }
-        int ans = arr[l];
-        for (int i = l + 1; i <= r; i++) {
-            ans &= arr[i];
-        }
-        return ans;
-    }
-
-
 }
