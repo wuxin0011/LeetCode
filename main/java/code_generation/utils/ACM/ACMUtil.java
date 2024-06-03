@@ -8,6 +8,7 @@ import code_generation.utils.StringUtils;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.InputStreamReader;
 import java.util.*;
 
 /**
@@ -42,17 +43,24 @@ public class ACMUtil {
         }
     }
 
+    static boolean printInfo = false;
+
     public static void runOnlyInput(Class<?> c) {
-        runOnlyInput(c, "", "");
+        runOnlyInput(c, "", "",true);
+    }
+    public static void runOnlyInput(Class<?> c,boolean isPrint) {
+        runOnlyInput(c, "", "",isPrint);
     }
 
-    public static void runOnlyInput(Class<?> c, String dir, String fileName) {
+    public static void runOnlyInput(Class<?> c, String dir, String fileName,boolean isPrint) {
         check(c);
         if (StringUtils.isEmpty(fileName)) {
             fileName = DEFAULT_INPUT;
         }
         String in = IoUtil.wrapperAbsolutePath(c, dir) + File.separator + fileName;
+        printInfo = isPrint;
         run(c, "", in, null, null);
+        printInfo = false;
     }
 
     public static void run(Class<?> c) {
@@ -121,24 +129,26 @@ public class ACMUtil {
             // 执行命令
             Process process = Runtime.getRuntime().exec(command);
 
+            if(printInfo) {
+                input = new BufferedReader(new InputStreamReader(process.getInputStream()));
+                error = new BufferedReader(new InputStreamReader(process.getErrorStream()));
 
-//            BufferedReader input = new BufferedReader(new InputStreamReader(process.getInputStream()));
-//            BufferedReader error = new BufferedReader(new InputStreamReader(process.getErrorStream()));
-//
-//            String line;
-//            while ((line = input.readLine()) != null) {
-//                System.out.println(line);
-//            }
-//
-//            while ((line = error.readLine()) != null) {
-//                System.err.println(line);
-//            }
+                String line;
+                while ((line = input.readLine()) != null) {
+                    System.out.println(line);
+                }
+                while ((line = error.readLine()) != null) {
+                    System.out.println(line);
+                }
+            }
+
+
 
             int exitCode = process.waitFor();
             // System.out.println("\nExit Code: " + exitCode);
 
 
-            if (temp != null) {
+            if (temp != null && !printInfo) {
                 compareFileDiff(out, temp);
             }
 
