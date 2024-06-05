@@ -4,7 +4,7 @@ package template.union;
  * @author: wuxin0011
  * @Description: 并查集
  */
-public class Example {
+public class DefaultUnion {
 
     public static void main(String[] args) {
 

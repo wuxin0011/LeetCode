@@ -1,4 +1,4 @@
-package test;
+package test.acmtest;
 
 import code_generation.utils.ACM.ACMUtil;
 import test.acmtest.A;

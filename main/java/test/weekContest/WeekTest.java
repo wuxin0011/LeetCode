@@ -1,4 +1,4 @@
-package test;
+package test.weekContest;
 
 import code_generation.crwal.leetcode.LCContest;
 

@@ -1,14 +1,13 @@
-package test;
+package test.weekContest;
 
 import code_generation.crwal.leetcode.LCTestCase;
 import code_generation.utils.StringUtils;
-import sun.java2d.pipe.SpanClipRenderer;
 
 /**
  * @author: wuxin0011
  * @Description:
  */
-public class T1 {
+public class TestCase {
 //
 //    static  {
 //        System.out.println("static init ...");

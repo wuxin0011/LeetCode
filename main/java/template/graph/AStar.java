@@ -6,7 +6,7 @@ import java.util.PriorityQueue;
  * @author: wuxin0011
  * @Description: 假设网格图中相邻两点距离为1 给出原点和终点求到达目标点需要最小步骤  0 网格图中只有 0 和 1 ，0 认为不可走 1 可以走
  */
-public class AStart {
+public class AStar {
 
 
     /**

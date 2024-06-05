@@ -1,7 +1,6 @@
 package leetcode.ox3if.dp.base.Solution_0014;
 
 import code_generation.utils.IoUtil;
-import java.util.*;
 /**
  *
  *
@@ -41,21 +40,43 @@ import java.util.*;
  *
  * @author: wuxin0011
  * @Description:
- * @url:   https://leetcode.cn/problems/maximum-score-of-spliced-array
+ * @url: https://leetcode.cn/problems/maximum-score-of-spliced-array
  * @title: 拼接数组的最大分数
  */
 public class Solution {
 
     public static void main(String[] args) {
-        IoUtil.testUtil(Solution.class,"maximumsSplicedArray","in.txt");
+        IoUtil.testUtil(Solution.class, "maximumsSplicedArray", "in.txt");
     }
-     
 
-    public int maximumsSplicedArray(int[] nums1, int[] nums2) {    
 
-        return 0; 
-	}
+    public static int maxSubArray(int[] a, int[] b) {
+        int n = a.length;
+        int[] d = new int[n];
+        for (int i = 0; i < n; i++) {
+            d[i] = a[i] - b[i];
+        }
+        int mx = 0;
+        int f = 0;
+        for (int v : d) {
+            f = Math.max(f + v, 0);
+            mx = Math.max(f, mx);
+        }
+        return mx;
+    }
 
-  
+
+    public int maximumsSplicedArray(int[] nums1, int[] nums2) {
+        int n = nums1.length;
+        int sum1 = 0, sum2 = 0;
+        for (int i = 0; i < n; i++) {
+            sum1 += nums1[i];
+            sum2 += nums2[i];
+        }
+        sum1 += maxSubArray(nums2, nums1);
+        sum2 += maxSubArray(nums1, nums2);
+        return Math.max(sum1, sum2);
+    }
+
 
 }

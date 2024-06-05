@@ -667,7 +667,7 @@ class NumArray {
 
 代码中有个小细节就是`x++`这是因为`lowbit`不能传值为`0`，否则会陷入死循环。
 
-```cpp															     
+```java													     
 import java.io.*;
 import java.util.*;
 

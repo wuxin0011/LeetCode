@@ -1,4 +1,4 @@
-package test;
+package test.updtest;
 
 import code_generation.utils.IoUtil;
 
