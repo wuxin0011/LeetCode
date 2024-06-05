@@ -1,4 +1,4 @@
-package leetcode.other.medium;
+package leetcode.base.other.medium;
 
 import code_generation.annotation.Description;
 import code_generation.enums.Difficulty;

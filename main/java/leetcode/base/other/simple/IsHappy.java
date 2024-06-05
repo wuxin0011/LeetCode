@@ -1,4 +1,4 @@
-package leetcode.other.simple;
+package leetcode.base.other.simple;
 
 import code_generation.annotation.Description;
 
