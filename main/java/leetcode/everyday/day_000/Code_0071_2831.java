@@ -1,7 +1,11 @@
 package leetcode.everyday.day_000;
 
 import code_generation.utils.IoUtil;
-import java.util.*;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 /**
  *
  *
@@ -34,22 +38,62 @@ import java.util.*;
  * 	0 <= k <= nums.length
  *
  * @author: wuxin0011
- * @Description:
- * @url:   https://leetcode.cn/problems/find-the-longest-equal-subarray
+ * @Description: hash + 滑动窗口
+ * @url: https://leetcode.cn/problems/find-the-longest-equal-subarray
  * @title: 找出最长等值子数组
  */
 public class Code_0071_2831 {
 
     public static void main(String[] args) {
-        IoUtil.testUtil(Code_0071_2831.class,"longestEqualSubarray","txt_file\\Code_0071_2831.txt");
+        IoUtil.testUtil(Code_0071_2831.class, "longestEqualSubarray", "txt_file\\Code_0071_2831.txt");
     }
-     
 
-    public int longestEqualSubarray(List<Integer> nums, int k) {    
 
-        return 0; 
-	}
+    public int longestEqualSubarray(List<Integer> nums, int k) {
 
-  
+        Map<Integer, List<Integer>> map = new HashMap<>();
+
+        for (int i = 0; i < nums.size(); i++) {
+            int val = nums.get(i);
+            List<Integer> ids = map.get(val);
+            if (ids == null) {
+                ids = new ArrayList<>();
+                ids.add(i);
+                map.put(val, ids);
+            } else {
+                ids.add(i);
+            }
+        }
+
+        int ans = 0;
+
+        for (Map.Entry<Integer, List<Integer>> item : map.entrySet()) {
+            List<Integer> ids = item.getValue();
+            // 这个减枝非常重要
+            if (ans > ids.size()) {
+                continue;
+            }
+            // 滑动窗口
+            for (int l = 0, r = 0, del = 0; r < ids.size(); r++) {
+
+                // 统计删除
+                // ids.get(r) - ids.get(r - 1) 是两个相邻索引间隔多少
+                // -1 是因为 如果 索引为 4 、 3 那么 是连续 间隔就是 0 无需删除 因此需要 - 1
+                if (r > 0) {
+                    del += (ids.get(r) - ids.get(r - 1) - 1);
+                }
+
+                while (del > k) {
+                    if (l + 1 <= r) {
+                        del -= (ids.get(l + 1) - ids.get(l) - 1);
+                    }
+                    l++;
+                }
+                ans = Math.max(ans,r - l + 1);
+            }
+        }
+        return ans;
+    }
+
 
 }
