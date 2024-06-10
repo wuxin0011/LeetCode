@@ -1,6 +1,7 @@
 package code_generation.utils;
 
 import code_generation.annotation.Description;
+import code_generation.annotation.TestCaseGroup;
 import code_generation.bean.ListNode;
 import code_generation.bean.TreeNode;
 import code_generation.enums.Type;
@@ -1205,6 +1206,45 @@ public class ReflectUtils {
             return i;
         }
         return -1;
+    }
+
+
+    public static int[] getTestCaseInfo(Method method, Class<?> origin, Class<?> src) {
+        if (method.getDeclaredAnnotation(TestCaseGroup.class) != null) {
+            return getTestCaseInfo(method);
+        }
+        if (origin.getDeclaredAnnotation(TestCaseGroup.class) != null) {
+            return getTestCaseInfo(origin);
+        }
+        if (src.getDeclaredAnnotation(TestCaseGroup.class) != null) {
+            return getTestCaseInfo(src);
+        }
+        return new int[]{1, 0x3f3f3f};
+    }
+
+
+    public static int[] getTestCaseInfo(Class<?> aClass) {
+        return getTestCaseInfo(aClass.getDeclaredAnnotation(TestCaseGroup.class));
+    }
+
+    public static int[] getTestCaseInfo(Method method) {
+        return getTestCaseInfo(method.getDeclaredAnnotation(TestCaseGroup.class));
+    }
+
+    /**
+     * 获取需要测试的测试用力
+     *
+     * @param annotation TestCaseGroup 注解
+     * @return
+     * @see code_generation.annotation.TestCaseGroup
+     */
+    public static int[] getTestCaseInfo(TestCaseGroup annotation) {
+        if (annotation == null || !annotation.use()) {
+            return new int[]{1, Integer.MAX_VALUE};
+        }
+        int start = Math.max(1, Math.min(annotation.start(), annotation.end()));
+        int end = Math.max(1, Math.max(annotation.start(), annotation.end()));
+        return new int[]{start, end};
     }
 
 }

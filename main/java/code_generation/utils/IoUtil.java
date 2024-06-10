@@ -344,6 +344,9 @@ public class IoUtil {
         int size = inputList.size();
         String read = null;
 
+        int[] testCaseInfo = ReflectUtils.getTestCaseInfo(method, origin, srcClass);
+
+
         int typeId = -2; // 如果返回值是空类型 而且需要比较的标志
 
         boolean isStatic = Modifier.isStatic(method.getModifiers()); // 是否是静态方法
@@ -353,15 +356,26 @@ public class IoUtil {
         List<Integer> errorTimes = new ArrayList<>();
         int exceptionTime = -1;
         int compareTimes = 1;
+        boolean isStartTest = false;
         for (int idx = 0; idx < size; ) {
-            if (newObj && !isStatic) {
-                // 如果不是构造类型对拍，定义普通类型属性会影响下次对拍 因此重新初始化
-                // 就是上次数据影响这次对拍
-                // example: leetcode.everyday.Code_0049_39
-                obj = ReflectUtils.initObjcect(srcClass, null);
+
+            if (compareTimes > testCaseInfo[1]) {
+                break;
             }
 
-            Objects.requireNonNull(obj, "obj is null");
+            // 是否在测试范围内
+            isStartTest = testCaseInfo[0] <= compareTimes && compareTimes <= testCaseInfo[1];
+
+            if(isStartTest) {
+                if (newObj && !isStatic) {
+                    // 如果不是构造类型对拍，定义普通类型属性会影响下次对拍 因此重新初始化
+                    // 就是上次数据影响这次对拍
+                    // example: leetcode.everyday.Code_0049_39
+                    obj = ReflectUtils.initObjcect(srcClass, null);
+                    Objects.requireNonNull(obj, "obj is null");
+                }
+            }
+
 
             // 填充参数信息
             boolean isFill = false; // 参数校验标志信息
@@ -391,7 +405,9 @@ public class IoUtil {
                         throw new RuntimeException("result not match place check your ans !");
                     }
                     isFill = true;
-                    args[i] = ReflectUtils.parseArg(origin, method.getName(), parameterTypes[i], read, i, parameterTypes.length);
+                    if (isStartTest) {
+                        args[i] = ReflectUtils.parseArg(origin, method.getName(), parameterTypes[i], read, i, parameterTypes.length);
+                    }
                     read = null;
                 }
 
@@ -410,14 +426,13 @@ public class IoUtil {
             Object result = null;
 
             try {
-
-
-                if (parameterTypes == null || parameterTypes.length == 0) {
-                    result = method.invoke(isStatic ? null : obj);
-                } else {
-                    result = method.invoke(isStatic ? null : obj, args);
+                if (isStartTest) {
+                    if (parameterTypes == null || parameterTypes.length == 0) {
+                        result = method.invoke(isStatic ? null : obj);
+                    } else {
+                        result = method.invoke(isStatic ? null : obj, args);
+                    }
                 }
-
 
                 // 允许答案和输入参数之间有间隙
                 while (idx < inputList.size() && ((read = inputList.get(idx)) == null || read.length() == 0)) {
@@ -430,8 +445,15 @@ public class IoUtil {
                     } else {
                         throw new RuntimeException("result not match place check your ans !");
                     }
-
                 }
+
+                if (!isStartTest) {
+                    returnName = tempRetrunName; // origin return name
+                    idx++; // match ok
+                    compareTimes++; // 比较次数
+                    continue;
+                }
+
                 if ("void".equalsIgnoreCase(returnName) && result == null) {
 
                     // 如果结果为null说明只是调用改方法 并且返回值为 void
@@ -456,11 +478,10 @@ public class IoUtil {
                     }
                 }
 
-
                 Object expect = ReflectUtils.parseArg(origin, method.getName(), returnName, read, -1, -1);
-                if (expect != null && !TestUtils.valid(result, expect, returnName, isStrict,true)) {
+                if (expect != null && !TestUtils.valid(result, expect, returnName, isStrict, true)) {
                     // 非构造类才输出错误信息
-                    if(newObj){
+                    if (newObj) {
                         System.out.println("compare " + compareTimes + " is Error , Run Method Name : " + method.getName() + "\n"); // save error
                     }
                     errorTimes.add(compareTimes);
