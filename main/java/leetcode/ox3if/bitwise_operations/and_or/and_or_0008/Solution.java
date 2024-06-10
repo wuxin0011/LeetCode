@@ -54,7 +54,6 @@ public class Solution {
             int val = nums[i];
             ans = Math.min(ans, Math.abs(val - k));
             for (int j = i - 1; j >= 0; j--) {
-
                 // 最核心的 部分
                 if ((val & nums[j]) == nums[j]) {
                     break;

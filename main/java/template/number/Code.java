@@ -72,18 +72,15 @@ public class Code {
      * 判断一个数是否是质数（素数）
      * 定义 ： 除了1和本身外 不能被其他数整除
      *
-     * @param num num
+     * @param n num
      * @return ok
      */
-    public static boolean isPrime(int num) {
-        if (num <= 3) {
-            return num > 1; // 3 2 , 1 not
-        }
-        if (num % 2 == 0 || num % 3 == 0) {
+    public static boolean isPrime(int n) {
+        if (n <= 1) {
             return false;
         }
-        for (int i = 5; i * i <= num; i += 6) {
-            if (num % i == 0 || num % (i + 2) == 0) {
+        for (int i = 2; i * i <= n; i++) {
+            if (n % i == 0) {
                 return false;
             }
         }
@@ -135,6 +132,42 @@ public class Code {
     }
 
 
+    /**
+     * 快速幂
+     *
+     * @param x val
+     * @param n 幂的次数
+     * @return result
+     */
+    public static long pow(long x, long n) {
+        return pow(x, n, (long) 1e9 + 7);
+    }
+
+
+    /**
+     * 快速幂
+     *
+     * @param x   val
+     * @param n   幂次数
+     * @param mod 取mod
+     * @return x ^ n
+     */
+    public static long pow(long x, long n, long mod) {
+        boolean isNeg = n < 0;
+        if (isNeg) n = -n;
+        long res = 1;
+        while (n > 0) {
+            // 当前位数有1
+            if ((n & 1) == 1) {
+                res = res * x % mod;
+            }
+            x = x * x % mod;
+            n >>= 1;
+        }
+        return isNeg ? 1 / res : res;
+    }
+
+
     public static void main(String[] args) {
         System.out.println(1 << 10); // 1 左移10位
         System.out.println(10 << 1); //10 左移1位数
@@ -144,5 +177,9 @@ public class Code {
         System.out.println(floor(11, 10));
         System.out.println(floor(-11, -10));
         System.out.println("=======end========");
+
+
+        System.out.println(pow(2, 10) == (int) Math.pow((double) 2, (double) 10));
+        System.out.println(pow(2, 3) == (int) Math.pow((double) 2, (double) 3));
     }
 }
