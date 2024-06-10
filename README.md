@@ -103,6 +103,7 @@
 ## 📘 更新日志
 
 
+- 2024/6/10 添加`@TestCaseGroup` 注解 用于根据需要测试哪一组数据 [See](./main/java/code_generation/annotation/TestCaseGroup.java)
 - 2024/3/27 基本完成自动案例功能
 - 2024/3/19 破坏性调整目录结构，新增代码`template`自动生成
 - 2024/2/15 调整目录结构，为`ACM`模式做预留。另外 好像大部分题目都没有写，有点懒了，算了🤣。
