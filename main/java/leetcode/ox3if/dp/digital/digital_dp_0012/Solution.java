@@ -35,6 +35,7 @@ import java.util.Arrays;
  * @url: https://leetcode.cn/problems/count-stepping-numbers-in-range
  * @title: 统计范围内的步进数字数目
  */
+
 public class Solution {
 
     public static void main(String[] args) {
@@ -43,7 +44,7 @@ public class Solution {
 
     private static final int MOD = (int) 1e9 + 7;
 
-    @TestCaseGroup(start = 3,end = 3)
+    @TestCaseGroup(start = 3, end = 3, use = false)
     public int countSteppingNumbers(String low, String high) {
         System.out.println("low = " + low + ",high = " + high);
         int a = check(low) ? 1 : 0;

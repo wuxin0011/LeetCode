@@ -2,6 +2,7 @@ package code_generation.utils;
 
 
 import code_generation.contest.ParseCodeInfo;
+import code_generation.proxy.TestData;
 
 import java.io.*;
 import java.lang.reflect.Constructor;
@@ -185,6 +186,9 @@ public class IoUtil {
 
         int t = 0;
         int compareTimes = 0;
+        TestData testData = new TestData(src);
+        int[] testGroup = testData == null || testData.testCaseGroup == null ? new int[]{1, 0x3fffff} : testData.testCaseGroup;
+        boolean isTestCase = false;
         List<String> errorTimes = new ArrayList<>();
         for (int k = 0; k < inputList.size(); k++) {
             String s = inputList.get(k);
@@ -217,6 +221,10 @@ public class IoUtil {
                 }
 
                 compareTimes++;
+                isTestCase = testGroup == null ? true : testGroup[0] <= compareTimes && compareTimes <= testGroup[1];
+                if (!isTestCase) {
+                    continue;
+                }
 
 
                 for (int index = 0; index < names.length; index++) {
@@ -237,7 +245,7 @@ public class IoUtil {
                     }
 
                     if (name.equals(className)) {
-                        // TODO 构造函数实例化
+                        //  构造函数实例化
                         try {
                             result = new ArrayList<>();
                             ReflectUtils.handlerConstructorMethodInput(args[index], result);
@@ -269,7 +277,9 @@ public class IoUtil {
             }
         }
 
-
+        if (testData != null && !StringUtils.isEmpty(testData.info)) {
+            System.out.println(testData.info);
+        }
         if (errorTimes.size() == 0) {
             System.out.println("Accepted!");
         } else {
@@ -344,7 +354,9 @@ public class IoUtil {
         int size = inputList.size();
         String read = null;
 
-        int[] testCaseInfo = ReflectUtils.getTestCaseInfo(method, origin, srcClass);
+        TestData testData = newObj ? new TestData(method, origin, srcClass) : null;
+
+        int[] testCaseInfo = testData == null || testData.testCaseGroup == null ? new int[]{1, 0x3f3f3f} : testData.testCaseGroup;
 
 
         int typeId = -2; // 如果返回值是空类型 而且需要比较的标志
@@ -496,6 +508,11 @@ public class IoUtil {
             returnName = tempRetrunName; // origin return name
             idx++; // match ok
             compareTimes++; // 比较次数
+        }
+
+
+        if ( newObj && !StringUtils.isEmpty(testData.info)) {
+            System.out.println(testData.info);
         }
 
         if (errorTimes.size() == 0 && exceptionTime == -1 && newObj) {

@@ -49,7 +49,7 @@ public class ReflectUtils {
         if (c == null) {
             return EMPTY_STR;
         }
-        return getDescriptionInfo(c.getAnnotation(Description.class), c);
+        return getDescriptionInfo(c.getDeclaredAnnotation(Description.class));
     }
 
     public static <T> String getMethodInfo(Class<T> c, String methodName) {
@@ -65,11 +65,10 @@ public class ReflectUtils {
         if (method == null) {
             return EMPTY_STR;
         }
-        Description annotation = method.getAnnotation(Description.class);
-        return getDescriptionInfo(annotation, method.getClass());
+        return getDescriptionInfo(method.getDeclaredAnnotation(Description.class));
     }
 
-    public static <T> String getDescriptionInfo(Description description, Class<T> c) {
+    public static <T> String getDescriptionInfo(Description description) {
         if (description == null) {
             return EMPTY_STR;
         }
@@ -1209,18 +1208,6 @@ public class ReflectUtils {
     }
 
 
-    public static int[] getTestCaseInfo(Method method, Class<?> origin, Class<?> src) {
-        if (method.getDeclaredAnnotation(TestCaseGroup.class) != null) {
-            return getTestCaseInfo(method);
-        }
-        if (origin.getDeclaredAnnotation(TestCaseGroup.class) != null) {
-            return getTestCaseInfo(origin);
-        }
-        if (src.getDeclaredAnnotation(TestCaseGroup.class) != null) {
-            return getTestCaseInfo(src);
-        }
-        return new int[]{1, 0x3f3f3f};
-    }
 
 
     public static int[] getTestCaseInfo(Class<?> aClass) {
