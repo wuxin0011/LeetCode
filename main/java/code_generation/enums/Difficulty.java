@@ -25,7 +25,7 @@ public enum Difficulty {
     /**
      * null
      */
-    NULL("");
+    NULL("unknown");
 
 
     final String desc;

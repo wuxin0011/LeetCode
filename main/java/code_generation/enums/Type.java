@@ -40,7 +40,21 @@ public enum Type {
     QUEUE("队列"),
     PILE_UP("堆"),
     PRIORITY_QUEUE("优先队列"),
-    BACKTRACk("回溯");
+    BACKTRACk("回溯"),
+    POINTER_TWO("双指针"),
+    PREFIX_SUF("前后缀"),
+    SLIDE_WINDOW("滑动窗口"),
+    UNION("并查集"),
+    TRIE("前缀树"),
+    MEMO("记忆化搜索"),
+    SHORTEST_PATH("最短路"),
+    TREE_ARRAY("树状数组"),
+    HASH_FUNCTION("哈希函数"),
+    UNKNOWN("unknown");
+
+
+
+    ;
 
 
 

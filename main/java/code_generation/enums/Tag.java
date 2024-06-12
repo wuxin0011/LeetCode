@@ -42,7 +42,7 @@ public enum Tag {
     /**
      * 空标签
      */
-    NULL("");
+    NULL("unknown");
 
 
     // TODO 补充其他类型
