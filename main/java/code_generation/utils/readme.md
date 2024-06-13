@@ -12,7 +12,8 @@ public static <T> void testUtil(Class<T> c, String methodName, String fileName, 
  - 类名
    - 必填
  - 测试方法名
-   - 如果测试方法只有除`main`方法一个方法，可不填,解析过程中会找到该方法
+   - 普通类对拍 如果测试方法只有除`main`方法一个方法，可不填,解析过程中会找到该方法
+   - 构造类对拍 当调用方法名为`__ConstructorClass__` 表示调用构造类对拍
  - 获取输入的文件名
    - 默认`in.txt`
  - 是否开启 `#content#` 格式解析
@@ -21,6 +22,9 @@ public static <T> void testUtil(Class<T> c, String methodName, String fileName, 
 
 **数组或者列表**
 
+> PS: **2024/6/13 更新: 如果后续补充其他功能 不会在添加参数了 将会慢慢调整为注解**
+
+### 普通对拍
 
 > 举个例子 下面方法是获取数组的最大值
 
@@ -161,7 +165,26 @@ Java
 ```
 
 
-### 注意
+### 构造类对拍
+
+
+由于构造类类名不是 Solution 为了方便 采用 静态内部类 
+
+- [类文件参考](../../leetcode/everyday/day_000/Code_0044_705.java)
+- [对拍文件格式](../../leetcode/everyday/day_000/txt_file/Code_0044_705.txt)
+
+
+### AMC 模式对拍
+
+[参见ACM模式对拍说明](./ACM/readme.md)
+
+
+## 其他
+
+- [@Description](../annotation/Description.java)   题目其他信息说明 这个注解是写着玩的不是很重要
+- [@TestCaseGroup](../annotation/TestCaseGroup.java) 测试那些组数据 根据自己需求测试那一组数组😂 根据个人经验来看这个还是十分有必要的🤨
+
+## 注意
 
 > 如果使用的跟目录请修改 [点这里](./IoUtil.java)
 
