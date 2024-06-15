@@ -15,6 +15,16 @@ import java.util.Map;
  */
 public class C {
 
+
+    static class S2 {
+        public static void main(String[] args) {
+            IoUtil.testUtil(S2.class, "maxTotalReward", "C.txt");
+        }
+        public int maxTotalReward(int[] r) {
+            return 10;
+        }
+    }
+
     static class Timeout {
         public static void main(String[] args) {
             IoUtil.testUtil(Timeout.class, "maxTotalReward", "C.txt");
