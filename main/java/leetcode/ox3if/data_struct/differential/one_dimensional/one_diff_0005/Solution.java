@@ -13,9 +13,14 @@ public class Solution {
     public static void main(String[] args) {
         IoUtil.testUtil(Solution.class,"merge","in.txt");
     }
-     
 
-    public int[][] merge(int[][] intervals) {    
+
+    /**
+     * @see leetcode.top_interview_150.merge_intervals.Solution
+     * @param intervals
+     * @return
+     */
+    public int[][] merge(int[][] intervals) {
 
         return null; 
 	}
