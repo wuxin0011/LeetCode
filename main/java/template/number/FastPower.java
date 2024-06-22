@@ -91,4 +91,219 @@ public class FastPower {
     }
 
 
+    static class LLM {
+        static long M9 = 998244353L, M1 = 1000_000_007L;
+        static long M = M1; // TODO: choose suitable M.
+        static int MAXN = 500300; // TODO: resize max N.
+        static long[] cacheStepmul = new long[MAXN];
+        static long[] cacheStepmulInv = new long[MAXN];
+        static long[] exp2 = new long[MAXN];
+        long num = 0;
+
+        LLM() {
+            this(0);
+        }
+
+        LLM(long num) {
+            if (num >= 0) {
+                this.num = num % M;
+            } else {
+                this.num = M - (-num) % M;
+            }
+        }
+
+        LLM(LLM bm) {
+            this(bm.num);
+        }
+
+        @Override
+        public String toString() {
+            return "LLM:" + num;
+        }
+
+        LLM add(long x) {
+            if (x > 0) {
+                num = (num + x % M) % M;
+            } else if (x < 0) {
+                num = (num - (-x) % M + M) % M;
+            }
+            return this;
+        }
+
+        LLM add(LLM bm) {
+            return add(bm.num);
+        }
+
+        LLM sub(long x) {
+            return add(-x);
+        }
+
+        LLM sub(LLM bm) {
+            return add(-bm.num);
+        }
+
+        LLM mul(long x) {
+            num = num * (x % M) % M;
+            return this;
+        }
+
+        LLM mul(LLM bm) {
+            return mul(bm.num);
+        }
+
+        LLM div(long x) {
+            return mul(exp(x, M - 2));
+        }
+
+        LLM div(LLM bm) {
+            return div(bm.num);
+        }
+
+        LLM exp(long p) {
+            long ret = 1L, base = num % M;
+            for (int i = 0; i <= 60 && p > 0; ++i) { //1<<30=1073741824
+                if ((p & (1L << i)) > 0) {
+                    ret = ret * base % M;
+                    p ^= (1L << i);
+                }
+                base = base * base % M;
+            }
+            if (p != 0) throw new RuntimeException("p should reduced to 0 in exp.");
+            num = ret;
+            return this;
+        }
+
+        LLM exp(LLM bm) {
+            return exp(bm.num);
+        }
+
+        static LLM exp(long x, long p) {
+            return new LLM(x).exp(p);
+        }
+
+        static LLM C(long n, long m) {
+            if (n < 0 || m < 0) throw new RuntimeException("n/m cannot be negative in C(n,m).");
+            if (n < m) throw new RuntimeException("n is less than m in C(n,m).");
+            if (n == 0) return new LLM(1);
+            if (m == 0 || m == n) return new LLM(1);
+            if (n < cacheStepmul.length) {
+                // C(n,m)=n!/(n-m)!/m!
+                return new LLM(stepmul(n)).mul(stepmulInv(n - m)).mul(stepmulInv(m));
+            }
+            // NOTE: O(m) complexity when n is large.
+            LLM r = new LLM(1);
+            long val = n;
+            for (long i = 0; i < m; ++i) r.mul(val--);
+            r.mul(stepmulInv(m));
+            return r;
+        }
+
+        static long stepmul(long n) { // n!
+            if (n < 0) throw new RuntimeException("n cannot be negative in stepmul.");
+            if (n >= cacheStepmul.length) throw new RuntimeException("overflow cacheSm size.");
+            if (cacheStepmul[0] == 0) {
+                cacheStepmul[0] = 1;
+                cacheStepmulInv[0] = exp(cacheStepmul[0], M - 2).num;
+                for (int i = 1; i < cacheStepmul.length; ++i) {
+                    cacheStepmul[i] = cacheStepmul[i - 1] * i % M;
+                    cacheStepmulInv[i] = exp(cacheStepmul[i], M - 2).num;
+                }
+            }
+            return cacheStepmul[(int) n];
+        }
+
+        static long stepmulInv(long n) {
+            if (cacheStepmulInv[1] == 0) stepmul(2);
+            return cacheStepmulInv[(int) n];
+        }
+
+        static long exp2(long n) { // 2^n
+            if (n < 0) throw new RuntimeException("n cannot be negative in exp2.");
+            if (n >= exp2.length) throw new RuntimeException("overflow exp2 size.");
+            if (exp2[0] == 0) {
+                exp2[0] = 1;
+                for (int i = 1; i < exp2.length; ++i)
+                    exp2[i] = exp2[i - 1] * 2 % M;
+            }
+            return exp2[(int) n];
+        }
+    }
+
+
+    public class Mat {
+        private long[][] m;
+        private int row, col;
+        private long mod;
+
+        public Mat(long[][] m0, long mod0) {
+            m = m0;
+            row = m0 == null ? 0 : m.length;
+            col = row == 0 ? 0 : m[0].length;
+            mod = mod0;
+            for (int r = 0; r < row; r++) {
+                for (int c = 0; c < col; c++) {
+                    m[r][c] %= mod;
+                }
+
+            }
+
+        }
+
+        public long get(int r, int c) {
+            return m[r][c];
+        }
+
+        public Mat mul(Mat mat) {
+            if (col != mat.row)
+                return null;
+            long[][] nm = new long[row][mat.col];
+            for (int r = 0; r < row; r++)
+                for (int c = 0; c < mat.col; c++)
+                    for (int i = 0; i < col; i++)
+                        nm[r][c] = (nm[r][c] + m[r][i] * mat.m[i][c]) % mod;
+            return new Mat(nm, mod);
+        }
+
+        public Mat pow(long x) {
+            Mat mat = new Mat(new long[][]{{1, 0}, {0, 1}}, mod), base = this;
+            while (x > 0) {
+                if (x % 2 != 0)
+                    mat = mat.mul(base);
+                base = base.mul(base);
+                x /= 2;
+            }
+            return mat;
+        }
+
+        public boolean equals(Object o) {
+            if (o == this)
+                return true;
+            if (!(o instanceof Mat))
+                return false;
+            Mat mat = (Mat) o;
+            if (row != mat.row || col != mat.col)
+                return false;
+            for (int r = 0; r < row; r++)
+                for (int c = 0; c < col; c++)
+                    if (m[r][c] != mat.m[r][c])
+                        return false;
+            return true;
+        }
+
+        public void print() {
+            System.out.println('[');
+            for (int r = 0; r < row; r++) {
+                System.out.print(' ');
+                for (int c = 0; c < col; c++) {
+                    if (c > 0)
+                        System.out.print(' ');
+                    System.out.print(m[r][c]);
+                }
+                System.out.println();
+            }
+            System.out.println(']');
+        }
+    }
+
+
 }

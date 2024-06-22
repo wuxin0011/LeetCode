@@ -47,6 +47,8 @@ public class Solution {
         return minimumDifference(arr, target);
     }
     // https://leetcode.cn/contest/weekly-contest-400/problems/find-subarray-with-bitwise-and-closest-to-k/
+    // 力扣改题目掩盖自己出原题骚操作哦
+    // 新题目链接 将上面 and => or
     public int minimumDifference(int[] nums, int k) {
         int n = nums.length;
         int ans = Integer.MAX_VALUE;
