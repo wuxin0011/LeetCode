@@ -165,7 +165,7 @@ public class Config {
      * @return cookie
      */
     private static String getCookieContent(String configPath, final Properties properties) {
-        configPath = configPath.contains(cookieFile) ? configPath : (configPath + cookieFile);
+        configPath = configPath.contains(cookieFile) ? configPath : (configPath + File.separator + cookieFile);
         if (!IoUtil.isAbsolutePath(configPath)) {
             throw new RuntimeException("place use absolute path !");
         }
