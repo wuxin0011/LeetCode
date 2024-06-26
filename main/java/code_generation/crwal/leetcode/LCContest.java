@@ -222,7 +222,7 @@ public class LCContest implements Contest {
         }
 
         if (parseCodeInfo == null) {
-            throw new RuntimeException("place check your cookie ! maybe already expire");
+            throw new RuntimeException("place check your cookie ! maybe already expire :" +  BuildUrl.request.getConfigPath());
         }
 
 
@@ -389,7 +389,7 @@ public class LCContest implements Contest {
     public ParseCodeInfo parseCodeTemplate(Question question) {
         String info = BuildUrl.queryNewContestQuestion(question.getUrl());
         if (StringUtils.kmpSearch(info, "authenticated") != -1) {
-            throw new RuntimeException("authenticated access ,place check your cookie ");
+            throw new RuntimeException("authenticated access ,place check your cookie in :" + BuildUrl.request.getConfigPath());
         }
         String p = "\"lang\":\"Java\",\"langSlug\":\"java\"";
         return lcTemplate.parseCodeTemplate(info, p, true);

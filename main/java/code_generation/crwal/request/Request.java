@@ -77,6 +77,10 @@ public class Request {
         this.headers = headers;
     }
 
+    public String getConfigPath() {
+        return configPath;
+    }
+
 
     public void initHttpURLConnection(HttpURLConnection connection) {
         initHttpURLConnection(connection, false);
