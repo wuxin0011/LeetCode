@@ -45,7 +45,11 @@ public class LCEveryDay extends LCCustom {
             if ("exit".equalsIgnoreCase(titleSlug) || "NO".equalsIgnoreCase(titleSlug)) {
                 System.exit(-1);
             }
-        } while (StringUtils.isEmpty(titleSlug) || !titleSlug.startsWith("https://leetcode.cn/problems/"));
+            // 经典模式URl
+            if (!StringUtils.isEmpty(titleSlug) && titleSlug.startsWith(BuildUrl.LC_CLASS_THEME_PREFIX)) {
+                titleSlug = titleSlug.replace(BuildUrl.LC_CLASS_THEME_PREFIX, BuildUrl.LC_PROBLEM_PREFIX);
+            }
+        } while (StringUtils.isEmpty(titleSlug) || !titleSlug.startsWith(BuildUrl.LC_PROBLEM_PREFIX));
         createByTitleSlug(titleSlug);
     }
 

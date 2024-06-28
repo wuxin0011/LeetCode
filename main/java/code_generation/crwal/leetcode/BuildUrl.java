@@ -27,6 +27,9 @@ public class BuildUrl {
     public final static String WeeklyUrlPattern = LC_WEEKLY_CONTEST_PREFIX + "-%s/problems/%s/";
     public final static String BiWeeklyUrlPattern = LC_BI_WEEKLY_CONTEST_PREFIX + "-%s/problems/%s/";
 
+    // 经典模式url
+    public final static String LC_CLASS_THEME_PREFIX = LC_PREFIX + "/classic" + "/problems";
+
 
     // 默认从当前目录下的 request_config 目录读取配置文件 这个目录会自动过滤
     public static final Request request = new Request(BuildUrl.class);

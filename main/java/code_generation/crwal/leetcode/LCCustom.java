@@ -222,9 +222,17 @@ public abstract class LCCustom implements CustomProblem {
                             if (url.startsWith(BuildUrl.LC_WEEKLY_CONTEST_PREFIX)) {
                                 return true;
                             }
+                            if (url.startsWith(BuildUrl.LC_CLASS_THEME_PREFIX)) {
+                                return true;
+                            }
                             return url.startsWith(BuildUrl.LC_BI_WEEKLY_CONTEST_PREFIX);
                         }
-                ).
+                ).map(u -> {
+                    if (u.startsWith(BuildUrl.LC_CLASS_THEME_PREFIX)) {
+                        return u.replace(BuildUrl.LC_CLASS_THEME_PREFIX, BuildUrl.LC_PROBLEM_PREFIX);
+                    }
+                    return u;
+                }).
                 collect(Collectors.toList());
     }
 
