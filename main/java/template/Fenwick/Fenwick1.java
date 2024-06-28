@@ -40,7 +40,7 @@ public class Fenwick1 {
             if (l < 0 || r > n || l >= r) {
                 return 0;
             }
-            return _sum(r) - _sum(l);
+            return _sum(r) - _sum(l-1);
         }
     }
 
