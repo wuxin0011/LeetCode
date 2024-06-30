@@ -157,7 +157,8 @@ public class LCContest implements Contest {
                 continue;
             }
             String tempTitle = (StringUtils.isEmpty(question.getTitle()) ? question.getTitle_slug() : question.getTitle());
-            System.out.println("\nstart parse question :  " + CustomColor.pink(tempTitle) + ", credit: " + (StringUtils.isEmpty(question.getCredit()) ? "unknown" : question.getCredit()));
+            System.out.println("\nstart parse question :  " + CustomColor.pink(tempTitle) + " , credit: " + (StringUtils.isEmpty(question.getCredit()) ? "unknown" : question.getCredit()));
+            System.out.println("access url : " + (StringUtils.isEmpty(question.getUrl()) ? "unknown" : question.getUrl()));
             final int idx = i;
 
             try {
