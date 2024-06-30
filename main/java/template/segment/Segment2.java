@@ -2,12 +2,14 @@ package template.segment;
 
 /**
  * @author: wuxin0011
- * @Description: 线段树基础版本 懒更新 + 最值查询 + 区间求和
+ * @Description:
  */
-public class Segment1 {
-
-    public static class Segment {
-        public int MAXN;
+public class Segment2 {
+    /**
+     * 取模版本
+     */
+    public static class SegmentMod {
+        public int N;
         public int[] arr;
         public int LEN;
         public long[] sum;
@@ -16,13 +18,15 @@ public class Segment1 {
         public boolean[] update;
         public long[] max;
         public long[] min;
+        long MOD;
 
 
-        public Segment() {
-            this((int) 1e5);
+        public SegmentMod() {
+            this((int) 1e5, (long) 1e9 + 7);
         }
-        public Segment(int N) {
-            this.MAXN = N;
+
+        public SegmentMod(int N, long MOD) {
+            this.N = N;
             this.LEN = N * 4 + 2;
             this.arr = new int[N + 2];
             this.sum = new long[LEN];
@@ -31,24 +35,25 @@ public class Segment1 {
             this.update = new boolean[LEN];
             this.max = new long[LEN];
             this.min = new long[LEN];
+            this.MOD = MOD;
         }
 
 
         public void up(int i) {
-            sum[i] = sum[i << 1] + sum[i << 1 | 1];
+            sum[i] = (sum[i << 1] + sum[i << 1 | 1] + MOD) % MOD;
             max[i] = Math.max(max[i << 1], max[i << 1 | 1]);
             min[i] = Math.min(min[i << 1], min[i << 1 | 1]);
         }
 
         public void addLazy(int i, long v, int n) {
-            sum[i] += n * v;
-            add[i] += v;
-            max[i] += v;
-            min[i] += v;
+            sum[i] = (sum[i] + n * v + MOD) % MOD;
+            add[i] = (add[i] + v + MOD) % MOD;
+            max[i] = (max[i] + v + MOD) % MOD;
+            min[i] = (min[i] + v + MOD) % MOD;
         }
 
         public void updateLazy(int i, long v, int n) {
-            sum[i] = (long) n * v;
+            sum[i] = ((long) n * v) % MOD;
             add[i] = 0;
             update[i] = true;
             change[i] = v;
@@ -146,11 +151,11 @@ public class Segment1 {
                 long ans = 0;
 
                 if (L <= mid) {
-                    ans += querySum(L, R, l, mid, i << 1);
+                    ans = (ans + querySum(L, R, l, mid, i << 1) +  MOD) % MOD;
                 }
 
                 if (R > mid) {
-                    ans += querySum(L, R, mid + 1, r, i << 1 | 1);
+                    ans = (ans + querySum(L, R, mid + 1, r, i << 1 | 1) + MOD) % MOD;
                 }
 
                 return ans;
@@ -199,140 +204,5 @@ public class Segment1 {
             }
         }
     }
-
-
-
-
-
-
-
-
-    public static void main(String[] args) {
-
-
-        int MAXN = 10000;
-        Segment segment = new Segment(MAXN + 1);
-
-        int T = 1000; // 测试次数
-        boolean ok = true;
-        while (--T > 0 && ok) {
-
-            int N = Math.max(100, (int) (Math.random() * MAXN));
-
-            int[] nums = new int[N + 10];
-
-            for (int i = 1; i <= N; i++) {
-                boolean isNeg = Math.random() > 0.5;
-                int v = (int) (Math.random() * 1000);
-                nums[i] = isNeg ? -v : v;
-                segment.arr[i] = nums[i];
-            }
-
-            segment.init(1, N, 1);
-
-            int k = 100;
-
-            while (--k > 0) {
-
-                boolean isNeg = Math.random() > 0.5;
-                int v = (int) (Math.random() * 1000);
-                if (isNeg) v = -v;
-
-                // 注意要 + 1
-                int a = (int) (Math.random() * N + 1);
-                int b = (int) (Math.random() * N + 1);
-
-                // 设置左右区间
-                int l = Math.min(a, b), r = Math.max(a, b);
-
-                // 0.2 add
-                // 0.4 update
-                // 0.6 query sum
-                // 0.8 query max
-                // > 0.8 query min
-                double op = Math.random();
-
-
-                long result = 0, expect = 0;
-                if (op < 0.2) {
-                    // add
-                    segment.add(l, r, v, 1, N, 1);
-                    checkAdd(l, r, v, nums);
-                } else if (op < 0.4) {
-                    segment.change(l, r, v, 1, N, 1);
-                    checkChange(l, r, v, nums);
-                } else if (op < 0.6) {
-                    result = segment.querySum(l, r, 1, N, 1);
-                    expect = checkSum(l, r, nums);
-                    if (result != expect) {
-                        ok = false;
-                        System.out.println("query sum error" + " { " + l + " , " + r + " }");
-                        break;
-                    }
-                } else if (op < 0.8) {
-                    result = segment.queryMax(l, r, 1, N, 1);
-                    expect = checkMax(l, r, nums);
-                    if (result != expect) {
-                        ok = false;
-                        System.out.println("query max error" + " { " + l + " , " + r + " }");
-                        break;
-                    }
-                } else {
-                    result = segment.queryMin(l, r, 1, N, 1);
-                    expect = checkMin(l, r, nums);
-                    if (result != expect) {
-                        ok = false;
-                        System.out.println("query min error" + " { " + l + " , " + r + " }");
-                        break;
-                    }
-                }
-
-            }
-        }
-
-        System.out.println(ok ? "ok" : "fail");
-
-    }
-
-
-    // 暴力测试部分
-    public static void checkAdd(int l, int r, long V, int[] nums) {
-        for (int i = l; i <= r; i++) {
-            nums[i] += V;
-        }
-    }
-
-    public static void checkChange(int l, int r, int V, int[] nums) {
-        for (int i = l; i <= r; i++) {
-            nums[i] = V;
-        }
-    }
-
-
-    public static long checkSum(int l, int r, int[] nums) {
-        long ans = 0;
-        for (int i = l; i <= r; i++) {
-            ans += nums[i];
-        }
-        return ans;
-    }
-
-    public static long checkMax(int l, int r, int[] nums) {
-        long ans = Long.MIN_VALUE;
-        for (int i = l; i <= r; i++) {
-            ans = Math.max(ans, nums[i]);
-        }
-        return ans;
-    }
-
-    public static long checkMin(int l, int r, int[] nums) {
-        long ans = Long.MAX_VALUE;
-        for (int i = l; i <= r; i++) {
-            ans = Math.min(ans, nums[i]);
-        }
-        return ans;
-    }
-
-
 
 }
