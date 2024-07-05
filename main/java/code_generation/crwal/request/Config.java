@@ -243,7 +243,7 @@ public class Config {
             "Sec-Fetch-Mode=cors\n" +
             "Sec-Ch-Ua-Platform=Windows\n" +
             "User-Agent=\"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36 Edg/116.0.1938.62\";\n" +
-            "Accept-Language=zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6\n" +
+            "Accept-Language=zh-CN,zh;desc=0.9,en;desc=0.8,en-GB;desc=0.7,en-US;desc=0.6\n" +
             "Cache-Control=max-age=0";
 
 }

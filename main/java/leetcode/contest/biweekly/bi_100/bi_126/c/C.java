@@ -39,7 +39,7 @@ public class C {
         List<Character> res = new ArrayList<>();
         PriorityQueue<int[]> q = new PriorityQueue<>((a, b) -> a[0] == b[0] ? a[1] - b[1] : a[0] - b[0]);
         for (int i = 0; i < h.length; i++) {
-            q.add(new int[]{h[i], i}); // 初始化 q
+            q.add(new int[]{h[i], i}); // 初始化 desc
         }
         for (int i = 0; i < ids.size(); i++) {
             int[] p = q.poll();

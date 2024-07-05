@@ -18,7 +18,7 @@ public class StringUtils {
 
     static final String[] removeTagName = {"strong",
             "abbr", "address", "br", "cite", "div", "ul", "span", "pre", "em", "b", "u", "li", "code", "data", "dd", "del", "p", "img", "src", "video",
-            "details", "dl", "dd", "html", "body", "footer", "h1", "h2", "h3", "h4", "h5", "p", "i", "link", "main", "map", "mark", "meta", "nav", "q"
+            "details", "dl", "dd", "html", "body", "footer", "h1", "h2", "h3", "h4", "h5", "p", "i", "link", "main", "map", "mark", "meta", "nav", "desc"
     };
 
     // 后续可以添加

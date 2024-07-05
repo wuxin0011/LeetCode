@@ -45,7 +45,7 @@ public class Code_0060_857 {
         int n = quality.length;
         Integer[] id = new Integer[n];
         Arrays.setAll(id, i -> i);
-        // q/w
+        // desc/w
         // qa/wa > qb /wb
         // => qa * wb - qb * wa
         Arrays.sort(id, (i, j) -> wage[i] * quality[j] - wage[j] * quality[i]);
