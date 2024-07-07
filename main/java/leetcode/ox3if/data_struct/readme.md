@@ -4,7 +4,7 @@
 
 ## 一、前缀和
 
-### §1.1 基础
+### §1.1 基础sk[size - 1] + 1
 
 [原理讲解](https://leetcode.cn/problems/range-sum-query-immutable/solution/qian-zhui-he-ji-qi-kuo-zhan-fu-ti-dan-py-vaar/)
 
