@@ -14,11 +14,28 @@ public class C {
         IoUtil.testUtil(C.class, "numberOfAlternatingGroups", "C.txt");
     }
 
-
+    // 0(1) 空间做法
     public int numberOfAlternatingGroups(int[] a, int k) {
+        int cnt = 0;
+        int n = a.length;
+        for (int l = 0, r = 0; r < n + k - 1; r++) {
+            if (r > 0 && a[r % n] == a[(r - 1) % n]) {
+                l = r;
+                continue;
+            }
+            if (r - l + 1 >= k) {
+                cnt++;
+            }
+        }
+        return cnt;
+    }
+
+    // 0(n+k) 空间做法
+
+    public int numberOfAlternatingGroups1(int[] a, int k) {
         int n = a.length;
         int cnt = 0;
-        int[] h = new int[n + k-1];
+        int[] h = new int[n + k - 1];
         int size = 0;
         for (int i = n - k + 1; i < n; i++) {
             h[size++] = a[i];

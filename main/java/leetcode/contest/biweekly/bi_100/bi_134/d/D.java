@@ -2,9 +2,34 @@ package leetcode.contest.biweekly.bi_100.bi_134.d;
 
 import code_generation.utils.IoUtil;
 
-import java.util.Arrays;
-
 /**
+ * 3209. 子数组按位与值为 K 的数目
+ * <p>
+ * <p>
+ * 给你一个整数数组nums和一个整数k，请你返回nums中有多少个子数组满足：子数组中所有元素按位AND的结果为 k。
+ * <p>
+ * 示例 1：
+ * 输入：nums = [1,1,1], k = 1
+ * 输出：6
+ * 解释：
+ * 所有子数组都只含有元素 1 。
+ * <p>
+ * 示例 2：
+ * 输入：nums = [1,1,2], k = 1
+ * 输出：3
+ * 解释：
+ * 按位AND值为 1 的子数组包括：[1,1,2], [1,1,2], [1,1,2]。
+ * <p>
+ * 示例 3：
+ * 输入：nums = [1,2,3], k = 2
+ * 输出：2
+ * 解释：
+ * 按位AND值为 2 的子数组包括：[1,2,3], [1,2,3]。
+ * <p>
+ * 提示：
+ * 1 <= nums.length <= 10^5
+ * 0 <= nums[i], k <= 10^9
+ *
  * @author: agitated-curranfnd
  * @Description:
  * @url: https://leetcode.cn/contest/biweekly-contest-134/problems/number-of-subarrays-with-and-value-of-k
@@ -12,79 +37,81 @@ import java.util.Arrays;
  */
 public class D {
 
-    public static void main(String[] args) {
-        IoUtil.testUtil(D.class, "countSubarrays", "D.txt");
-    }
 
-
-    public long countSubarrays(int[] a, int k) {
-        int n = a.length;
-        int l = 0, r = 0;
-        int v = -1;
-        int[] h = new int[32];
-        Arrays.fill(h, 1);
-        long ans = 0;
-        while (r < n) {
-            v &= a[r];
-            add(h, a[r], true);
-            // 不符合题目要求 重新赋值
-            if (!isLess(v, k)) {
-                v = -1;
-                l = r;
-                Arrays.fill(h, 1);
-            }
-            while (l < r && v == k) {
-                ans += 1;
-                add(h, a[l], false);
-                v = calc(h);
-                // 统计
-                l++;
-            }
-            r++;
+    static class s0 {
+        public static void main(String[] args) {
+            IoUtil.testUtil(s0.class, "countSubarrays", "D.txt");
         }
-        return ans;
-    }
 
+        // 双指针
+        public long countSubarrays(int[] a, int k) {
+            int n = a.length;
+            long ans = 0;
+            int l = 0, r = 0;
+            for (int i = 0; i < n; i++) {
+                int x = a[i];
+                for (int j = i - 1; j >= 0; j--) {
+                    if ((a[j] & x) == a[j]) {
+                        break;
+                    }
+                    a[j] &= x;
+                }
+                while (l <= i && a[l] < k) {
+                    l++;
+                }
+                while (r <= i && a[r] <= k) {
+                    r++;
+                }
+                // (l,r]
+                ans += r - l;
+            }
 
-    public static void add(int[] h, int v, boolean isAdd) {
-        int x = 0;
-        for (int i = 0; i < h.length-1 && x <= v; i++) {
-            int d = (v >> i & 1);
-            if (d == 0) {
-                continue;
-            }
-            if (isAdd) {
-                h[i]++;
-            } else {
-                h[i]--;
-            }
-//            x |= 1 << i;
+            return ans;
         }
+
+
     }
 
-    public static int calc(int[] h) {
-        int x = 0;
-        for (int i = 0; i < h.length-1; i++) {
-            if (h[i] == 0) {
-                continue;
-            }
-            x |= 1 << i;
+    // 二分
+    static class s1 {
+        public static void main(String[] args) {
+            IoUtil.testUtil(s1.class, "countSubarrays", "D.txt");
         }
-        return x;
-    }
 
 
-    // 判断是否对应
-    public static boolean isLess(int v, int k) {
-        for (int i = 0; i < 32; i++) {
-            int a = v >> i & 1;
-            int b = k >> i & 1;
-            if (a == 0 && b == 1) {
-                return false;
+        public long countSubarrays(int[] a, int k) {
+            int n = a.length;
+            long ans = 0;
+            for (int i = 0; i < n; i++) {
+                int x = a[i];
+                for (int j = i - 1; j >= 0; j--) {
+                    if ((a[j] & x) == a[j]) {
+                        break;
+                    }
+                    a[j] &= x;
+                }
+                // 二分 k 的第一个位置和最后一个位置
+                int l = lower_bound(a, k, 0, i);
+                int r = lower_bound(a, k + 1, 0, i);
+                // [l,r)
+                ans += r - l;
             }
-        }
-        return true;
-    }
 
+            return ans;
+        }
+
+        public static int lower_bound(int[] a, int target, int l, int r) {
+            while (l <= r) {
+                int mid = l + ((r - l) >> 1);
+                if (a[mid] >= target) {
+                    r = mid - 1;
+                } else {
+                    l = mid + 1;
+                }
+            }
+            return l;
+        }
+
+    }
 
 }

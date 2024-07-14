@@ -10,6 +10,8 @@ import java.util.Arrays;
  */
 public class valid_sudoku {
 
+
+
     static class S0 {
         public static void main(String[] args) {
             IoUtil.testUtil(S0.class, "isValidSudoku", "in.txt", true);
