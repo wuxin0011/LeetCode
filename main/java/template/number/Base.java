@@ -32,7 +32,7 @@ public class Base {
      * @return 最大公约数
      */
     public static int lcm(int a, int b) {
-        return a * b / gcd(a, b);
+        return (a  / gcd(a, b) * b);
     }
 
 

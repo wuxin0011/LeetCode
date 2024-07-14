@@ -1,7 +1,6 @@
 package leetcode.top_interview_150.rotate_image;
 
 import code_generation.utils.IoUtil;
-import java.util.*;
 /**
  *
  *
@@ -26,21 +25,62 @@ import java.util.*;
  *
  * @author: wuxin0011
  * @Description:
- * @url:   https://leetcode.cn/problems/rotate-image
+ * @url: https://leetcode.cn/problems/rotate-image
  * @title: 旋转图像
  */
 public class Solution {
 
     public static void main(String[] args) {
-        IoUtil.testUtil(Solution.class,"rotate","in.txt");
+        IoUtil.testUtil(Solution.class, "rotate", "in.txt");
+        IoUtil.testUtil(Solution.class, "rotate1", "in.txt");
     }
-     
 
-    public void rotate(int[][] matrix) {    
+    public void rotate(int[][] matrix) {
+        // 上下翻转 + 对角线翻转
+        int n = matrix.length;
+        int mid = n >> 1;
+        // 上下反转
+        for(int i = 0;i<mid;i++) {
+            int[] t = matrix[i];
+            matrix[i] = matrix[n - i - 1];
+            matrix[n - i - 1] =  t;
+        }
 
-         
-	}
+        // 对角线
+        for(int i = 0;i < n;i++) {
+            for(int j = i + 1;j < n;j++) {
+                int t = matrix[i][j];
+                matrix[i][j] = matrix[j][i];
+                matrix[j][i] = t;
+            }
+        }
+    }
 
-  
+    public void rotate1(int[][] matrix) {
+
+        int n = matrix.length;
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < i; j++) {
+                swap(matrix, i, j, j, i);
+            }
+        }
+        int l = 0, r = n - 1;
+        while (l < r) {
+            for (int i = 0; i < n; i++) {
+                swap(matrix, i, l, i, r);
+            }
+            l++;
+            r--;
+        }
+
+    }
+
+
+    public static void swap(int[][] mat, int i0, int j0, int i1, int j1) {
+        int x = mat[i0][j0];
+        mat[i0][j0] = mat[i1][j1];
+        mat[i1][j1] = x;
+    }
+
 
 }
