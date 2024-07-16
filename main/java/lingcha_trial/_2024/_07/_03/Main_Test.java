@@ -1,4 +1,4 @@
-package lingcha_trial.y_2024.m_07.d_04;
+package lingcha_trial._2024._07._03;
 
 import code_generation.utils.ACM.ACMUtil;
 
@@ -6,9 +6,9 @@ import code_generation.utils.ACM.ACMUtil;
  * @author: wuxin0011
  * @Description:
  */
-public class D_test {
+public class Main_Test {
 
     public static void main(String[] args) {
-        ACMUtil.runOnlyInput(D.class);
+        ACMUtil.run(Main.class);
     }
 }

@@ -1,15 +1,13 @@
-package lingcha_trial.y_2024.m_07.d_03;
+package lingcha_trial._2024._07._03;
 
 import code_generation.utils.ACM.IO;
-
-import java.io.*;
 
 /**
  * @author: wuxin0011
  * @Description:
  * @submit url : https://codeforces.com/contest/1849/submission/268702967
  */
-public class D {
+public class Main {
 
     static IO io;
     static int MAXN = (int) 2e5 + 1;
