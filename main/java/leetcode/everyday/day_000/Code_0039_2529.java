@@ -1,7 +1,7 @@
 package leetcode.everyday.day_000;
 
 import code_generation.utils.IoUtil;
-import java.util.*;
+
 /**
  * @author: wuxin0011
  * @Description:
@@ -18,7 +18,7 @@ public class Code_0039_2529 {
     /**
      * 
      * @param nums
-     * @see leetcode.ox3if.dichotomy.Dichotomy_0007.Solution#maximumCount(int[]) 
+     * @see leetcode._0x3f_.dichotomy.Dichotomy_0007.Solution#maximumCount(int[])
      * @return
      */
     public int maximumCount(int[] nums) {    

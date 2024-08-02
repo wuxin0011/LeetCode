@@ -20,7 +20,7 @@ public class Code_0051_1052 {
      * @param grumpy
      * @param minutes
      * @return
-     * @see leetcode.ox3if.slide_window.slide_0007.Solution
+     * @see leetcode._0x3f_.slide_window.slide_0007.Solution
      */
     public int maxSatisfied(int[] customers, int[] grumpy, int minutes) {
         int n = customers.length;

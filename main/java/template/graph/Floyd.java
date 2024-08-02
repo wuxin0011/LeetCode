@@ -5,8 +5,9 @@ import java.util.Arrays;
 /**
  * @author: wuxin0011
  * @Description: Floyd算法： 任意两点之间最短距离 注意不能有负环
- * @see leetcode.ox3if.graph.floyd.floyd_0000
- * @see leetcode.ox3if.graph.floyd.floyd_0001
+ * @see leetcode._0x3f_.graph.floyd.floyd_0000
+ * @see leetcode._0x3f_.graph.floyd.floyd_0001
+ * @see leetcode._0x3f_.graph.floyd.floyd_0002 floyd + 状压dp
  */
 public class Floyd {
 

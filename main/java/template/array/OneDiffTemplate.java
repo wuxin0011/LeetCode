@@ -4,11 +4,36 @@ import java.util.Arrays;
 
 /**
  * @author: wuxin0011
- * @Description: 一维等差差分
+ * @Description:
  */
 public class OneDiffTemplate {
 
 
+    // 一个维差分
+    static class D {
+        int n;
+        int[] diffs;
+
+        D(int[] a) {
+            n = a.length;
+            diffs = new int[n + 1];
+        }
+
+        void add(int l, int r, int v) {
+            diffs[l] += v;
+            diffs[r + 1] -= v;
+        }
+
+        void origin(int[] a) {
+            for (int i = 1; i < n + 1; i++) {
+                diffs[i] += diffs[i - 1];
+                a[i] += diffs[i - 1];
+            }
+        }
+    }
+
+
+    // 一维等差差分
     static class OneDiff {
 
         int[] diff;
@@ -58,15 +83,11 @@ public class OneDiffTemplate {
 
         int[] origin() {
             int[] a = new int[this.diff.length - 2];
-
-            for (int i = 1; i < this.diff.length; i++) {
-                this.diff[i] += this.diff[i - 1];
+            for (int x = 0; x < 2; x++) {
+                for (int i = 1; i < this.diff.length; i++) {
+                    this.diff[i] += this.diff[i - 1];
+                }
             }
-
-            for (int i = 1; i < this.diff.length; i++) {
-                this.diff[i] += this.diff[i - 1];
-            }
-
             for (int i = 0; i < this.diff.length - 2; i++) {
                 a[i] = this.diff[i];
             }

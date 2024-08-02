@@ -15,6 +15,74 @@ import java.util.List;
 public class PrimeNumber {
 
 
+    // 常用模板
+    // https://leetcode.cn/problems/prime-subtraction-operation/
+    static class DefaultPrimeNumberTemplate {
+        static int N = (int) 1e6 + 1;
+        static int[] vis = new int[N];
+        static int[] sums = new int[N];
+        static int[] sk;
+        static int size;
+
+        static {
+            Arrays.fill(vis, 1);
+            size = N;
+            for (int i = 0; i < N; i++) {
+                if (i < 2) {
+                    vis[i] = 0;
+                    size--;
+                } else {
+                    if (vis[i] == 0) {
+                        continue;
+                    }
+                    if (i * 1L * i >= N) {
+                        break;
+                    }
+                    for (int j = i * i; j < N; j += i) {
+                        if (vis[j] != 0) {
+                            size--;
+                        }
+                        vis[j] = 0;
+                    }
+                }
+            }
+            sk = new int[size];
+
+            for (int i = 0, j = 0; i < N; i++) {
+                if (vis[i] == 1) {
+                    sk[j++] = i;
+                }
+                // if(i > 2) {
+                //     sums[i] = sums[i-1] + a[i];
+                // }
+            }
+        }
+
+        // 配合二分使用
+        static int lowerBound(int t) {
+            int l = 0, r = size;
+            while (l <= r) {
+                int mid = l + ((r - l) >> 1);
+                if (mid >= size) {
+                    break;
+                }
+                if (sk[mid] >= t) {
+                    r = mid - 1;
+                } else {
+                    l = mid + 1;
+                }
+            }
+            return l;
+        }
+
+
+        public static boolean isPrime(int n) {
+            return vis[n] == 1;
+        }
+
+    }
+
+
     static class baseValid {
 
         /**

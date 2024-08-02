@@ -7,11 +7,12 @@ package template.array;
 public class DoubleArray {
 
 
-    static class ArraySum {
+    // 二维前缀和模板
+    static class Mat {
 
         int[][] sum;
 
-        ArraySum(int[][] grid) {
+        Mat(int[][] grid) {
             this.sum = init(grid);
         }
 
@@ -41,8 +42,8 @@ public class DoubleArray {
          * 坐上坐标 a,b
          * 右下坐标 c,d
          */
-        public int queryDouble(int a, int b, int c, int d) {
-            if (sum == null) {
+        public int query(int a, int b, int c, int d) {
+            if (sum == null || a > c || b > d) {
                 return 0;
             }
             int top = a > 0 ? sum[a - 1][d] : 0;

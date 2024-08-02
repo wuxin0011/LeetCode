@@ -4,9 +4,9 @@ package template.graph;
 import java.util.Arrays;
 
 /**
- * @see leetcode.ox3if.graph.topological_sorting.Solution_0001.Solution
- * @see leetcode.ox3if.graph.topological_sorting.Solution_0002.Solution
- * @see leetcode.ox3if.graph.topological_sorting.Solution_0003.Solution
+ * @see leetcode._0x3f_.graph.topological_sorting.Solution_0001.Solution
+ * @see leetcode._0x3f_.graph.topological_sorting.Solution_0002.Solution
+ * @see leetcode._0x3f_.graph.topological_sorting.Solution_0003.Solution
  * @author: wuxin0011
  * @Description: 链式向前星建图
  */
