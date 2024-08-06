@@ -49,15 +49,42 @@ public class DefaultUnion {
                 size--;
                 int sx = s[x];
                 int sy = s[y];
-                if(sx >= sy) {
-                    fa[y] = x;
-                    s[x] += s[y];
-                }else {
-                    fa[x] = y;
-                    s[y] += s[x];
+                if (sx < sy) {
+                    int temp = y;
+                    y = x;
+                    x = temp;
                 }
+                fa[y] = x;
+                s[x] += s[y];
+                s[y] = 0;
                 return true;
             }
         }
+
+
+
+        /**
+
+        // 数字大小小挂大
+        public boolean union(int x, int y) {
+            x = find(x);
+            y = find(y);
+            if (x == y) {
+                return false;
+            } else {
+                size--;
+                if (y < x) {
+                    int temp = y;
+                    y = x;
+                    x = temp;
+                }
+                fa[y] = x;
+                s[x] += s[y];
+                s[y] = 0;
+                return true;
+            }
+        }
+         */
+
     }
 }

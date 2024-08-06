@@ -80,6 +80,13 @@ public class Base {
     }
 
 
+    public static int calcMOD(int mod, int... args) {
+        long s = 0;
+        for (int v : args) {
+            s += v % mod;
+        }
+        return (int) (s + mod) % mod;
+    }
 
 
     public static void main(String[] args) {
