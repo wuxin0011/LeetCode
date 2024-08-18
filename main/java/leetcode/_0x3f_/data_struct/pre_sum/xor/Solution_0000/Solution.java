@@ -12,13 +12,50 @@ import java.util.List;
  * @title: 构建回文串检测
  */
 public class Solution {
+    static class S0 {
+        public static void main(String[] args) {
+            IoUtil.testUtil(S0.class, "canMakePaliQueries", "in.txt");
+        }
+
+
+        public List<Boolean> canMakePaliQueries(String s, int[][] queries) {
+            List<Boolean> ans = new ArrayList<>();
+            int[] a = s.chars().map(x -> x - 'a' + 1).toArray();
+            int n = a.length;
+            int[] sums = new int[n];
+            sums[0] ^= 1 << a[0];
+            for (int i = 1; i < n; i++) {
+                sums[i] = sums[i - 1];
+                sums[i] ^= (1 << a[i]);
+            }
+            for (int[] q : queries) {
+                int l = q[0], r = q[1], k = q[2];
+                ans.add(check(sums, l, r, k));
+            }
+            return ans;
+        }
+
+        public static boolean check(int[] sums, int l, int r, int k) {
+            int mask = sums[r] ^ (l - 1 < 0 ? 0 : sums[l - 1]);
+            int cnt = 0;
+            for (int i = 1; i <= 26 && mask > 0; i++) {
+                if ((mask >> i & 1) == 0) {
+                    continue;
+                }
+                cnt++;
+            }
+            return cnt / 2 <= k;
+        }
+
+
+    }
+
     static class S1 {
         public static void main(String[] args) {
             IoUtil.testUtil(S1.class, "canMakePaliQueries", "in.txt");
         }
 
-
-        public List<Boolean> canMakePaliQueries(String s, int[][] queries) {
+        public List<Boolean> canMakePaliQueries2(String s, int[][] queries) {
             int n = s.length();
             int[][] sums = new int[n + 1][26];
             for (int i = 0; i < n; i++) {

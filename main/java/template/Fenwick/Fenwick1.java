@@ -8,27 +8,45 @@ public class Fenwick1 {
 
     public static class Fenwick {
         int n;
-        int[] tree;
+        int[] tree, diff, a;
 
-        Fenwick(int n) {
+        public Fenwick(int[] a) {
+            this.n = a.length;
+            this.tree = new int[n + 1];
+            this.diff = new int[n + 1];
+            this.a = a;
+        }
+        public Fenwick(int n) {
             this.n = n;
-            this.tree = new int[n];
+            this.tree = new int[n + 1];
         }
 
-        static int lowbit(int i) {
+        public void init() {
+            for (int i = 0; i < n; i++) {
+                this.add(i, a[i]);
+            }
+        }
+
+        public int lowbit(int i) {
             return i & -i;
         }
 
-        void add(int i, int val) {
-            i += 1;
-            while (i < n) {
-                tree[i] += val;
+        public void add(int i, int val) {
+            int v = val;
+            if (diff != null) {
+                v = val - this.diff[i];
+                this.diff[i] = v;
+            }
+            i++;
+            while (i <= n) {
+                tree[i] += v;
                 i += lowbit(i);
             }
         }
 
-        private int _sum(int i) {
+        private int sums(int i) {
             int s = 0;
+            i++;
             while (i > 0) {
                 s += tree[i];
                 i -= lowbit(i);
@@ -36,11 +54,11 @@ public class Fenwick1 {
             return s;
         }
 
-        int query(int l, int r) {
-            if (l < 0 || r > n || l >= r) {
+        public int sums(int l, int r) {
+            if (l < 0 || r > n || l > r) {
                 return 0;
             }
-            return _sum(r) - _sum(l-1);
+            return sums(r) - sums(l - 1);
         }
     }
 

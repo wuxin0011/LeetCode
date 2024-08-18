@@ -2,6 +2,7 @@ package leetcode._0x3f_.data_struct.pre_sum.xor.Solution_0001;
 
 import code_generation.utils.IoUtil;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,6 +16,38 @@ public class Solution {
 
     public static void main(String[] args) {
         IoUtil.testUtil(Solution.class, "findTheLongestSubstring", "in.txt");
+    }
+
+    public int findTheLongestSubstring(String s) {
+        char[] a = s.toCharArray();
+        int mask = 0;
+        int[] map = new int[1 << 6];
+        Arrays.fill(map, -2);
+        map[0] = -1;
+        int ans = 0;
+        for (int i = 0; i < a.length; i++) {
+            char c = a[i];
+            int id = getIdx(c);
+            if (id != 0) {
+                mask ^= 1 << id;
+            }
+            if (map[mask] != -2) {
+                ans = Math.max(ans, i - map[mask]);
+            }
+            if (map[mask] == -2) {
+                map[mask] = i;
+            }
+        }
+        return ans;
+    }
+
+    public static int getIdx(char c) {
+        if (c == 'a') return 1;
+        if (c == 'e') return 2;
+        if (c == 'i') return 3;
+        if (c == 'o') return 4;
+        if (c == 'u') return 5;
+        return 0;
     }
 
     public int findTheLongestSubstring0(String s) {
@@ -39,7 +72,7 @@ public class Solution {
 
     // 根据异或 a ^ b = 0 ===> a == b
     // 要想长度最大 记录最早下标
-    public int findTheLongestSubstring(String s) {
+    public int findTheLongestSubstring2(String s) {
         int n = s.length();
         int[] sums = new int[n + 1];
         for (int i = 0; i < n; i++) {

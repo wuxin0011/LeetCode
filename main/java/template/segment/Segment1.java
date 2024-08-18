@@ -7,85 +7,128 @@ package template.segment;
 public class Segment1 {
 
     public static class Segment {
-        public int MAXN;
+        public int N;
         public int[] arr;
-        public int LEN;
-        public long[] sum;
-        public long[] add;
-        public long[] change;
+        public int MAXN;
+        public long[] sum, add, change, max, min;
         public boolean[] update;
-        public long[] max;
-        public long[] min;
-
+        boolean isCheck = true;
 
         public Segment() {
             this((int) 1e5);
         }
+
         public Segment(int N) {
-            this.MAXN = N;
-            this.LEN = N * 4 + 2;
+            this.N = N;
+            this.MAXN = N * 4 + 1;
             this.arr = new int[N + 2];
-            this.sum = new long[LEN];
-            this.add = new long[LEN];
-            this.change = new long[LEN];
-            this.update = new boolean[LEN];
-            this.max = new long[LEN];
-            this.min = new long[LEN];
+            this.sum = new long[MAXN];
+            this.add = new long[MAXN];
+            this.change = new long[MAXN];
+            this.update = new boolean[MAXN];
+            this.max = new long[MAXN];
+            this.min = new long[MAXN];
         }
 
 
         public void up(int i) {
-            sum[i] = sum[i << 1] + sum[i << 1 | 1];
-            max[i] = Math.max(max[i << 1], max[i << 1 | 1]);
-            min[i] = Math.min(min[i << 1], min[i << 1 | 1]);
+            if (sum != null) {
+                sum[i] = sum[i << 1] + sum[i << 1 | 1];
+            }
+            if (max != null) {
+                max[i] = Math.max(max[i << 1], max[i << 1 | 1]);
+            }
+            if (min != null) {
+                min[i] = Math.min(min[i << 1], min[i << 1 | 1]);
+            }
         }
 
         public void addLazy(int i, long v, int n) {
-            sum[i] += n * v;
-            add[i] += v;
-            max[i] += v;
-            min[i] += v;
+            if (sum != null) {
+                sum[i] += n * v;
+                add[i] += v;
+            }
+            if (max != null) {
+                max[i] += v;
+            }
+            if (min != null) {
+                min[i] += v;
+            }
         }
 
         public void updateLazy(int i, long v, int n) {
-            sum[i] = (long) n * v;
-            add[i] = 0;
-            update[i] = true;
-            change[i] = v;
-            max[i] = v;
-            min[i] = v;
+            if (sum != null && add != null) {
+                sum[i] = (long) n * v;
+                add[i] = 0;
+            }
+            if (update != null && change != null) {
+                update[i] = true;
+                change[i] = v;
+            }
+            if (max != null) {
+                max[i] = v;
+            }
+            if (min != null) {
+                min[i] = v;
+            }
         }
 
 
         public void down(int i, int ln, int rn) {
-            if (update[i]) {
+            if (update != null && update[i]) {
                 updateLazy(i << 1, change[i], ln);
                 updateLazy(i << 1 | 1, change[i], rn);
                 update[i] = false;
             }
 
             // 注意一定要先的处理更新内容再处理 add
-            if (add[i] != 0) {
+            if (add != null && add[i] != 0) {
                 addLazy(i << 1, add[i], ln);
                 addLazy(i << 1 | 1, add[i], rn);
                 add[i] = 0;
             }
         }
 
+        public void init() {
+            this.init(1, N, 1);
+        }
+
+        public long querySum(int l, int r) {
+            return this.querySum(l, r, 1, N, 1);
+        }
+
+        public long queryMax(int l, int r) {
+            return this.queryMax(l, r, 1, N, 1);
+        }
+
+        public long queryMin(int l, int r) {
+            return this.queryMin(l, r, 1, N, 1);
+        }
+
         public void init(int l, int r, int i) {
             if (l == r) {
-                sum[i] = arr[l];
-                max[i] = arr[l];
-                min[i] = arr[l];
+                if (sum != null) {
+                    sum[i] = arr[l];
+                }
+                if (max != null) {
+                    max[i] = arr[l];
+                }
+                if (min != null) {
+                    min[i] = arr[l];
+                }
             } else {
                 int mid = l + ((r - l) >> 1);
                 init(l, mid, i << 1);
                 init(mid + 1, r, i << 1 | 1);
                 up(i);
             }
-            add[i] = 0;
-            update[i] = false;
-            change[i] = 0;
+            if (add != null) {
+                add[i] = 0;
+            }
+            if (update != null && change != null) {
+                update[i] = false;
+                change[i] = 0;
+            }
         }
 
 
@@ -100,6 +143,11 @@ public class Segment1 {
          * @param i 当前节点 （二叉树 父亲节点为 i 左儿子为 2 * i, 右孩子 i * 2 + 1 )
          */
         public void add(int L, int R, long V, int l, int r, int i) {
+            if (isCheck) {
+                if (L <= 0 || L > R || L > N || R > N) {
+                    return;
+                }
+            }
             if (L <= l && r <= R) {
                 addLazy(i, V, r - l + 1);
             } else {
@@ -113,7 +161,6 @@ public class Segment1 {
                 if (R > mid) {
                     add(L, R, V, mid + 1, r, i << 1 | 1);
                 }
-
                 up(i);
             }
         }
@@ -121,6 +168,14 @@ public class Segment1 {
 
         // 参数解释同 add
         public void change(int L, int R, long V, int l, int r, int i) {
+            if (isCheck) {
+                if (update == null || change == null) {
+                    throw new RuntimeException("update is null or change is null");
+                }
+                if (L <= 0 || L > R || L > N || R > N) {
+                    return;
+                }
+            }
             if (L <= l && r <= R) {
                 updateLazy(i, V, r - l + 1);
             } else {
@@ -138,6 +193,15 @@ public class Segment1 {
 
         // 参数解释同 add
         public long querySum(int L, int R, int l, int r, int i) {
+            if (isCheck) {
+                if (sum == null) {
+                    throw new RuntimeException("sum is null");
+                }
+                if (L <= 0 || L > R || L > N || R > N) {
+                    return 0;
+                }
+            }
+
             if (L <= l && r <= R) {
                 return sum[i];
             } else {
@@ -159,6 +223,15 @@ public class Segment1 {
 
         // 参数解释同 add
         public long queryMax(int L, int R, int l, int r, int i) {
+            if (isCheck) {
+                if (max == null) {
+                    throw new RuntimeException("max is null");
+                }
+                if (L <= 0 || L > R || L > N || R > N) {
+                    return Long.MIN_VALUE;
+                }
+            }
+
             if (L <= l && r <= R) {
                 return max[i];
             } else {
@@ -180,6 +253,16 @@ public class Segment1 {
 
         // 参数解释同 add
         public long queryMin(int L, int R, int l, int r, int i) {
+
+            if (isCheck) {
+                if (min == null) {
+                    throw new RuntimeException("min is null");
+                }
+                if (L <= 0 || L > R || L > N || R > N) {
+                    return Long.MAX_VALUE;
+                }
+            }
+
             if (L <= l && r <= R) {
                 return min[i];
             } else {
@@ -198,6 +281,7 @@ public class Segment1 {
                 return ans;
             }
         }
+
     }
 
 
