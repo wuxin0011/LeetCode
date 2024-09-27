@@ -47,7 +47,6 @@ public class minimum_genetic_mutation {
         int mask = 0;
         int ans = inf;
         for (int i = 0; i < bank.length; i++) {
-
             if (check(startGene, bank[i])) {
                 ans = Math.min(ans, dfs(bank[i], mask | 1 << i, endGene, bank) + 1);
             }

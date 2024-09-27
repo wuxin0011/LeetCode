@@ -1,4 +1,4 @@
-package leetcode.top_interview_150.graph;
+package leetcode.top_interview_150.number_of_islands;
 
 import code_generation.utils.IoUtil;
 
@@ -6,10 +6,10 @@ import code_generation.utils.IoUtil;
  * @author: wuxin0011
  * @Description:
  */
-public class number_of_islands {
+public class Solution {
 
     public static void main(String[] args) {
-        IoUtil.testUtil(number_of_islands.class, "numIslands", "./txt_file/number_of_islands.txt", true);
+        IoUtil.testUtil(Solution.class, "numIslands", "./in.txt", true);
     }
 
 

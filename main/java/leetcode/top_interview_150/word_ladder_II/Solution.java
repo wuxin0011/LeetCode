@@ -1,4 +1,4 @@
-package leetcode.top_interview_150.graph;
+package leetcode.top_interview_150.word_ladder_II;
 
 import code_generation.utils.IoUtil;
 
@@ -10,9 +10,9 @@ import java.util.*;
  * @title: 单词接龙 II
  * @url https://leetcode.cn/problems/word-ladder-ii/description/
  */
-public class word_ladder_II {
+public class Solution {
     public static void main(String[] args) {
-        IoUtil.testUtil(word_ladder_II.class, "findLadders", "./txt_file/word_ladder_II.txt");
+        IoUtil.testUtil(Solution.class, "findLadders", "./in.txt");
     }
 
 

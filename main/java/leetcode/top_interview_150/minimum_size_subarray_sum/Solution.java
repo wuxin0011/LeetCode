@@ -1,4 +1,4 @@
-package leetcode.top_interview_150.slide_window;
+package leetcode.top_interview_150.minimum_size_subarray_sum;
 
 import code_generation.utils.IoUtil;
 
@@ -7,10 +7,10 @@ import code_generation.utils.IoUtil;
  * @Description: 长度最小的子数组
  * @url https://leetcode.cn/problems/minimum-size-subarray-sum/?envType=study-plan-v2&envId=top-interview-150
  */
-public class minimum_size_subarray_sum {
+public class Solution {
 
     public static void main(String[] args) {
-        IoUtil.testUtil(minimum_size_subarray_sum.class,"minSubArrayLen","./txt_file/minimum_size_subarray_sum.txt");
+        IoUtil.testUtil(Solution.class,"minSubArrayLen","./in.txt");
     }
 
     public int minSubArrayLen(int target, int[] nums) {

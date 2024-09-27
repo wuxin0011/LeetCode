@@ -1,4 +1,4 @@
-package leetcode.top_interview_150.graph;
+package leetcode.top_interview_150.surrounded_regions;
 
 import code_generation.utils.IoUtil;
 
@@ -6,10 +6,10 @@ import code_generation.utils.IoUtil;
  * @author: wuxin0011
  * @Description:
  */
-public class surrounded_regions {
+public class Solution {
 
     public static void main(String[] args) {
-        IoUtil.testUtil(surrounded_regions.class,"solve","./txt_file/surrounded_regions.txt");
+        IoUtil.testUtil(Solution.class,"solve","./in.txt");
     }
 
 

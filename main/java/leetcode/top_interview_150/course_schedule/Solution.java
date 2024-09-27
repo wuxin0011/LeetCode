@@ -1,4 +1,4 @@
-package leetcode.top_interview_150.graph;
+package leetcode.top_interview_150.course_schedule;
 
 import code_generation.utils.IoUtil;
 
@@ -11,10 +11,10 @@ import java.util.List;
  * @author: wuxin0011
  * @Description:
  */
-public class course_schedule {
+public class Solution {
 
     public static void main(String[] args) {
-        IoUtil.testUtil(course_schedule.class, "canFinish", "./txt_file/course_schedule.txt");
+        IoUtil.testUtil(Solution.class, "canFinish", "./in.txt");
     }
 
     public boolean canFinish(int numCourses, int[][] prerequisites) {

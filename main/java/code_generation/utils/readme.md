@@ -70,7 +70,7 @@ class Main {
 public class number_of_islands {
 
     public static void main(String[] args) {
-        IoUtil.testUtil(number_of_islands.class, "numIslands", "./txt_file/number_of_islands.txt", true);
+        IoUtil.testUtil(number_of_islands.class, "numIslands", "./txt_file/in.txt", true);
     }
 
 
