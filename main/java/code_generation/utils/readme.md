@@ -200,3 +200,7 @@ public static final String[] DEFAULT_ROOTS = {"main", "java"};
 public static final String[] DEFAULT_ROOTS = {"src"};
 ```
 
+
+为了方便，将对拍部分重写到一个文件中，将文件名，功能和这个一样，同时新增了在 `java` 文件中标记了测试案例符号
+
+[这个文件](./lcutil.txt)
