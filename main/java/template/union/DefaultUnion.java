@@ -40,6 +40,8 @@ public class DefaultUnion {
             return find(x) == find(y);
         }
 
+
+        // 基于集合大小的
         public boolean union(int x,int y) {
             x = find(x);
             y = find(y);

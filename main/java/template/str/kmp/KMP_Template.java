@@ -1,4 +1,4 @@
-package template.str;
+package template.str.kmp;
 
 import java.util.ArrayList;
 import java.util.List;

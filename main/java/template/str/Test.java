@@ -1,6 +1,8 @@
 package template.str;
 
 import code_generation.utils.TestUtils;
+import template.str.hash.StringHash_Template;
+import template.str.kmp.KMP_Template;
 
 import java.util.List;
 

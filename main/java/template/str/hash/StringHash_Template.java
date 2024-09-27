@@ -1,4 +1,4 @@
-package template.str;
+package template.str.hash;
 
 import java.util.ArrayList;
 import java.util.List;
