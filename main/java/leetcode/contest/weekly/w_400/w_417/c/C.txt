@@ -1,0 +1,11 @@
+aeioqq
+1
+0
+
+aeiou
+0
+1
+
+ieaouqqieaouqq
+1
+3
