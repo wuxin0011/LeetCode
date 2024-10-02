@@ -5,27 +5,28 @@
 ## 👓 演示部分
 
 <details>
-  <summary>点我查看配置</summary>
+  <summary>查看配置</summary>
   <img src="./assert/create-cookie-dir.png" alt="config"/>
 </details>
 
 
 
 <details>
-  <summary>点我查看自动获取每日一题</summary>
+  <summary>查看自动获取每日一题</summary>
   <img src="./assert/every-day-learn.png" alt="每日一题演示"/>
 </details>
 
 
 
 <details>
-  <summary>点我查看通过题目链接自动获取题目</summary>
+  <summary>查看通过题目链接自动获取题目</summary>
   <img src="./assert/custom-url.gif" alt="自定义题目"/>
+  <img src="./assert/custom-url-01.png" alt="自定义题目"/>
 </details>
 
 
 <details>
-  <summary>点我查看自定义周赛演示</summary>
+  <summary>查看自定义周赛演示</summary>
   <img src="./assert/custom-contest.gif" alt="自定义比赛演示"/>
 </details>
 
