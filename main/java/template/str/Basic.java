@@ -28,10 +28,21 @@ public class Basic {
 
 
     // 判断一个范围字符串是不是回文串 用 暴力 dp 加速
-    public static void isPlaim(String s) {
-        int n = s.length();
-        boolean[][] f = new boolean[n][n];
-
+    // 相关题目
+    // https://leetcode.cn/problems/palindrome-partitioning-iv/solutions
+    public boolean check(String s) {
+        char[] a = s.toCharArray();
+        int n = a.length;
+        boolean[][] dp = new boolean[n + 1][n + 1];
+        for (int i = n - 1; i >= 0; i--) {
+            for (int j = i; j < n; j++) {
+                if (a[i] == a[j]) {
+                    dp[i][j] = j - i <= 2 || dp[i + 1][j - 1];
+                }
+            }
+        }
+        // ...
+        return true;
     }
 
 
