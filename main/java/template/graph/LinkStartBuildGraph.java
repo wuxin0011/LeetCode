@@ -12,82 +12,75 @@ import java.util.Arrays;
  */
 public class LinkStartBuildGraph {
 
-    @FunctionalInterface
-    public interface Apply {
-        void run();
-    }
+        // 模板
+        // https://leetcode.cn/problems/course-schedule-ii/submissions/571351678/
+        public int[] findOrder(int numCourses, int[][] prerequisites) {
+            clear(numCourses);
 
-    static final boolean isDirect = false; // 是否是无向图
-    static final boolean isWeigth = false; // 是否有权重
-    static int NO = 26;
-    static int MAX = 1001;
-    static int cnt = 0;
-    static final int[] head, next, to, w;
-    static final int N = 26;
-    static final int[] queue = new int[N];
-    static final int[] in = new int[N];
-    static int r, l, t;
-
-    static {
-        MAX = isDirect ? MAX * 2 + 1 : MAX;
-        head = new int[NO];
-        next = new int[MAX];
-        to = new int[MAX];
-        w = isWeigth ? null : new int[MAX];
-    }
-
-    static void clear(int n) {
-        clear(n, () -> {
-        });
-    }
-
-    static void clear(int n, Apply a) {
-        cnt = 0;
-        for (int i = 0; i < n; i++) {
-            if (i < NO)
-                head[i] = -1;
-            next[i] = 0;
-            to[i] = 0;
-            if (w != null) {
-                w[i] = 0;
+            for (int[] e : prerequisites) {
+                int u = e[1], v = e[0], w = 0;
+                addEdge(u, v, w);
+                in[v]++;
             }
-        }
-        a.run();
-    }
-
-    static void addEdge(int fa, int nxt, int we) {
-        next[cnt] = head[fa];
-        to[cnt] = nxt;
-        if (w != null) {
-            w[cnt] = we;
-        }
-        head[fa] = cnt;
-        cnt++;
-        if (isDirect) {
-            next[cnt] = head[nxt];
-            to[cnt] = fa;
-            if (w != null) {
-                w[cnt] = we;
-            }
-            head[nxt] = cnt;
-            cnt++;
-        }
-    }
-
-    public static void topSort() {
-        clear(MAX, () -> {
-            Arrays.fill(in, -1);
-            r = l = t = 0;
-        });
-
-        while (l < r) {
-            int i = queue[l++];
-            for (int ei = head[i]; ei != -1; ei = next[ei]) {
-                in[to[ei]]--;
-                if (in[to[ei]] == 0) {
-                    queue[r++] = to[ei];
+            for (int i = 0; i < numCourses; i++) {
+                if (in[i] == 0) {
+                    q[r++] = i;
                 }
             }
+            int[] ans = new int[numCourses];
+            int i = 0;
+            while (l < r) {
+                int x = q[l++];
+                ans[i++] = x;
+                numCourses--;
+                for (int e = head[x]; e >= 0; e = edges[e].next) {
+                    int v = edges[e].to;
+                    in[v]--;
+                    if (in[v] == 0) {
+                        q[r++] = v;
+                    }
+                }
+            }
+            return numCourses == 0 ? ans : empty;
         }
-    }
+
+
+        static int[] in = new int[2001], q = new int[2001], head = new int[2001], empty = new int[]{};
+        static int cnt, l, r;
+        static Edge[] edges = new Edge[5001];
+
+        static void clear(int n) {
+            for (int i = 0; i <= n; i++) {
+                in[i] = 0;
+                head[i] = -1;
+            }
+            cnt = 0;
+            l = r = 0;
+        }
+
+        static void addEdge(int u, int v, int w) {
+            if (edges[cnt] == null) {
+                edges[cnt] = new Edge(head[u], v, w);
+            } else {
+                edges[cnt].update(head[u], v, w);
+            }
+            head[u] = cnt++;
+        }
+
+        static class Edge {
+            int w, next, to;
+
+            Edge() {
+            }
+
+            Edge(int next, int to, int w) {
+                this.update(next, to, w);
+            }
+
+            void update(int next, int to, int w) {
+                this.next = next;
+                this.to = to;
+                this.w = w;
+            }
+        }
 }

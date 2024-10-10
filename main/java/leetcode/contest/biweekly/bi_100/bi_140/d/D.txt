@@ -1,0 +1,15 @@
+abcdefg
+bcdffg
+1
+
+ababbababa
+bacaba
+4
+
+abcd
+dba
+-1
+
+dde
+d
+0
