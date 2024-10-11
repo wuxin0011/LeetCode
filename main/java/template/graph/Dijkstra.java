@@ -139,4 +139,8 @@ public class Dijkstra {
     }
 
 
+    // 求次大值的dj
+    // https://leetcode.cn/problems/second-minimum-time-to-reach-destination/submissions/571668490/
+
+
 }

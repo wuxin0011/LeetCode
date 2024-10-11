@@ -10,7 +10,7 @@ import java.util.List;
  */
 public class BuildEdge {
 
-
+    // 测试链接 https://leetcode.cn/problems/second-minimum-time-to-reach-destination/submissions/571668490/
     // 参数说明
     // uIdx 为 u 的索引
     // vIdx 为 v 的索引
@@ -23,17 +23,37 @@ public class BuildEdge {
     // in[] 为入读，out[]为出度
     // hasDirect 是否是有向图
     // hasWeight 是否有权重
-    public static class E {
+    public static class Graph {
         int uIdx = 0, vIdx = 1, wIdx = 2, cnt[], es[][], n = 0, g2[][], g3[][][], in[], out[];
-        boolean hasDirect = false, hasWeight = false;
+        boolean hasDirect = true, hasWeight = false;
 
-        E(int n, int[][] es) {
+
+        Graph(int n, List<List<Integer>> eList) {
+            if(eList == null) {
+                throw new RuntimeException("List is null");
+            }
+            int[][] es = new int[eList.size()][];
+            for (int i = 0; i < eList.size(); i++) {
+                es[i] = new int[eList.get(i).size()];
+                for (int j = 0; j < eList.get(i).size(); j++) {
+                    es[i][j] = eList.get(i).get(j);
+                }
+            }
+            this.init(n, es);
+        }
+
+        Graph(int n, int[][] es) {
+            this.init(n, es);
+        }
+
+        void init(int n, int[][] es) {
             this.n = n;
             this.es = es;
             // this.in = new int[n];
             // this.out = new int[n];
             this.build();
         }
+
 
         void addEdge2(int u, int v) {
             cnt[u]--;
@@ -57,7 +77,7 @@ public class BuildEdge {
                 cnt[u]++;
                 if (in != null) in[v]++;
                 if (out != null) out[u]++;
-                if (hasDirect) {
+                if (!hasDirect) {
                     cnt[v]++;
                     if (in != null) in[u]++;
                     if (out != null) out[v]++;
@@ -80,12 +100,12 @@ public class BuildEdge {
                 if (hasWeight) {
                     int w = e[wIdx];
                     addEdge3(u, v, w);
-                    if (hasDirect) {
+                    if (!hasDirect) {
                         addEdge3(v, u, w);
                     }
                 } else {
                     addEdge2(u, v);
-                    if (hasDirect) {
+                    if (!hasDirect) {
                         addEdge2(v, u);
                     }
                 }
@@ -116,6 +136,28 @@ public class BuildEdge {
 //            int u = e[0],v = e[1],w = e[2];
 //            g[u].add(new int[]{v,w});
 //            g[v].add(new int[]{u,w});
+//        }
+    }
+
+
+    public static void buildEdgeList3(int n,List<List<Integer>> edges) {
+
+        // 建立无向图 没有权值
+//        List<Integer>[] g = new List[n];
+//        Arrays.setAll(g, i->new ArrayList<>());
+//        for(List<Integer> e : edges) {
+//            int u = e.get(0),v = e.get(1);
+//            g[u].add(v);
+//            g[v].add(u);
+//        }
+
+        // 建立有向图 有权值
+//        List<int[]>[] g = new List[n];
+//        Arrays.setAll(g, i->new ArrayList<>());
+//        for(List<Integer> e : edges) {
+//            int u = e.get(0),v = e.get(1),w = e.get(2);
+//            g[u].add(new int[]{v,w});
+//            g[v].add(new int[]{v,w});
 //        }
     }
 }
