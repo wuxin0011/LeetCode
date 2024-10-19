@@ -1,7 +1,8 @@
 package leetcode.contest.weekly.w_400.w_418.c;
 
-import code_generation.utils.IoUtil;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 /**
  *
  * 100431. 构造符合图结构的二维矩阵
@@ -42,21 +43,89 @@ import java.util.*;
  *
  * @author: agitated-curranfnd
  * @Description:
- * @url:   https://leetcode.cn/contest/weekly-contest-418/problems/construct-2d-grid-matching-graph-layout
+ * @url: https://leetcode.cn/contest/weekly-contest-418/problems/construct-2d-grid-matching-graph-layout
  * @title: 构造符合图结构的二维矩阵
  */
 public class C {
 
     public static void main(String[] args) {
-        IoUtil.testUtil(C.class,"constructGridLayout","C.txt");
+        // 这题为符合情况就行 答案不为1 因此测试方式不行
+        // IoUtil.testUtil(C.class, "constructGridLayout", "C.txt");
     }
-     
 
-    public int[][] constructGridLayout(int n, int[][] edges) {    
 
-        return null; 
-	}
+    public int[][] constructGridLayout(int n, int[][] edges) {
 
-  
+        List<Integer>[] g = new List[n];
+        Arrays.setAll(g, i -> new ArrayList<Integer>());
+        for (int[] e : edges) {
+            int u = e[0], v = e[1];
+            g[u].add(v);
+            g[v].add(u);
+        }
+        int[] indeg = new int[5];
+        Arrays.fill(indeg, -1);
+
+        for (int i = 0; i < n; i++) {
+            indeg[g[i].size()] = i;
+        }
+
+        List<Integer> row = new ArrayList<>();
+
+        // 出现入读为1 这种情况只有一行
+        if (indeg[1] != -1) {
+            row.add(indeg[1]);
+        } else if (indeg[4] == -1) {
+            // 如果没有出现入读为1和入读为4 只有入读为2这种情况
+            int x = indeg[2];
+            for (int y : g[x]) {
+                if (g[y].size() == 2) {
+                    row.add(x);
+                    row.add(y);
+                    break;
+                }
+            }
+        } else {
+            // 这种情况下至少有三列……
+            int x = indeg[2]; // 想找如入读最小开始
+            row.add(x);
+            int pre = x;
+            x = g[x].get(0);
+            // 构造 入读为3
+            while ((g[x].size()) == 3) {
+                row.add(x);
+                for (int y : g[x]) {
+                    if (y != pre && g[y].size() < 4) {
+                        pre = x;
+                        x = y;
+                        break;
+                    }
+                }
+            }
+            row.add(x); // 此时x入读必定是2
+        }
+        int k = row.size();
+        int[][] result = new int[n / k][k];
+        boolean[] vis = new boolean[n];
+        for (int i = 0; i < k; i++) {
+            int x = row.get(i);
+            result[0][i] = x;
+            vis[x] = true;
+        }
+        for (int i = 1; i < result.length; i++) {
+            for (int j = 0; j < k; j++) {
+                // 从上到下构造
+                // 找上面相邻的边
+                for (int y : g[result[i - 1][j]]) {
+                    if (vis[y]) continue;
+                    vis[y] = true;
+                    result[i][j] = y;
+                    break;
+                }
+            }
+        }
+        return result;
+    }
+
 
 }
