@@ -1,0 +1,11 @@
+abacb
+2
+4
+
+abcde
+1
+15
+
+"szbhlom"
+1
+28
