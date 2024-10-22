@@ -2,6 +2,7 @@ package template.cache;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * @author: wuxin0011
@@ -23,6 +24,7 @@ public class Template1 {
                 val += x;
             }
             return val;
+//            return Objects.hashCode(args);
         }
 
         @Override
@@ -39,6 +41,7 @@ public class Template1 {
                 return true;
             }
             return false;
+//            return Objects.equals(this,obj);
         }
     }
 
