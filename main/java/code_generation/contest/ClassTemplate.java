@@ -141,7 +141,7 @@ public class ClassTemplate {
             "/**\n" +
             " * @author: %s\n" +
             " * @Description:\n" +
-            " * @url:   %s\n" +
+            " * @url:   <a href=\"%s\">%s</a>\n" +
             " * @title: %s\n" +
             " */\n" +
             "public class %s {\n\n" +
@@ -170,6 +170,7 @@ public class ClassTemplate {
                 importInfo,
                 info.author,
                 info.url,
+                info.title,
                 info.title,
                 originClassName,
                 className,

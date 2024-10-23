@@ -5,7 +5,7 @@ import java.util.*;
 /**
  * @author: agitated-curranfnd
  * @Description:
- * @url:   https://leetcode.cn/contest/weekly-contest-420/problems/check-if-dfs-strings-are-palindromes
+ * @url:   <a href="https://leetcode.cn/contest/weekly-contest-420/problems/check-if-dfs-strings-are-palindromes">判断 DFS 字符串是否是回文串</a>
  * @title: 判断 DFS 字符串是否是回文串
  */
 public class D {
