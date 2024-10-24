@@ -10,21 +10,21 @@ import code_generation.utils.RandomArrayUtils;
 public class ManacherTemplate {
 
 
-    static class Manacher {
+    public static class Manacher {
         char[] origin, chars;
         int[] halfLen; // 回文半径
 
 
-        Manacher(String s) {
+        public Manacher(String s) {
            this(s.toCharArray());
         }
 
-        Manacher(char[] origin) {
+        public Manacher(char[] origin) {
             this.origin = origin;
             this.init();
         }
 
-        void init() {
+        public void init() {
             int n = this.origin.length;
             chars = new char[n * 2 + 3];
 
@@ -70,7 +70,7 @@ public class ManacherTemplate {
 
 
         // 询问[l，r) 区间是否回文串
-        boolean query(int l, int r) {
+        public boolean query(int l, int r) {
             return halfLen[l + r + 1] > r - l;
         }
     }
