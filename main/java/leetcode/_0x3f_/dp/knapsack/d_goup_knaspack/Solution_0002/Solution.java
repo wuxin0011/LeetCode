@@ -1,5 +1,9 @@
 package leetcode._0x3f_.dp.knapsack.d_goup_knaspack.Solution_0002;
 
+import code_generation.annotation.Description;
+import code_generation.enums.Difficulty;
+import code_generation.enums.Tag;
+import code_generation.enums.Type;
 import code_generation.utils.IoUtil;
 
 import java.util.List;
@@ -33,9 +37,11 @@ import java.util.List;
  *
  * @author: wuxin0011
  * @Description:
- * @url: https://leetcode.cn/problems/maximum-value-of-k-coins-from-piles
+ * @url: <a href="https://leetcode.cn/problems/maximum-value-of-k-coins-from-piles">maximum-value-of-k-coins-from-piles</a>
  * @title: maximum-value-of-k-coins-from-piles
  */
+
+@Description(value = "分组背包 + 前缀和", diff = Difficulty.HARD, types = Type.DB,tag = Tag.ARRAY)
 public class Solution {
 
     public static void main(String[] args) {
@@ -43,61 +49,53 @@ public class Solution {
     }
 
 
+    // 经过转换后就是01的分组背包
+    // 对于每个桶来说如果取到第I个面币必定会取到第I-1个面币
     public int maxValueOfCoins(List<List<Integer>> piles, int k) {
-        this.piles = piles;
-        sk = new int[piles.size()];
-        int s = 0, tot = 0;
-        for (int i = 0; i < sk.length; i++) {
-            sk[i] = piles.get(i).size();
-            for (Integer x : piles.get(i)) {
-                tot += x;
-            }
-            s += sk[i];
-        }
-        if (s == k) {
-            return tot;
-        }
-        a = new int[sk.length];
-        memo = new Integer[k + 1];
-        long st = System.currentTimeMillis();
-        int ans = dfs(k);
-        long ed = System.currentTimeMillis();
-        System.out.println("cost time = " + (ed - st) + " ms");
-        return ans;
-    }
-
-    int[] sk;
-    int[] a;
-
-
-    List<List<Integer>> piles;
-
-    Integer[] memo;
-
-
-    int dfs(int j) {
-        if (j == 0) {
+        if (k == 0) {
             return 0;
         }
-        if (memo[j] != null) {
-            return memo[j];
-        }
-        int ans = 0;
-        for (int i = 0; i < sk.length; i++) {
-            if (a[i] + 1 <= sk[i]) {
-                a[i]++;
-                ans = Math.max(dfs(j - 1) + piles.get(i).get(a[i] - 1), ans);
-//                if (j - 1 == 0) {
-//                    // System.out.println("ans = " + ans);
-//                }
-                a[i]--;
+        int cur = 0, sums = 0;
+        for (List<Integer> coinList : piles) {
+            int n = coinList.size();
+            // 预处理成前缀和
+            for (int i = 1; i < n; i++) {
+                coinList.set(i, coinList.get(i - 1) + coinList.get(i));
             }
-
+            cur += n;
+            sums += coinList.get(n - 1);
         }
-//        return memo[j] = ans;
-        return ans;
+        // 如果K大于所有桶的数量 就会全部获取到直接返回
+        if (k >= cur) {
+            return sums;
+        }
 
+        this.piles = piles;
+        memo = new Integer[piles.size() + 1][k + 1];
+        return dfs(0, k);
     }
 
 
+    Integer[][] memo;
+    List<List<Integer>> piles;
+
+
+    public int dfs(int i, int rest) {
+        if (i >= piles.size() || rest == 0) {
+            return 0;
+        }
+        if (memo[i][rest] != null) {
+            return memo[i][rest];
+        }
+        int ans = 0;
+        // 有可能桶打大小不满足
+        int curCoinsSize = Math.min(piles.get(i).size(), rest);
+        // 不选
+        ans = Math.max(ans, dfs(i + 1, rest));
+        for (int j = 1; j <= curCoinsSize; j++) {
+            int index = j - 1;
+            ans = Math.max(ans, piles.get(i).get(index) + dfs(i + 1, rest - j));
+        }
+        return memo[i][rest] = ans;
+    }
 }
