@@ -14,6 +14,7 @@ public class Palindrome {
      * @return true
      */
     public static boolean isPalindrome(long x) {
+        if (x < 0) return false;
         long off = 1;
         while(x / off >= 10) {
             off *= 10;
@@ -26,6 +27,20 @@ public class Palindrome {
             off /= 100;
         }
         return true;
+    }
+
+
+    // 原理是每次取的原来种子的最右侧数字 然后消除这一个数字
+    // 输入一个种子构造回文数
+    // true表示奇回文
+    public static long builderPalindromeNumber(long x,boolean odd) {
+        long y = x;
+        if(odd) x /= 10;
+        while(x > 0) {
+            y = y * 10 + x % 10;
+            x /= 10;
+        }
+        return y;
     }
 
 

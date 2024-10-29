@@ -6,6 +6,50 @@ package template.number;
  */
 public class Base {
 
+    // 以对齐方式打印int[] 的中二进制数据
+     public static String printBinaryToString(int...args) {
+        int mx = 0;
+        for(int x : args) if(mx < x) mx = x;
+        // List<String> list = new ArrayList<>();
+        int n = 0;
+        for(int i = 0,v = 0;i < 32 && v < mx;i++) {
+            v |= (1 << i);
+            n++;
+        }
+        String S = "";
+        for(int x : args) {
+            String s = "";
+            for(int i = 0;i < n;i++) {
+                s = (x >> i & 1) + s;
+            }
+            S += s;
+            S += "\n";
+        }
+        System.out.println(S);
+        return S;
+    }
+
+
+
+    // 数组的LCM
+    public static int arrayLCM(int[] a){
+        int m = a[0];
+        for(int i = 1;i < a.length;i++) {
+            m = lcm(m,a[i]);
+        }
+        return m;
+    }
+
+
+    // 数组的GCD
+    public static int arrayGCD(int[] a){
+        int g = a[0];
+        for(int i = 1;i < a.length;i++) {
+            g = gcd(g,a[i]);
+        }
+        return g;
+    }
+
 
     /**
      * 最小公倍数
@@ -16,11 +60,11 @@ public class Base {
      */
     public static int gcd(int a, int b) {
         while (b != 0) {
-            int mod = a % b;
+            int temp = a % b;
             a = b;
-            b = mod;
+            b = temp;
         }
-        return b;
+        return a;
     }
 
 
@@ -32,6 +76,19 @@ public class Base {
      * @return 最大公约数
      */
     public static int lcm(int a, int b) {
+        return (a  / gcd(a, b) * b);
+    }
+
+
+    public static long gcd(long a, long b) {
+        while (b != 0) {
+            long temp = a % b;
+            a = b;
+            b = temp;
+        }
+        return a;
+    }
+    public static long lcm(long a, long b) {
         return (a  / gcd(a, b) * b);
     }
 
@@ -56,6 +113,8 @@ public class Base {
             return a / b;
         }
     }
+
+
 
 
     /**
@@ -88,15 +147,4 @@ public class Base {
         return (int) (s + mod) % mod;
     }
 
-
-    public static void main(String[] args) {
-        System.out.println(1 << 10); // 1 左移10位
-        System.out.println(10 << 1); //10 左移1位数
-        System.out.println("ceil and floor");
-        System.out.println(ceil(11, 10));
-        System.out.println(ceil(-11, -10));
-        System.out.println(floor(11, 10));
-        System.out.println(floor(-11, -10));
-        System.out.println("=======end========");
-    }
 }
