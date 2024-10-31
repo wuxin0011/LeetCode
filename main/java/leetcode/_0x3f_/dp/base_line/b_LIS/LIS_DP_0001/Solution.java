@@ -15,13 +15,33 @@ public class Solution {
     }
      
 
+    // 这题有点构造题味道
     public int findNumberOfLIS(int[] nums) {
         int n = nums.length;
         int[] g = new int[n],f = new int[n];
+        Arrays.fill(f,1);
+        Arrays.fill(g,1);
+
+        int mx = 0;
         for (int i = 0; i < n; i++) {
-            
+            for(int j = 0;j < i;j++) {
+                if(nums[j] >= nums[i]) continue;
+                if(f[i] < f[j] + 1) {
+                    f[i] = f[j] + 1;
+                    g[i] = g[j];
+                }else if(f[i] == f[j] + 1) {
+                    g[i] += g[j];
+                }
+            }
+            mx = Math.max(f[i],mx);
         }
-        return 0;
+        int ans = 0;
+        for(int i = 0;i < n;i++) {
+            if(f[i] == mx) {
+                ans += g[i];
+            }
+        }
+        return ans;
     }
 
   

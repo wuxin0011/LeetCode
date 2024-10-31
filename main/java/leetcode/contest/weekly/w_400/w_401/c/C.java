@@ -16,6 +16,9 @@ import java.util.Map;
 public class C {
 
 
+    // 具体解见第四题
+
+
     static class S2 {
         public static void main(String[] args) {
             IoUtil.testUtil(S2.class, "maxTotalReward", "C.txt");
