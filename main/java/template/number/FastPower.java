@@ -5,7 +5,10 @@ import java.util.Arrays;
 /**
  * @author: wuxin0011
  * @Description: 乘法快速幂 + 矩阵快速幂
+ * @see leetcode.contest.weekly.w_400.w_421.d.D  取模版本的矩阵快速幂
  */
+
+@SuppressWarnings("all")
 public class FastPower {
 
     // 矩阵快速幂
@@ -88,6 +91,44 @@ public class FastPower {
             return isNeg ? 1 / res : res;
         }
 
+    }
+
+
+    /**
+     * 取模版本的矩阵快速幂
+     * @see leetcode.contest.weekly.w_400.w_421.d.D
+     */
+    static class FastMatMod {
+        
+        // 注意b是结果矩阵
+        public static int[][] pow(int[][] a, int[][] b, int n, int mod) {
+            int[][] res = b;
+            while (n > 0) {
+                if ((n & 1) > 0) {
+                    res = mul(a, res, mod);
+                }
+                a = mul(a, a, mod);
+                n >>= 1;
+            }
+            return res;
+        }
+
+
+        // 注意 mat1.col == mat2.row
+        public static int[][] mul(int[][] mat1, int[][] mat2, int mod) {
+            int n = mat1.length;
+            int m = mat2[0].length;
+            int k = mat1[0].length;
+            int[][] ans = new int[n][m];
+            for (int i = 0; i < n; i++) {
+                for (int j = 0; j < m; j++) {
+                    for (int c = 0; c < k; c++) {
+                        ans[i][j] = (int) ((ans[i][j] + mat1[i][c] * 1L * mat2[c][j]) % mod);
+                    }
+                }
+            }
+            return ans;
+        }
     }
 
 
