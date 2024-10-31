@@ -168,7 +168,7 @@ public class D {
             // max(fa(10) + fb(10),fa(11) + fb(00))
             t[i][2] = Math.max(a[2] + b[2], a[3] + b[0]);
             // max(fa(10) + fb(11),fa(11) + fb(01)
-            t[i][3] = Math.max(a[2] + b[3], b[3] + b[1]);
+            t[i][3] = Math.max(a[2] + b[3], a[3] + b[1]);
         }
 
     }
