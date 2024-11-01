@@ -4,8 +4,9 @@ import code_generation.utils.IoUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TreeSet;
 
-/**
+ /**
  * 100314. 物块放置查询
  * <p>
  * 有一条无限长的数轴，原点在 0 处，沿着 x 轴 正方向无限延伸。
@@ -36,49 +37,87 @@ import java.util.List;
  * 输入保证至少有一个操作类型 2 。
  *
  * @author: wuxin0011
- * @Description:
- * @url
- * @title
+ * @Description: <a href="https://leetcode.cn/problems/block-placement-queries/submissions/577381149/">提交链接</a>
+ * @url <a href="https://leetcode.cn/problems/block-placement-queries">物块放置查询</a>
+ * @title 物块放置查询
  */
 public class D {
     public static void main(String[] args) {
-        IoUtil.testUtil(D.class, "getResults1", "D.txt");
+        IoUtil.testUtil(D.class, "getResults", "D.txt");
     }
 
 
     public List<Boolean> getResults(int[][] queries) {
+
+        // 查询线段树最大区间
+        int mx = 0;
+        for (int[] q : queries) {
+            if (q[0] == 1) {
+                mx = Math.max(mx, q[1]);
+            } else if (q[0] == 2) {
+                mx = Math.max(mx, q[1]);
+                mx = Math.max(mx, q[2]);
+            }
+        }
+        mx++;
+//        t = new int[2 << (32 - Integer.numberOfLeadingZeros(mx))];
+        t = new int[mx << 2];
+
+
+        TreeSet<Integer> treeSet = new TreeSet<>(Integer::compareTo);
+
+        // 设置哨兵节点
+        treeSet.add(0);
+        treeSet.add(mx);
+
         List<Boolean> ans = new ArrayList<>();
+        for (int[] q : queries) {
+            int x = q[1];
+            Integer pre = treeSet.floor(x - 1);
+            assert pre != null;
+            if (q[0] == 1) {
+                Integer next = treeSet.ceiling(x);
+                assert next != null;
+                treeSet.add(x);
+                update(0, mx, 1, x, x - pre);
+                update(0, mx, 1, next, next - x);
+            } else if (q[0] == 2) {
+                int cur = Math.max(x - pre, query(pre, 0, mx, 1));
+                ans.add(cur >= q[2]);
+            }
+        }
         return ans;
     }
 
-//    public List<Boolean> getResults1(int[][] queries) {
-//        List<Boolean> ans = new ArrayList<>();
-//        int inf = 1000001;
-//        boolean[] vis = new boolean[inf];
-//        for (int[] query : queries) {
-//            int op = query[0];
-//            int x = query[1];
-//            if (op == 1) {
-//                vis[x] = false;
-//            } else {
-//                int w = query[2];
-//                int l = 1;
-//                boolean ok = false;
-//                for (int k = 0; k <= x; k++) {
-//                    if (!vis[k]) {
-//                        l = 1;
-//                        continue;
-//                    }
-//                    l++;
-//                    if (l >= w) {
-//                        ok = true;
-//                        break;
-//                    }
-//                }
-//                ans.add(ok);
-//            }
-//        }
-//
-//        return ans;
-//    }
+    int[] t;
+
+
+    void update(int l, int r, int i, int index, int val) {
+        if (l == r) {
+            // update
+            t[i] = val;
+        } else {
+            int mid = l + ((r - l) >> 1);
+            if (index <= mid) {
+                update(l, mid, i << 1, index, val);
+            } else {
+                update(mid + 1, r, i << 1 | 1, index, val);
+            }
+            t[i] = Math.max(t[i << 1], t[i << 1 | 1]);
+        }
+    }
+
+
+    int query(int qr, int l, int r, int i) {
+        if (r <= qr) {
+            return t[i];
+        } else {
+            int mid = l + ((r - l) >> 1);
+            if (qr <= mid) {
+                return query(qr, l, mid, i << 1);
+            }
+            // 注意如果查询内容位于右侧 应该同时合并左边和右边的最大值！！！
+            return Math.max(t[i << 1],query(qr, mid + 1, r, i << 1 | 1));
+        }
+    }
 }
