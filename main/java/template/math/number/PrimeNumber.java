@@ -1,4 +1,4 @@
-package template.number;
+package template.math.number;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -93,10 +93,10 @@ public class PrimeNumber {
          * @return ok
          */
         public static boolean isPrime(int n) {
-            if (n <= 1) {
+            if (n < 2) {
                 return false;
             }
-            for (int i = 2; i * i <= n; i++) {
+            for (int i = 2; i <= n / i; i++) {
                 if (n % i == 0) {
                     return false;
                 }

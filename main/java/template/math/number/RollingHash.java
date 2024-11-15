@@ -1,4 +1,4 @@
-package template.number;
+package template.math.number;
 
 import java.util.LinkedList;
 

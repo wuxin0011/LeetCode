@@ -1,4 +1,4 @@
-package template.number;
+package template.math.number;
 
 /**
  * @author: wuxin0011
@@ -125,6 +125,50 @@ public class Base {
      * @return int
      */
     public static int floor(int a, int b) {
+        if (a == 0 || b == 0) {
+            return 0;
+        }
+        if (a % b == 0) {
+            return a / b;
+        }
+        if (a > 0) {
+            return a / b;
+        } else {
+            return (a - b + 1) / b;
+        }
+    }
+
+
+    /**
+     * 上取整
+     *
+     * @param a int
+     * @param b int
+     * @return int
+     */
+    public static long ceil(long a, long b) {
+        if (a == 0 || b == 0) {
+            return 0;
+        }
+        if (a % b == 0) {
+            return a / b;
+        }
+        if (a > 0) {
+            return (a + b - 1) / b;
+        } else {
+            return a / b;
+        }
+    }
+
+
+    /**
+     * 下取整
+     *
+     * @param a int
+     * @param b int
+     * @return int
+     */
+    public static long floor(long a, long b) {
         if (a == 0 || b == 0) {
             return 0;
         }

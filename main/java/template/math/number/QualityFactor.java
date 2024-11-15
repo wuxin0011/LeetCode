@@ -1,4 +1,4 @@
-package template.number;
+package template.math.number;
 
 /**
  * @author: wuxin0011
@@ -14,7 +14,7 @@ public class QualityFactor {
     }
 
     public static void Qualityfactor(int t) {
-        for (int k = 1; k * k <= t; k++) {
+        for (int k = 1; k <= t / k; k++) {
             if (t % k != 0) {
                 continue;
             }

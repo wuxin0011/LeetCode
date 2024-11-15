@@ -1,7 +1,6 @@
 package leetcode.contest.biweekly.bi_100.bi_141.a;
 
 import code_generation.utils.IoUtil;
-import template.number.Base;
 
 import java.util.Arrays;
 import java.util.List;

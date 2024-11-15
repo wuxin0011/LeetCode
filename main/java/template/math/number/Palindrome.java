@@ -1,4 +1,4 @@
-package template.number;
+package template.math.number;
 
 /**
  * @author: wuxin0011
