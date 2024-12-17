@@ -6,7 +6,7 @@ import java.util.Random;
 
 /**
  * @author: wuxin0011
- * @Description:
+ * @Description: 单模hash 有出错概率 （不负责） 效率优与双模hash
  */
 public class StringHashMod {
 
@@ -151,13 +151,13 @@ public class StringHashMod {
         }
 
 
-        private static void heapCalcHash(int[] h, char[] chs) {
+        public static void heapCalcHash(int[] h, char[] chs) {
             for (int i = 0; i < n; i++) {
                 h[i + 1] = (int) ((h[i] * 1L * BASE + chs[i]) % MOD);
             }
         }
 
-        private static void calcHash(char[] a, boolean reverse) {
+        public static void calcHash(char[] a, boolean reverse) {
             chars = a;
             n = a.length;
             heapCalcHash(pre, a);
@@ -170,19 +170,19 @@ public class StringHashMod {
             }
         }
 
-        private static int getHash(int[] hash, int l, int r) {
+        public static int getHash(int[] hash, int l, int r) {
             return (int) (((hash[r + 1] - hash[l] * 1L * power[r - l + 1]) % MOD + MOD) % MOD);
         }
 
 
         // 获取 [l,r] 的 hash
-        private static int getHash(int l, int r) {
+        public static int getHash(int l, int r) {
             return getHash(pre, l, r);
         }
 
 
         // 检查[l,r]是否是回文
-        static boolean isPalindromeString(int l, int r) {
+        public static boolean isPalindromeString(int l, int r) {
             int preHash = getHash(pre, l, r);
             int subHash = getHash(suf, n - r - 1, n - l - 1);
             return preHash == subHash;
@@ -191,8 +191,8 @@ public class StringHashMod {
 
 
     public static void main(String[] args) {
-        test02();
-        // test03();
+//        test02();
+         test03();
     }
 
 

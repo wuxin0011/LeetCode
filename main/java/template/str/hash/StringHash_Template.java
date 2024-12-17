@@ -5,7 +5,7 @@ import java.util.List;
 
 /**
  * @author: wuxin0011
- * @Description:
+ * @Description: 自然溢出版本 也是最容易被卡的版本 但是是字符串hash中效率最佳版本
  */
 public class StringHash_Template {
 
