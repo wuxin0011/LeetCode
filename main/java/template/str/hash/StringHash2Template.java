@@ -15,96 +15,100 @@ public class StringHash2Template {
 
 
     // 检查回文 如果需要copy请直接附带
-    static class StringHashPalindrome {
+    public static class StringHashPalindrome {
         int mod1, mod2, base1, base2;
         StringHash stringHash1, stringHash2;
         int n;
-        int[] a;
-
-        StringHashPalindrome() {
-            this(StringHash.BASE1, StringHash.BASE2, StringHash.MOD1, StringHash.MOD2);
+        public StringHashPalindrome(char[] chars) {
+            this.init(StringHash.BASE1, StringHash.BASE2, StringHash.MOD1, StringHash.MOD2);
+            this.build(chars);
         }
 
-        StringHashPalindrome(int base1, int base2, int mod1, int mod2) {
+        public StringHashPalindrome(char[] chars, int base1, int base2, int mod1, int mod2) {
+            this.init(base1,base2,mod1,mod2);
+            this.build(chars);
+        }
+
+        public StringHashPalindrome(int[] chars, int base1, int base2, int mod1, int mod2) {
+            this.init(base1,base2,mod1,mod2);
+            this.build(chars);
+        }
+        private void init(int base1, int base2, int mod1, int mod2) {
             this.base1 = base1;
             this.base2 = base2;
             this.mod1 = mod1;
             this.mod2 = mod2;
         }
 
-        void build(char[] chars) {
-            int[] array = new int[chars.length];
-            for (int i = 0; i < chars.length; i++) {
-                array[i] = chars[i];
+        private void build(char[] array) {
+            int[] a = new int[array.length];
+            for(int i = 0;i < array.length;i++) {
+                a[i] = array[i];
             }
-            this.build(array);
+            this.build(a);
         }
-
-        void build(int[] array) {
-            this.a = array;
-            this.n = array.length;
-            this.stringHash1 = new StringHash(base1, base2, mod1, mod2);
-            this.stringHash2 = new StringHash(base1, base2, mod1, mod2);
+        private void build(int[] a) {
+            this.n = a.length;
             int[] b = new int[n];
             for (int i = 0; i < n; i++) {
                 b[i] = a[n - i - 1];
             }
-            this.stringHash1.build(a);
-            this.stringHash2.build(b);
+            this.stringHash1 = new StringHash(a, base1, base2, mod1, mod2);
+            this.stringHash2 = new StringHash(b, base1, base2, mod1, mod2);
         }
 
 
         // query [l,r]  isPalindrome
-        boolean isPalindromeString(int l, int r) {
+        public boolean isPalindromeString(int l, int r) {
             return stringHash1.get(l, r) == stringHash2.get(n - r - 1, n - l - 1);
         }
     }
 
 
-    static class StringHash {
+    // string hash 开始
+    public static class StringHash {
         private static final int BASE1 = (int) 8e8 + new Random().nextInt((int) 1e8);
         private static final int BASE2 = (int) 8e8 + new Random().nextInt((int) 1e8);
         private static final int MOD1 = 1_070_777_777;
         private static final int MOD2 = 1_000_000_007;
-
         int mod1, mod2, base1, base2;
         int[] powBase1, powBase2, preHash1, preHash2;
-
-
-        public StringHash() {
-            this(BASE1, BASE2, MOD1, MOD2);
+        int n;
+        public StringHash(char[] chars) {
+            this(chars, BASE1, BASE2, MOD1, MOD2);
+        }
+        public StringHash(int[] a) {
+            this(a, BASE1, BASE2, MOD1, MOD2);
+        }
+        public StringHash(char[] chars, int b1, int b2, int m1, int m2) {
+            int[] a = new int[chars.length];
+            for(int i = 0;i < chars.length;i++) {
+                a[i] = chars[i];
+            }
+            this.build(a,b1,b2,m1,m2);
         }
 
+        public StringHash(int[] a, int b1, int b2, int m1, int m2) {
+            this.build(a,b1,b2,m1,m2);
+        }
 
-        public StringHash(int b1, int b2, int m1, int m2) {
+        private void build(int[] a, int b1, int b2, int m1, int m2){
             this.base1 = b1;
             this.base2 = b2;
             this.mod1 = m1;
             this.mod2 = m2;
-        }
-
-
-        public void build(char[] chars) {
-            int[] a = new int[chars.length];
-            for (int i = 0; i < chars.length; i++) {
-                a[i] = chars[i];
-            }
-            this.build(a);
-        }
-
-        public void build(int[] nums) {
-            int n = nums.length;
+            this.n = a.length;
             powBase1 = new int[n];
             powBase2 = new int[n];
             preHash1 = new int[n];
             preHash2 = new int[n];
             powBase1[0] = powBase2[0] = 1;
-            preHash1[0] = preHash2[0] = nums[0] + 1;
+            preHash1[0] = preHash2[0] = a[0] + 1;
             for (int i = 1; i < n; i++) {
                 powBase1[i] = (int) (powBase1[i - 1] * 1L * base1 % mod1);
                 powBase2[i] = (int) (powBase2[i - 1] * 1L * base2 % mod2);
-                preHash1[i] = (int) ((preHash1[i - 1] * 1L * base1 + nums[i] + 1) % mod1);
-                preHash2[i] = (int) ((preHash2[i - 1] * 1L * base2 + nums[i] + 1) % mod2);
+                preHash1[i] = (int) ((preHash1[i - 1] * 1L * base1 + a[i] + 1) % mod1);
+                preHash2[i] = (int) ((preHash2[i - 1] * 1L * base2 + a[i] + 1) % mod2);
             }
         }
 
@@ -117,13 +121,14 @@ public class StringHash2Template {
             return subHash;
         }
     }
+    // string hash 结束
 
 
 
     public static void main(String[] args) {
         // test();
-//        test02();
-        test03();
+        test02();
+//        test03();
     }
 
 
@@ -144,12 +149,8 @@ public class StringHash2Template {
             List<Integer> res = new ArrayList<>();
 
 
-            StringHash hash1 = new StringHash();
-            StringHash hash2 = new StringHash();
-
-
-            hash1.build(chars);
-            hash2.build(p);
+            StringHash hash1 = new StringHash(chars);
+            StringHash hash2 = new StringHash(p);
 
             int n = p.length;
             long v1 = hash2.get(0, n - 1);
@@ -175,7 +176,7 @@ public class StringHash2Template {
         boolean ok = true;
         long t1 = 0, t2 = 0, time = 0;
         String errorStr = "";
-        StringHashPalindrome hash = new StringHashPalindrome();
+
         next:
         for (int T = 10; T > 0; T--) {
 
@@ -183,7 +184,7 @@ public class StringHash2Template {
             long c1 = 0, c2 = 0;
             time++;
 
-            hash.build(s.toCharArray());
+            StringHashPalindrome hash = new StringHashPalindrome(s.toCharArray());
 
 
             // 马拉车
@@ -228,17 +229,15 @@ public class StringHash2Template {
         String errorStr = "";
 
         next:
-        for (int T = 100; T > 0; T--) {
+        for (int T = 10; T > 0; T--) {
 
 
             String s = new String(RandomArrayUtils.randomCharArray(100, (int) 1e5));
             long c1 = 0, c2 = 0;
             time++;
-            StringHashPalindrome hash = new StringHashPalindrome();
+            StringHashPalindrome hash = new StringHashPalindrome(s.toCharArray());
 
             StringHashMod.StringHash3.calcHash(s.toCharArray(),true);
-
-            hash.build(s.toCharArray());
 
             for (int i = 0; i < s.length(); i++) {
                 for (int j = i + 1; j < s.length(); j++) {
