@@ -24,7 +24,7 @@ public class Template1 {
                 val += x;
             }
             return val;
-//            return Objects.hashCode(args);
+            // return Objects.hashCode(args);
         }
 
         @Override

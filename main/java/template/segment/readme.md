@@ -2,4 +2,5 @@
 
 - [线段树基本版本](./Segment1.java) 维护最值 懒更新 区域求和
 - [线段树灵活板子](./LazySegmentTemplate.java) `作用同上` 使用函数式接口传入 操作类型 以及查询的初始时 和 线段树大小 ~ 
+- [动态开点线段树](./LazySegmentTemplateNode.java) `作用同上` 使用函数式接口传入 操作类型 以及查询的初始时 和 线段树大小 ~ 
 - [线段树区间合并](./SegmentUnionTemplate.java) 线段树处理区间合并问题
