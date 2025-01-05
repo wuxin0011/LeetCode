@@ -7,29 +7,36 @@ package template.segment;
 public class LazySegmentTemplateNode {
 
 
-    @FunctionalInterface
-    public interface Operation {
-        long operation(long x, long y);
-    }
+    // https://leetcode.cn/problems/my-calendar-iii/submissions/591256245/
+    // https://leetcode.cn/problems/my-calendar-iii/submissions/591259655/
 
-    public static class Node {
-        Node left;
-        Node right;
-        boolean vis;
-        int add, change;
-        long val;
-
-        public Node() {
-        }
-    }
 
     public static class LazySegment {
+        // 基本逻辑内容
+        public static class Node {
+            Node left;
+            Node right;
+            boolean vis;
+            int add, change;
+            long val;
+
+            public Node() {
+
+            }
+        }
+
+        @FunctionalInterface
+        public interface Operation {
+            long operation(long x, long y);
+        }
+
+
         Node root;
         int n;
         long initial;
         Operation operation;
 
-        LazySegment(int n, long initial, Operation operation) {
+        public LazySegment(int n, long initial, Operation operation) {
             this.n = n;
             this.initial = initial;
             this.operation = operation;
@@ -37,6 +44,8 @@ public class LazySegmentTemplateNode {
         }
 
         private void up(Node node, int ln, int rn) {
+            if (node.left == null) node.left = new Node();
+            if (node.right == null) node.right = new Node();
             node.val = operation.operation(node.left.val, node.right.val);
         }
 
@@ -60,13 +69,13 @@ public class LazySegmentTemplateNode {
 
 
         private void updateLazy(Node node, int size, int v) {
-
             node.val = v;
             // sum
             // node.val = size * 1L * v;
             node.change = v;
             node.vis = true;
             node.add = 0;
+            // System.out.println("注意 updateLazy 逻辑 如果没问题请删除 这里是提醒主要修改的地方");
         }
 
         private void addLazy(Node node, int size, int v) {
@@ -74,6 +83,7 @@ public class LazySegmentTemplateNode {
             // sum
             // node.val += v * 1L * size;
             node.add += v;
+            // System.out.println("注意 addLazy 逻辑 如果没问题请删除 这里是提醒主要修改的地方");
         }
 
 
@@ -166,6 +176,10 @@ public class LazySegmentTemplateNode {
             node.add = 0;
         }
 
+        public long query() {
+            return query(1, n, 1, n, this.root);
+        }
+
         public long query(int ql, int qr) {
             return query(ql, qr, 1, n, this.root);
         }
@@ -187,7 +201,7 @@ public class LazySegmentTemplateNode {
 
         int T = 10; // 测试次数
         boolean ok = true;
-        Operation operation = (a, b) -> Math.max(a, b);
+        LazySegment.Operation operation = (a, b) -> Math.max(a, b);
         long initial = Long.MIN_VALUE;
         while (--T > 0 && ok) {
 

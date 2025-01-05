@@ -2,91 +2,98 @@ package template.segment;
 
 /**
  * @author: wuxin0011
- * @Description: 基本模板
+ * @Description: 基本模板 通过数组维护线段树
  */
 
 @SuppressWarnings("all")
 public class LazySegmentTemplate {
 
 
-    public static interface Operation {
-        long op(long x, long y);
-    }
+
 
     public static int MAXN = (int) 1e5 + 1;
 
     public static class LazySegment {
 
+        @FunctionalInterface
+        public static interface Operation {
+            long op(long x, long y);
+        }
+
+        public static class Info {
+            int add, change;
+            boolean vis;
+            long val;
+        }
+
+
         public int[] arr;
-        public int[] add;
-        public int[] change;
-        public boolean[] vis;
-        public long[] vals;
+
         Operation operation;
         long initVal;
         int n;
+        Info info[];
 
         LazySegment(int n, Operation operation, long initVal) {
             this.initVal = initVal;
             this.n = n;
+            this.info = new Info[n << 2];
+            for (int i = 0; i < (n << 2); i++) {
+                info[i] = new Info();
+            }
             this.arr = new int[n + 1];
-            this.add = new int[n << 2];
-            this.change = new int[n << 2];
-            this.vis = new boolean[n << 2];
-            this.add = new int[n << 2];
-            this.vals = new long[n << 2];
             this.operation = operation;
         }
 
         public void up(int i) {
-            vals[i] = operation.op(vals[i << 1], vals[i << 1 | 1]);
+            info[i].val = operation.op(info[i << 1].val, info[i << 1 | 1].val);
         }
 
         public void build(int l, int r, int i) {
             if (l == r) {
-                vals[i] = arr[l];
+                info[i].val = arr[l];
             } else {
                 int mid = l + ((r - l) >> 1);
                 build(l, mid, i << 1);
                 build(mid + 1, r, i << 1 | 1);
                 up(i);
             }
-            vis[i] = false;
-            change[i] = 0;
-            add[i] = 0;
+            info[i].vis = false;
+            info[i].change = 0;
+            info[i].add = 0;
         }
 
         public void addLazy(int i, int size, int v) {
-            add[i] += v;
+            info[i].add += v;
 
             // if other op
-             vals[i] += v;
+            info[i].val += v;
 
             // if op is sum
 //            vals[i] += v * 1L * size;
         }
 
         public void updateLazy(int i, int size, int v) {
-            add[i] = 0;
-            change[i] = v;
-            vis[i] = true;
+            info[i].add = 0;
+            info[i].change = v;
+            info[i].vis = true;
             // if other op
-             vals[i] = v;
+            info[i].val = v;
 
             // if op is sum
             // vals[i] = v * 1L * size;
         }
 
         public void down(int i, int ln, int rn) {
-            if (vis[i]) {
-                updateLazy(i << 1, ln, change[i]);
-                updateLazy(i << 1 | 1, rn, change[i]);
-                vis[i] = false;
+            if (info[i].vis) {
+                updateLazy(i << 1, ln, info[i].change);
+                updateLazy(i << 1 | 1, rn, info[i].change);
+                info[i].vis = false;
             }
-            if (add[i] != 0) {
-                addLazy(i << 1, ln, add[i]);
-                addLazy(i << 1 | 1, rn, add[i]);
-                add[i] = 0;
+            if (info[i].add != 0) {
+                addLazy(i << 1, ln, info[i].add);
+                addLazy(i << 1 | 1, rn, info[i].add);
+                info[i].add = 0;
             }
         }
 
@@ -124,7 +131,7 @@ public class LazySegmentTemplate {
 
         public long query(int ql, int qr, int l, int r, int i) {
             if (ql <= l && r <= qr) {
-                return vals[i];
+                return info[i].val;
             } else {
                 long ans = initVal;
                 int mid = l + ((r - l) >> 1);
@@ -144,7 +151,7 @@ public class LazySegmentTemplate {
 
     public static void main(String[] args) {
         long initVal = Long.MIN_VALUE;
-        Operation operation = (a, b) -> Math.max(a,b);
+        LazySegment.Operation operation = (a, b) -> Math.max(a, b);
         int T = 10000; // 测试次数
         boolean ok = true;
         while (--T > 0 && ok) {
@@ -221,7 +228,7 @@ public class LazySegmentTemplate {
     }
 
 
-    public static long query(int l, int r, int[] array, Operation op, long initVal) {
+    public static long query(int l, int r, int[] array, LazySegment.Operation op, long initVal) {
         long ans = initVal;
         for (int i = l; i <= r; i++) {
             ans = op.op(ans, array[i]);
