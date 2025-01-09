@@ -98,22 +98,22 @@ public class DynamicOPSegmentTreeBTreeTemplate {
             int mid = l + ((r - l) >> 1);
             if (node.vis) {
                 if (mid - l + 1 > 0) {
-                    if (node.left == null) node.left = new Node(initial);
+                    addLeftSon(node);
                     updateLazy(node.left, l, mid, node.change);
                 }
                 if (r - mid > 0) {
-                    if (node.right == null) node.right = new Node(initial);
+                    addRightSon(node);
                     updateLazy(node.right, mid + 1, r, node.change);
                 }
                 node.vis = false;
             }
             if (node.add != 0) {
                 if (mid - l + 1 > 0) {
-                    if (node.left == null) node.left = new Node(initial);
+                    addLeftSon(node);
                     addLazy(node.left, l, mid, node.add);
                 }
                 if (r - mid > 0) {
-                    if (node.right == null) node.right = new Node(initial);
+                    addRightSon(node);
                     addLazy(node.right, mid + 1, r, node.add);
                 }
                 node.add = 0;
@@ -128,11 +128,11 @@ public class DynamicOPSegmentTreeBTreeTemplate {
                 int mid = l + ((r - l) >> 1);
                 down(node, l, r);
                 if (ql <= mid) {
-                    if (node.left == null) node.left = new Node(initial);
+                    addLeftSon(node);
                     update(ql, qr, v, l, mid, node.left);
                 }
                 if (qr > mid) {
-                    if (node.right == null) node.right = new Node(initial);
+                    addRightSon(node);
                     update(ql, qr, v, mid + 1, r, node.right);
                 }
                 up(node, l, r);
@@ -147,11 +147,11 @@ public class DynamicOPSegmentTreeBTreeTemplate {
                 int mid = l + ((r - l) >> 1);
                 down(node, l, r);
                 if (ql <= mid) {
-                    if (node.left == null) node.left = new Node(initial);
+                    addLeftSon(node);
                     add(ql, qr, v, l, mid, node.left);
                 }
                 if (qr > mid) {
-                    if (node.right == null) node.right = new Node(initial);
+                    addRightSon(node);
                     add(ql, qr, v, mid + 1, r, node.right);
                 }
                 up(node, l, r);
@@ -180,19 +180,27 @@ public class DynamicOPSegmentTreeBTreeTemplate {
             }
         }
 
+        private void addLeftSon(Node node) {
+            if (node.left == null) {
+                node.left = new Node(initial);
+            }
+        }
+
+        private void addRightSon(Node node) {
+            if (node.right == null) {
+                node.right = new Node(initial);
+            }
+        }
+
 
         public void build(int l, int r, Node node, int[] array) {
             if (l == r) {
                 node.val = array[l];
             } else {
                 int mid = l + ((r - l) >> 1);
-                if (node.left == null) {
-                    node.left = new Node(initial);
-                }
+                addLeftSon(node);
                 build(l, mid, node.left, array);
-                if (node.right == null) {
-                    node.right = new Node(initial);
-                }
+                addRightSon(node);
                 build(mid + 1, r, node.right, array);
                 up(node, l, r);
             }
