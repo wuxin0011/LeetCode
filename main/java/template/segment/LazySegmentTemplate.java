@@ -2,7 +2,7 @@ package template.segment;
 
 /**
  * @author: wuxin0011
- * @Description: 基本模板 通过数组维护线段树
+ * @Description: 基本模板 通过数组维护线段树 功能单一
  */
 
 @SuppressWarnings("all")
