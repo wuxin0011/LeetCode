@@ -136,7 +136,7 @@ public class ClassTemplate {
     final static String TEMPLATE_PATTERN = "package %s;\n" +
             "\n" +
             "import code_generation.utils.IoUtil;\n" +
-            "import code_generation.annotation.TestCaseGroup;;\n" +
+            "import code_generation.annotation.TestCaseGroup;\n" +
             "import java.util.*;\n" +
             "%s" +
             "/**\n" +

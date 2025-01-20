@@ -905,11 +905,13 @@ public class IoUtil {
         }
         BufferedReader bis = null;
         String s = null;
+
         // fix LC bi week 147 contest bug
         if(name.contains("$")) {
             String[] split = name.split("\\$");
             name = split[split.length - 1];
         }
+
         String matchMethodName = name + "(";
         try {
             bis = new BufferedReader(new FileReader(file));
