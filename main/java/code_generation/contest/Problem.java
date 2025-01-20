@@ -87,13 +87,15 @@ public class Problem {
     final static String pattern = "package %s;\n" +
             "\n" +
             "import code_generation.utils.IoUtil;\n" +
+            "import code_generation.annotation.TestCaseGroup;\n" +
             "import java.util.*;\n" +
             "/**\n" +
-            " * @author: wuxin0011\n" +
+            " * @author: \n" +
             " * @Description:\n" +
             " * @url\n" +
             " * @title\n" +
             " */\n" +
+            "//@TestCaseGroup(start = 1,end = 0x3fff,use = true)\n" +
             "public class %s {\n" +
             "    public static void main(String[] args) {\n" +
             "        IoUtil.testUtil(%s.class,IoUtil.DEFAULT_METHOD_NAME,\"%s.txt\");\n" +

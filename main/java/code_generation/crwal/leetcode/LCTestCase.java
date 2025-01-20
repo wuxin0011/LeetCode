@@ -16,176 +16,163 @@ import java.util.regex.Pattern;
  */
 public class LCTestCase implements TestCase {
 
-    public static final String input_flag = "Input:";
-    public static final String output_flag = "Output:";
+    public static final String input_flag = StringUtils.Input;
+    public static final String output_flag = StringUtils.Output;
+    public static final String explain_flag = StringUtils.Explanation;
+    public static final String tips_flag = "Constraints";
+    public static final String zh_input_flag = StringUtils.inputUnicodeOld;
+    public static final String zh_output_flag = StringUtils.outputUnicodeOld;
+    public static final String zh_explain_flag = StringUtils.explainUnicodeOld;
+    public static final String zh_tips_flag = "\\u63d0\\u793a";
     public static final String strong_start = "<strong>";
     public static final String strong_end = "</strong>";
-
     public static final String pre_start = "<pre";
     public static final String pre_end = "</pre>";
-
-
     public static final String EqualFlag = "=";
     public static final String OtherFlag = ":";
     public static final String interFlag = ",";
 
+    public LCTestCase() {
+    }
 
-    @Override
     public List<String> parseContest(String input) {
         input = TestCaseUtil.getTagContent(input, "class=\"question-content source-content\"", 0, "<div", "</div");
         input = input.replace("&quot;", "");
         List<String> ans = new ArrayList<>();
         handlerOldOutPut(input, ans);
-        // 有时候获取不到测试案例 或者测试案例获取不全面
-        // 这里尝试将周赛测试案例方式移动到后面检查
         if (ans.size() == 0) {
-            // matchExampleAll(input, ".*<span\\s+class=\"example-io\".*>(.*?)</span>", ans);
-            matchExampleAll(input, null, ans);
+            matchExampleAll(input, (String) null, ans);
         }
 
-
-//        之前处理方案
-//        String pattern = "<span\\s+class=\"example-io\">(.*?)</span>";
-//        // String pattern = "<span\\\\s*class=(?:\\\"|')?example-io(?:\\\"|')?>(.*?)</span>";
-//        //System.out.println(input);
-//        Pattern r = Pattern.compile(pattern, Pattern.DOTALL);
-//        Matcher m = r.matcher(input);
-//        while (m.find()) {
-//            String result = m.group(1);
-//            TestCaseUtil.startParseContestTestCase(result, EqualFlag, interFlag, ans);
-//        }
-//        if (ans.size() == 0) {
-//            handlerOldOutPut(input, ans);
-//        }
         StringUtils.handlerResult(ans);
         return ans;
     }
 
-
     public static int findOutput(String next, String... flags) {
         int idx = -1;
+
         for (String flag : flags) {
             idx = StringUtils.kmpSearch(next, flag);
             if (idx != -1) {
                 break;
             }
         }
+
         return idx;
     }
 
-
     public static void handlerOldOutPut(String input, List<String> ans) {
-        List<Integer> input_pos = StringUtils.kmpSearchList(input, input_flag);
-        List<Integer> output_pos = StringUtils.kmpSearchList(input, output_flag);
-        if (input_pos.size() == 0 || output_pos.size() == 0) {
-            input_pos = StringUtils.kmpSearchList(input, StringUtils.inputUnicodeOld);
-            output_pos = StringUtils.kmpSearchList(input, StringUtils.outputUnicodeOld);
+        List<Integer> input_pos = StringUtils.kmpSearchList(input, "Input");
+        List<Integer> output_pos = StringUtils.kmpSearchList(input, "Output");
+        if (input_pos.isEmpty() || output_pos.isEmpty()) {
+            input_pos = StringUtils.kmpSearchList(input, "\\u8f93\\u5165");
+            output_pos = StringUtils.kmpSearchList(input, "\\u8f93\\u51fa");
         }
+
         if (input_pos.size() != output_pos.size()) {
-            System.out.printf("parse test case is error, %s\n", CustomColor.error("place Try copying manually"));
-            return;
-        }
-        // System.out.println("len = " + input.length());
-        for (int i = 0; i < input_pos.size(); i++) {
-            parseInputTestCase(input.substring(input_pos.get(i), output_pos.get(i)), ans);
-            String next = input.substring(output_pos.get(i));
-            // Explanation 为测试案例解释标识符  Explanation 或者 inputUnicodeOld 字符
-            // 如果上面两个都没找到 则说明该测试没有解释 尝试直接 找到下一行 输出标识符 Input 或者 inputUnicodeOld
-            int j = findOutput(next, StringUtils.Explanation, StringUtils.explainUnicodeOld, StringUtils.Input, StringUtils.inputUnicodeOld);
-            if (j != -1) {
-                parseOutputTestCase(next.substring(0, j), ans);
-            } else {
-                // 第几个测试案例错误
-                System.out.printf("parse test case find error in %s times, %s\n", CustomColor.error(i + 1), CustomColor.error("place Try copying manually"));
+            System.out.printf("parse test case is error, %s\n", CustomColor.error(new Object[]{"place Try copying manually"}));
+        } else {
+            for (int i = 0; i < input_pos.size(); ++i) {
+                parseInputTestCase(input.substring((Integer) input_pos.get(i), (Integer) output_pos.get(i)), ans);
+                String next = input.substring((Integer) output_pos.get(i));
+                int j = findOutput(next, "Explanation", "\\u89e3\\u91ca", "Input", "\\u8f93\\u5165");
+                if (j != -1) {
+                    parseOutputTestCase(next.substring(0, j), ans);
+                } else {
+                    System.out.printf("parse test case find error in %s times, %s\n", CustomColor.error(new Object[]{i + 1}), CustomColor.error(new Object[]{"place Try copying manually"}));
+                }
             }
+
         }
     }
 
-    @Override
     public List<String> parseDefault(String input) {
         input = input.replace("&quot;", "");
         input = input.replace("<em>", "").replace("</em>", "");
         List<String> ans = new ArrayList<>();
-        List<Integer> preList = StringUtils.kmpSearchList(input, pre_start);
-        List<Integer> preEndList = StringUtils.kmpSearchList(input, pre_end);
+        List<Integer> preList = StringUtils.kmpSearchList(input, "<pre");
+        List<Integer> preEndList = StringUtils.kmpSearchList(input, "</pre>");
         if (preList.size() != preEndList.size()) {
             System.err.println("parse default testcase is error because pre code size not equal , use default testcase ");
-            return parseContest(input);
-        }
+            return this.parseContest(input);
+        } else {
+            for (int idx = 0; idx < preList.size(); ++idx) {
+                int st = (Integer) preList.get(idx);
+                int end = (Integer) preEndList.get(idx);
+                String target = input.substring(st, end + "</pre>".length());
+                TestCaseUtil.parseDefaultTextCase(target, ans);
+            }
 
-        for (int idx = 0; idx < preList.size(); idx++) {
-            int st = preList.get(idx);
-            int end = preEndList.get(idx);
-            String target = input.substring(st, end + pre_end.length());
-            TestCaseUtil.parseDefaultTextCase(target, ans);
+            if (ans.isEmpty()) {
+                handlerOldOutPut(input, ans);
+            }
+
+            if (ans.isEmpty()) {
+                return this.parseContest(input);
+            } else {
+                StringUtils.handlerResult(ans);
+                return ans;
+            }
         }
-        if (ans.size() == 0) {
-            handlerOldOutPut(input, ans);
-        }
-        if (ans.size() == 0) { // 尝试其他方式3
-            return parseContest(input);
-        }
-        StringUtils.handlerResult(ans);
-        return ans;
     }
 
-
     public static void parseInputTestCase(String s, List<String> ans) {
-        // s = s.replace(input_flag, "").replace(output_flag, "").replace(strong_start, "").replace(strong_end, "");
         s = StringUtils.replaceIgnoreContent(s);
-        // s = matchExample(s);
         s = s.replace("\\n", "");
-        // System.out.println("input s => " + s);
         StringBuilder sb = null;
         int deep = 0;
-        for (int i = 0; i < s.length(); i++) {
+
+        for (int i = 0; i < s.length(); ++i) {
             char c = s.charAt(i);
-            if (StringUtils.isIgnore(c)) {
-                continue;
-            }
-            if (c == '=') {
-                sb = new StringBuilder();
-            } else if (c == ',') {
-                if (sb != null) {
-                    if (deep == 0) {
-                        ans.add(sb.toString());
+            if (!StringUtils.isIgnore(c)) {
+                if (c == '=') {
+                    sb = new StringBuilder();
+                } else if (c == ',') {
+                    if (sb != null) {
+                        if (deep == 0) {
+                            ans.add(sb.toString());
+                        } else {
+                            sb.append(c);
+                        }
+                    }
+                } else if (c != '[' && c != '{') {
+                    if (c != ']' && c != '}') {
+                        if (sb != null) {
+                            sb.append(c);
+                        }
                     } else {
+                        --deep;
+                        if (sb != null) {
+                            sb.append(c);
+                            if (deep == 0) {
+                                ans.add(sb.toString());
+                                sb = null;
+                            }
+                        }
+                    }
+                } else {
+                    if (sb != null) {
                         sb.append(c);
                     }
-                }
-            } else if (c == '[' || c == '{') {
-                if (sb != null) {
-                    sb.append(c);
-                }
-                deep++;
-            } else if (c == ']' || c == '}') {
-                deep--;
-                if (sb != null) {
-                    sb.append(c);
-                    if (deep == 0) {
-                        ans.add(sb.toString());
-                        sb = null;
-                    }
-                }
-            } else {
-                if (sb != null) {
-                    sb.append(c);
+
+                    ++deep;
                 }
             }
         }
 
         if (sb != null) {
             ans.add(sb.toString());
-            sb = null;
+            StringBuilder var8 = null;
         }
+
     }
 
     public static void parseOutputTestCase(String s, List<String> ans) {
-        // s = matchExample(s);
         s = StringUtils.replaceIgnoreContent(s);
         if (!StringUtils.isEmpty(s)) {
             s = StringUtils.ingoreString(s);
         }
+
         ans.add(s);
         ans.add("\n");
     }
@@ -198,13 +185,216 @@ public class LCTestCase implements TestCase {
         if (StringUtils.isEmpty(pattern)) {
             pattern = "<span.*?>(.*?)</span>";
         }
+
         Pattern r = Pattern.compile(pattern, Pattern.DOTALL);
         Matcher m = r.matcher(input);
+
         while (m.find()) {
             String result = m.group(1);
-            TestCaseUtil.startParseContestTestCase(result, EqualFlag, interFlag, ans);
+            TestCaseUtil.startParseContestTestCase(result, "=", ",", ans);
+        }
+
+    }
+
+    public static List<String> _2025NewHandlerInputAndOutput(String jsonStr) {
+        List<String> inputs = _2025NewHandlerInput(jsonStr);
+        List<String> outputs = _2025NewHandlerOutPut(jsonStr);
+        List<String> result = new ArrayList<>();
+        int m = inputs.size();
+        int n = outputs.size();
+        if (n == 0) {
+            if (inputs.isEmpty()) {
+                return inputs;
+            } else {
+                for (int i = 0; i < m; ++i) {
+                    inputs.set(i, (String) inputs.get(i) + "\n");
+                }
+
+                return inputs;
+            }
+        } else {
+            int group = m / n;
+            if (m % n != 0) {
+                System.out.println(CustomColor.error("案例解析失败，请尝试手动copy！"));
+            }
+
+            int i = 0;
+            int j = 0;
+
+            for (int k = 0; i < m && j < n; ++i) {
+                ++k;
+                result.add(StringUtils.replaceIgnoreContent((String) inputs.get(i)));
+                result.add("\n");
+                if (k == group) {
+                    result.add(StringUtils.replaceIgnoreContent((String) outputs.get(j)));
+                    if (j != n - 1) {
+                        result.add("\n\n");
+                    }
+                    ++j;
+                    k = 0;
+                }
+            }
+
+            return result;
         }
     }
 
+    public static List<String> _2025NewHandlerInput(String jsonStr) {
+        String examples = null;
+        List<String> ans = new ArrayList<>();
+        if (StringUtils.kmpSearch(jsonStr, "exampleTestcaseList") != -1) {
+            examples = StringUtils.jsonStrGetValueByKey(jsonStr, "exampleTestcaseList");
+        } else if (StringUtils.kmpSearch(jsonStr, "exampleTestcases") != -1) {
+            examples = StringUtils.jsonStrGetValueByKey(jsonStr, "exampleTestcases");
+        } else if (StringUtils.kmpSearch(jsonStr, "jsonExampleTestcases") != -1) {
+            examples = StringUtils.jsonStrGetValueByKey(jsonStr, "jsonExampleTestcases");
+        }
+
+        if (StringUtils.isEmpty(examples)) {
+            return ans;
+        } else {
+            List<Integer> leftIds = StringUtils.kmpSearchList(examples, "[");
+            List<Integer> rightIdx = StringUtils.kmpSearchList(examples, "]");
+            if (!leftIds.isEmpty() && !rightIdx.isEmpty() && leftIds.size() <= rightIdx.size()) {
+                examples = examples.substring((Integer) leftIds.get(0) + 1, (Integer) rightIdx.get(leftIds.size() - 1));
+                int d = 0;
+                StringBuilder cur = new StringBuilder();
+
+                for (int i = 0; i < examples.length(); ++i) {
+                    char c = examples.charAt(i);
+                    if (!StringUtils.isIgnoreStrict(c)) {
+                        switch (c) {
+                            case ',':
+                                if (d == 0) {
+                                    if (!StringUtils.isEmpty(cur.toString())) {
+                                        ans.add(cur.toString());
+                                        cur = new StringBuilder();
+                                    }
+                                } else {
+                                    cur.append(c);
+                                }
+                                break;
+                            case '[':
+                                ++d;
+                                if (d == 1 && !StringUtils.isEmpty(cur.toString())) {
+                                    ans.add(cur.toString());
+                                    cur = new StringBuilder();
+                                }
+
+                                cur.append(c);
+                                break;
+                            case ']':
+                                cur.append(c);
+                                --d;
+                                if (d == 0 && !StringUtils.isEmpty(cur.toString())) {
+                                    ans.add(cur.toString());
+                                    cur = new StringBuilder();
+                                }
+                                break;
+                            case 'n':
+                                if (i > 0 && examples.charAt(i - 1) == '\\') {
+                                    if (!StringUtils.isEmpty(cur.toString())) {
+                                        ans.add(cur.toString());
+                                    }
+
+                                    cur = new StringBuilder();
+                                } else {
+                                    cur.append(c);
+                                }
+                                break;
+                            default:
+                                cur.append(c);
+                        }
+                    }
+                }
+
+                if (!StringUtils.isEmpty(cur.toString())) {
+                    ans.add(cur.toString());
+                }
+
+                return ans;
+            } else {
+                return ans;
+            }
+        }
+    }
+
+    public static List<String> _2025NewHandlerOutPut(String jsonStr) {
+        int index = StringUtils.kmpSearch(jsonStr, input_flag);
+        if (index != -1) {
+            return parseOutput(jsonStr.substring(index), input_flag, output_flag, explain_flag, tips_flag);
+        } else {
+            index = StringUtils.kmpSearch(jsonStr, zh_input_flag);
+            return parseOutput(jsonStr.substring(index), zh_input_flag, zh_output_flag, zh_explain_flag, zh_tips_flag);
+        }
+    }
+
+    public static List<String> parseOutput(String inputstring, String input_flag, String output_flag, String explain_flag, String tips_flag) {
+        List<String> outputs = new ArrayList<>();
+        List<Integer> startIds = StringUtils.kmpSearchList(inputstring, pre_start);
+        List<Integer> endIds = StringUtils.kmpSearchList(inputstring, pre_end);
+        if (!startIds.isEmpty() && startIds.size() == endIds.size()) {
+            int n = startIds.size();
+
+            for (int i = 0; i < n; ++i) {
+                String cur = inputstring.substring(startIds.get(i), endIds.get(i));
+                int outputIndex = StringUtils.kmpSearch(cur, output_flag);
+                int explainIndex = StringUtils.kmpSearch(cur, explain_flag);
+                if (outputIndex != -1) {
+                    outputs.add(StringUtils.replaceIgnoreContent(cur.substring(outputIndex + output_flag.length(), explainIndex != -1 && explainIndex >= outputIndex ? explainIndex : cur.length())));
+                }
+            }
+
+            if (outputs.size() == startIds.size()) {
+                return outputs;
+            }
+
+            outputs = new ArrayList<>();
+        }
+
+        startIds = StringUtils.kmpSearchList(inputstring, output_flag);
+        endIds = StringUtils.kmpSearchList(inputstring, explain_flag);
+        if (!startIds.isEmpty()) {
+            int addcnt = 0;
+
+            for (int i = 0; i < Math.min(startIds.size(), endIds.size()); ++i) {
+                outputs.add(StringUtils.replaceIgnoreContent(inputstring.substring(startIds.get(i), endIds.get(i))));
+                ++addcnt;
+            }
+
+            if (startIds.size() - endIds.size() == 1) {
+                String cur = inputstring.substring((Integer) startIds.get(startIds.size() - 1) + output_flag.length());
+                int k = StringUtils.kmpSearch(cur, tips_flag);
+                if (startIds.size() != endIds.size() && k != -1) {
+                    outputs.add(StringUtils.replaceIgnoreContent(cur.substring(0, k)));
+                } else {
+                    outputs.add(StringUtils.replaceIgnoreContent(cur));
+                }
+            } else {
+                List<Integer> inputIdx = StringUtils.kmpSearchList(inputstring, input_flag);
+                if (inputIdx.size() == startIds.size()) {
+                    int i = endIds.size();
+
+                    for (int j = Math.max(0, endIds.size() - 1); i < inputIdx.size(); ++j) {
+                        outputs.add(StringUtils.replaceIgnoreContent(inputstring.substring(startIds.get(j), inputIdx.get(i))));
+                        ++addcnt;
+                        ++i;
+                    }
+                }
+
+                if (addcnt != startIds.size()) {
+                    String cur = inputstring.substring((Integer) startIds.get(startIds.size() - 1) + output_flag.length());
+                    int k = StringUtils.kmpSearch(cur, tips_flag);
+                    if (startIds.size() != endIds.size() && k != -1) {
+                        outputs.add(StringUtils.replaceIgnoreContent(cur.substring(0, k)));
+                    } else {
+                        outputs.add(StringUtils.replaceIgnoreContent(cur));
+                    }
+                }
+            }
+        }
+
+        return outputs;
+    }
 
 }

@@ -136,6 +136,7 @@ public class ClassTemplate {
     final static String TEMPLATE_PATTERN = "package %s;\n" +
             "\n" +
             "import code_generation.utils.IoUtil;\n" +
+            "import code_generation.annotation.TestCaseGroup;;\n" +
             "import java.util.*;\n" +
             "%s" +
             "/**\n" +
@@ -144,6 +145,7 @@ public class ClassTemplate {
             " * @url:   <a href=\"%s\">%s</a>\n" +
             " * @title: %s\n" +
             " */\n" +
+            "//@TestCaseGroup(start = 1,end = 0x3fff,use = true)\n" +
             "public class %s {\n\n" +
             "    public static void main(String[] args) {\n" +
             "        IoUtil.testUtil(%s.class,%s,%s);\n" +
