@@ -133,6 +133,7 @@ public class StringUtils {
         s = s.replace("&amp;", "");
         s = s.replace("&quot;", "");
         s = s.replace("&nbsp;", "");
+        s = s.replace(":", "");
         s = s.replace(" ", "");
         s = s.replace("<", "").replace(">", "");
         if (isEmpty(s)) {
