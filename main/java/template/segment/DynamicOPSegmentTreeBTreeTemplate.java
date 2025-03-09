@@ -1,15 +1,17 @@
 package template.segment;
 
 /*
-*
-*   https://www.luogu.com.cn/record/197482966
-*
-*
-*
-*/
+ *
+ *   https://www.luogu.com.cn/record/197482966
+ *
+ *
+ *
+ */
+
 /**
  * 动态开点线段树 二叉树版 维护更多信息
  * 注意：如果需要效率更高需要使用数组维护的开点线段树
+ *
  * @see template.segment.DynamicOPSegmentTreeBTreeArrayTemplate
  */
 public class DynamicOPSegmentTreeBTreeTemplate {
@@ -53,8 +55,8 @@ public class DynamicOPSegmentTreeBTreeTemplate {
         Operation operation;
 
         /**
-         * @param n 查询范围 [1,n]
-         * @param initial 默认初始值
+         * @param n         查询范围 [1,n]
+         * @param initial   默认初始值
          * @param operation 操作
          */
         public LazySegment(int n, long initial, Operation operation) {
@@ -79,7 +81,7 @@ public class DynamicOPSegmentTreeBTreeTemplate {
             // 最值等操作 和范围size无关
             // node.val += v;
             // 求和使用下面 注释上面
-             node.val += v * 1L * (r - l + 1);
+            node.val += v * 1L * (r - l + 1);
         }
 
         private void up(Node node, int l, int r) {
@@ -218,6 +220,45 @@ public class DynamicOPSegmentTreeBTreeTemplate {
 
         public void update(int ql, int qr, int v) {
             update(ql, qr, v, 1, n, this.root);
+        }
+
+
+        //  线段树二分 查询第一个 >= val
+        public int findFirst(int val, int l, int r, Node node) {
+            if (node == null) return -1;
+            if (l == r) {
+                return node.val >= val ? l : -1;
+            }
+            int mid = l + ((r - l) >> 1);
+            Node temp = null;
+            temp = query(l, mid, l, mid, node.left);
+            if (temp != null && temp.val >= val) {
+                return findFirst(val, l, mid, node.left);
+            }
+            temp = query(mid + 1, r, mid + 1, r, node.right);
+            if (temp != null && temp.val >= val) {
+                return findFirst(val, mid + 1, r, node.right);
+            }
+            return -1;
+        }
+
+        // 线段树二分 查询最后一个 >= val
+        public int findLast(int val, int l, int r, Node node) {
+            if (node == null) return -1;
+            if (l == r) {
+                return node.val >= val ? l : -1;
+            }
+            int mid = l + ((r - l) >> 1);
+            Node temp = null;
+            temp = query(mid + 1, r, mid + 1, r, node.right);
+            if (temp != null && temp.val >= val) {
+                return findLast(val, mid + 1, r, node.right);
+            }
+            temp = query(l, mid, l, mid, node.left);
+            if (temp != null && temp.val >= val) {
+                return findLast(val, l, mid, node.left);
+            }
+            return -1;
         }
     }
 

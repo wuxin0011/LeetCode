@@ -231,6 +231,45 @@ public class DynamicOPSegmentTreeBTreeArrayTemplate {
         public void update(int ql, int qr, int v) {
             update(ql, qr, v, 1, n, 1);
         }
+
+        // 线段树二分 查询第一个
+        public int findFirst(int val, int l, int r, int i) {
+            if (nodes[i] == null)
+                return -1;
+            if (l == r) {
+                return nodes[i].val >= val ? l : -1;
+            }
+            int mid = l + ((r - l) >> 1);
+            Node temp = query(l, mid, l, mid, left[i]);
+            if (temp != null && temp.val >= val) {
+                return findFirst(val, l, mid, left[i]);
+            }
+            temp = query(mid + 1, r, mid + 1, r, right[i]);
+            if (temp != null && temp.val >= val) {
+                return findFirst(val, mid + 1, r, right[i]);
+            }
+            return -1;
+        }
+
+        // 线段树二分 查询最后一个
+        public int findLast(int val, int l, int r, int i) {
+            if (nodes[i] == null)
+                return -1;
+            if (l == r) {
+                return nodes[i].val >= val ? l : -1;
+            }
+            int mid = l + ((r - l) >> 1);
+            Node temp = query(mid + 1, r, mid + 1, r, right[i]);
+            if (temp != null && temp.val >= val) {
+                return findLast(val, mid + 1, r, right[i]);
+            }
+            temp = query(l, mid, l, mid, left[i]);
+            if (temp != null && temp.val >= val) {
+                return findLast(val, l, mid, left[i]);
+            }
+            return -1;
+        }
+
     }
 
 
