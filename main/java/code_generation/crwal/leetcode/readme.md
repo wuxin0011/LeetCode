@@ -14,6 +14,8 @@
 
 爬取测试案例和模板需要配置本地`cookie` [查看配置](../request_config_template) 
 
+[配置cookies](https://github.com/wuxin0011/py-lc-run/blob/main/use.md)
+
 **如果不配置 运行会自动生成😅 不过应该会报错 提示你需要配置相关信息！**
 
 目前测试了两个平台

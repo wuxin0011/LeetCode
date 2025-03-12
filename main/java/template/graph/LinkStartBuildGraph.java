@@ -1,8 +1,6 @@
 package template.graph;
 
 
-import java.util.Arrays;
-
 /**
  * @see leetcode._0x3f_.graph.topological_sorting.Solution_0001.Solution
  * @see leetcode._0x3f_.graph.topological_sorting.Solution_0002.Solution
@@ -45,42 +43,50 @@ public class LinkStartBuildGraph {
         }
 
 
-        static int[] in = new int[2001], q = new int[2001], head = new int[2001], empty = new int[]{};
-        static int cnt, l, r;
-        static Edge[] edges = new Edge[5001];
+    // =====================================链式前向星建图开始
 
-        static void clear(int n) {
-            for (int i = 0; i <= n; i++) {
-                in[i] = 0;
-                head[i] = -1;
-            }
-            cnt = 0;
-            l = r = 0;
+    private static final int MAXN = (int) 1e3 + 1;
+    private static final int EDGE_MAXN = (int) 1e4 + 1;
+
+
+    private static int[] in = new int[MAXN], q = new int[MAXN], head = new int[MAXN], empty = new int[]{};
+    private static int cnt, l, r;
+    private static Edge[] edges = new Edge[EDGE_MAXN];
+
+    private static void clear(int n) {
+        for (int i = 0; i <= n; i++) {
+            in[i] = 0;
+            head[i] = -1;
+        }
+        cnt = 0;
+        l = r = 0;
+    }
+
+    private static void addEdge(int u, int v, int w) {
+        if (edges[cnt] == null) {
+            edges[cnt] = new Edge(head[u], v, w);
+        } else {
+            edges[cnt].update(head[u], v, w);
+        }
+        head[u] = cnt++;
+    }
+
+    private static class Edge {
+        int w, next, to;
+
+        Edge() {
         }
 
-        static void addEdge(int u, int v, int w) {
-            if (edges[cnt] == null) {
-                edges[cnt] = new Edge(head[u], v, w);
-            } else {
-                edges[cnt].update(head[u], v, w);
-            }
-            head[u] = cnt++;
+        Edge(int next, int to, int w) {
+            this.update(next, to, w);
         }
 
-        static class Edge {
-            int w, next, to;
-
-            Edge() {
-            }
-
-            Edge(int next, int to, int w) {
-                this.update(next, to, w);
-            }
-
-            void update(int next, int to, int w) {
-                this.next = next;
-                this.to = to;
-                this.w = w;
-            }
+        void update(int next, int to, int w) {
+            this.next = next;
+            this.to = to;
+            this.w = w;
         }
+    }
+
+    // =====================================链式前向星建图结束
 }

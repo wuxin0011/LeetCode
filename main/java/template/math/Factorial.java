@@ -2,7 +2,7 @@ package template.math;
 
 /**
  * @author: wuxin0011
- * @Description:
+ * @Description: 组合数学
  */
 public class Factorial {
     private final long[] f;
