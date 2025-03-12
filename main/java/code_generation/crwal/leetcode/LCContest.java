@@ -34,6 +34,12 @@ public class LCContest implements Contest {
 
 
     /**
+     * 是否闯创建readme.md 文件
+     */
+    public static final boolean CREATE_READ_ME = true;
+
+
+    /**
      * 周赛
      */
     public static final LCContest WEEK_CONTEST = new LCContest(380, "2024-01-14 10:30:00", 4, WEEKLY_PREFIX, WEEK_DRI, 1, null);
@@ -184,6 +190,9 @@ public class LCContest implements Contest {
         }
         // Problem.createProblems(problems, dir);
         System.out.println("==========================================" + No + " end ==========================================");
+
+
+        createReadme(No, dir, questions);
     }
 
     private static final LCTemplate lcTemplate = new LCTemplate("{'value': 'java', 'text': 'Java', 'defaultCode':");
@@ -544,6 +553,27 @@ public class LCContest implements Contest {
 
         }
         autoCreateNext(aClass);
+    }
+
+
+    // 创建 readmd.md 文件
+    public void createReadme(int NO, String dir, List<Question> questions) {
+        if (!CREATE_READ_ME) {
+            return;
+        }
+        StringBuilder content = new StringBuilder();
+        boolean ok = dir.contains(BI_WEEK_DRI);
+        content.append("## 第 ").append(NO).append(" 场").append(ok ? "双" : "").append("周赛");
+        content.append("\n");
+        for (int i = 0; i < questions.size(); i++) {
+            Question q = questions.get(i);
+            if (q == null) continue;
+            content.append("- [ ] ");
+            content.append("[").append(q.getTitle()).append("]");
+            content.append("(").append(q.getUrl()).append(")\n");
+        }
+//        System.out.println(content);
+        IoUtil.writeContent(new File(dir + "readme.md"), content.toString());
     }
 
 
