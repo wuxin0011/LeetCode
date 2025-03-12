@@ -17,10 +17,32 @@ public class B {
     }
      
 
-    public long[] findMaxSum(int[] nums1, int[] nums2, int k) {            
+    public long[] findMaxSum(int[] nums1, int[] nums2, int k) {
+        long sums = 0;
+        int n = nums1.length;
+        long[] ans = new long[n];
+        Arrays.fill(ans,-1);
+        Integer[] ids = new Integer[n];
+        Arrays.setAll(ids,i->i);
+        Arrays.sort(ids,(x,y)->nums1[x] - nums1[y]);
+        PriorityQueue<Integer> q = new PriorityQueue<>();
+        for (int i = 0; i < n; ) {
+            int st = i;
+            while(i < n && nums1[ids[st]] == nums1[ids[i]])i++;
+            for(int j = st;j < i && j < n;j++) {
+                ans[ids[j]] = sums;
+            }
+            for(int j = st;j < i && j < n;j++) {
+                sums += nums2[ids[j]];
+                q.add(nums2[ids[j]]);
+                while(q.size() > k) sums -= q.poll();
+            }
+        }
+        return ans;
+    }
 
-        return null; 
-	}
+
+
 
   
 

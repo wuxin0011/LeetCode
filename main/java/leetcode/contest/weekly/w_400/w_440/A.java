@@ -1,8 +1,6 @@
 package leetcode.contest.weekly.w_400.w_440;
 
 import code_generation.utils.IoUtil;
-import code_generation.annotation.TestCaseGroup;
-import java.util.*;
 /**
  * @author: agitated-curranfnd
  * @Description:
@@ -13,15 +11,11 @@ import java.util.*;
 public class A {
 
     public static void main(String[] args) {
-        IoUtil.testUtil(A.class,"numOfUnplacedFruits","A.txt");
+        IoUtil.testUtil(A.class, "numOfUnplacedFruits", "A.txt");
     }
-     
 
-    public int numOfUnplacedFruits(int[] fruits, int[] baskets) {            
+    // 同第三题
 
-        return 0; 
-	}
 
-  
 
 }
