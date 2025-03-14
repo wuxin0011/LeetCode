@@ -34,9 +34,15 @@ public class LCContest implements Contest {
 
 
     /**
-     * 是否闯创建readme.md 文件
+     * 是否创建 solution.md 文件 默认不创建
      */
-    public static final boolean CREATE_READ_ME = true;
+    public static final boolean CREATE_SOLUTION_ME = false;
+
+
+    /**
+     * 创建父级目录下的 readme.md 默认创建
+     */
+    public static final boolean CREATE_READ_ME_FATHER = true;
 
 
     /**
@@ -558,12 +564,9 @@ public class LCContest implements Contest {
 
     // 创建 readmd.md 文件
     public void createReadme(int NO, String dir, List<Question> questions) {
-        if (!CREATE_READ_ME) {
-            return;
-        }
         StringBuilder content = new StringBuilder();
         boolean ok = dir.contains(BI_WEEK_DRI);
-        content.append("## 第 ").append(NO).append(" 场").append(ok ? "双" : "").append("周赛");
+        content.append("## \uD83C\uDFC6 第 ").append(NO).append(" 场").append(ok ? "双" : "").append("周赛");
         content.append("\n");
         for (int i = 0; i < questions.size(); i++) {
             Question q = questions.get(i);
@@ -572,8 +575,18 @@ public class LCContest implements Contest {
             content.append("[").append(q.getTitle()).append("]");
             content.append("(").append(q.getUrl()).append(")\n");
         }
-//        System.out.println(content);
-        IoUtil.writeContent(new File(dir + "readme.md"), content.toString());
+        if (CREATE_SOLUTION_ME) {
+            IoUtil.writeContent(new File(dir + "solution.md"), content.toString());
+        }
+        // father readme.md
+        if (CREATE_READ_ME_FATHER) {
+            File file = new File(new File(new File(dir).getParent()).getParent() + File.separator + "readme.md");
+            String p = null;
+            if(file.exists()) {
+                p = IoUtil.readContent(file);
+            }
+            IoUtil.writeContent(file,(StringUtils.isEmpty(content.toString()) ? "" : content.toString()) + (StringUtils.isEmpty(p) ? "" : ( "\n\n\n" + p)));
+        }
     }
 
 
