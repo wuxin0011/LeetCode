@@ -138,6 +138,7 @@ public class ClassTemplate {
             "import code_generation.utils.IoUtil;\n" +
             "import code_generation.annotation.TestCaseGroup;\n" +
             "import java.util.*;\n" +
+            "import javafx.util.Pair;\n" +
             "%s" +
             "/**\n" +
             " * @author: %s\n" +
