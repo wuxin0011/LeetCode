@@ -575,9 +575,9 @@ public class LCContest implements Contest {
             content.append("- [ ] ");
             content.append("[").append(q.getTitle()).append("]");
             content.append("(").append(q.getUrl()).append(")\n");
-            content.append(" ").append(" | ");
-            content.append("[").append("本题代码").append("]");
-            content.append("(").append(javafiles.get(i).replace(parentDir,".")).append(")\n");
+            content.append(" ");
+            content.append("[").append("🎈代码").append("]");
+            content.append("(").append(javafiles.get(i).replace(parentDir,"").replace("\\","/").substring(1)).append(")\n");
         }
         if (CREATE_SOLUTION_ME) {
             IoUtil.writeContent(new File(dir + "solution.md"), content.toString());
