@@ -582,7 +582,7 @@ public class LCContest implements Contest {
         if (CREATE_SOLUTION_ME) {
             IoUtil.writeContent(new File(dir + "solution.md"), content.toString());
         }
-        System.out.println(content);
+//        System.out.println(content);
         // father readme.md
         if (CREATE_READ_ME_FATHER) {
             File file = new File(parentDir + File.separator + "readme.md");
