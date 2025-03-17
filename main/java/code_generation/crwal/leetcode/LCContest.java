@@ -9,10 +9,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Objects;
-import java.util.Scanner;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
@@ -278,6 +275,8 @@ public class LCContest implements Contest {
         String javaFile = dir + className + ".java";
 //        String txtFile = dir  + "\\__test_case__\\"+ className + ".txt";
         String txtFile = dir  + className + ".txt";
+
+        javafiles.add(javaFile);
 
         String packageInfo = ReflectUtils.getPackageInfo(javaFile);
 
@@ -563,9 +562,11 @@ public class LCContest implements Contest {
 
 
     // 创建 readmd.md 文件
+    List<String> javafiles = new ArrayList<>();
     public void createReadme(int NO, String dir, List<Question> questions) {
         StringBuilder content = new StringBuilder();
         boolean ok = dir.contains(BI_WEEK_DRI);
+        String parentDir = new File(new File(dir).getParent()).getParent();
         content.append("## \uD83C\uDFC6 第 ").append(NO).append(" 场").append(ok ? "双" : "").append("周赛");
         content.append("\n");
         for (int i = 0; i < questions.size(); i++) {
@@ -574,18 +575,22 @@ public class LCContest implements Contest {
             content.append("- [ ] ");
             content.append("[").append(q.getTitle()).append("]");
             content.append("(").append(q.getUrl()).append(")\n");
+            content.append(" ").append(" | ");
+            content.append("[").append("本题代码").append("]");
+            content.append("(").append(javafiles.get(i).replace(parentDir,".")).append(")\n");
         }
         if (CREATE_SOLUTION_ME) {
             IoUtil.writeContent(new File(dir + "solution.md"), content.toString());
         }
+        System.out.println(content);
         // father readme.md
         if (CREATE_READ_ME_FATHER) {
-            File file = new File(new File(new File(dir).getParent()).getParent() + File.separator + "readme.md");
+            File file = new File(parentDir + File.separator + "readme.md");
             String p = null;
             if(file.exists()) {
                 p = IoUtil.readContent(file);
             }
-            IoUtil.writeContent(file,(StringUtils.isEmpty(content.toString()) ? "" : content.toString()) + (StringUtils.isEmpty(p) ? "" : ( "\n\n\n" + p)));
+             IoUtil.writeContent(file,(StringUtils.isEmpty(content.toString()) ? "" : content.toString()) + (StringUtils.isEmpty(p) ? "" : ( "\n\n\n" + p)));
         }
     }
 
