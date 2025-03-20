@@ -3,6 +3,8 @@ package leetcode._0x3f_.data_struct.segment.segment_0004;
 import code_generation.contest.ParseCodeInfo;
 import code_generation.utils.IoUtil;
 
+import java.util.*;
+
 /**
  *
  * 2286. 以组为单位订音乐会的门票
@@ -45,7 +47,7 @@ import code_generation.utils.IoUtil;
  *
  * @author: wuxin0011
  * @Description:
- * @url: https://leetcode.cn/problems/booking-concert-tickets-in-groups
+ * @url: <a href="https://leetcode.cn/problems/booking-concert-tickets-in-groups">以组为单位订音乐会的门票</a>
  * @title: 以组为单位订音乐会的门票
  */
 public class Solution {
@@ -55,26 +57,102 @@ public class Solution {
     }
 
 
+    /**
+     * 不使用板子
+     * @link <a href="https://leetcode.cn/problems/booking-concert-tickets-in-groups/submissions/613346529/>sublimit</a>
+     */
     public static class BookMyShow {
+        int n, m, max[], a[];
+        long[] sums;
 
-        int n,m;
         public BookMyShow(int n, int m) {
             this.n = n;
             this.m = m;
-
+            this.a = new int[n];
+            this.sums = new long[n << 2];
+            this.max = new int[n << 2];
+            Arrays.fill(a, m);
+            build(1, n, 1);
         }
 
         public int[] gather(int k, int maxRow) {
-
-            return null;
+            int id = findFirst(1, k, 1, n, 1);
+            if (id == -1 || id - 1 > maxRow) return new int[]{};
+            int val = (int) (m - query(id, id, 1, n, 1));
+            add(id, id, -k, 1, n, 1);
+            return new int[]{id - 1, val};
         }
 
         public boolean scatter(int k, int maxRow) {
+            long tot = query(1, maxRow + 1, 1, n, 1);
+            if (tot < k) return false;
+            for (int i = 1; i <= n && k > 0; i++) {
+                int id = findFirst(i, 1, 1, n, 1);
+                if (id == -1) continue;
+                int use = (int) Math.min(k * 1L, query(id, id, 1, n, 1));
+                add(id, id, -use, 1, n, 1);
+                k -= use;
+            }
+            return k == 0;
+        }
 
-            return false;
+        void up(int i) {
+            int lson = i << 1, rson = i << 1 | 1;
+            sums[i] = sums[lson] + sums[rson];
+            max[i] = Math.max(max[lson], max[rson]);
         }
 
 
-    }
+        void build(int l, int r, int i) {
+            if (l == r) {
+                max[i] = a[l - 1];
+                sums[i] = a[l - 1];
+                return;
+            }
+            int mid = l + ((r - l) >> 1);
+            build(l, mid, i << 1);
+            build(mid + 1, r, i << 1 | 1);
+            up(i);
+        }
 
+        long query(int ql, int qr, int l, int r, int i) {
+            if (ql <= l && r <= qr) {
+                return sums[i];
+            }
+            long ans = 0;
+            int mid = l + ((r - l) >> 1);
+            if (ql <= mid) ans += query(ql, qr, l, mid, i << 1);
+            if (qr > mid) ans += query(ql, qr, mid + 1, r, i << 1 | 1);
+            return ans;
+        }
+
+        void add(int ql, int qr, int val, int l, int r, int i) {
+            if (max[i] == 0 || sums[i] == 0)
+                return;
+            if (l == r) {
+                sums[i] += val;
+                max[i] += val;
+                return;
+            }
+            int mid = l + ((r - l) >> 1);
+            if (ql <= mid) {
+                add(ql, qr, val, l, mid, i << 1);
+            }
+            if (qr > mid) {
+                add(ql, qr, val, mid + 1, r, i << 1 | 1);
+            }
+            up(i);
+        }
+
+        int findFirst(int L, int x, int l, int r, int i) {
+            if (max[i] < x) return -1;
+            if (l == r) return l;
+            int mid = l + ((r - l) >> 1);
+            if (L <= mid) {
+                int pos = findFirst(L, x, l, mid, i << 1);
+                if (pos >= 0) return pos;
+            }
+            return findFirst(L, x, mid + 1, r, i << 1 | 1);
+        }
+    }
 }
