@@ -20,6 +20,9 @@ package template.segment;
  */
 public class DynamicOPSegmentTreeBTreeArrayTemplate {
 
+
+    /***************************************线段树模板开始**************************************/
+
     // 自定义实现操作
     @FunctionalInterface
     public interface Operation {
@@ -271,6 +274,7 @@ public class DynamicOPSegmentTreeBTreeArrayTemplate {
 
     }
 
+    /***************************************线段树模板结束**************************************/
 
     public static void main(String[] args) {
         int T = 10; // 测试次数

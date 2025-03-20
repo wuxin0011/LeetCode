@@ -16,6 +16,9 @@ package template.segment;
  */
 public class DynamicOPSegmentTreeBTreeTemplate {
 
+
+
+    /***************************************线段树模板开始**************************************/
     @FunctionalInterface
     public interface Operation {
         Node op(Node a, Node b);
@@ -255,6 +258,8 @@ public class DynamicOPSegmentTreeBTreeTemplate {
             return findLast(R,val,l,mid,node.left);
         }
     }
+
+    /***************************************线段树模板结束**************************************/
 
 
     public static void main(String[] args) {

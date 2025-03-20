@@ -9,6 +9,7 @@ package template.segment;
 public class LazySegmentTemplate {
 
 
+    /***************************************线段树模板开始**************************************/
     public static int MAXN = (int) 1e5 + 1;
 
     public static class LazySegment {
@@ -177,6 +178,8 @@ public class LazySegmentTemplate {
         }
 
     }
+
+    /***************************************线段树模板结束**************************************/
 
 
     public static void main(String[] args) {
