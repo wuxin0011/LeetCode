@@ -37,6 +37,7 @@ public class DynamicOPSegmentTreeBTreeArrayTemplate {
     }
 
     // 如果是求和注意 updateLazy 和 addLazy 两处逻辑
+    // 注意下标和原始数组对应关系 + 1
     public static class LazySegment {
 
         int n;
@@ -48,17 +49,17 @@ public class DynamicOPSegmentTreeBTreeArrayTemplate {
 
         /**
          * @param n         查询范围 [1,n]
-         * @param arraySize 数组开辟空间大小
          * @param initial   默认初始值
          * @param operation 操作
          */
-        public LazySegment(int n, int arraySize, long initial, Operation operation) {
+        public LazySegment(int n, long initial, Operation operation) {
             this.n = n;
             this.initial = initial;
             this.operation = operation;
-            this.left = new int[arraySize];
-            this.right = new int[arraySize];
-            this.nodes = new Node[arraySize];
+            this.left = new int[n << 1];
+            this.right = new int[n << 1];
+            this.nodes = new Node[n << 2];
+            // 如果不调用 build 需要初始化
             // Arrays.setAll(nodes, i -> new Node(initial));
             this.cnt = 1;
         }
@@ -205,6 +206,7 @@ public class DynamicOPSegmentTreeBTreeArrayTemplate {
 
         public void build(int l, int r, int i, int[] array) {
             if (l == r) {
+                // 如果传入数组不是从1开始,需要-1 new Node(array[l - 1])
                 nodes[i] = new Node(array[l]);
             } else {
                 int mid = l + ((r - l) >> 1);
@@ -233,41 +235,35 @@ public class DynamicOPSegmentTreeBTreeArrayTemplate {
         }
 
         // 线段树二分 查询第一个
-        public int findFirst(int val, int l, int r, int i) {
-            if (nodes[i] == null)
+        // 注意 L 传入需要 + 1 因为 + 1 才和线段树下标对应
+        public int findFirst(int L, int val, int l, int r, int i) {
+            if (i == 0 || nodes[i] == null || nodes[i].val < val)
                 return -1;
             if (l == r) {
-                return nodes[i].val >= val ? l : -1;
+                return l;
             }
             int mid = l + ((r - l) >> 1);
-            Node temp = query(l, mid, l, mid, left[i]);
-            if (temp != null && temp.val >= val) {
-                return findFirst(val, l, mid, left[i]);
+            if (L <= mid) {
+                int p = findFirst(L, val, l, mid, left[i]);
+                if (p >= 0) return p;
             }
-            temp = query(mid + 1, r, mid + 1, r, right[i]);
-            if (temp != null && temp.val >= val) {
-                return findFirst(val, mid + 1, r, right[i]);
-            }
-            return -1;
+            return findFirst(L, val, mid + 1, r, right[i]);
         }
 
-        // 线段树二分 查询最后一个
-        public int findLast(int val, int l, int r, int i) {
-            if (nodes[i] == null)
+        // 线段树二分 查询第一个
+        // 注意 L 传入需要 + 1 因为 + 1 才和线段树下标对应
+        public int findLast(int R, int val, int l, int r, int i) {
+            if (i == 0 || nodes[i] == null || nodes[i].val < val)
                 return -1;
             if (l == r) {
-                return nodes[i].val >= val ? l : -1;
+                return l;
             }
             int mid = l + ((r - l) >> 1);
-            Node temp = query(mid + 1, r, mid + 1, r, right[i]);
-            if (temp != null && temp.val >= val) {
-                return findLast(val, mid + 1, r, right[i]);
+            if (R >= mid) {
+                int p = findLast(R, val, mid + 1, r, right[i]);
+                if (p >= 0) return p;
             }
-            temp = query(l, mid, l, mid, left[i]);
-            if (temp != null && temp.val >= val) {
-                return findLast(val, l, mid, left[i]);
-            }
-            return -1;
+            return findLast(R, val, l, mid, left[i]);
         }
 
     }
@@ -287,7 +283,7 @@ public class DynamicOPSegmentTreeBTreeArrayTemplate {
 
             int[] nums = new int[n + 1];
 
-            LazySegment seg = new LazySegment(n, n << 2, initial, operation);
+            LazySegment seg = new LazySegment(n, initial, operation);
 
             for (int i = 1; i <= n; i++) {
                 boolean isNeg = Math.random() > 0.5;

@@ -145,33 +145,35 @@ public class LazySegmentTemplate {
         }
 
         // 线段树二分 查询第一个
-        public int findFirst(int val, int l, int r, int i) {
+        public int findFirst(int L, int x, int l, int r, int i) {
+            if (info[i].val < x)
+                return -1;
             if (l == r) {
-                return info[i].val >= val ? l : -1;
+                return l;
             }
             int mid = l + ((r - l) >> 1);
-            if (query(l, mid, l, mid, i << 1) >= val) {
-                return findFirst(val, l, mid, i << 1);
+            if (L <= mid) {
+                int p = findFirst(L, x, l, mid, i << 1);
+                if (p >= 0)
+                    return p;
             }
-            if (query(mid + 1, r, mid + 1, r, i << 1 | 1) >= val) {
-                return findFirst(val, mid + 1, r, i << 1 | 1);
-            }
-            return -1;
+            return findFirst(L, x, mid + 1, r, i << 1 | 1);
         }
 
         // 线段树二分 查询最后一个
-        public int findLast(int val, int l, int r, int i) {
+        public int findLast(int L, int x, int l, int r, int i) {
+            if (info[i].val < x)
+                return -1;
             if (l == r) {
-                return info[i].val >= val ? l : -1;
+                return l;
             }
             int mid = l + ((r - l) >> 1);
-            if (query(mid + 1, r, mid + 1, r, i << 1 | 1) >= val) {
-                return findLast(val, mid + 1, r, i << 1 | 1);
+            if (L >= mid) {
+                int p = findLast(L, x, mid + 1, r, i << 1 | 1);
+                if (p >= 0)
+                    return p;
             }
-            if (query(l, mid, l, mid, i << 1) >= val) {
-                return findLast(val, l, mid, i << 1);
-            }
-            return -1;
+            return findLast(L, x, l, mid, i << 1);
         }
 
     }
