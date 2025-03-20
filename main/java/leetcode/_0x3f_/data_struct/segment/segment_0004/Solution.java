@@ -58,8 +58,8 @@ public class Solution {
 
 
     /**
-     * 不使用板子
-     * @link <a href="https://leetcode.cn/problems/booking-concert-tickets-in-groups/submissions/613346529/>sublimit</a>
+     * @link <a href="https://leetcode.cn/problems/booking-concert-tickets-in-groups/submissions/613366603/>使用板子</a>
+     * @link <a href="https://leetcode.cn/problems/booking-concert-tickets-in-groups/submissions/613346529/>不使用板子</a>
      */
     public static class BookMyShow {
         int n, m, max[], a[];
