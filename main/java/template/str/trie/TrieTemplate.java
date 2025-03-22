@@ -1,6 +1,7 @@
 package template.str.trie;
 
 /**
+ * <a href="https://leetcode.cn/problems/longest-common-prefix-of-k-strings-after-removal/">删除元素后 K 个字符串的最长公共前缀</a>
  * @author: wuxin0011
  * @Description: 字典树
  */
@@ -22,15 +23,15 @@ public class TrieTemplate {
         }
     }
 
-    static void insert(Trie root, char[] s) {
+    static void insert(Trie root, int cnt,char[] s) {
         Trie cur = root;
         for (char c : s) {
             int idx = c - 'a';
             if (cur.next[idx] == null) {
                 cur.next[idx] = new Trie();
             }
-            cur.path++;
             cur = cur.next[idx];
+            cur.path += cnt;
         }
         cur.isEnd = true;
     }

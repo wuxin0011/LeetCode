@@ -1,8 +1,6 @@
 package leetcode.contest.weekly.w_400.w_440;
 
 import code_generation.utils.IoUtil;
-import code_generation.annotation.TestCaseGroup;
-import java.util.*;
 /**
  * @author: agitated-curranfnd
  * @Description:
@@ -22,7 +20,7 @@ public class C {
         build(1, n, 1, baskets);
         int ans = 0;
         for (int x : fruits) {
-            int id = find(x, 1, n, 1);
+            int id = find(1,x, 1, n, 1);
             if (id == -1) ans++;
             else update(id, id, -1, 1, n, 1);
         }
@@ -68,13 +66,24 @@ public class C {
         }
     }
 
-    private static int find(int val, int l, int r, int i) {
-        if (l > r) return -1;
-        if (l == r) return data[i] >= val ? l : -1;
+//    private static int find(int val, int l, int r, int i) {
+//        if (l > r) return -1;
+//        if (l == r) return data[i] >= val ? l : -1;
+//        int mid = l + ((r - l) >> 1);
+//        if (query(l, mid, l, mid, i << 1) >= val) return find(val, l, mid, i << 1);
+//        if (query(mid + 1, r, mid + 1, r, i << 1 | 1) >= val) return find(val, mid + 1, r, i << 1 | 1);
+//        return -1;
+//    }
+
+    private static int find(int L,int val, int l, int r, int i) {
+        if(data[i] < val || l > r) return -1;
+        if(l == r) return l;
         int mid = l + ((r - l) >> 1);
-        if (query(l, mid, l, mid, i << 1) >= val) return find(val, l, mid, i << 1);
-        if (query(mid + 1, r, mid + 1, r, i << 1 | 1) >= val) return find(val, mid + 1, r, i << 1 | 1);
-        return -1;
+        if(L<=mid) {
+            int p = find(L,val,l,mid,i << 1);
+            if(p >= 0) return p;
+        }
+        return find(L,val,mid + 1,r,i << 1 | 1);
     }
 
 
