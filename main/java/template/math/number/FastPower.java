@@ -76,12 +76,12 @@ public class FastPower {
          * @return x ^ n
          */
         public static long pow(int x, int n, int mod) {
+            // 参数不要传反了！！！
             boolean isNeg = n < 0;
             if (isNeg) n = -n;
             long res = 1;
             long v = x;
             while (n > 0) {
-                // 当前位数有1
                 if ((n & 1) == 1) {
                     res = res * v % mod;
                 }

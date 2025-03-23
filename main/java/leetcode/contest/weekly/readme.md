@@ -1,3 +1,15 @@
+## 🏆 第 442 场周赛
+- [x] [船上可以装载的最大集装箱数量](https://leetcode.cn/contest/weekly-contest-442/problems/maximum-containers-on-a-ship)
+ [🎈代码](w_400/w_442/A.java)
+- [x] [属性图](https://leetcode.cn/contest/weekly-contest-442/problems/properties-graph)
+ [🎈代码](w_400/w_442/B.java) `并查集` `bfs` `dfs`
+- [x] [酿造药水需要的最少总时间](https://leetcode.cn/contest/weekly-contest-442/problems/find-the-minimum-amount-of-time-to-brew-potions)
+ [🎈代码](w_400/w_442/C.java) `审题` `前后遍历`
+- [x] [使数组元素都变为零的最少操作次数](https://leetcode.cn/contest/weekly-contest-442/problems/minimum-operations-to-make-array-elements-zero)
+ [🎈代码](w_400/w_442/D.java) `数学` `预处理` `找规律`
+
+
+
 
 ## 🏆 第 441 场周赛
 - [x] [删除后的最大子数组元素和](https://leetcode.cn/contest/weekly-contest-441/problems/maximum-unique-subarray-sum-after-deletion) [🎈代码](w_400/w_441/A.java) `脑筋急转弯`
