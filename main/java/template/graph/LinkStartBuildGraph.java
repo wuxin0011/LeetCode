@@ -31,7 +31,7 @@ public class LinkStartBuildGraph {
                 int x = q[l++];
                 ans[i++] = x;
                 numCourses--;
-                for (int e = head[x]; e >= 0; e = edges[e].next) {
+                for (int e = head[x]; e >= 0; e = edges[e].nxt) {
                     int v = edges[e].to;
                     in[v]--;
                     if (in[v] == 0) {
@@ -45,7 +45,7 @@ public class LinkStartBuildGraph {
 
     // =====================================链式前向星建图开始
 
-    private static final int MAXN = (int) 1e3 + 1;
+    private static final int MAXN = (int) 1e3 + 1,NOT_EXIST_FLAG = -1;
     private static final int EDGE_MAXN = (int) 1e4 + 1;
 
 
@@ -56,7 +56,7 @@ public class LinkStartBuildGraph {
     private static void clear(int n) {
         for (int i = 0; i <= n; i++) {
             in[i] = 0;
-            head[i] = -1;
+            head[i] = NOT_EXIST_FLAG;
         }
         cnt = 0;
         l = r = 0;
@@ -72,7 +72,7 @@ public class LinkStartBuildGraph {
     }
 
     private static class Edge {
-        int w, next, to;
+        int w, nxt, to;
 
         Edge() {
         }
@@ -81,8 +81,8 @@ public class LinkStartBuildGraph {
             this.update(next, to, w);
         }
 
-        void update(int next, int to, int w) {
-            this.next = next;
+        void update(int nxt, int to, int w) {
+            this.nxt = nxt;
             this.to = to;
             this.w = w;
         }
