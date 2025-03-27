@@ -13,12 +13,16 @@ import java.util.List;
  */
 public class LCA_Template {
 
+// lca 模板开始===================================================
 
-    static class TreeAncestor {
+    /**
+     * 使用方法 1、初始化 2、建图 3、调用dfs
+     */
+    static class Lca {
         int deep[], st[][], power, n;
         List<Integer>[] g;
 
-        public void pre(int n) {
+        public void init(int n) {
             this.n = n;
             deep = new int[n];
             g = new List[n];
@@ -31,48 +35,21 @@ public class LCA_Template {
             g[u].add(v);
         }
 
-        public TreeAncestor(int n, int[] parent) {
-            this.pre(n);
-            if (parent != null) {
-                for (int i = 1; i < n; i++) {
-                    addEdge(parent[i], i);
-                }
-                dfs(0, 0);
-            }
-        }
 
-        public TreeAncestor(int n, int[][] edges) {
-            pre(n);
-            if (edges != null) {
-                for (int[] e : edges) {
-                    addEdge(e[0], e[1]);
-//                addEdge(e[1],e[0]);
-                }
-                dfs(0, 0);
-            }
-        }
-
-        public void dfs(int u, int fa) {
-            deep[u] = (u != 0 ? deep[fa] : 0) + 1;
+        public void dfs(int u, int fa, int height) {
+            deep[u] = height + 1;
             st[u][0] = fa;
-            for (int p = 1; (1 << p) <= deep[u]; p++) {
+            for (int p = 1; p <= power; p++) {
                 st[u][p] = st[st[u][p - 1]][p - 1];
             }
             for (int v : g[u]) {
                 if (v != u && v != fa) {
-                    dfs(v, u);
+                    dfs(v, u, height + 1);
                 }
             }
         }
 
-        /**
-         * 求点 i 往上跳K步 的节点
-         *
-         * @param i 当前节点
-         * @param k step
-         * @return x
-         */
-        public int getKthAncestor(int i, int k) {
+        public int kth(int i, int k) {
             if (deep[i] <= k)
                 return -1;
             int high = deep[i] - k;
@@ -86,35 +63,142 @@ public class LCA_Template {
 
         /**
          * 求 点 a，b 最低公共祖先
-         *
-         * @param a 点a
-         * @param b 点b
-         * @return lca
          */
         public int lca(int a, int b) {
-            if (a == b) return a;
-            if (deep[b] > deep[a]) {
-                int temp = a;
+            if (deep[a] < deep[b]) {
+                int tmp = a;
                 a = b;
-                b = temp;
+                b = tmp;
             }
             for (int p = power; p >= 0; p--) {
-                // 处理完毕 ab处于同一高度
-                if (deep[st[a][p]] >= deep[st[b][p]]) {
+                if (deep[st[a][p]] >= deep[b]) {
                     a = st[a][p];
                 }
             }
-            if (a == b) return a;
+            if (a == b) {
+                return a;
+            }
             for (int p = power; p >= 0; p--) {
                 if (st[a][p] != st[b][p]) {
                     a = st[a][p];
                     b = st[b][p];
                 }
             }
-            // 返回a的父节点
             return st[a][0];
         }
     }
+
+    // lca 模板结束===================================================
+
+
+    // lca 模板开始===================================================
+
+
+    /**
+     * 链式前向星建图
+     * <p>
+     * 使用方法 1、初始化 2、建图 3、调用dfs
+     */
+    static class Lca_2 {
+
+        static int REMOVE_FLAG = 10,NOT_EXIST_FLAG = -1;
+        int deep[], st[][], power, n, nxt[], to[], head[], cnt;
+
+        // n 表示点数
+        // m 表示边的数量
+        public void init(int n, int m) {
+            this.n = n;
+            deep = new int[n + REMOVE_FLAG];
+            nxt = new int[m + REMOVE_FLAG];
+            to = new int[m + REMOVE_FLAG];
+            head = new int[n + REMOVE_FLAG];
+            Arrays.fill(head, NOT_EXIST_FLAG);
+            power = (int) (Math.floor(Math.log(n) / Math.log(2)));
+            st = new int[n][power + 1];
+            cnt = 0;
+        }
+
+        public void clear(int n) {
+            cnt = 0;
+            for (int i = 0; i < n; i++) {
+                head[i] = NOT_EXIST_FLAG;
+                deep[i] = 0;
+            }
+        }
+
+        public void addEdge(int u, int v) {
+            nxt[cnt] = head[u];
+            to[cnt] = v;
+            head[u] = cnt;
+            cnt++;
+        }
+
+
+        // dfs(0,0,1)
+        public void dfs(int u, int fa, int height) {
+            deep[u] = height;
+            st[u][0] = fa;
+            for (int p = 1; p <= power; p++) {
+                st[u][p] = st[st[u][p - 1]][p - 1];
+            }
+            for (int e = head[u]; e != NOT_EXIST_FLAG; e = nxt[e]) {
+                int v = to[e];
+                if (v != u && v != fa) {
+                    dfs(v, u, height + 1);
+                }
+            }
+        }
+
+        public int kth(int i, int k) {
+            if (deep[i] <= k)
+                return -1;
+            int high = deep[i] - k;
+            for (int p = power; p >= 0; p--) {
+                if (deep[st[i][p]] >= high) {
+                    i = st[i][p];
+                }
+            }
+            return i;
+        }
+
+        public int lca(int a, int b) {
+            if (deep[a] < deep[b]) {
+                int tmp = a;
+                a = b;
+                b = tmp;
+            }
+            for (int p = power; p >= 0; p--) {
+                if (deep[st[a][p]] >= deep[b]) {
+                    a = st[a][p];
+                }
+            }
+            if (a == b) {
+                return a;
+            }
+            for (int p = power; p >= 0; p--) {
+                if (st[a][p] != st[b][p]) {
+                    a = st[a][p];
+                    b = st[b][p];
+                }
+            }
+            return st[a][0];
+        }
+    }
+
+
+    // lca 模板结束======================================================
+
+    // example
+    //    static Lca_2 lca = new Lca_2();
+    //    static int N = (int)6e4;
+    //    static {
+    //        lca.init(N,N);
+    //    }
+    //    void run_method(int n,int[][] edges){
+    //        lca.clear(n);
+    //        for(int[] e : edges) lca.addEdge(e[0],e[1]);
+    //        lca.dfs(0,0,1);
+    //    }
 
 
 }
