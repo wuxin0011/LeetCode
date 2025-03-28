@@ -171,9 +171,11 @@ public class LCA_Tarjan_Template {
             Targin lca = new Targin(n,m);
             for (int i = 0, u = 0, v = 0; i < n; i++) {
                 lca.addEdge(u, v);
+                // 无向图
                 lca.addEdge(v, u);
             }
             for (int i = 0, u = 0, v = 0; i < m; i++) {
+                // 必须双向建立查询
                 lca.addQuery(u, v, i);
                 lca.addQuery(v, u, i);
             }
