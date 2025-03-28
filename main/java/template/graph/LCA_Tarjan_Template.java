@@ -60,7 +60,7 @@ public class LCA_Tarjan_Template {
             for (int e = head[u], v = -1; e != NOT_EXIST_FLAG; e = nxt[e]) {
                 v = to[e];
                 if (!vis[v]) {
-                    targin(to[e]);
+                    targin(v);
                     fa[v] = u;
                 }
             }
