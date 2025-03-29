@@ -6,7 +6,7 @@ import java.util.List;
 
 /**
  * <a href="https://leetcode.cn/problems/kth-ancestor-of-a-tree-node/">树节点的第 K 个祖先</a>
- * <a href="https://leetcode.cn/problems/minimum-edge-weight-equilibrium-queries-in-a-tree//">边权重均等查询</a>
+ * <a href="https://leetcode.cn/problems/minimum-edge-weight-equilibrium-queries-in-a-tree//">边权重均等查询</a> 如果题目权重很大 但是类型不多，可以用 list(set) 保存遍历
  *
  * @author: wuxin0011
  * @Description: 树上倍增 最低公共祖先 复杂度 nmlog(m)
@@ -21,9 +21,10 @@ public class LCA_ST_Template {
 
 
         // lca 模板开始===================================================
+        @SuppressWarnings("all")
         static class LCA {
             int h[], st[][], power, n;
-            List<Integer>[] g;
+            List<int[]>[] g;
 
             public LCA(int n) {
                 this.n = n;
@@ -34,8 +35,8 @@ public class LCA_ST_Template {
                 Arrays.setAll(g, i -> new ArrayList<>());
             }
 
-            public void addEdge(int u, int v) {
-                g[u].add(v);
+            public void addEdge(int u, int v,int w) {
+                g[u].add(new int[]{v,w});
             }
 
 
@@ -45,7 +46,8 @@ public class LCA_ST_Template {
                 for (int p = 1; p <= power; p++) {
                     st[u][p] = st[st[u][p - 1]][p - 1];
                 }
-                for (int v : g[u]) {
+                for (int[] e : g[u]) {
+                    int v = e[0],w = e[1];
                     if (v != u && v != fa) {
                         dfs(v, u, height + 1);
                     }
@@ -53,13 +55,10 @@ public class LCA_ST_Template {
             }
 
             public int kth(int i, int k) {
-                if (h[i] <= k)
-                    return -1;
+                if (h[i] <= k) return -1;
                 int high = h[i] - k;
                 for (int p = power; p >= 0; p--) {
-                    if (h[st[i][p]] >= high) {
-                        i = st[i][p];
-                    }
+                    if (h[st[i][p]] >= high) i = st[i][p];
                 }
                 return i;
             }
@@ -74,13 +73,9 @@ public class LCA_ST_Template {
                     b = tmp;
                 }
                 for (int p = power; p >= 0; p--) {
-                    if (h[st[a][p]] >= h[b]) {
-                        a = st[a][p];
-                    }
+                    if (h[st[a][p]] >= h[b]) a = st[a][p];
                 }
-                if (a == b) {
-                    return a;
-                }
+                if (a == b) return a;
                 for (int p = power; p >= 0; p--) {
                     if (st[a][p] != st[b][p]) {
                         a = st[a][p];
@@ -88,6 +83,10 @@ public class LCA_ST_Template {
                     }
                 }
                 return st[a][0];
+            }
+
+            public int getDis(int x,int y,int lcaXY) {
+                return h[x] + h[y] - 2 * h[lcaXY];
             }
         }
 
@@ -100,7 +99,7 @@ public class LCA_ST_Template {
             LCA lca = new LCA(n);
             for(int[] e : edges){
                 int u = e[0],v = e[1];
-                lca.addEdge(u,v);
+                lca.addEdge(u,v,0);
             }
             lca.dfs(0,0,1);
             for(int[] q : queries ) {
@@ -123,9 +122,11 @@ public class LCA_ST_Template {
 
 
         // lca 模板开始===================================================
+
+        @SuppressWarnings("all")
         static class LCA {
             static int ADD_FLAG = 20, NOT_EXIST_FLAG = -1;
-            int h[], st[][], power, n, m, nxt[], to[], head[], cnt;
+            int h[], st[][], power, n, m, nxt[], to[], head[],weight[], cnt;
 
             // n 表示点数
             // m 表示边数
@@ -135,6 +136,7 @@ public class LCA_ST_Template {
                 h = new int[n + ADD_FLAG];
                 nxt = new int[m + ADD_FLAG];
                 to = new int[m + ADD_FLAG];
+                weight = new int[m + ADD_FLAG];
                 head = new int[n + ADD_FLAG];
                 power = (int) (Math.floor(Math.log(n) / Math.log(2)));
                 st = new int[n][power + 1];
@@ -150,9 +152,10 @@ public class LCA_ST_Template {
                 }
             }
 
-            public void addEdge(int u, int v) {
+            public void addEdge(int u, int v,int w) {
                 nxt[cnt] = head[u];
                 to[cnt] = v;
+                weight[cnt] = w;
                 head[u] = cnt;
                 cnt++;
             }
@@ -169,7 +172,7 @@ public class LCA_ST_Template {
                     st[u][p] = st[st[u][p - 1]][p - 1];
                 }
                 for (int e = head[u]; e != NOT_EXIST_FLAG; e = nxt[e]) {
-                    int v = to[e];
+                    int v = to[e],w = weight[e];
                     if (v != u && v != fa) {
                         dfs(v, u, d + 1);
                     }
@@ -205,24 +208,34 @@ public class LCA_ST_Template {
                 }
                 return st[a][0];
             }
+
+            public int getDis(int x,int y,int lcaXY) {
+                return h[x] + h[y] - 2 * h[lcaXY];
+            }
         }
 
         // lca 模板结束======================================================
 
 
         // example
-        static int N = (int) 6e4;
-        static LCA lca = new LCA(N,N<<1);
 
 
         void example_test(int n, int[][] edges) {
+            int N = (int)1e5;
+            LCA lca = new LCA(N,N<<1);
+            // 必须调用步骤
             // 1 如果是静态需要clear
             lca.clear(n);
             // 2 建图
-            for (int[] e : edges) lca.addEdge(e[0], e[1]);
+            for (int[] e : edges) lca.addEdge(e[0], e[1],e[2]);
             // 3 dfs
             lca.dfs(0, 0, 1);
-            // 4 查询
+
+            //  根据题意修改
+            // a 查询
+            System.out.println(lca.lca(0,1));
+            // b、求两点距离
+            System.out.println("dis = " + (lca.getDis(0,1,lca.lca(0,1))));
         }
 
     }
