@@ -4,4 +4,7 @@
 - [单源最短路径_Dijkstra](./Dijkstra.java) 
 - [最小生成树_Kruskal](./Kruskal.java) 
 - [最小生成树_Prim](./Prim.java) 
-- [01BFS_A星](./AStar.java) 
+- [01BFS_A星](./AStar.java)
+- [LCA-倍增法](./LCA_ST_Template.java) 
+- [LCA-Tarjan](./LCA_Tarjan_Template.java) 
+- [树的重心](./GraphCenter.java) 

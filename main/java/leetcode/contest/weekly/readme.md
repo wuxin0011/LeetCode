@@ -1,3 +1,15 @@
+## 🏆 第 443 场周赛
+- [ ] [到达每个位置的最小费用](https://leetcode.cn/contest/weekly-contest-443/problems/minimum-cost-to-reach-every-position)
+ [🎈代码](w_400/w_443/A.java)
+- [ ] [子字符串连接后的最长回文串 I](https://leetcode.cn/contest/weekly-contest-443/problems/longest-palindrome-after-substring-concatenation-i)
+ [🎈代码](w_400/w_443/B.java)
+- [ ] [子字符串连接后的最长回文串 II](https://leetcode.cn/contest/weekly-contest-443/problems/longest-palindrome-after-substring-concatenation-ii)
+ [🎈代码](w_400/w_443/C.java)
+- [ ] [使 K 个子数组内元素相等的最少操作数](https://leetcode.cn/contest/weekly-contest-443/problems/minimum-operations-to-make-elements-within-k-subarrays-equal)
+ [🎈代码](w_400/w_443/D.java)
+
+
+
 ## 🏆 第 442 场周赛
 - [x] [船上可以装载的最大集装箱数量](https://leetcode.cn/contest/weekly-contest-442/problems/maximum-containers-on-a-ship)
  [🎈代码](w_400/w_442/A.java)
