@@ -23,7 +23,8 @@ public class LCA_ST_Template {
         // lca 模板开始===================================================
         @SuppressWarnings("all")
         static class LCA {
-            int h[], st[][], power, n;
+            static int ADD_FLAG = 10;// 偏移量
+            int h[], st[][], power, n, point[];
             List<int[]>[] g;
 
             public LCA(int n) {
@@ -38,6 +39,12 @@ public class LCA_ST_Template {
             public void addEdge(int u, int v,int w) {
                 g[u].add(new int[]{v,w});
             }
+
+            // 无向图的带边权的更新需要使用这种方式
+//            public void addEdge(int u, int v,int w) {
+//                g[u].add(new int[]{v, w, g[v].size()});
+//                g[v].add(new int[]{u, w, g[u].size() - 1});
+//            }
 
 
             public void dfs(int u, int fa, int height) {
@@ -85,9 +92,66 @@ public class LCA_ST_Template {
                 return st[a][0];
             }
 
-            public int getDis(int x,int y,int lcaXY) {
+            public int getDis(int x, int y, int lcaXY) {
                 return h[x] + h[y] - 2 * h[lcaXY];
             }
+
+
+            // 点差分部分 u += w v += w lca -= w lcalca-= w
+            public void pointDiff(int u, int v, int w) {
+                if (point == null) point = new int[n + ADD_FLAG];
+                if (u == v) {
+                    point[u] += w;
+                    return;
+                }
+                point[u] += w;
+                point[v] += w;
+                int uvLca = lca(u, v);
+                if (uvLca != -1) {
+                    point[uvLca] -= w;
+                    if (st[uvLca][0] != -1) {
+                        point[st[uvLca][0]] -= w;
+                    }
+                }
+            }
+
+            public void pointDiffDfs(int u, int f) {
+                for (int[] e : g[u]) {
+                    int v = e[0], w = e[1];
+                    if (v != u && v != f) {
+                        pointDiffDfs(v, u);
+                        if (v != u && v != f) {
+                            point[u] += point[v];
+                        }
+                    }
+                }
+            }
+
+
+            public void edgeDiff(int u, int v, int w) {
+                if (u == v) return;
+                if (point == null) point = new int[n + ADD_FLAG];
+                point[u] += w;
+                point[v] += w;
+                int uvLca = lca(u, v);
+                if (uvLca != -1) {
+                    point[uvLca] -= w * 2;
+                }
+            }
+
+            public void edgeDiffDFS(int u, int f) {
+                for (int[] e : g[u]) {
+                    int v = e[0], w = e[1];
+                    if (v != u && v != f) {
+                        edgeDiffDFS(v, u);
+                        point[u] += point[v];
+                        e[1] += point[v];
+                        // 如果是无向图需要关闭下面注释 同时上面addEdge方法需要附带索引
+                        // g[v].get(e[2])[1] += point[v]; // 同步更新v→u的边权
+                    }
+                }
+            }
+
         }
 
         // lca 模板结束===================================================
@@ -126,7 +190,7 @@ public class LCA_ST_Template {
         @SuppressWarnings("all")
         static class LCA {
             static int ADD_FLAG = 20, NOT_EXIST_FLAG = -1;
-            int h[], st[][], power, n, m, nxt[], to[], head[],weight[], cnt;
+            int h[], st[][], power, n, m, nxt[], to[], head[], weight[], cnt, point[];
 
             // n 表示点数
             // m 表示边数
@@ -209,9 +273,76 @@ public class LCA_ST_Template {
                 return st[a][0];
             }
 
-            public int getDis(int x,int y,int lcaXY) {
+            public int getDis(int x, int y, int lcaXY) {
                 return h[x] + h[y] - 2 * h[lcaXY];
             }
+
+            // 点差分部分 u += w v += w lca -= w lcalca-= w
+            public void pointDiff(int u, int v, int w) {
+                if (point == null) point = new int[n + ADD_FLAG];
+                if (u == v) {
+                    point[u] += w;
+                    return;
+                }
+                point[u] += w;
+                point[v] += w;
+                int uvLca = lca(u, v);
+                if (uvLca != NOT_EXIST_FLAG) {
+                    point[uvLca] -= w;
+                    if (st[uvLca][0] != NOT_EXIST_FLAG) {
+                        point[st[uvLca][0]] -= w;
+                    }
+                }
+
+            }
+
+            public void pointDiffDfs(int u, int f) {
+                for (int e = head[u]; e != NOT_EXIST_FLAG; e = nxt[e]) {
+                    int v = to[e], w = weight[e];
+                    if (v != u && v != f) {
+                        pointDiffDfs(v, u);
+                        point[u] += point[v];
+                    }
+                }
+            }
+
+
+            // 边差分 边差分通过点来更新
+
+            // 添加过程
+            // point[u] += w
+            // point[v] += w
+            // point[uvlca] -= w * 2
+
+            // 更新过程
+            // point[u] += point[v]
+            // weithg[uv] += point[v]
+            public void edgeDiff(int u, int v, int w) {
+                if (u == v) return;
+                if (point == null) point = new int[n + ADD_FLAG];
+                point[u] += w;
+                point[v] += w;
+                int uvLca = lca(u, v);
+                if (uvLca != NOT_EXIST_FLAG) {
+                    point[uvLca] -= w * 2;
+                }
+
+            }
+
+            public void edgeDiffDFS(int u, int f) {
+                for (int e = head[u]; e != NOT_EXIST_FLAG; e = nxt[e]) {
+                    int v = to[e], w = weight[e];
+                    if (v != u && v != f) {
+                        edgeDiffDFS(v, u);
+                        // 更新点权
+                        point[u] += point[v];
+                        // 更新边权
+                        weight[e] += point[v];
+                    }
+                }
+            }
+
+
         }
 
         // lca 模板结束======================================================
