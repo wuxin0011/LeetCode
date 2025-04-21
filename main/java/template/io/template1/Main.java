@@ -1,4 +1,4 @@
-package template.acm.template1;
+package template.io.template1;
 
 /**
  * @author: wuxin0011

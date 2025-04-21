@@ -1,11 +1,10 @@
-package template.acm.template;
+package template.io.template;
 
 /**
  * @author: wuxin0011
  * @Description:
  */
 import java.io.*;
-import java.util.*;
 
 
 /**

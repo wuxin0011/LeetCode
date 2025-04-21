@@ -2,7 +2,7 @@ package template.array.lis;
 
 /**
  * @author: wuxin0011
- * @Description: 最长递增子序列 (贪心 + 二分）
+ * @Description: 最长递增子序列 (贪心 + 二分）亦可以用线段树解决(如果数值过大可以用线段树离散化解决)
  */
 @SuppressWarnings("warning")
 public class LIS {

@@ -1,4 +1,4 @@
-package template.acm.array;
+package template.io.array;
 
 /**
  * @author: wuxin0011

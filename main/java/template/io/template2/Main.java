@@ -1,4 +1,4 @@
-package template.acm.template2;
+package template.io.template2;
 
 /**
  * @author: wuxin0011
@@ -6,7 +6,6 @@ package template.acm.template2;
  */
 
 import java.io.*;
-import java.util.*;
 
 public class Main {
 
