@@ -44,8 +44,8 @@ public class FenwickTemplate4_diff {
         private static void add(int l, int r, int k, int d) {
             add(l, k);
             add(l + 1, d - k);
-            add(r + 1, -((r - l + 1) * d + k));
-            add(r + 2, d + (r - l) * d);
+            add(r + 1, -((r - l + 1) *1L * d + k));
+            add(r + 2, d + (r - l) *1L * d);
         }
 
         private static long query(int x) {
