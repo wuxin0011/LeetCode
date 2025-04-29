@@ -1,4 +1,4 @@
-package template.bitset;
+package template.bit;
 
 /**
  * @author: wuxin0011

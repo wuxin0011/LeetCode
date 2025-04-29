@@ -1,5 +1,10 @@
 
-# template
+## 快读
 
-[Java Io template](./)
-[c++ 和 C 参考](https://oi-wiki.org/contest/io/)
+- [Java Io template](./io/template)
+
+
+## 模板参考
+
+- [go 模板](https://github.com/EndlessCheng/codeforces-go)
+- [py 模板](https://github.com/liupengsay/PyIsTheBestLang/)

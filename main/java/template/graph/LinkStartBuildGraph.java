@@ -89,4 +89,54 @@ public class LinkStartBuildGraph {
     }
 
     // =====================================链式前向星建图结束
+
+
+
+
+
+    // 不使用结构体方式更加节省空间
+    static class template_1 {
+
+        // =========================================链式向前星建图模板开始=================================
+        private static int N = (int) 1e5 + 100, NOT_EXIST_FLAG = -1;
+        private static int M = N << 1; // 无向图
+        private static int head[] = new int[N], nxt[] = new int[M], to[] = new int[M],weight[] = new int[M], cnt;
+
+
+        public static void clear(int n) {
+            for (int i = 0; i <= n + 10; i++) {
+                head[i] = NOT_EXIST_FLAG;
+            }
+            cnt=0;
+        }
+        public static void addEdge(int u, int v,int w) {
+            nxt[cnt] = head[u];
+            to[cnt] = v;
+            weight[cnt] = w;
+            head[u] = cnt++;
+        }
+
+
+        // =========================================模板结束=================================
+
+        public static void example() {
+            int n = 1000, m = 1000;
+            clear(n);
+            for (int i = 0, u = 0, v = 0; i < n; i++) {
+                addEdge(u, v,0);
+                addEdge(v, u,0);
+            }
+
+            // 遍历
+            int u = 0;
+
+            //
+            for (int e = head[u], v = -1,w = 0; e != NOT_EXIST_FLAG; e = nxt[e]) {
+                v = to[e];
+                w = weight[e];
+            }
+
+        }
+    }
+
 }

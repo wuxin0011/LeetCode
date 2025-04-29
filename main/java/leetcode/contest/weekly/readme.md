@@ -1,3 +1,15 @@
+## 🏆 第 447 场周赛
+- [x] [统计被覆盖的建筑](https://leetcode.cn/contest/weekly-contest-447/problems/count-covered-buildings)
+ [🎈代码](w_400/w_447/A.java) `二次统计`
+- [x] [针对图的路径存在性查询 I](https://leetcode.cn/contest/weekly-contest-447/problems/path-existence-queries-in-a-graph-i)
+ [🎈代码](w_400/w_447/B.java) `并查集`
+- [x] [判断连接可整除性](https://leetcode.cn/contest/weekly-contest-447/problems/concatenated-divisibility)
+ [🎈代码](w_400/w_447/C.java) `状压dp` `贪心` `字典序`
+- [x] [针对图的路径存在性查询 II](https://leetcode.cn/contest/weekly-contest-447/problems/path-existence-queries-in-a-graph-ii)
+ [🎈代码](w_400/w_447/D.java) `并查集` `倍增`
+
+
+
 ## 🏆 第 443 场周赛
 - [ ] [到达每个位置的最小费用](https://leetcode.cn/contest/weekly-contest-443/problems/minimum-cost-to-reach-every-position)
  [🎈代码](w_400/w_443/A.java)
