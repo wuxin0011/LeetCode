@@ -1,12 +1,12 @@
 ## 🏆 第 155 场双周赛
-- [ ] [找到最常见的回答](https://leetcode.cn/contest/biweekly-contest-155/problems/find-the-most-common-response)
- [🎈代码](bi_100/bi_155/A.java)
-- [ ] [单位转换 I](https://leetcode.cn/contest/biweekly-contest-155/problems/unit-conversion-i)
- [🎈代码](bi_100/bi_155/B.java)
-- [ ] [统计水平子串和垂直子串重叠格子的数目](https://leetcode.cn/contest/biweekly-contest-155/problems/count-cells-in-overlapping-horizontal-and-vertical-substrings)
- [🎈代码](bi_100/bi_155/C.java)
-- [ ] [有向无环图中合法拓扑排序的最大利润](https://leetcode.cn/contest/biweekly-contest-155/problems/maximum-profit-from-valid-topological-order-in-dag)
- [🎈代码](bi_100/bi_155/D.java)
+- [x] [找到最常见的回答](https://leetcode.cn/contest/biweekly-contest-155/problems/find-the-most-common-response)
+ [🎈代码](bi_100/bi_155/A.java) `前缀树`
+- [x] [单位转换 I](https://leetcode.cn/contest/biweekly-contest-155/problems/unit-conversion-i)
+ [🎈代码](bi_100/bi_155/B.java) `图` `BFS` `DFS`
+- [x] [统计水平子串和垂直子串重叠格子的数目](https://leetcode.cn/contest/biweekly-contest-155/problems/count-cells-in-overlapping-horizontal-and-vertical-substrings)
+ [🎈代码](bi_100/bi_155/C.java) `KMP` `下标转换`
+- [x] [有向无环图中合法拓扑排序的最大利润](https://leetcode.cn/contest/biweekly-contest-155/problems/maximum-profit-from-valid-topological-order-in-dag)
+ [🎈代码](bi_100/bi_155/D.java) `数位dp` `贪心`
 
 
 
