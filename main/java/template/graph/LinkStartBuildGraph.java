@@ -10,6 +10,10 @@ package template.graph;
  */
 public class LinkStartBuildGraph {
 
+
+
+
+    static class template_1 {
         // 模板
         // https://leetcode.cn/problems/course-schedule-ii/submissions/571351678/
         public int[] findOrder(int numCourses, int[][] prerequisites) {
@@ -43,59 +47,56 @@ public class LinkStartBuildGraph {
         }
 
 
-    // =====================================链式前向星建图开始
+        // =====================================链式前向星建图开始
 
-    private static final int MAXN = (int) 1e3 + 1,NOT_EXIST_FLAG = -1;
-    private static final int EDGE_MAXN = (int) 1e4 + 1;
+        private static final int MAXN = (int) 1e5 + 10,NOT_EXIST_FLAG = -1;
+        private static final int EDGE_MAXN = (int) 1e5 + 10;
 
 
-    private static int[] in = new int[MAXN], q = new int[MAXN], head = new int[MAXN], empty = new int[]{};
-    private static int cnt, l, r;
-    private static Edge[] edges = new Edge[EDGE_MAXN];
+        private static int[] in = new int[MAXN], q = new int[MAXN], head = new int[MAXN], empty = new int[]{};
+        private static int cnt, l, r;
+        private static Edge[] edges = new Edge[EDGE_MAXN];
 
-    private static void clear(int n) {
-        for (int i = 0; i <= n; i++) {
-            in[i] = 0;
-            head[i] = NOT_EXIST_FLAG;
+        private static void clear(int n) {
+            for (int i = 0; i <= n; i++) {
+                in[i] = 0;
+                head[i] = NOT_EXIST_FLAG;
+            }
+            cnt = 0;
+            l = r = 0;
         }
-        cnt = 0;
-        l = r = 0;
+
+        private static void addEdge(int u, int v, int w) {
+            if (edges[cnt] == null) {
+                edges[cnt] = new Edge(head[u], v, w);
+            } else {
+                edges[cnt].update(head[u], v, w);
+            }
+            head[u] = cnt++;
+        }
+
+        private static class Edge {
+            int w, nxt, to;
+            Edge() {}
+            Edge(int next, int to, int w) {
+                this.update(next, to, w);
+            }
+            void update(int nxt, int to, int w) {
+                this.nxt = nxt;
+                this.to = to;
+                this.w = w;
+            }
+        }
+
+        // =====================================链式前向星建图结束
+
     }
-
-    private static void addEdge(int u, int v, int w) {
-        if (edges[cnt] == null) {
-            edges[cnt] = new Edge(head[u], v, w);
-        } else {
-            edges[cnt].update(head[u], v, w);
-        }
-        head[u] = cnt++;
-    }
-
-    private static class Edge {
-        int w, nxt, to;
-
-        Edge() {
-        }
-
-        Edge(int next, int to, int w) {
-            this.update(next, to, w);
-        }
-
-        void update(int nxt, int to, int w) {
-            this.nxt = nxt;
-            this.to = to;
-            this.w = w;
-        }
-    }
-
-    // =====================================链式前向星建图结束
-
 
 
 
 
     // 不使用结构体方式更加节省空间
-    static class template_1 {
+    static class template_2 {
 
         // =========================================链式向前星建图模板开始=================================
         private static int N = (int) 1e5 + 100, NOT_EXIST_FLAG = -1;
