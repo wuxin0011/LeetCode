@@ -1,8 +1,8 @@
-package template.math;
+package template.math.combine;
 
 /**
  * @author: wuxin0011
- * @Description: 组合数学
+ * @Description: 组合数学 逆元
  */
 public class Factorial {
     private final long[] f;
@@ -35,7 +35,7 @@ public class Factorial {
     }
 
     // 组合数
-    public long combi(int n, int m) {
+    public long comb(int n, int m) {
         if (n < m || m < 0 || n < 0) {
             return 0;
         }
@@ -52,7 +52,7 @@ public class Factorial {
 
     // 卡特兰数
     public long catalan(int n) {
-        return (combi(2 * n, n) - combi(2 * n, n - 1) + mod) % mod;
+        return (comb(2 * n, n) - comb(2 * n, n - 1) + mod) % mod;
     }
 
     // 逆元
@@ -62,14 +62,11 @@ public class Factorial {
 
     private long pow(long a, int n) {
         long res = 1L;
-        while (n > 0) {
-            if (n % 2 == 1) {
-                res *= a;
-                res %= mod;
+        for (; n > 0; n /= 2) {
+            if ((n % 2) == 1) {
+                res = res * a % mod;
             }
-            a *= a;
-            a %= mod;
-            n /= 2;
+            a = a * a % mod;
         }
         return res;
     }
