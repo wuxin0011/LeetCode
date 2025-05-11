@@ -1,3 +1,15 @@
+## 🏆 第 449 场周赛
+- [x] [不同字符数量最多为 K 时的最少删除数](https://leetcode.cn/contest/weekly-contest-449/problems/minimum-deletions-for-at-most-k-distinct-characters)
+ [🎈代码](w_400/w_449/A.java) `模拟`
+- [x] [等和矩阵分割 I](https://leetcode.cn/contest/weekly-contest-449/problems/equal-sum-grid-partition-i)
+ [🎈代码](w_400/w_449/B.java) `前缀和`
+- [ ] [图中边值的最大和](https://leetcode.cn/contest/weekly-contest-449/problems/maximum-sum-of-edge-values-in-a-graph)
+ [🎈代码](w_400/w_449/C.java)
+- [x] [等和矩阵分割 II](https://leetcode.cn/contest/weekly-contest-449/problems/equal-sum-grid-partition-ii)
+ [🎈代码](w_400/w_449/D.java) `贪心` `模拟`
+
+
+
 ## 🏆 第 447 场周赛
 - [x] [统计被覆盖的建筑](https://leetcode.cn/contest/weekly-contest-447/problems/count-covered-buildings)
  [🎈代码](w_400/w_447/A.java) `二次统计`

@@ -1,6 +1,14 @@
 package template.Fenwick;
 
 /**
+ *
+ *
+ *
+ * 二维树状数组的应用
+ *  参考文章 莫队解法 https://zhuanlan.zhihu.com/p/115243708
+ *  二维数组离线查询 区间[l,r] 不同数的个数 https://www.luogu.com.cn/article/a2ax37xe
+ *
+ *
  * @author: wuxin0011
  * @Description: 树状数组维持 二维差分、查询
  */
