@@ -27,10 +27,13 @@ public class LCA_ST_Template {
             int h[], st[][], power, n, point[];
             List<int[]>[] g;
 
+            long[] sums;
+
             public LCA(int n) {
                 this.n = n;
                 h = new int[n];
                 g = new List[n];
+                sums = new long[n];
                 power = (int) (Math.floor(Math.log(n) / Math.log(2)));
                 st = new int[n][power + 1];
                 Arrays.setAll(g, i -> new ArrayList<>());
@@ -56,11 +59,13 @@ public class LCA_ST_Template {
                 for (int[] e : g[u]) {
                     int v = e[0],w = e[1];
                     if (v != u && v != fa) {
+                        sums[v] = sums[u] + w;
                         dfs(v, u, height + 1);
                     }
                 }
             }
 
+            // 第i个节点往上k步的节点
             public int kth(int i, int k) {
                 if (h[i] <= k) return -1;
                 int high = h[i] - k;
@@ -74,6 +79,7 @@ public class LCA_ST_Template {
              * 求 点 a，b 最低公共祖先
              */
             public int lca(int a, int b) {
+                if (a == b) return a;
                 if (h[a] < h[b]) {
                     int tmp = a;
                     a = b;
@@ -92,10 +98,13 @@ public class LCA_ST_Template {
                 return st[a][0];
             }
 
-            public int getDis(int x, int y, int lcaXY) {
-                return h[x] + h[y] - 2 * h[lcaXY];
+            public int getDis(int x, int y) {
+                return h[x] + h[y] - 2 * h[lca(x,y)];
             }
 
+            public long getWegith(int x, int y) {
+                return sums[x] + sums[y] - 2 * sums[lca(x,y)];
+            }
 
             // 点差分部分 u += w v += w lca -= w lcalca-= w
             public void pointDiff(int u, int v, int w) {
@@ -191,6 +200,7 @@ public class LCA_ST_Template {
         static class LCA {
             static int ADD_FLAG = 20, NOT_EXIST_FLAG = -1;
             int h[], st[][], power, n, m, nxt[], to[], head[], weight[], cnt, point[];
+            long sums[];
 
             // n 表示点数
             // m 表示边数
@@ -201,6 +211,7 @@ public class LCA_ST_Template {
                 nxt = new int[m + ADD_FLAG];
                 to = new int[m + ADD_FLAG];
                 weight = new int[m + ADD_FLAG];
+                sums = new long[m + ADD_FLAG];
                 head = new int[n + ADD_FLAG];
                 power = (int) (Math.floor(Math.log(n) / Math.log(2)));
                 st = new int[n][power + 1];
@@ -217,11 +228,11 @@ public class LCA_ST_Template {
             }
 
             public void addEdge(int u, int v,int w) {
+                cnt++;
                 nxt[cnt] = head[u];
                 to[cnt] = v;
                 weight[cnt] = w;
                 head[u] = cnt;
-                cnt++;
             }
 
             // dfs(0,0,1)
@@ -235,14 +246,17 @@ public class LCA_ST_Template {
                 for (int p = 1; p <= power; p++) {
                     st[u][p] = st[st[u][p - 1]][p - 1];
                 }
-                for (int e = head[u]; e != NOT_EXIST_FLAG; e = nxt[e]) {
-                    int v = to[e],w = weight[e];
+                for (int e = head[u]; e > 0; e = nxt[e]) {
+                    int v = to[e], w = weight[e];
                     if (v != u && v != fa) {
+                        // 如果是带权边
+                        sums[v] = sums[u] + w;
                         dfs(v, u, d + 1);
                     }
                 }
             }
 
+            // 第i个节点往上k步的节点
             public int kth(int i, int k) {
                 if (h[i] <= k) return -1;
                 int high = h[i] - k;
@@ -253,6 +267,7 @@ public class LCA_ST_Template {
             }
 
             public int lca(int a, int b) {
+                if (a == b) return a;
                 if (h[a] < h[b]) {
                     int tmp = a;
                     a = b;
@@ -261,9 +276,7 @@ public class LCA_ST_Template {
                 for (int p = power; p >= 0; p--) {
                     if (h[st[a][p]] >= h[b]) a = st[a][p];
                 }
-                if (a == b) {
-                    return a;
-                }
+                if (a == b) return a;
                 for (int p = power; p >= 0; p--) {
                     if (st[a][p] != st[b][p]) {
                         a = st[a][p];
@@ -273,8 +286,14 @@ public class LCA_ST_Template {
                 return st[a][0];
             }
 
-            public int getDis(int x, int y, int lcaXY) {
-                return h[x] + h[y] - 2 * h[lcaXY];
+            // 两点距离
+            public int getDis(int x, int y) {
+                return h[x] + h[y] - 2 * h[lca(x, y)];
+            }
+
+            // 两点距离的权值
+            public long getWeight(int x, int y) {
+                return sums[x] + sums[y] - 2 * sums[lca(x, y)];
             }
 
             // 点差分部分 u += w v += w lca -= w lcalca-= w
@@ -358,15 +377,17 @@ public class LCA_ST_Template {
             // 1 如果是静态需要clear
             lca.clear(n);
             // 2 建图
-            for (int[] e : edges) lca.addEdge(e[0], e[1],e[2]);
+            for (int[] e : edges) lca.addEdge(e[0], e[1], e[2]);
             // 3 dfs
             lca.dfs(0, 0, 1);
 
             //  根据题意修改
             // a 查询
-            System.out.println(lca.lca(0,1));
+            System.out.println(lca.lca(0, 1));
             // b、求两点距离
-            System.out.println("dis = " + (lca.getDis(0,1,lca.lca(0,1))));
+            System.out.println("dis = " + (lca.getDis(0, 1)));
+            // c、求两点权值
+            System.out.println("dis = " + (lca.getWeight(0, 1)));
         }
 
     }
