@@ -1,11 +1,14 @@
 package template.graph;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
  * @author: wuxin0011
  * @Description: 建图
  */
+@SuppressWarnings("all")
 public class BuildEdge {
 
     // 测试链接 https://leetcode.cn/problems/second-minimum-time-to-reach-destination/submissions/571668490/
@@ -158,4 +161,65 @@ public class BuildEdge {
 //            g[v].add(new int[]{v,w});
 //        }
     }
+
+
+    /**
+     * 离散化建图
+     */
+
+    static class Lca_3 {
+
+
+        public static void example(int[][] edges, int[][] q) {
+            int[] a = rnq(edges);
+            LCA_ST_Template.Lca_2.LCA g = new LCA_ST_Template.Lca_2.LCA(100, 10000);
+            for (int[] edge : edges) {
+                int u = lower_bound(a, a.length, edge[0]), v = lower_bound(a, a.length, edge[1]), w = 0;
+                g.addEdge(u, v, w);
+                g.addEdge(v, u, w);
+            }
+
+            for (int i = 0; i < q.length; i++) {
+                int u = lower_bound(a, a.length, q[i][0]), v = lower_bound(a, a.length, q[i][1]);
+                System.out.printf("lca {%d %d} = %d\n", q[i][0], q[i][1], a[g.lca(u, v)]);
+            }
+
+        }
+
+
+        public static int[] rnq(int[][] edges) {
+            int n = edges.length + 1;
+            List<Integer> lt = new ArrayList<>();
+            for (int[] edge : edges) {
+                lt.add(edge[0]);
+                lt.add(edge[1]);
+            }
+
+            int[] a = new int[lt.size()];
+            for (int i = 0; i < lt.size(); i++) {
+                a[i] = lt.get(i);
+            }
+            Arrays.sort(a);
+            int size = 1;
+            for (int i = 0; i < a.length; i++) {
+                if (a[i] != a[size - 1]) {
+                    a[size++] = a[i];
+                }
+            }
+            return Arrays.copyOf(a, size);
+        }
+
+        public static int lower_bound(int[] a, int size, int x) {
+            int l = 0, r = size - 1;
+            while (l <= r) {
+                int mid = l + ((r - l) >> 1);
+                if (a[mid] >= x) r = mid - 1;
+                else l = mid + 1;
+            }
+            return l;
+        }
+
+    }
+
+
 }
