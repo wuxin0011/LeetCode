@@ -10,14 +10,18 @@ import java.util.List;
  *
  * @author: wuxin0011
  * @Description: 树上倍增 最低公共祖先 复杂度 nmlog(m)
+ * @see Lca_1 邻接矩阵建图求LCA
+ * @see Lca_2 链式前向星方式建图求LCA
+ * @see Lca_3 离散化技巧
  */
+@SuppressWarnings("all")
 public class LCA_ST_Template {
 
 
     /**
      * 使用方法 1、初始化 2、建图 3、调用dfs
      */
-    static class Lca_template1 {
+    static class Lca_1 {
 
 
         // lca 模板开始===================================================
@@ -392,8 +396,61 @@ public class LCA_ST_Template {
 
     }
 
+    // 如果点不符合[0,n] 需要采用离散化 但是点不能重复
+
+    static class Lca_3 {
 
 
+        public static void example(int[][] edges, int[][] q) {
+            int[] a = rnq(edges);
+            Lca_2.LCA g = new Lca_2.LCA(100, 10000);
+            for (int[] edge : edges) {
+                int u = lower_bound(a, a.length, edge[0]), v = lower_bound(a, a.length, edge[1]), w = 0;
+                g.addEdge(u, v, w);
+                g.addEdge(v, u, w);
+            }
+
+            for (int i = 0; i < q.length; i++) {
+                int u = lower_bound(a, a.length, q[i][0]), v = lower_bound(a, a.length, q[i][1]);
+                System.out.printf("lca {%d %d} = %d\n", q[i][0], q[i][1], a[g.lca(u, v)]);
+            }
+
+        }
+
+
+        public static int[] rnq(int[][] edges) {
+            int n = edges.length + 1;
+            List<Integer> lt = new ArrayList<>();
+            for (int[] edge : edges) {
+                lt.add(edge[0]);
+                lt.add(edge[1]);
+            }
+
+            int[] a = new int[lt.size()];
+            for (int i = 0; i < lt.size(); i++) {
+                a[i] = lt.get(i);
+            }
+            Arrays.sort(a);
+            int size = 1;
+            for (int i = 0; i < a.length; i++) {
+                if (a[i] != a[size - 1]) {
+                    a[size++] = a[i];
+                }
+            }
+            return Arrays.copyOf(a, size);
+        }
+
+        public static int lower_bound(int[] a, int size, int x) {
+            int l = 0, r = size - 1;
+            while (l <= r) {
+                int mid = l + ((r - l) >> 1);
+                if (a[mid] >= x) r = mid - 1;
+                else l = mid + 1;
+            }
+            return l;
+        }
+
+    }
 
 
 }
