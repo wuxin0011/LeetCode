@@ -1,4 +1,4 @@
-package template.SparseTable;
+package template.sparseTable;
 
 
 /**

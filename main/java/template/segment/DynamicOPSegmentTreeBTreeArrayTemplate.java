@@ -2,21 +2,22 @@ package template.segment;
 
 
 /*
-*
-*
-*    https://www.luogu.com.cn/record/197536628
-*
-*
-* 板子如何使用 ？ 参考连接
-* <a href="https://leetcode.cn/problems/booking-concert-tickets-in-groups/submissions/613366603/>使用板子 音乐会门票 维护最大值 区间和 ，使用线段树树二分</a>
-*/
+ *
+ *
+ *    https://www.luogu.com.cn/record/197536628
+ *
+ *
+ * 板子如何使用 ？ 参考连接
+ * <a href="https://leetcode.cn/problems/booking-concert-tickets-in-groups/submissions/613366603/>使用板子 音乐会门票 维护最大值 区间和 ，使用线段树树二分</a>
+ */
 
 
 /**
  * 动态开点线段树 数组版 维护更多信息
  * 注意：如果不想维护范围大小请使用二叉树版本的开点线段树
+ *
  * @see template.segment.DynamicOPSegmentTreeBTreeTemplate
- *  //
+ * //
  */
 public class DynamicOPSegmentTreeBTreeArrayTemplate {
 
@@ -66,7 +67,7 @@ public class DynamicOPSegmentTreeBTreeArrayTemplate {
             this.right = new int[n << 1];
             this.nodes = new Node[n << 2];
             // 如果不调用 build 需要初始化
-            // Arrays.setAll(nodes, i -> new Node(initial));
+//            Arrays.setAll(nodes, i -> new Node(initial));
             this.cnt = 1;
         }
 
