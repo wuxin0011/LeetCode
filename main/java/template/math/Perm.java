@@ -18,6 +18,11 @@ public class Perm {
      * isRepeat // 是否允许重复的排列
      */
     static class Permutations {
+        public static List<List<Integer>> permutations(int n) {
+            int[] ids = new int[n];
+            for(int i = 0;i < n;i++) ids[i] = i;
+            return permutations(ids);
+        }
         public static List<List<Integer>> permutations(int... a) {
             return permutations(false, a);
         }

@@ -1,3 +1,15 @@
+## 🏆 第 451 场周赛
+- [ ] [木材运输的最小成本](https://leetcode.cn/contest/weekly-contest-451/problems/find-minimum-log-transportation-cost)
+ [🎈代码](w_400/w_451/A.java)
+- [ ] [移除相邻字符](https://leetcode.cn/contest/weekly-contest-451/problems/resulting-string-after-adjacent-removals)
+ [🎈代码](w_400/w_451/B.java)
+- [ ] [折扣价交易股票的最大利润](https://leetcode.cn/contest/weekly-contest-451/problems/maximum-profit-from-trading-stocks-with-discounts)
+ [🎈代码](w_400/w_451/C.java)
+- [ ] [移除相邻字符后字典序最小的字符串](https://leetcode.cn/contest/weekly-contest-451/problems/lexicographically-smallest-string-after-adjacent-removals)
+ [🎈代码](w_400/w_451/D.java)
+
+
+
 ## 🏆 第 449 场周赛
 - [x] [不同字符数量最多为 K 时的最少删除数](https://leetcode.cn/contest/weekly-contest-449/problems/minimum-deletions-for-at-most-k-distinct-characters)
  [🎈代码](w_400/w_449/A.java) `模拟`
