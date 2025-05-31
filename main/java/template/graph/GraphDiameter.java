@@ -2,6 +2,11 @@ package template.graph;
 
 import java.util.Arrays;
 
+// 参考题目
+// https://leetcode.cn/problems/find-minimum-diameter-after-merging-two-trees/
+// https://leetcode.cn/problems/longest-path-with-different-adjacent-characters/
+// https://leetcode.cn/problems/count-subtrees-with-max-distance-between-cities/
+// https://leetcode.cn/problems/difference-between-maximum-and-minimum-price-sum/
 /**
  * 树的直径
  * 求法 自底部向上 ，每次更新之前的最大高度 + 当前求的高度
@@ -15,7 +20,7 @@ public class GraphDiameter {
 
     static class Template1 {
 
-        // https://leetcode.cn/problems/find-minimum-diameter-after-merging-two-trees/
+        // https://leetcode.cn/problems/longest-path-with-different-adjacent-characters/
         static int N = (int) 1e5 + 10;
         static int head[] = new int[N], nxt[] = new int[N<<1], to[] = new int[N<<1], cnt,maxDiameter;
 
