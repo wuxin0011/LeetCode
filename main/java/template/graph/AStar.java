@@ -175,7 +175,7 @@ public class AStar {
     // 直线距离
     // 用 勾股定理
     public static double ODistance(int x, int y, int targetX, int targetY) {
-        return Math.sqrt(Math.abs(x - targetX) * Math.abs(x - targetX) + Math.abs(y - targetY) * Math.abs(y - targetY));
+        return Math.sqrt(Math.abs(x - targetX) * 1L * Math.abs(x - targetX) + Math.abs(y - targetY) * 1L * Math.abs(y - targetY));
     }
 
 
