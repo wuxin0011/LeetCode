@@ -5,6 +5,8 @@ import code_generation.utils.IoUtil;
 import code_generation.utils.StringUtils;
 
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -26,8 +28,6 @@ public class Test {
     public static final LCTestCase testCase = new LCTestCase();
 
 
-
-
     static void testPost() {
 
         final String title_url = "count-submatrices-with-top-left-element-and-sum-less-than-k";
@@ -35,7 +35,7 @@ public class Test {
         // System.out.println(request.requestPost(graphql, JsonStrTemplate.getTotalInfo()));
 
         // 获取测试案例 OK
-         System.out.println(request.requestPost(graphql, LCJsonTemplate.createQuestionTestCase("count-submatrices-with-top-left-element-and-sum-less-than-k")));
+        System.out.println(request.requestPost(graphql, LCJsonTemplate.createQuestionTestCase("count-submatrices-with-top-left-element-and-sum-less-than-k")));
 
 
         // submit OK
@@ -121,10 +121,10 @@ public class Test {
     public static void testUserStatus() {
         String s = BuildUrl.userStatus();
         System.out.println(s);
-        System.out.println(StringUtils.jsonStrGetValueByKey(s,"username"));
-        System.out.println(StringUtils.jsonStrGetValueByKey(s,"realName"));
-        System.out.println(StringUtils.jsonStrGetValueByKey(s,"avatar"));
-        System.out.println(StringUtils.jsonStrGetValueByKey(s,"userSlug"));
+        System.out.println(StringUtils.jsonStrGetValueByKey(s, "username"));
+        System.out.println(StringUtils.jsonStrGetValueByKey(s, "realName"));
+        System.out.println(StringUtils.jsonStrGetValueByKey(s, "avatar"));
+        System.out.println(StringUtils.jsonStrGetValueByKey(s, "userSlug"));
     }
 
     public static void testCodeSnippets() {
@@ -295,7 +295,8 @@ public class Test {
         // queryNewContestQuestion();
 
 
-        testLoginInfo();
+        // testLoginInfo();
+        testContest452C();
     }
 
     private static void getProblemsTitle() {
@@ -347,7 +348,7 @@ public class Test {
 
     public static void testConstructor2() throws ParseException {
         String url = "https://leetcode.cn/problems/implement-trie-prefix-tree/?envType=study-plan-v2&envId=top-interview-150";
-         String translations = BuildUrl.questionTranslations(url);
+        String translations = BuildUrl.questionTranslations(url);
         // String translations = IoUtil.readContent(Test.class, "./test_file/constructor-desc.txt");
         // \u5b9e\u73b0  \u7c7b
         Pattern compile = Pattern.compile("\\\\u5b9e\\\\u73b0(.*)\\\\u7c7b", Pattern.DOTALL);
@@ -379,6 +380,57 @@ public class Test {
         LCTemplate lcTemplate = new LCTemplate();
         System.out.println(lcTemplate.parseCodeTemplate(code));
         // System.out.println(new LCTestCase().parseDefault(translations));
+    }
+
+
+    public static void testContest452C() throws ParseException {
+        String url = "https://leetcode.cn/contest/weekly-contest-452/problems/minimum-moves-to-clean-the-classroom";
+        // String translations = BuildUrl.questionTranslations(url);
+        String codeInfo = IoUtil.readContent(Test.class, "./test_file/452-contest-c.txt");
+        // System.out.println(codeInfo);
+        // System.out.println(StringUtils.jsonStrGetValueByKey(codeInfo,"codeSnippets",true,false));
+        String codes = StringUtils.jsonStrGetValueByKey(codeInfo, "codeSnippets", true, false);
+        codes = codes.substring(StringUtils.kmpSearch(codes, "["));
+        System.out.println(codes);
+        List<String> lts = new ArrayList<>();
+        int deep = 0;
+        StringBuilder sb = new StringBuilder();
+        System.out.println("=======");
+        for (int i = 0; i < codes.length(); i++) {
+            char c = codes.charAt(i);
+            if ((c == '[' || c == ']') && deep == 0) {
+                continue;
+            }
+            if (c == '{') {
+                deep++;
+            } else if (c == '}' && deep > 0) {
+                sb.append("}");
+                deep--;
+            }
+            if (deep > 0) {
+                sb.append(c);
+            }
+            if (deep == 0) {
+                if (!sb.toString().isEmpty()) {
+                    lts.add(sb.toString());
+                }
+                sb = new StringBuilder();
+            }
+        }
+        System.out.println(lts.size());
+        for (String s : lts) {
+            // System.out.println(StringUtils.jsonStrGetValueByKey(s,"langSlug"));
+            String langSlug = StringUtils.jsonStrGetValueByKey(s,"langSlug");
+            if(StringUtils.isEmpty(langSlug)) continue;
+            langSlug = langSlug.replace("}","").replace("{","");
+            langSlug = langSlug.replace("\"","").replace("\\'","");
+            langSlug = langSlug.replace(" ","");
+            if(langSlug.equalsIgnoreCase("java")) {
+                System.out.println(s);
+                System.out.println(StringUtils.jsonStrGetValueByKey(s,"code"));;
+            }
+        }
+
     }
 
 

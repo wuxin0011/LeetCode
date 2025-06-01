@@ -138,7 +138,6 @@ public class ClassTemplate {
             "import code_generation.utils.IoUtil;\n" +
             "import code_generation.annotation.TestCaseGroup;\n" +
             "import java.util.*;\n" +
-            "import javafx.util.Pair;\n" +
             "%s" +
             "/**\n" +
             " * @author: %s\n" +
@@ -167,7 +166,6 @@ public class ClassTemplate {
         String method = isNot ? info.method : createConstructorClassTemplate(codeInfo.getClassName(), codeInfo.getMethod());
         String importInfo = isNot ? info.importInfo : info.importInfo + "\n" + default_constructor_info;
         String methodName = isNot ? info.methodName : default_constructor_methodName;
-        info.isNeedMod=true; // 暂时添加MOD
         return String.format(
                 TEMPLATE_PATTERN,
                 info.packageInfo,

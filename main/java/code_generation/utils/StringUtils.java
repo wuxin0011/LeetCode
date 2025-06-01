@@ -228,6 +228,10 @@ public class StringUtils {
     }
 
     public static String jsonStrGetValueByKey(String jsonStr, String key, boolean isWrapper) {
+        return jsonStrGetValueByKey(jsonStr,key,isWrapper,true);
+    }
+
+    public static String jsonStrGetValueByKey(String jsonStr, String key, boolean isWrapper,boolean isReplace) {
         try {
             if (isWrapper) {
                 key = wrapperKey(key);
@@ -272,6 +276,7 @@ public class StringUtils {
                     sb.append(c);
                 }
             }
+            if(!isReplace) return sb.toString();
             return sb.toString().replaceAll("\"", "").replace(":", "");
         } catch (Exception ignore) {
             return "";

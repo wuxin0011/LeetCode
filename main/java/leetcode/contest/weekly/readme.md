@@ -1,3 +1,15 @@
+## 🏆 第 452 场周赛
+- [ ] [等积子集的划分方案](https://leetcode.cn/contest/weekly-contest-452/problems/partition-array-into-two-equal-product-subsets)
+ [🎈代码](w_400/w_452/A.java)
+- [ ] [子矩阵的最小绝对差](https://leetcode.cn/contest/weekly-contest-452/problems/minimum-absolute-difference-in-sliding-submatrix)
+ [🎈代码](w_400/w_452/B.java)
+- [ ] [清理教室的最少移动](https://leetcode.cn/contest/weekly-contest-452/problems/minimum-moves-to-clean-the-classroom)
+ [🎈代码](w_400/w_452/C.java)
+- [ ] [分割数组后不同质数的最大数目](https://leetcode.cn/contest/weekly-contest-452/problems/maximize-count-of-distinct-primes-after-split)
+ [🎈代码](w_400/w_452/D.java)
+
+
+
 ## 🏆 第 451 场周赛
 - [ ] [木材运输的最小成本](https://leetcode.cn/contest/weekly-contest-451/problems/find-minimum-log-transportation-cost)
  [🎈代码](w_400/w_451/A.java)

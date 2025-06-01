@@ -2,6 +2,8 @@ package code_generation.contest;
 
 import code_generation.utils.StringUtils;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -13,6 +15,7 @@ import java.util.regex.Pattern;
 public class ParseCodeDefaultTemplate implements ParseCodeTemplate {
 
     private final static String[] defaultNames = {"Solution"};
+    private final static String LANG = "java";
     public final static String ConstructorClass = ParseCodeInfo.ConstructorClass;
 
 
@@ -79,18 +82,20 @@ public class ParseCodeDefaultTemplate implements ParseCodeTemplate {
 
 
     public void init() {
-        if (StringUtils.isEmpty(startFlag)) {
-            throw new RuntimeException("place input start flag");
-        }
-        int i = StringUtils.kmpSearch(input, startFlag);
-        if (i == -1) {
-            throw new RuntimeException("parse code fail, not find code flag  " + startFlag + ",place check this problems is not membership question !");
-        }
-        if (isNewHandler) {
-            this.input = findNewHandlerCode(this.input, i);
-        } else {
-            this.input = input.substring(i + startFlag.length());
-        }
+//        if (StringUtils.isEmpty(startFlag)) {
+//            throw new RuntimeException("place input start flag");
+//        }
+//        int i = StringUtils.kmpSearch(input, startFlag);
+//        if (i == -1) {
+//            throw new RuntimeException("parse code fail, not find code flag  " + startFlag + ",place check this problems is not membership question !");
+//        }
+//        if (isNewHandler) {
+//            this.input = findNewHandlerCode(this.input, i);
+//        } else {
+//            this.input = input.substring(i + startFlag.length());
+//        }
+
+        this.input = getLangCode(LANG,saveLangCode(this.input));
         parseProcess();
     }
 
@@ -318,6 +323,51 @@ public class ParseCodeDefaultTemplate implements ParseCodeTemplate {
         }
 
         return sb.reverse().toString();
+    }
+
+
+    public static List<String> saveLangCode(String codeInfo){
+        String codes = StringUtils.jsonStrGetValueByKey(codeInfo, "codeSnippets", true, false);
+        codes = codes.substring(StringUtils.kmpSearch(codes, "["));
+        List<String> langsCode = new ArrayList<>();
+        int deep = 0;
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < codes.length(); i++) {
+            char c = codes.charAt(i);
+            if ((c == '[' || c == ']') && deep == 0) {
+                continue;
+            }
+            if (c == '{') {
+                deep++;
+            } else if (c == '}' && deep > 0) {
+                sb.append("}");
+                deep--;
+            }
+            if (deep > 0) {
+                sb.append(c);
+            }
+            if (deep == 0) {
+                if (!sb.toString().isEmpty()) {
+                    langsCode.add(sb.toString());
+                }
+                sb = new StringBuilder();
+            }
+        }
+        return langsCode;
+    }
+
+    public static String getLangCode(String langTag,List<String> langCodes){
+        for (String codeInfo : langCodes) {
+            String langSlug = StringUtils.jsonStrGetValueByKey(codeInfo,"langSlug");
+            if(StringUtils.isEmpty(langSlug)) continue;
+            langSlug = langSlug.replace("}","").replace("{","");
+            langSlug = langSlug.replace("\"","").replace("\\'","");
+            langSlug = langSlug.replace(" ","");
+            if(langSlug.equalsIgnoreCase(langTag)) {
+                return StringUtils.jsonStrGetValueByKey(codeInfo,"code");
+            }
+        }
+        return null;
     }
 
 

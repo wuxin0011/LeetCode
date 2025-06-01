@@ -231,7 +231,9 @@ public abstract class LCCustom implements CustomProblem {
                     if (u.startsWith(BuildUrl.LC_CLASS_THEME_PREFIX)) {
                         return u.replace(BuildUrl.LC_CLASS_THEME_PREFIX, BuildUrl.LC_PROBLEM_PREFIX);
                     }
-                    return u;
+//                    System.out.println(Arrays.toString(u.split("problems")));
+                    String[] sss = u.split("problems");
+                    return BuildUrl.LC_PROBLEM_PREFIX + sss[sss.length - 1] ;
                 }).
                 collect(Collectors.toList());
     }
