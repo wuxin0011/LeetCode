@@ -178,7 +178,7 @@ public class ClassTemplate {
                 className,
                 methodName,
                 info.textFileName,
-                info.isNeedMod ? MOD : "",
+                MOD,
                 method
         );
     }

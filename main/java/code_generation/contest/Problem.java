@@ -100,6 +100,7 @@ public class Problem {
             "    public static void main(String[] args) {\n" +
             "        IoUtil.testUtil(%s.class,IoUtil.DEFAULT_METHOD_NAME,\"%s.txt\");\n" +
             "    }\n" +
+            "    \n\n private static final int MOD = (int) 1e9 + 7;\n" +
             "}\n";
 
     public static String createDir(int id, boolean isUpper) {

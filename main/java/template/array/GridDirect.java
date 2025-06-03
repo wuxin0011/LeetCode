@@ -1,5 +1,7 @@
 package template.array;
 
+import java.util.Random;
+
 /**
  * @author: wuxin0011
  * @Description: 网格图方向
@@ -55,6 +57,39 @@ public class GridDirect {
                     // todo
                 }
             }
+        }
+    }
+
+
+
+    // 四个方向 顺时针 逆时针
+    // https://leetcode.cn/problems/EXvqDp/description/
+    static class C {
+
+        static int[][] dirs = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
+
+        static void test(int direct) {
+            int i = 0, j = 0;
+            int m = 100, n = 100;
+
+            // 假设v是改变方向的值
+            int v = new Random().nextInt(4);
+
+            if(v == 0){
+                // 不变
+            }else if(v == 1){
+                // 逆时针
+                direct = (direct + 3) % 4;
+            }else if(v == 2){
+                // 顺时针
+                direct = (direct + 1) % 4;
+            }
+
+            // 改变方向
+            i += dirs[direct][0];
+            j += dirs[direct][1];
+
+
         }
     }
 
