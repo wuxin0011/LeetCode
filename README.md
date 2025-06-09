@@ -124,10 +124,14 @@
 - [官方链接](https://leetcode.cn/)
 - [中文接口文档](https://www.matools.com/api/java8)
 
-## 精简版
+## 🍉 其他
 
-上述是我个人使用，如果你需要下载使用 可以使用我独立分离的精简版本[leetcode-template-simple](https://github.com/wuxin0011/leetcode-template-simple)
+上述是我个人使用，如果你需要下载使用 可以使用我独立分离的其他版本
 
+### ☕ Java  
+  -  精简版本 [leetcode-template-simple](https://github.com/wuxin0011/leetcode-template-simple)，可以根据自己需求修改源码，方便自定义
+  -  maven 版本 [java-lc-run](https://github.com/wuxin0011/java-lc-run) 如果出了bug，方便更新
 
-当然也也有同功能的 `pyhton` 版本，[点击查看](https://github.com/wuxin0011/py-lc-run)
+### 🦎 python 
+-  [ py-lc-run ](https://github.com/wuxin0011/py-lc-run)
 
