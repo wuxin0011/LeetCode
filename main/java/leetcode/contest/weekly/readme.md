@@ -1,3 +1,15 @@
+## 🏆 第 453 场周赛
+- [x] [数组元素相等转换](https://leetcode.cn/contest/weekly-contest-453/problems/transform-array-to-all-equal-elements)
+ [🎈代码](w_400/w_453/A.java) `模拟`
+- [x] [统计计算机解锁顺序排列数](https://leetcode.cn/contest/weekly-contest-453/problems/count-the-number-of-computer-unlocking-permutations)
+ [🎈代码](w_400/w_453/B.java) `脑筋急转弯`
+- [x] [统计极差最大为 K 的分割方式数](https://leetcode.cn/contest/weekly-contest-453/problems/count-partitions-with-max-min-difference-at-most-k)
+ [🎈代码](w_400/w_453/C.java) `单调队列+dp` `二分st表+dp`
+- [ ] [字符串转换需要的最小操作数](https://leetcode.cn/contest/weekly-contest-453/problems/minimum-steps-to-convert-string-with-operations)
+ [🎈代码](w_400/w_453/D.java) `贪心策略+dp`
+
+
+
 ## 🏆 第 452 场周赛
 - [ ] [等积子集的划分方案](https://leetcode.cn/contest/weekly-contest-452/problems/partition-array-into-two-equal-product-subsets)
  [🎈代码](w_400/w_452/A.java)
