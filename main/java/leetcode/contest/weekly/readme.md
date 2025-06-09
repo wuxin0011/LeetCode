@@ -5,7 +5,7 @@
  [🎈代码](w_400/w_453/B.java) `脑筋急转弯`
 - [x] [统计极差最大为 K 的分割方式数](https://leetcode.cn/contest/weekly-contest-453/problems/count-partitions-with-max-min-difference-at-most-k)
  [🎈代码](w_400/w_453/C.java) `单调队列+dp` `二分st表+dp`
-- [ ] [字符串转换需要的最小操作数](https://leetcode.cn/contest/weekly-contest-453/problems/minimum-steps-to-convert-string-with-operations)
+- [x] [字符串转换需要的最小操作数](https://leetcode.cn/contest/weekly-contest-453/problems/minimum-steps-to-convert-string-with-operations)
  [🎈代码](w_400/w_453/D.java) `贪心策略+dp`
 
 
