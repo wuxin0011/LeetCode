@@ -7,6 +7,7 @@ import code_generation.utils.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -352,8 +353,31 @@ public class LCTestCase implements TestCase {
             outputs = new ArrayList<>();
         }
 
+
+        // 20250615
+        // fix bug
         startIds = StringUtils.kmpSearchList(inputstring, output_flag);
         endIds = StringUtils.kmpSearchList(inputstring, explain_flag);
+        int n = Math.min(startIds.size(), endIds.size());
+        TreeSet<Integer> treeSet = new TreeSet<>(endIds);
+        int[][] group = new int[n][2];
+        for(int i = 0;i < n;i++){
+            group[i][0] = startIds.get(i);
+            Integer key = treeSet.ceiling(startIds.get(i));
+            if(key != null) {
+                group[i][1] = key;
+                treeSet.remove(key);
+            }else{
+                throw new RuntimeException("parse Exception");
+            }
+        }
+        startIds = new ArrayList<>();
+        endIds = new ArrayList<>();
+        for(int i = 0;i < n;i++) {
+            startIds.add(group[i][0]);
+            endIds.add(group[i][1]);
+        }
+
         if (!startIds.isEmpty()) {
             int addcnt = 0;
 
@@ -396,5 +420,4 @@ public class LCTestCase implements TestCase {
 
         return outputs;
     }
-
 }
