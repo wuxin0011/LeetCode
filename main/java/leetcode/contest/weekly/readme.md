@@ -1,3 +1,15 @@
+## 🏆 第 454 场周赛
+- [ ] [为视频标题生成标签](https://leetcode.cn/contest/weekly-contest-454/problems/generate-tag-for-video-caption)
+ [🎈代码](w_400/w_454/A.java)
+- [ ] [统计特殊三元组](https://leetcode.cn/contest/weekly-contest-454/problems/count-special-triplets)
+ [🎈代码](w_400/w_454/B.java)
+- [ ] [子序列首尾元素的最大乘积](https://leetcode.cn/contest/weekly-contest-454/problems/maximum-product-of-first-and-last-elements-of-a-subsequence)
+ [🎈代码](w_400/w_454/C.java)
+- [ ] [树中找到带权中位节点](https://leetcode.cn/contest/weekly-contest-454/problems/find-weighted-median-node-in-tree)
+ [🎈代码](w_400/w_454/D.java)
+
+
+
 ## 🏆 第 453 场周赛
 - [x] [数组元素相等转换](https://leetcode.cn/contest/weekly-contest-453/problems/transform-array-to-all-equal-elements)
  [🎈代码](w_400/w_453/A.java) `模拟`

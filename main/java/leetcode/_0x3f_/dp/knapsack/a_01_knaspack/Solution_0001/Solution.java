@@ -1,7 +1,8 @@
 package leetcode._0x3f_.dp.knapsack.a_01_knaspack.Solution_0001;
 
-import code_generation.annotation.TestCaseGroup;
 import code_generation.utils.IoUtil;
+
+import java.math.BigInteger;
 
 /**
  * 416. 分割等和子集
@@ -35,8 +36,27 @@ public class Solution {
     }
 
 
-    @TestCaseGroup(start = 3)
+    // 位运算优化01背包
     public boolean canPartition(int[] nums) {
+
+        // 选择一部分分开 那么 总和必须为偶数
+        int s = 0;
+        for (int num : nums) {
+            s += num;
+        }
+        if (s % 2 == 1) {
+            return false;
+        }
+        s /= 2;
+        BigInteger f = BigInteger.ONE;
+        for(int x : nums) {
+            f = f.or(f.shiftLeft(x));
+        }
+//        return f.shiftRight(s).and(BigInteger.ONE).equals(BigInteger.ONE);
+        return f.testBit(s);
+    }
+//    @TestCaseGroup(start = 3)
+    public boolean canPartition2(int[] nums) {
 
         // 选择一部分分开 那么 总和必须为偶数
         int s = 0;
