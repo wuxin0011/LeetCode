@@ -198,13 +198,12 @@ public class LCA_ST_Template {
     static class Lca_2 {
 
 
-        // lca 模板开始===================================================
 
-        @SuppressWarnings("all")
+        // lca 模板开始======================================================
         static class LCA {
             static int ADD_FLAG = 20, NOT_EXIST_FLAG = -1;
-            int h[], st[][], power, n, m, nxt[], to[], head[], weight[], cnt, point[];
-            long sums[];
+            int h[], st[][], power, n, m, nxt[], to[], head[], wt[], cnt, point[];
+            long weightDis[];
 
             // n 表示点数
             // m 表示边数
@@ -214,20 +213,21 @@ public class LCA_ST_Template {
                 h = new int[n + ADD_FLAG];
                 nxt = new int[m + ADD_FLAG];
                 to = new int[m + ADD_FLAG];
-                weight = new int[m + ADD_FLAG];
-                sums = new long[m + ADD_FLAG];
+                wt = new int[m + ADD_FLAG];
+                weightDis = new long[n + ADD_FLAG];
                 head = new int[n + ADD_FLAG];
-                power = (int) (Math.floor(Math.log(n) / Math.log(2)));
+                power = (int) (Math.floor(Math.log(n) / Math.log(2))) + 1;
                 st = new int[n][power + 1];
                 clear(n);
             }
 
             public void clear(int n) {
                 cnt = 0;
-                power = (int) (Math.floor(Math.log(n) / Math.log(2)));
+                power = (int) (Math.floor(Math.log(n) / Math.log(2))) + 1;
                 for (int i = 0; i <= n + 5; i++) {
                     head[i] = NOT_EXIST_FLAG;
                     h[i] = 0;
+                    weightDis[i] = 0;
                 }
             }
 
@@ -235,7 +235,7 @@ public class LCA_ST_Template {
                 cnt++;
                 nxt[cnt] = head[u];
                 to[cnt] = v;
-                weight[cnt] = w;
+                wt[cnt] = w;
                 head[u] = cnt;
             }
 
@@ -247,14 +247,14 @@ public class LCA_ST_Template {
             public void dfs(int u, int fa, int d) {
                 h[u] = d;
                 st[u][0] = fa;
-                for (int p = 1; p <= power; p++) {
+                for (int p = 1; p <= power && st[u][p - 1] >= 0; p++) {
                     st[u][p] = st[st[u][p - 1]][p - 1];
                 }
                 for (int e = head[u]; e > 0; e = nxt[e]) {
-                    int v = to[e], w = weight[e];
+                    int v = to[e], w = wt[e];
                     if (v != u && v != fa) {
                         // 如果是带权边
-                        sums[v] = sums[u] + w;
+                        weightDis[v] = weightDis[u] + w;
                         dfs(v, u, d + 1);
                     }
                 }
@@ -277,17 +277,17 @@ public class LCA_ST_Template {
                     a = b;
                     b = tmp;
                 }
-                for (int p = power; p >= 0; p--) {
-                    if (h[st[a][p]] >= h[b]) a = st[a][p];
+                for (int p = power-1; p >= 0 && a != b; p--) {
+                    if (st[a][p]>=0 && h[st[a][p]] >= h[b]) a = st[a][p];
                 }
                 if (a == b) return a;
-                for (int p = power; p >= 0; p--) {
+                for (int p = power-1; p >= 0; p--) {
                     if (st[a][p] != st[b][p]) {
                         a = st[a][p];
                         b = st[b][p];
                     }
                 }
-                return st[a][0];
+                return Math.max(st[a][0],0);
             }
 
             // 两点距离
@@ -297,7 +297,7 @@ public class LCA_ST_Template {
 
             // 两点距离的权值
             public long getWeight(int x, int y) {
-                return sums[x] + sums[y] - 2 * sums[lca(x, y)];
+                return weightDis[x] + weightDis[y] - 2L * weightDis[lca(x, y)];
             }
 
             // 点差分部分 u += w v += w lca -= w lcalca-= w
@@ -321,7 +321,7 @@ public class LCA_ST_Template {
 
             public void pointDiffDfs(int u, int f) {
                 for (int e = head[u]; e != NOT_EXIST_FLAG; e = nxt[e]) {
-                    int v = to[e], w = weight[e];
+                    int v = to[e], w = wt[e];
                     if (v != u && v != f) {
                         pointDiffDfs(v, u);
                         point[u] += point[v];
@@ -354,18 +354,37 @@ public class LCA_ST_Template {
 
             public void edgeDiffDFS(int u, int f) {
                 for (int e = head[u]; e != NOT_EXIST_FLAG; e = nxt[e]) {
-                    int v = to[e], w = weight[e];
+                    int v = to[e], w = wt[e];
                     if (v != u && v != f) {
                         edgeDiffDFS(v, u);
                         // 更新点权
                         point[u] += point[v];
                         // 更新边权
-                        weight[e] += point[v];
+                        wt[e] += point[v];
                     }
                 }
             }
 
+            // 在边权的边上，往上跳多少权重就能到达的点
+            public  int upToDis(int u,long d){
+                long cur = weightDis[u];
+                for(int i = power-1;i>=0;i--){
+                    if(st[u][i]>=0 && cur - weightDis[st[u][i]] <=d) {
+                        u = st[u][i];
+                    }
+                }
+                return u;
+            }
 
+            public void init(int n,int[][] edges){
+                clear(n);
+                for (int[] edge : edges) {
+                    int u = edge[0],v = edge[1],w = edge[2];
+                    addEdge(u,v,w);
+                    addEdge(v,u,w);
+                }
+                dfs(0,0,1);
+            }
         }
 
         // lca 模板结束======================================================

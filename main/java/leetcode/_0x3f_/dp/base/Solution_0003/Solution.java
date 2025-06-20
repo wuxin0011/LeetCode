@@ -2,6 +2,8 @@ package leetcode._0x3f_.dp.base.Solution_0003;
 
 import code_generation.utils.IoUtil;
 
+import java.util.Arrays;
+
 /**
  *
  2466. 统计构造好字符串的方案数
@@ -39,6 +41,7 @@ public class Solution {
 
     public static void main(String[] args) {
         IoUtil.testUtil(Solution.class,"countGoodStrings","in.txt");
+        IoUtil.testUtil(Solution.class,"countGoodStrings1","in.txt");
     }
     private static final int MOD = (int)1e9 + 7;
 
@@ -52,16 +55,41 @@ public class Solution {
                 dp[i] = ( dp[i] + dp[i-zero]) % MOD;
             }
             if(i>=one) {
-                dp[i] = ( dp[i] + dp[i-one]) % MOD;
+                dp[i] = (dp[i] + dp[i - one]) % MOD;
             }
-            if(i>=low){
-               ans = (ans + dp[i]) % MOD;
+            if (i >= low) {
+                ans = (ans + dp[i]) % MOD;
             }
         }
 
         return (int) (ans % MOD);
-	}
+    }
 
-  
+
+    // 记忆化搜索
+    private static final int mod = (int) 1e9 + 7;
+
+    public int countGoodStrings1(int low, int high, int zero, int one) {
+        int[] dp = new int[high + 1];
+        Arrays.fill(dp, -1);
+        long ans = 0;
+        for (int i = low; i <= high; i++) {
+            ans += dfs(i, one, zero, dp);
+            ans %= mod;
+        }
+        return (int) ans;
+    }
+
+
+    public static int dfs(int i, int one, int zero, int[] dp) {
+        if (i < 0) return 0;
+        if (i == 0) return 1;
+        if (dp[i] != -1) return dp[i];
+        long res = 0;
+        res += dfs(i - one, one, zero, dp) + dfs(i - zero, one, zero, dp);
+        res %= mod;
+        return dp[i] = (int) res;
+    }
+
 
 }
