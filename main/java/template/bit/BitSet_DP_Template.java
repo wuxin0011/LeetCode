@@ -7,4 +7,6 @@ package template.bit;
  */
 public class BitSet_DP_Template {
 
+    // https://leetcode.cn/problems/check-if-there-is-a-valid-partition-for-the-array/
+    // https://leetcode.cn/contest/weekly-contest-401/problems/maximum-total-reward-using-operations-ii
 }

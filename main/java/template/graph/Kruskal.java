@@ -3,6 +3,7 @@ package template.graph;
 import java.util.Arrays;
 
 /**
+ * https://leetcode.cn/problems/maximize-spanning-tree-stability-with-upgrades/
  * @author: wuxin0011
  * @Description: kruskal 又称为 K算法 是一种求最小生成树的算法 和 并查集一起应用
  * @see template.union
