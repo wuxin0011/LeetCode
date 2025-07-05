@@ -4,6 +4,10 @@ import java.util.Arrays;
 import java.util.Random;
 
 /**
+ *
+ * 注意 当前模板存在问题 发现根本过不了 暴力比分块还块  😥😥😥 ！！！
+ *
+ *
  * - 求区间最值 最大值最小值 这个线段树能做
  * - 区间求和 这个线段树能做
  * - 区间 `[L,R]` 求满足 `>= val` 的个数,说明一下
@@ -28,6 +32,8 @@ public class _1_query_interval_val {
         flag:
         for (int compareTime = 1; T > 0 && ok; T--, compareTime++) {
             int n = (int) (Math.random() * ((int) test_max_len) + 1);
+
+            long st = 0, ed = 0;
             n = Math.min(n, 20);
             int[] a = new int[n];
             for (int i = 0; i < n; i++) {
@@ -43,30 +49,65 @@ public class _1_query_interval_val {
             int val = (int) (Math.random() * 10 + 1);
             Block block = new Block(b);
             if (op == 0) {
+
+                st = System.currentTimeMillis();
                 add(a, L, R, val);
+                ed = System.currentTimeMillis();
+                t1 += ed - st;
+                st = ed;
                 block.add(L, R, val);
+                ed = System.currentTimeMillis();
+                t2 += ed - st;
             } else if (op == 1) {
+                st = System.currentTimeMillis();
                 update(a, L, R, val);
+                ed = System.currentTimeMillis();
+                t1 += ed - st;
+                st = ed;
                 block.update(L, R, val);
+                ed = System.currentTimeMillis();
+                t2 += ed - st;
             } else if (op == 2) {
+                st = System.currentTimeMillis();
                 long x = queryMaxCount(a, L, R, val);
+                ed = System.currentTimeMillis();
+                t1 += ed - st;
+                st = ed;
                 long y = block.query(L, R, val, BlockOp.QUERY_MAX_COUNT);
+                ed = System.currentTimeMillis();
+                t2 += ed - st;
                 if (x != y) {
                     System.out.println(x + " " + y);
                     throw new RuntimeException("query count is Error");
                 }
 
             } else if (op == 3) {
+
+
+                st = System.currentTimeMillis();
                 long x = queryMax(a, L, R);
+                ed = System.currentTimeMillis();
+                t1 += ed - st;
+                st = ed;
                 long y = block.query(L, R, 0, BlockOp.QUERY_MAX);
+                ed = System.currentTimeMillis();
+                t2 += ed - st;
                 if (x != y) {
                     System.out.println(x + " " + y);
                     throw new RuntimeException("query max is Error");
                 }
             } else if (op == 4) {
                 // 求 <= val 可以利用上面 >=(val + 1) 来做 这里提供一个接口
+                st = System.currentTimeMillis();
                 long x = queryMin(a, L, R);
+                ed = System.currentTimeMillis();
+                t1 += ed - st;
+                st = ed;
                 long y = block.query(L, R, 0, BlockOp.QUERY_MIN);
+                ed = System.currentTimeMillis();
+                t2 += ed - st;
+
+
                 if (x != y) {
                     System.out.println(x + " " + y);
                     throw new RuntimeException("query min is Error");
@@ -76,32 +117,62 @@ public class _1_query_interval_val {
 //					throw new RuntimeException("query array is Error");
 //				}
             } else if (op == 6) {
+                st = System.currentTimeMillis();
                 long x = querySum(a, L, R);
+                ed = System.currentTimeMillis();
+                t1 += ed - st;
+                st = ed;
                 long y = block.query(L, R, 0, BlockOp.QUERY_SUM);
+                ed = System.currentTimeMillis();
+                t2 += ed - st;
+
+
                 if (x != y) {
                     System.out.println(x + " " + y);
                     throw new RuntimeException("query min is Error");
                 }
             } else if (op == 7) {
+                st = System.currentTimeMillis();
                 long x = queryMinCount(a, L, R, val);
+                ed = System.currentTimeMillis();
+                t1 += ed - st;
+                st = ed;
                 long y = block.query(L, R, val, BlockOp.QUERY_MIN_COUNT);
+                ed = System.currentTimeMillis();
+                t2 += ed - st;
+
+
                 if (x != y) {
                     System.out.println(x + " " + y);
                     throw new RuntimeException("query min count is Error");
                 }
             } else if (op == 8) {
                 int sz = R - L + 1;
+                st = System.currentTimeMillis();
                 long x = queryMinCount(a, L, R, val);
+                ed = System.currentTimeMillis();
+                t1 += ed - st;
+                st = ed;
                 long y = sz - block.query(L, R, val + 1, BlockOp.QUERY_MAX_COUNT);
+                ed = System.currentTimeMillis();
+                t2 += ed - st;
+
+
                 if (x != y) {
                     System.out.println(x + " " + y);
                     throw new RuntimeException("query convert count is Error");
                 }
             } else if (op == 9) {
+                st = System.currentTimeMillis();
                 long x = queryEqualCount(a, L, R, val);
+                ed = System.currentTimeMillis();
+                t1 += ed - st;
+                st = ed;
                 long max_count = block.query(L, R, val, BlockOp.QUERY_MAX_COUNT);
                 long max_count_ADD_1 = block.query(L, R, val + 1, BlockOp.QUERY_MAX_COUNT);
                 long y = max_count - max_count_ADD_1;
+                ed = System.currentTimeMillis();
+                t2 += ed - st;
                 if (y != x) {
                     System.out.println(x + " " + y);
                     throw new RuntimeException("query convert count is Error");
@@ -113,6 +184,8 @@ public class _1_query_interval_val {
         }
 
         System.out.println(ok ? "ok" : "fail");
+        System.out.println("暴力用时: " + t1 + " ms");
+        System.out.println("分块用时: " + t2 + " ms");
 
     }
 
@@ -124,7 +197,7 @@ public class _1_query_interval_val {
         int n, blockSize, blockNumber;
         int[] bl, br;
         long[] addHistory, updateHistory, a, sort, sum;
-        boolean[] updateFlag;
+        boolean[] updateFlag,needSort;
 
         public Block(int[] array) {
             this.n = array.length;
@@ -136,6 +209,7 @@ public class _1_query_interval_val {
             this.addHistory = new long[blockNumber];
             this.updateHistory = new long[blockNumber];
             this.updateFlag = new boolean[blockNumber];
+            this.needSort = new boolean[blockNumber];
             this.sum = new long[blockNumber];
             this.sort = new long[n];
             Arrays.fill(bl, n + 20);
@@ -188,17 +262,6 @@ public class _1_query_interval_val {
         // 暴力更新部分
         private void updateSomeBlock(int l, int r, int val, BlockOp op) {
             int blockIndex = get(l);
-            if (updateFlag[blockIndex]) {
-                Arrays.fill(a, bl[blockIndex], br[blockIndex] + 1, updateHistory[blockIndex]);
-                addHistory[blockIndex] = 0;
-                updateFlag[blockIndex] = false;
-            }
-            if (addHistory[blockIndex] != 0) {
-                for (int i = bl[blockIndex]; i <= br[blockIndex]; i++) {
-                    a[i] += addHistory[blockIndex];
-                }
-                addHistory[blockIndex] = 0;
-            }
             for (int i = l; i <= r; i++) {
                 if (op == BlockOp.UPDATE) {
                     sum[blockIndex] += val - a[i];
@@ -208,14 +271,7 @@ public class _1_query_interval_val {
                     a[i] += val;
                 }
             }
-            sum[blockIndex] = 0;
-            for (int i = bl[blockIndex]; i <= br[blockIndex]; i++) {
-                sort[i] = a[i] = getRawValue(i);
-                sum[blockIndex] += a[i];
-            }
-            Arrays.sort(sort, bl[blockIndex], br[blockIndex] + 1);
-            updateFlag[blockIndex] = false;
-            addHistory[blockIndex] = 0;
+            needSort[blockIndex] = true;
         }
 
         // 懒更新一个块
@@ -347,20 +403,49 @@ public class _1_query_interval_val {
             return ans;
         }
 
+//        private long queryBlock(int blockIndex, BlockOp op, long ans) {
+//            if (updateFlag[blockIndex]) {
+//                long val = updateHistory[blockIndex];
+//                return op == BlockOp.QUERY_MAX ? Math.max(ans, val) : Math.min(ans, val);
+//            } else {
+//                long blockMin = Long.MAX_VALUE;
+//                long blockMax = Long.MIN_VALUE;
+//                for (int i = bl[blockIndex]; i <= br[blockIndex]; i++) {
+//                    long val = getValue(i);
+//                    blockMin = Math.min(blockMin, val);
+//                    blockMax = Math.max(blockMax, val);
+//                }
+//                return op == BlockOp.QUERY_MAX ? Math.max(ans, blockMax) : Math.min(ans, blockMin);
+//            }
+//        }
+
+
         private long queryBlock(int blockIndex, BlockOp op, long ans) {
             if (updateFlag[blockIndex]) {
                 long val = updateHistory[blockIndex];
                 return op == BlockOp.QUERY_MAX ? Math.max(ans, val) : Math.min(ans, val);
-            } else {
-                long blockMin = Long.MAX_VALUE;
-                long blockMax = Long.MIN_VALUE;
-                for (int i = bl[blockIndex]; i <= br[blockIndex]; i++) {
-                    long val = getValue(i);
-                    blockMin = Math.min(blockMin, val);
-                    blockMax = Math.max(blockMax, val);
-                }
-                return op == BlockOp.QUERY_MAX ? Math.max(ans, blockMax) : Math.min(ans, blockMin);
             }
+
+            // 如果是完整块查询，可以尝试利用排序后的数组
+            if (op == BlockOp.QUERY_MAX) {
+                if (!needSort[blockIndex] && addHistory[blockIndex] == 0) {
+                    return Math.max(ans, sort[br[blockIndex]]);
+                }
+            } else if (op == BlockOp.QUERY_MIN) {
+                if (!needSort[blockIndex] && addHistory[blockIndex] == 0) {
+                    return Math.min(ans, sort[bl[blockIndex]]);
+                }
+            }
+
+            // 否则回退到遍历
+            long blockMin = Long.MAX_VALUE;
+            long blockMax = Long.MIN_VALUE;
+            for (int i = bl[blockIndex]; i <= br[blockIndex]; i++) {
+                long val = getValue(i);
+                blockMin = Math.min(blockMin, val);
+                blockMax = Math.max(blockMax, val);
+            }
+            return op == BlockOp.QUERY_MAX ? Math.max(ans, blockMax) : Math.min(ans, blockMin);
         }
 
         private long getValue(int i) {
@@ -377,27 +462,33 @@ public class _1_query_interval_val {
                 return updateHistory[blockIndex] >= x ? (br[blockIndex] - bl[blockIndex] + 1) : 0;
             }
 
-            // 确保sort数组是最新的
-            if (addHistory[blockIndex] != 0) {
+            // 只有在需要时才重新排序
+            if (needSort[blockIndex] || addHistory[blockIndex] != 0) {
                 for (int i = bl[blockIndex]; i <= br[blockIndex]; i++) {
-                    sort[i] = getRawValue(i) + addHistory[blockIndex];
+                    sort[i] = getRawValue(i);
+                    if (addHistory[blockIndex] != 0) {
+                        sort[i] += addHistory[blockIndex];
+                    }
                 }
                 Arrays.sort(sort, bl[blockIndex], br[blockIndex] + 1);
                 addHistory[blockIndex] = 0;
+                needSort[blockIndex] = false;
             }
 
-            // 二分查找
+            // 使用更高效的二分查找
             int left = bl[blockIndex];
             int right = br[blockIndex];
+            int result = br[blockIndex] + 1;
             while (left <= right) {
-                int mid = left + (right - left) / 2;
+                int mid = (left + right) >>> 1;
                 if (sort[mid] >= x) {
+                    result = mid;
                     right = mid - 1;
                 } else {
                     left = mid + 1;
                 }
             }
-            return br[blockIndex] - left + 1;
+            return br[blockIndex] - result + 1;
         }
     }
 
