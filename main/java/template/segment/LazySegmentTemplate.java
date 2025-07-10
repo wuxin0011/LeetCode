@@ -33,7 +33,7 @@ public class LazySegmentTemplate {
         int n;
         Info info[];
 
-        LazySegment(int n, Operation operation, long initVal) {
+        LazySegment(int n, long initVal, Operation operation) {
             this.initVal = initVal;
             this.n = n;
             this.info = new Info[n << 2];
@@ -49,12 +49,15 @@ public class LazySegmentTemplate {
         }
 
         public void build(int l, int r, int i) {
+            build(l,r,i,arr);
+        }
+        public void build(int l, int r, int i,int[] array) {
             if (l == r) {
-                info[i].val = arr[l];
+                info[i].val = array[l];
             } else {
                 int mid = l + ((r - l) >> 1);
-                build(l, mid, i << 1);
-                build(mid + 1, r, i << 1 | 1);
+                build(l, mid, i << 1,array);
+                build(mid + 1, r, i << 1 | 1,array);
                 up(i);
             }
             info[i].vis = false;
@@ -191,7 +194,7 @@ public class LazySegmentTemplate {
             int n = 100;
             int[] nums = new int[n + 1];
 
-            LazySegment seg = new LazySegment(n, operation, initVal);
+            LazySegment seg = new LazySegment(n,  initVal,operation);
 
             for (int i = 1; i <= n; i++) {
                 boolean isNeg = Math.random() > 0.5;
