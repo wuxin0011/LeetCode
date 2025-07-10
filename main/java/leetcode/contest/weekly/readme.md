@@ -1,3 +1,15 @@
+## 🏆 第 457 场周赛
+- [ ] [优惠券校验器](https://leetcode.cn/contest/weekly-contest-457/problems/coupon-code-validator)
+ [🎈代码](w_400/w_457/A.java)
+- [ ] [电网维护](https://leetcode.cn/contest/weekly-contest-457/problems/power-grid-maintenance)
+ [🎈代码](w_400/w_457/B.java)
+- [ ] [包含 K 个连通分量需要的最小时间](https://leetcode.cn/contest/weekly-contest-457/problems/minimum-time-for-k-connected-components)
+ [🎈代码](w_400/w_457/C.java)
+- [ ] [到达目标点的最小移动次数](https://leetcode.cn/contest/weekly-contest-457/problems/minimum-moves-to-reach-target-in-grid)
+ [🎈代码](w_400/w_457/D.java)
+
+
+
 ## 🏆 第 456 场周赛
 - [ ] [分割字符串](https://leetcode.cn/contest/weekly-contest-456/problems/partition-string)
  [🎈代码](w_400/w_456/A.java)
