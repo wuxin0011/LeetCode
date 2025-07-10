@@ -57,6 +57,8 @@ public class DynamicOPSegmentTreeBTreeTemplate {
         long initial;
         Operation operation;
 
+        boolean isOffset = true; // 是否以[1,n] 作为区间查询
+
         /**
          * @param n         查询范围 [1,n]
          * @param initial   默认初始值
@@ -214,48 +216,48 @@ public class DynamicOPSegmentTreeBTreeTemplate {
         }
 
         public Node query(int ql, int qr) {
-            return query(ql, qr, 1, n, this.root);
+            return query(ql, qr, isOffset ? 1 : 0, isOffset ? n : n - 1, this.root);
         }
 
         public void add(int ql, int qr, int v) {
-            add(ql, qr, v, 1, n, this.root);
+            add(ql, qr, v, isOffset ? 1 : 0, isOffset ? n : n - 1, this.root);
         }
 
         public void update(int ql, int qr, int v) {
-            update(ql, qr, v, 1, n, this.root);
+            update(ql, qr, v, isOffset ? 1 : 0, isOffset ? n : n - 1, this.root);
         }
 
 
         // 线段树二分 查询第一个
-        // 注意 L 传入需要 + 1 因为 + 1 才和线段树下标对应
-        public int findFirst(int L,int val, int l, int r, Node node) {
-            if (node == null|| node.val < val)
+        // 查询区间 [L,R] 符合条件的第一个
+        public int findFirst(int L,int R,int val, int l, int r, Node node) {
+            if (r < L || l > R || node == null|| node.val < val)
                 return -1;
             if (l == r) {
                 return l;
             }
             int mid = l + ((r - l) >> 1);
             if(L <= mid) {
-                int p = findFirst(L,val,l,mid,node.left);
+                int p = findFirst(L,R,val,l,mid,node.left);
                 if(p >= 0)  return p;
             }
-            return findFirst(L,val,mid + 1,r,node.right);
+            return findFirst(L,R,val,mid + 1,r,node.right);
         }
 
-        // 线段树二分 查询第一个
-        // 注意 L 传入需要 + 1 因为 + 1 才和线段树下标对应
-        public int findLast(int R,int val, int l, int r, Node node) {
-            if (node == null|| node.val < val)
+        // 线段树二分 查询最后一个
+        // 查询区间 [L,R] 符合条件的最后一个
+        public int findLast(int L,int R,int val, int l, int r, Node node) {
+            if (r < L || l > R || node == null|| node.val < val)
                 return -1;
             if (l == r) {
                 return l;
             }
             int mid = l + ((r - l) >> 1);
-            if(R >= mid) {
-                int p = findLast(R,val,mid + 1,r,node.right);
+            if(L <= mid) {
+                int p =  findLast(L,R,val,mid + 1,r,node.right);
                 if(p >= 0)  return p;
             }
-            return findLast(R,val,l,mid,node.left);
+            return findLast(L,R,val,l,mid,node.left);
         }
     }
 

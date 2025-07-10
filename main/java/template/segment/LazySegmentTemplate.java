@@ -146,35 +146,35 @@ public class LazySegmentTemplate {
         }
 
         // 线段树二分 查询第一个
-        public int findFirst(int L, int x, int l, int r, int i) {
-            if (info[i].val < x)
+        public int findFirst(int L,int R, int x, int l, int r, int i) {
+            if (r < L || l > R || info[i].val < x)
                 return -1;
             if (l == r) {
                 return l;
             }
             int mid = l + ((r - l) >> 1);
             if (L <= mid) {
-                int p = findFirst(L, x, l, mid, i << 1);
+                int p = findFirst(L,R, x, l, mid, i << 1);
                 if (p >= 0)
                     return p;
             }
-            return findFirst(L, x, mid + 1, r, i << 1 | 1);
+            return findFirst(L, R,x, mid + 1, r, i << 1 | 1);
         }
 
         // 线段树二分 查询最后一个
-        public int findLast(int L, int x, int l, int r, int i) {
-            if (info[i].val < x)
+        public int findLast(int L,int R, int x, int l, int r, int i) {
+            if (r < L || l > R || info[i].val < x)
                 return -1;
             if (l == r) {
                 return l;
             }
             int mid = l + ((r - l) >> 1);
             if (L >= mid) {
-                int p = findLast(L, x, mid + 1, r, i << 1 | 1);
+                int p = findLast(L,R,x, mid + 1, r, i << 1 | 1);
                 if (p >= 0)
                     return p;
             }
-            return findLast(L, x, l, mid, i << 1);
+            return findLast(L, R,x, l, mid, i << 1);
         }
 
     }

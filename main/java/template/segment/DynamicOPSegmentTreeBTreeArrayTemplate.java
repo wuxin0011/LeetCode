@@ -12,6 +12,8 @@ package template.segment;
  */
 
 
+import java.util.Arrays;
+
 /**
  * 动态开点线段树 数组版 维护更多信息
  * 注意：如果不想维护范围大小请使用二叉树版本的开点线段树
@@ -54,6 +56,8 @@ public class DynamicOPSegmentTreeBTreeArrayTemplate {
         Node[] nodes;
         int cnt;
 
+        boolean isOffset = true; // 是否以[1,n] 作为区间查询
+
         /**
          * @param n         查询范围 [1,n]
          * @param initial   默认初始值
@@ -67,7 +71,7 @@ public class DynamicOPSegmentTreeBTreeArrayTemplate {
             this.right = new int[n << 1];
             this.nodes = new Node[n << 2];
             // 如果不调用 build 需要初始化
-//            Arrays.setAll(nodes, i -> new Node(initial));
+            Arrays.setAll(nodes, i -> new Node(initial));
             this.cnt = 1;
         }
 
@@ -230,49 +234,48 @@ public class DynamicOPSegmentTreeBTreeArrayTemplate {
         }
 
         public Node query(int ql, int qr) {
-            return query(ql, qr, 1, n, 1);
+            return query(ql, qr, isOffset ? 1 : 0, isOffset ? n : n - 1, 1);
         }
 
         public void add(int ql, int qr, int v) {
-            add(ql, qr, v, 1, n, 1);
+            add(ql, qr, v, isOffset ? 1 : 0, isOffset ? n : n - 1, 1);
         }
 
         public void update(int ql, int qr, int v) {
-            update(ql, qr, v, 1, n, 1);
+            update(ql, qr, v, isOffset ? 1 : 0, isOffset ? n : n - 1, 1);
         }
 
         // 线段树二分 查询第一个
-        // 注意 L 传入需要 + 1 因为 + 1 才和线段树下标对应
-        public int findFirst(int L, int val, int l, int r, int i) {
-            if (i == 0 || nodes[i] == null || nodes[i].val < val)
+        // 查询区间 [L,R] 符合条件的第一个
+        public int findFirst(int L,int R, int val, int l, int r, int i) {
+            if (r < L || l > R || nodes[i] == null || nodes[i].val < val)
                 return -1;
             if (l == r) {
                 return l;
             }
             int mid = l + ((r - l) >> 1);
             if (L <= mid) {
-                int p = findFirst(L, val, l, mid, left[i]);
+                int p = findFirst(L, R,val, l, mid, left[i]);
                 if (p >= 0) return p;
             }
-            return findFirst(L, val, mid + 1, r, right[i]);
+            return findFirst(L,R, val, mid + 1, r, right[i]);
         }
 
-        // 线段树二分 查询第一个
-        // 注意 L 传入需要 + 1 因为 + 1 才和线段树下标对应
-        public int findLast(int R, int val, int l, int r, int i) {
-            if (i == 0 || nodes[i] == null || nodes[i].val < val)
+        // 线段树二分 查询最后一个
+        // 查询区间 [L,R] 符合条件的最后一个
+        public int findLast(int L,int R, int val, int l, int r, int i) {
+            if (r < L || l > R || nodes[i] == null || nodes[i].val < val)
                 return -1;
             if (l == r) {
                 return l;
             }
             int mid = l + ((r - l) >> 1);
-            if (R >= mid) {
-                int p = findLast(R, val, mid + 1, r, right[i]);
+            if (L <= mid) {
+                int p = findLast(L,R, val, mid + 1, r, right[i]) ;
                 if (p >= 0) return p;
             }
-            return findLast(R, val, l, mid, left[i]);
+            return findLast(L, R,val, l, mid, left[i]);
         }
-
     }
 
     /***************************************线段树模板结束**************************************/
