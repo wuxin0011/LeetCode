@@ -16,45 +16,23 @@ public class StringHash2Template {
 
     // 检查回文 如果需要copy请直接附带
     public static class StringHashPalindrome {
-        int mod1, mod2, base1, base2;
         StringHash stringHash1, stringHash2;
         int n;
         public StringHashPalindrome(char[] chars) {
-            this.init(StringHash.BASE1, StringHash.BASE2, StringHash.MOD1, StringHash.MOD2);
             this.build(chars);
         }
-
-        public StringHashPalindrome(char[] chars, int base1, int base2, int mod1, int mod2) {
-            this.init(base1,base2,mod1,mod2);
-            this.build(chars);
-        }
-
-        public StringHashPalindrome(int[] chars, int base1, int base2, int mod1, int mod2) {
-            this.init(base1,base2,mod1,mod2);
-            this.build(chars);
-        }
-        private void init(int base1, int base2, int mod1, int mod2) {
-            this.base1 = base1;
-            this.base2 = base2;
-            this.mod1 = mod1;
-            this.mod2 = mod2;
-        }
-
         private void build(char[] array) {
             int[] a = new int[array.length];
             for(int i = 0;i < array.length;i++) {
                 a[i] = array[i];
             }
-            this.build(a);
-        }
-        private void build(int[] a) {
             this.n = a.length;
             int[] b = new int[n];
             for (int i = 0; i < n; i++) {
                 b[i] = a[n - i - 1];
             }
-            this.stringHash1 = new StringHash(a, base1, base2, mod1, mod2);
-            this.stringHash2 = new StringHash(b, base1, base2, mod1, mod2);
+            this.stringHash1 = new StringHash(a);
+            this.stringHash2 = new StringHash(b);
         }
 
 
@@ -67,37 +45,30 @@ public class StringHash2Template {
 
     // string hash 开始
     public static class StringHash {
-        private static final int BASE1 = (int) 8e8 + new Random().nextInt((int) 1e8);
-        private static final int BASE2 = (int) 8e8 + new Random().nextInt((int) 1e8);
-        private static final int MOD1 = 1_070_777_777;
-        private static final int MOD2 = 1_000_000_007;
-        int mod1, mod2, base1, base2;
+        private static final int base1 = (int) 8e8 + new Random().nextInt((int) 1e8);
+        private static final int base2 = (int) 8e8 + new Random().nextInt((int) 1e8);
+        private static final int mod1 = 1_070_777_777;
+        private static final int mod2 = 1_000_000_007;
         int[] powBase1, powBase2, preHash1, preHash2;
         int n;
+        int[] array,suf;
+
         public StringHash(char[] chars) {
-            this(chars, BASE1, BASE2, MOD1, MOD2);
-        }
-        public StringHash(int[] a) {
-            this(a, BASE1, BASE2, MOD1, MOD2);
-        }
-        public StringHash(char[] chars, int b1, int b2, int m1, int m2) {
             int[] a = new int[chars.length];
             for(int i = 0;i < chars.length;i++) {
                 a[i] = chars[i];
             }
-            this.build(a,b1,b2,m1,m2);
+            this.build(a);
+        }
+        public StringHash(int[] chars) {
+            this.build(chars);
         }
 
-        public StringHash(int[] a, int b1, int b2, int m1, int m2) {
-            this.build(a,b1,b2,m1,m2);
-        }
 
-        private void build(int[] a, int b1, int b2, int m1, int m2){
-            this.base1 = b1;
-            this.base2 = b2;
-            this.mod1 = m1;
-            this.mod2 = m2;
+
+        private void build(int[] a){
             this.n = a.length;
+            this.array = a;
             powBase1 = new int[n];
             powBase2 = new int[n];
             preHash1 = new int[n];

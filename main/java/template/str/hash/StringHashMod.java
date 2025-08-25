@@ -17,8 +17,11 @@ public class StringHashMod {
      * @link <a href="https://leetcode.cn/problems/find-the-index-of-the-first-occurrence-in-a-string/submissions/574426236/">测试结果</a>
      */
 
+
     static class StringHash {
-        long pow[], hash[], base = 499, mod = (long) 1e9 + 7;
+        private long[] pow, hash;
+        // 随机 base 防止被 hack ！
+        private static final long BASE = (long) (1e9 + 7) + new Random().nextInt((int) 1e8);
 
         StringHash(String s) {
             int n = s.length();
@@ -27,8 +30,8 @@ public class StringHashMod {
             pow[0] = 1L;
             hash[0] = s.charAt(0);
             for (int i = 1; i < n; i++) {
-                pow[i] = pow[i - 1] * base;
-                hash[i] = (hash[i - 1] * base + (s.charAt(i)));
+                pow[i] = pow[i - 1] * BASE;
+                hash[i] = (hash[i - 1] * BASE + (s.charAt(i)));
             }
         }
 
@@ -44,6 +47,10 @@ public class StringHashMod {
 
     // long 类型hash
     public static class StringHash2 {
+
+
+
+        // 实际 BASE 和 MOD 应该提取为全局变量 防止其他字符串调用 MOD 和 BASE 变化了
         private static final int BASE = 1_070_777_777;
         private static final int MOD = (int) 8e8 + new Random().nextInt((int) 1e8);
 
