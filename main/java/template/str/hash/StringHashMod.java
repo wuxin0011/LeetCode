@@ -48,11 +48,9 @@ public class StringHashMod {
     // long 类型hash
     public static class StringHash2 {
 
-
-
         // 实际 BASE 和 MOD 应该提取为全局变量 防止其他字符串调用 MOD 和 BASE 变化了
-        private static final int BASE = 1_070_777_777;
-        private static final int MOD = (int) 8e8 + new Random().nextInt((int) 1e8);
+        private static final long BASE = 1_070_777_777;
+        private static final long MOD = (int) 8e8 + new Random().nextInt((int) 1e8);
 
         static int MAXN = (int) (1e5 + 1), n;
         static long[] power = new long[MAXN + 2], pre = new long[MAXN + 2], suf = null;
