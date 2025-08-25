@@ -48,9 +48,8 @@ public class StringHashMod {
     // long 类型hash
     public static class StringHash2 {
 
-        // 实际 BASE 和 MOD 应该提取为全局变量 防止其他字符串调用 MOD 和 BASE 变化了
-        private static final long BASE = 1_070_777_777;
-        private static final long MOD = (int) 8e8 + new Random().nextInt((int) 1e8);
+        private static final long BASE = (long) (1e9 + 7) + new Random().nextInt((int) 1e8);
+        private static final long MOD = (long)(1e9 + 7);
 
         static int MAXN = (int) (1e5 + 1), n;
         static long[] power = new long[MAXN + 2], pre = new long[MAXN + 2], suf = null;
@@ -125,8 +124,8 @@ public class StringHashMod {
      * @link <a title="测试链接" href="https://leetcode.cn/problems/palindromic-substrings/submissions/575085385/">提交测试</a>
      */
     static class StringHash3 {
-        private static final int BASE = 499;
-        private static final int MOD = (int) 8e8 + new Random().nextInt((int) 1e8);
+        private static final long BASE = (long)(1e9 + 7) + new Random().nextInt((int) 1e8);
+        private static final long MOD = (long)1e9 + 7;
 
         static int MAXN = (int) (1e5 + 1), n;
         static int[] power = new int[MAXN + 2], pre = new int[MAXN + 2], suf = null;
@@ -196,8 +195,8 @@ public class StringHashMod {
 
 
     public static void main(String[] args) {
-//        test02();
-         test03();
+        test02();
+//         test03();
     }
 
 
