@@ -1,27 +1,19 @@
 package template.matrix;
 
-import java.util.*;
-import java.math.BigInteger;
-import java.io.*;
-
-
-
-
 public class MatrixBase {
 
 
-
-	// 打印矩阵对角线
+    // 打印矩阵对角线
     public static void printMatrixSingle(int[][] g) {
 
         int m = g.length,n = g[0].length;
 
 
         for(int i = 0;i < m;i++) {
-        	for(int j = 0; j< n;j++) {
-        		System.out.printf("(%s,%s) ",i,j);
-        	}
-        	System.out.println();
+            for(int j = 0; j< n;j++) {
+                System.out.printf("(%s,%s) ",i,j);
+            }
+            System.out.println();
         }
 
 
@@ -32,8 +24,8 @@ public class MatrixBase {
             int j = 0;
             while( i < m && j < n) {
                 System.out.printf("g[%s][%s]=%s ",i,j,g[i][j]);
-            	i++;
-            	j++;
+                i++;
+                j++;
             }
             System.out.println("");
         }
@@ -43,8 +35,8 @@ public class MatrixBase {
             int j = d;
             while( i < m && j < n) {
                 System.out.printf("g[%s][%s]=%s ",i,j,g[i][j]);
-            	i++;
-            	j++;
+                i++;
+                j++;
             }
             System.out.println("");
         }
@@ -73,7 +65,34 @@ public class MatrixBase {
         //     }
         //     System.out.println("");
         // }
-	}
+    }
+
+
+
+
+    // 将矩形顺时针旋转90
+    public static int[][] rotateCounterclockwise(int[][] mat){
+        int m = mat.length,n = mat[0].length;
+        int[][] temp = new int[m][n];
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                temp[j][m - 1 - i] = mat[i][j];
+            }
+        }
+        return temp;
+    }
+
+    // 将矩形逆时针旋转90
+    public static int[][] reverseRotateCounterclockwise(int[][] mat){
+        int m = mat.length,n = mat[0].length;
+        int[][] temp = new int[m][n];
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                temp[n - 1 - j][i] = mat[i][j];
+            }
+        }
+        return temp;
+    }
 
 
 
