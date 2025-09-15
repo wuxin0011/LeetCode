@@ -15,3 +15,15 @@
 
 ## bitset
 [bitset dp](../../leetcode/contest/weekly/w_400/w_401/d/D.java)
+
+
+
+## 线性基
+
+基本模板
+[XorBasis](./XorBasis.java)
+
+
+复杂模板
+[VectorSpace](./VectorSpace.java)
+

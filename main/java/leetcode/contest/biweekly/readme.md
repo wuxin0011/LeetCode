@@ -1,3 +1,15 @@
+## 🏆 第 165 场双周赛
+- [ ] [大于平均值的最小未出现正整数](https://leetcode.cn/contest/biweekly-contest-165/problems/smallest-absent-positive-greater-than-average)
+ [🎈代码](bi_100/bi_165/A.java)
+- [ ] [使库存平衡的最少丢弃次数](https://leetcode.cn/contest/biweekly-contest-165/problems/minimum-discards-to-balance-inventory)
+ [🎈代码](bi_100/bi_165/B.java)
+- [ ] [生成赛程](https://leetcode.cn/contest/biweekly-contest-165/problems/generate-schedule)
+ [🎈代码](bi_100/bi_165/C.java)
+- [ ] [子序列最大 XOR 值](https://leetcode.cn/contest/biweekly-contest-165/problems/maximum-xor-of-subsequences)
+ [🎈代码](bi_100/bi_165/D.java)
+
+
+
 ## 🏆 第 155 场双周赛
 - [x] [找到最常见的回答](https://leetcode.cn/contest/biweekly-contest-155/problems/find-the-most-common-response)
  [🎈代码](bi_100/bi_155/A.java) `前缀树`
