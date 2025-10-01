@@ -11,3 +11,8 @@
 - [排列组合](./Perm.java)
 - [平面几何](./geometry)
   - 三点共线
+- [高精度](./HighPrecision)
+  - [大整数的快速幂、模逆元、素数测试等](./HighPrecision/BigInt.java)
+  - [高精度小数的平方根、对数、指数等函数](HighPrecision/HighPrecision.java)
+  - [分数的精确有理数运算](./HighPrecision/Fraction.java)
+  - [求1/n后的第m位](./HighPrecision/Utils.java)

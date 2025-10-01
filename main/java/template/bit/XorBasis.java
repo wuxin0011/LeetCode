@@ -1,7 +1,12 @@
 package template.bit;
 
 /**
- * https://leetcode.cn/problems/maximum-xor-of-subsequences/description/
+ * 模板题 ： https://leetcode.cn/problems/maximum-xor-of-subsequences/description/
+ * 1、判断一个数是否是子集的异或和
+ * 2、判断子集的异或和的方案数
+ * 3、判断子集的异或的和最大，最小，第K大，第k小
+ * 4、判断一个数是否是子集的异或和 中的排名
+ *
  * @author: wuxin0011
  * @Description:
  */

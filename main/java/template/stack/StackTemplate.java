@@ -30,11 +30,11 @@ public class StackTemplate {
         }
 
         // last 是一个负数 例如栈顶 可以 直接 get(-1) 栈顶第二个元素 get(-2)
-        public int get(int last) {
+        public int get(int index) {
 //            if (size + last < 0 || size + last >= cap) {
 //                throw new IndexOutOfBoundsException();
 //            }
-            return stack[size + last];
+            return index >=  0 ? stack[index] : stack[size + index];
         }
 
         public int peek() {
