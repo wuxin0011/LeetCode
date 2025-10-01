@@ -7,7 +7,6 @@ package template.stack;
 public class MyDeque {
     int[] arr;
     int l, r;
-
     MyDeque(int n) {
         arr = new int[n + 1];
         l = r = 0;
@@ -26,23 +25,35 @@ public class MyDeque {
     }
 
     int pop() {
-        return pollLast();
+        return pop(-1);
+    }
+
+
+    int pop(int index) {
+        if(index >= 0) {
+            if(index==0)index++;
+            l += index;
+            return arr[l];
+        }else{
+            r += index;
+            return arr[r];
+        }
     }
 
     int peek() {
-        return peekLast();
+        return get(-1);
     }
 
     int pollFirst() {
-        return arr[l++];
+        return pop(1);
     }
 
     int peekLast() {
-        return arr[r - 1];
+        return get(-1);
     }
 
     int pollLast() {
-        return arr[--r];
+        return pop(-1);
     }
 
     void add(int x) {
@@ -64,4 +75,5 @@ public class MyDeque {
     int size() {
         return r - l < 0 ? 0 : r - l;
     }
+
 }
