@@ -1,6 +1,13 @@
 package template.Balancedtree;
 
 /**
+ *
+ *
+ * 由于Java对象封装不容易比较，c++版本容易拓展
+ * 参考链接 ： https://leetcode.cn/problems/xx4gT2/submissions/667971855/ 动态数组版本
+ * 参考链接 ： https://leetcode.cn/problems/xx4gT2/submissions/667973116/ 数组版本
+ *
+ *
  * @author: wuxin0011
  * @Description: treap 的实现
  */
