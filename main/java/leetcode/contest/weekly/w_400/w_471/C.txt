@@ -1,0 +1,8 @@
+abbac
+4
+
+aabcc
+3
+
+aba
+2

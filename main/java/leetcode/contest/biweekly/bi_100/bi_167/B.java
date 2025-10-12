@@ -1,8 +1,6 @@
 package leetcode.contest.biweekly.bi_100.bi_167;
 
 import code_generation.utils.IoUtil;
-import code_generation.annotation.TestCaseGroup;
-import java.util.*;
 /**
  * @author: agitated-curranfnd
  * @Description:
@@ -13,15 +11,27 @@ import java.util.*;
 public class B {
 
     public static void main(String[] args) {
-        IoUtil.testUtil(B.class,"longestSubarray","B.txt");
+        IoUtil.testUtil(B.class, "longestSubarray", "B.txt");
     }
-    private static final int MOD = (int)1e9 + 7; 
 
-    public int longestSubarray(int[] nums) {            
+    private static final int MOD = (int) 1e9 + 7;
 
-        return 0; 
-	}
+    public int longestSubarray(int[] a) {
+        int n = a.length;
+        int ans = Math.min(n,2);
+        for(int i = 2;i<n;){
+            if(a[i] != a[i-2] + a[i-1]){
+                i++;
+                continue;
+            }
+            int st = i;
+            for(;i < n && a[i] == a[i-1] + a[i-2];i++){
 
-  
+            }
+            ans = Math.max(ans,i - st + 2);
+        }
+        return ans;
+    }
+
 
 }

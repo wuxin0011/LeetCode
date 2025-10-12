@@ -50,20 +50,9 @@ public class C {
             int r = lowerbound(ed);
             if(r>=sz||r<0)return 0;
             long ans = 0;
-            // System.out.println(st + " " +ed + " ，query1 = " + l + " " + r );
             if(a[r] != ed)r--;
-            // if(a[l] != st)l++;
             if(l>r)return 0;
-            // System.out.println(st + " " +ed + " ，query2 = " + l + " " + r );
-            // System.out.println(st + " " +ed + " ，query = " + a[l] + " " + a[r] );
-            // if(a[l]==st)l--;
-            // if(a[r]==ed)r++;
-            // long ans = sums[r] - (l >= 0 ? sums[l] : 0);
-            // if(l>=0){
-            //     System.out.println(st + " " +ed + " " + a[l] + " " + a[r] );
-            // }
             return sums[r] - (l >0 ? sums[l - 1]:0);
-            // return 0;
         }
     }
 
