@@ -296,7 +296,10 @@ public class Test {
 
 
         // testLoginInfo();
-        testContest452C();
+//        testContest452C();
+
+        // 测试构造函数
+        testparse1();
     }
 
     private static void getProblemsTitle() {
@@ -431,6 +434,45 @@ public class Test {
             }
         }
 
+    }
+
+
+    static void testparse1(){
+        StringBuilder sb = null;
+        String methodStr = IoUtil.readContent(Test.class, "./test_file/bi-w-167-c.txt");
+        int i = 0;
+        int deep = 0;
+        methodStr = methodStr.replace("}}","}");
+        System.out.println("origin :" + methodStr);
+        for(;i < methodStr.length() && methodStr.charAt(i) !='{';i++){
+
+        }
+        for (; i < methodStr.length(); i++) {
+            char c = methodStr.charAt(i);
+            if (c == '{') {
+                deep++;
+                if (deep == 1 && sb == null) {
+                    sb = new StringBuilder();
+                } else if (deep == 2 && sb != null) {
+                    sb.append(c);
+                }
+            } else if (c == '}') {
+                deep--;
+                if (deep == 0) {
+                    break;
+                }
+                if (sb != null) {
+                    sb.append(c);
+                }
+
+            } else {
+                if (sb != null) sb.append(c);
+            }
+        }
+        if(i<methodStr.length()){
+            System.out.println("\n\nend = >" + methodStr.substring(i));
+        }
+        System.out.println("cur = " + sb);
     }
 
 

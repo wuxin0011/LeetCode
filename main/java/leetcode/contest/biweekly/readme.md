@@ -1,3 +1,17 @@
+
+
+## 🏆 第 167 场双周赛
+- [ ] [相等子字符串分数](https://leetcode.cn/contest/biweekly-contest-167/problems/equal-score-substrings)
+ [🎈代码](bi_100/bi_167/A.java)
+- [ ] [最长斐波那契子数组](https://leetcode.cn/contest/biweekly-contest-167/problems/longest-fibonacci-subarray)
+ [🎈代码](bi_100/bi_167/B.java)
+- [ ] [设计考试分数记录器](https://leetcode.cn/contest/biweekly-contest-167/problems/design-exam-scores-tracker)
+ [🎈代码](bi_100/bi_167/C.java)
+- [ ] [最大划分因子](https://leetcode.cn/contest/biweekly-contest-167/problems/maximum-partition-factor)
+ [🎈代码](bi_100/bi_167/D.java)
+
+
+
 ## 🏆 第 165 场双周赛
 - [ ] [大于平均值的最小未出现正整数](https://leetcode.cn/contest/biweekly-contest-165/problems/smallest-absent-positive-greater-than-average)
  [🎈代码](bi_100/bi_165/A.java)

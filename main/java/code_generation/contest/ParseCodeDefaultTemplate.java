@@ -144,8 +144,14 @@ public class ParseCodeDefaultTemplate implements ParseCodeTemplate {
             methodStr = methodStr.substring(i + className.length());
         }
 
+        // 处理不规范的数据 https://leetcode.cn/problems/design-exam-scores-tracker/
+        if(this.info.isConstructor()){
+            methodStr = methodStr.replace("}}","}");
+        }
+
         int deep = 0;
         StringBuilder sb = null;
+
         for (i = 0; i < methodStr.length(); i++) {
             char c = methodStr.charAt(i);
             if (c == '{') {

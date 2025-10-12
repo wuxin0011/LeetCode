@@ -1,0 +1,5 @@
+adcb
+true
+
+bace
+false
