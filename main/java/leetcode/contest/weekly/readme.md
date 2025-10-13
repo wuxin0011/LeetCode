@@ -1,12 +1,12 @@
 ## 🏆 第 471 场周赛
-- [ ] [出现次数能被 K 整除的元素总和](https://leetcode.cn/contest/weekly-contest-471/problems/sum-of-elements-with-frequency-divisible-by-k)
- [🎈代码](w_400/w_471/A.java)
-- [ ] [最长的平衡子串 I](https://leetcode.cn/contest/weekly-contest-471/problems/longest-balanced-substring-i)
- [🎈代码](w_400/w_471/B.java)
-- [ ] [最长的平衡子串 II](https://leetcode.cn/contest/weekly-contest-471/problems/longest-balanced-substring-ii)
- [🎈代码](w_400/w_471/C.java)
-- [ ] [完全平方数的祖先个数总和](https://leetcode.cn/contest/weekly-contest-471/problems/sum-of-perfect-square-ancestors)
- [🎈代码](w_400/w_471/D.java)
+- [x] [出现次数能被 K 整除的元素总和](https://leetcode.cn/contest/weekly-contest-471/problems/sum-of-elements-with-frequency-divisible-by-k)
+ [🎈代码](w_400/w_471/A.java) `暴力枚举`
+- [x] [最长的平衡子串 I](https://leetcode.cn/contest/weekly-contest-471/problems/longest-balanced-substring-i)
+ [🎈代码](w_400/w_471/B.java) `暴力枚举`
+- [x] [最长的平衡子串 II](https://leetcode.cn/contest/weekly-contest-471/problems/longest-balanced-substring-ii)
+ [🎈代码](w_400/w_471/C.java) `贪心` `前缀和` `哈希表`
+- [x] [完全平方数的祖先个数总和](https://leetcode.cn/contest/weekly-contest-471/problems/sum-of-perfect-square-ancestors)
+ [🎈代码](w_400/w_471/D.java) `预处理平方剩余核`
 
 
 
