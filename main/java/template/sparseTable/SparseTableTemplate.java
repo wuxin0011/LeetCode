@@ -15,20 +15,23 @@ public class SparseTableTemplate {
             int op(int x, int y);
         }
 
-        private final int[][] st;
+        private int st[][] ,LOG[],n;
         private final Operation op;
 
         public SparseTable(int[] array, Operation op) {
             this.op = op;
-            int n = array.length;
-            int log = (int) (Math.ceil(Math.log(n) / Math.log(2))) + 1;
-            st = new int[n][log];
+            this.n = array.length;
+            LOG = new int[n + 10];
+            for (int i = 2; i <= n; i++) {
+                LOG[i] = LOG[i / 2] + 1;
+            }
+            int k = LOG[n] + 1;
+            st = new int[n][k];
             for (int i = 0; i < n; i++) {
                 st[i][0] = array[i];
             }
-            for (int j = 1; j < log; j++) {
-                int pj = (1 << (j - 1));
-                for (int i = 0; i + pj < n; i++) {
+            for (int j = 1; j < k; j++) {
+                for (int i = 0; i + (1 << j) <= n; i++) {
                     st[i][j] = op.op(st[i][j - 1], st[i + (1 << (j - 1))][j - 1]);
                 }
             }
@@ -36,12 +39,14 @@ public class SparseTableTemplate {
 
         // [l,r]
         public int query(int l, int r) {
-            int lt = r - l + 1;
-            int q = (int) (Math.floor(Math.log(lt) / Math.log(2)));
-            return op.op(st[l][q], st[r - (1 << q) + 1][q]);
+            if (l > r || r - l + 1 > n) {
+                throw new RuntimeException("OUT");
+            }
+            int len = r - l + 1;
+            int j = LOG[len];
+            return op.op(st[l][j], st[r - (1 << j) + 1][j]);
         }
     }
-
     // ======================================SparseTable 模板结束 ======================================
 
 
