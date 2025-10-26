@@ -1,3 +1,15 @@
+## 🏆 第 473 场周赛
+- [ ] [移除十进制表示中的所有零](https://leetcode.cn/contest/weekly-contest-473/problems/remove-zeros-in-decimal-representation)
+ [🎈代码](w_400/w_473/A.java)
+- [ ] [最大交替平方和](https://leetcode.cn/contest/weekly-contest-473/problems/maximum-alternating-sum-of-squares)
+ [🎈代码](w_400/w_473/B.java)
+- [ ] [边界与内部和相等的稳定子数组](https://leetcode.cn/contest/weekly-contest-473/problems/stable-subarrays-with-equal-boundary-and-interior-sum)
+ [🎈代码](w_400/w_473/C.java)
+- [ ] [统计有序数组中可被 K 整除的子数组数量](https://leetcode.cn/contest/weekly-contest-473/problems/count-distinct-subarrays-divisible-by-k-in-sorted-array)
+ [🎈代码](w_400/w_473/D.java)
+
+
+
 ## 🏆 第 471 场周赛
 - [x] [出现次数能被 K 整除的元素总和](https://leetcode.cn/contest/weekly-contest-471/problems/sum-of-elements-with-frequency-divisible-by-k)
  [🎈代码](w_400/w_471/A.java) `暴力枚举`
