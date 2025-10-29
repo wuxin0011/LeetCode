@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * 后缀数组解法 https://leetcode.cn/problems/count-distinct-subarrays-divisible-by-k-in-sorted-array/solutions/3815825/hou-zhui-shu-zu-bu-bao-zheng-fei-jiang-x-wohz/
  * @author: sagitated-curranfnd
  * @Description:
  * @url:   <a href="https://leetcode.cn/contest/weekly-contest-473/problems/count-distinct-subarrays-divisible-by-k-in-sorted-array">统计有序数组中可被 K 整除的子数组数量</a>
