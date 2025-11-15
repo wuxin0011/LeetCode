@@ -1,3 +1,5 @@
+
+
 ## 🏆 第 473 场周赛
 - [x] [移除十进制表示中的所有零](https://leetcode.cn/contest/weekly-contest-473/problems/remove-zeros-in-decimal-representation)
  [🎈代码](w_400/w_473/A.java) `暴力`
@@ -19,6 +21,16 @@
  [🎈代码](w_400/w_471/C.java) `贪心` `前缀和` `哈希表`
 - [x] [完全平方数的祖先个数总和](https://leetcode.cn/contest/weekly-contest-471/problems/sum-of-perfect-square-ancestors)
  [🎈代码](w_400/w_471/D.java) `预处理平方剩余核`
+
+## 🏆 第 463 场周赛
+- [ ] [按策略买卖股票的最佳时机](https://leetcode.cn/contest/weekly-contest-463/problems/best-time-to-buy-and-sell-stock-using-strategy)
+  [🎈代码](w_400/w_463/A.java)
+- [ ] [区间乘法查询后的异或 I](https://leetcode.cn/contest/weekly-contest-463/problems/xor-after-range-multiplication-queries-i)
+  [🎈代码](w_400/w_463/B.java)
+- [ ] [删除可整除和后的最小数组和](https://leetcode.cn/contest/weekly-contest-463/problems/minimum-sum-after-divisible-sum-deletions)
+  [🎈代码](w_400/w_463/C.java)
+- [ ] [区间乘法查询后的异或 II](https://leetcode.cn/contest/weekly-contest-463/problems/xor-after-range-multiplication-queries-ii)
+  [🎈代码](w_400/w_463/D.java)
 
 
 

@@ -1,3 +1,15 @@
+## 🏆 第 169 场双周赛
+- [ ] [最小操作次数使数组元素相等 III](https://leetcode.cn/contest/biweekly-contest-169/problems/minimum-moves-to-equal-array-elements-iii)
+ [🎈代码](bi_100/bi_169/A.java)
+- [ ] [统计主要元素子数组数目 I](https://leetcode.cn/contest/biweekly-contest-169/problems/count-subarrays-with-majority-element-i)
+ [🎈代码](bi_100/bi_169/B.java)
+- [ ] [替换至多一个元素后最长非递减子数组](https://leetcode.cn/contest/biweekly-contest-169/problems/longest-non-decreasing-subarray-after-replacing-at-most-one-element)
+ [🎈代码](bi_100/bi_169/C.java)
+- [ ] [统计主要元素子数组数目 II](https://leetcode.cn/contest/biweekly-contest-169/problems/count-subarrays-with-majority-element-ii)
+ [🎈代码](bi_100/bi_169/D.java)
+
+
+
 
 
 ## 🏆 第 167 场双周赛
