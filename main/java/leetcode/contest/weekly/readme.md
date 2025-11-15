@@ -23,14 +23,14 @@
  [🎈代码](w_400/w_471/D.java) `预处理平方剩余核`
 
 ## 🏆 第 463 场周赛
-- [ ] [按策略买卖股票的最佳时机](https://leetcode.cn/contest/weekly-contest-463/problems/best-time-to-buy-and-sell-stock-using-strategy)
-  [🎈代码](w_400/w_463/A.java)
-- [ ] [区间乘法查询后的异或 I](https://leetcode.cn/contest/weekly-contest-463/problems/xor-after-range-multiplication-queries-i)
-  [🎈代码](w_400/w_463/B.java)
-- [ ] [删除可整除和后的最小数组和](https://leetcode.cn/contest/weekly-contest-463/problems/minimum-sum-after-divisible-sum-deletions)
-  [🎈代码](w_400/w_463/C.java)
-- [ ] [区间乘法查询后的异或 II](https://leetcode.cn/contest/weekly-contest-463/problems/xor-after-range-multiplication-queries-ii)
-  [🎈代码](w_400/w_463/D.java)
+- [x] [按策略买卖股票的最佳时机](https://leetcode.cn/contest/weekly-contest-463/problems/best-time-to-buy-and-sell-stock-using-strategy)
+  [🎈代码](w_400/w_463/A.java) `前后缀分解`
+- [x] [区间乘法查询后的异或 I](https://leetcode.cn/contest/weekly-contest-463/problems/xor-after-range-multiplication-queries-i)
+  [🎈代码](w_400/w_463/B.java) `暴力`
+- [x] [删除可整除和后的最小数组和](https://leetcode.cn/contest/weekly-contest-463/problems/minimum-sum-after-divisible-sum-deletions)
+  [🎈代码](w_400/w_463/C.java) `前缀和dp` 
+- [x] [区间乘法查询后的异或 II](https://leetcode.cn/contest/weekly-contest-463/problems/xor-after-range-multiplication-queries-ii)
+  [🎈代码](w_400/w_463/D.java) `根号算法` `快速幂` `乘法逆元`
 
 
 
