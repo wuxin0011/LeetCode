@@ -74,17 +74,11 @@ public class StringHashMod {
             }
         }
 
+        // 默认不检查回文的
         private static void calcHash(char[] a) {
             calcHash(a, false);
         }
-
-
-        private static void heapCalcHash(long[] h, char[] chs) {
-            for (int i = 0; i < n; i++) {
-                h[i + 1] = (h[i] * BASE + chs[i]) % MOD;
-            }
-        }
-
+        // 是否构建检查回文的
         private static void calcHash(char[] a, boolean reverse) {
             chars = a;
             n = a.length;
@@ -98,13 +92,22 @@ public class StringHashMod {
             }
         }
 
+
+        private static void heapCalcHash(long[] h, char[] chs) {
+            for (int i = 0; i < n; i++) {
+                h[i + 1] = (h[i] * BASE + chs[i]) % MOD;
+            }
+        }
+
+
+
         private static long getHash(long[] hash, int l, int r) {
             return (hash[r + 1] - hash[l] * power[r - l + 1] % MOD + MOD) % MOD;
         }
 
 
         // 获取 [l,r] 的 hash
-        private static long getHash(int l, int r) {
+        public static long getHash(int l, int r) {
             return getHash(pre, l, r);
         }
 
