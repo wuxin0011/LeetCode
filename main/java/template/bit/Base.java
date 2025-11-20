@@ -1,9 +1,9 @@
 package template.bit;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
+ * 参考文章 ： https://leetcode.cn/discuss/post/3571304/cong-ji-he-lun-dao-wei-yun-suan-chang-ji-enve/
  * @author: wuxin0011
  * @Description:
  */
@@ -178,17 +178,59 @@ public class Base {
     }
 
 
+    // 亦可以用字典树解答
+    // 求两个数最大异或和
+    // 位运算 + 贪心 + 哈希表
+    public static int findMaximumXOR(int[] nums) {
+        int mx = nums[0];
+        for (int x : nums) {
+            mx = Math.max(x, mx);
+        }
+        int bit = 32 - Integer.numberOfLeadingZeros(mx);
+        int ans = 0;
+        for (int w = bit, m = 0; w >= 0; w--) {
+            m |= 1 << w;
+            int e = ans | 1 << w; // 贪心 当前位期望的最大结果
+            Set<Integer> vis = new HashSet<>();
+            for (int x : nums) {
+                x &= m; // 去掉w后面的地位
+                // 当前位置异或能知道符合当前位置最大值
+                if (vis.contains(x ^ e)) {
+                    ans = e;
+                    break;
+                }
+                vis.add(x);
+            }
+        }
+        return ans;
+    }
+
+
+    // 求两个异或和最小
+    public static int findMinimumXOR(int[] nums) {
+        int ans = Integer.MAX_VALUE;
+        int[] b = Arrays.copyOf(nums,nums.length);
+        Arrays.sort(b);
+        for(int i = 0;i<nums.length-1;i++){
+            ans=Math.min(ans,b[i]^b[i + 1]);
+        }
+        return ans;
+    }
+
+
+
     public static void main(String[] args) {
-        int[] a  = {1,20,1111,21,11,111};
+        int[] a = {1, 20, 1111, 21, 11, 111};
         printBinaryToString(a);
         int S = a[1];
         System.out.println("当前集合的二进制: " + Integer.toBinaryString(S));
         System.out.println("获取二进制长度:" + bitLength(S));
         System.out.println("获取二进制1的个数:" + bitCount(S));
-        System.out.println("获取当前位是否有1:" + has(S,2));
+        System.out.println("获取当前位是否有1:" + has(S, 2));
         System.out.println("是否有相邻的1:" + hasOneOne(S));
         System.out.println("获取集合中最大元素:" + numberOfLeadingZeros(S));
         System.out.println("获取集合中最小元素:" + numberOfTrailingZeros(S));
+        System.out.println("获取中两个数异或的最大值:" + findMaximumXOR(a));
 
         exampleSub(S);
         exampleSubEmpty(S);
