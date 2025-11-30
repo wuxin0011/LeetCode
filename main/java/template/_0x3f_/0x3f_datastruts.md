@@ -474,7 +474,7 @@ class SparseTable {
         }
         for (int i = 1; i < w; i++) {
             for (int j = 0; j + (1 << i) <= n; j++) {
-                infos[i][j] = op(infos[i - 1][j], infos[i - 1][j + (1 << (i - 1))]);
+                infos[i][j] = op.op(infos[i - 1][j], infos[i - 1][j + (1 << (i - 1))]);
             }
         }
     }
@@ -483,7 +483,7 @@ class SparseTable {
     // 时间复杂度 O(1)
     public int query(int l, int r) {
         int k = 31 - Integer.numberOfLeadingZeros(r - l);
-        return op(infos[k][l], infos[k][r - (1 << k)]);
+        return op.op(infos[k][l], infos[k][r - (1 << k)]);
     }
 }
 
