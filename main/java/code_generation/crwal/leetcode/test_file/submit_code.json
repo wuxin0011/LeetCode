@@ -1,0 +1,5 @@
+{
+  "lang": "java",
+  "question_id": "4051",
+  "typed_code": "  // package leetcode.contest.weekly.w_400.w_473;\n\n// import code_generation.utils.IoUtil;\n/**\n * @author: agitated-curranfnd\n * @Description:\n * @url:   <a href=\"https://leetcode.cn/contest/weekly-contest-473/problems/remove-zeros-in-decimal-representation\">移除十进制表示中的所有零</a>\n * @title: 移除十进制表示中的所有零\n */\n// @TestCaseGroup(start = 1,end = 0x3fff,use = true)\npublic class Solution {\n\n    public static void main(String[] args) {\n        // IoUtil.testUtil(A.class,\"removeZeros\",\"A.txt\");\n    }\n    private static final int MOD = (int)1e9 + 7; \n\n    public long removeZeros(long n) {\n        return Long.parseLong(String.valueOf(n).replace(\"0\",\"\"));\n\t}\n\n  \n\n}"
+}

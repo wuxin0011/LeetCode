@@ -16,7 +16,7 @@ public class A {
     private static final int MOD = (int)1e9 + 7; 
 
     public long removeZeros(long n) {
-        return Long.valueOf(String.valueOf(n).replace("0",""));
+        return Long.parseLong(String.valueOf(n).replace("0",""));
 	}
 
   

@@ -2,6 +2,7 @@ package code_generation.utils;
 
 
 import code_generation.contest.ParseCodeInfo;
+import code_generation.crwal.leetcode.LCSubmit;
 import code_generation.proxy.TestData;
 
 import java.io.*;
@@ -110,6 +111,7 @@ public class IoUtil {
         testUtil(c, methodName, fileName, openLongContent, IS_STRICT_EQUAL);
     }
 
+    static Class<?> runClass;
 
     /**
      * 对拍核心方法
@@ -122,6 +124,7 @@ public class IoUtil {
      */
     public static <T> void testUtil(Class<T> src, String methodName, String fileName, boolean openLongContent, boolean isStrict) {
         check(src, methodName, fileName);
+        runClass = src;
         boolean find = false;
         try {
 
@@ -517,6 +520,12 @@ public class IoUtil {
 
         if (errorTimes.size() == 0 && exceptionTime == -1 && newObj) {
             System.out.println("Accepted!");
+            System.out.println("\nSubmit remotely ? (y|yes) ");
+            Scanner sc = new Scanner(System.in);
+            String next = sc.next();
+            if("y".equals(next.toLowerCase()) || "yes".equals(next.toLowerCase())){
+                LCSubmit.submit(runClass);
+            }
         } else {
 //            for (int error : errorTimes) {
 //                System.out.println("compare " + error + " is Error ,place check your program");

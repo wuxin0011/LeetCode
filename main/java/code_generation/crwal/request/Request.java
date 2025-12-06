@@ -10,10 +10,8 @@ import java.io.File;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.StringJoiner;
+import java.nio.charset.StandardCharsets;
+import java.util.*;
 
 /**
  * @author: wuxin0011
@@ -101,7 +99,7 @@ public class Request {
 
     public static HttpURLConnection getConnection(String url) {
         try {
-            if (!(url.contains("api/info/") || url.contains("https://leetcode.cn/graphql/"))) {
+            if (!(url.contains("api/info/") || url.contains("https://leetcode.cn/graphql/") || url.contains("submit"))) {
                 System.out.println("access url : " + url);
             }
             URL apiUrl = new URL(url);
@@ -239,7 +237,10 @@ public class Request {
         try {
             connection.setDoOutput(true);
             DataOutputStream outputStream = new DataOutputStream(connection.getOutputStream());
-            outputStream.writeBytes(jsonStr);
+            // 原来使用的
+            // outputStream.writeBytes(jsonStr);
+            // 使用下面方式可以修复提交代码问题
+            outputStream.write(jsonStr.getBytes(StandardCharsets.UTF_8));
             outputStream.flush();
             outputStream.close();
         } catch (Exception e) {

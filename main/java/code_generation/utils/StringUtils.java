@@ -571,4 +571,49 @@ public class StringUtils {
     }
 
 
+
+    public static String escapeForJson(String input) {
+        if (input == null) {
+            return "null";
+        }
+
+        StringBuilder sb = new StringBuilder(input.length() + 20);
+
+        for (int i = 0; i < input.length(); i++) {
+            char ch = input.charAt(i);
+
+            switch (ch) {
+                case '"':  // 双引号
+                    sb.append("\\\"");
+                    break;
+                case '\\': // 反斜杠
+                    sb.append("\\\\");
+                    break;
+                case '\b': // 退格
+                    sb.append("\\b");
+                    break;
+                case '\f': // 换页
+                    sb.append("\\f");
+                    break;
+                case '\n': // 换行
+                    sb.append("\\n");
+                    break;
+                case '\r': // 回车
+                    sb.append("\\r");
+                    break;
+                case '\t': // 制表符
+                    sb.append("\\t");
+                    break;
+                default:
+                    // 控制字符（0x00-0x1F）使用Unicode转义
+                    if (ch <= 0x1F) {
+                        sb.append(String.format("\\u%04x", (int) ch));
+                    } else {
+                        sb.append(ch);
+                    }
+            }
+        }
+
+        return sb.toString();
+    }
 }

@@ -287,6 +287,7 @@ public class LCContest implements Contest {
                 .buildAuthor(this.username)
                 .buildMethodName(methodName)
                 .buildPackageInfo(packageInfo)
+                .buildQuestionId(question.getQuestion_id())
                 // .buildClassName(className)
                 // 如果使用旧版本dir方式
                 .buildTextFileName(className)

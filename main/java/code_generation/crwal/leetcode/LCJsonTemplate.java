@@ -160,9 +160,40 @@ public class LCJsonTemplate {
         return queryTokenStr;
     }
 
+
+    private static final String submitCodeString = "{\n" +
+            "    \"lang\": \"java\",\n" +
+            "    \"question_id\": \"%s\",\n" +
+            "    \"typed_code\": \" %s\"\n" +
+            "}";
+    public static String submitCode(String questionID,String code) {
+        return String.format(submitCodeString,questionID,code);
+    }
+
+
+    public static final String queryQuestionInfo = "{\n" +
+            "    \"query\": \"\\n    query questionDetail($titleSlug: String!) {\\n  languageList {\\n    id\\n    name\\n    verboseName\\n  }\\n  statusList {\\n    id\\n    name: translatedName\\n  }\\n  question(titleSlug: $titleSlug) {\\n    title\\n    titleSlug\\n    questionId\\n    questionFrontendId\\n    questionTitle\\n    translatedTitle\\n    content\\n    translatedContent\\n    categoryTitle\\n    difficulty\\n    stats\\n    style\\n    contributors {\\n      username\\n      profileUrl\\n      avatarUrl\\n    }\\n    book {\\n      id\\n      bookName\\n      pressName\\n      source\\n      shortDescription\\n      fullDescription\\n      bookImgUrl\\n      pressImgUrl\\n      productUrl\\n    }\\n    companyTagStatsV2\\n    topicTags {\\n      name\\n      slug\\n      translatedName\\n    }\\n    similarQuestions\\n    mysqlSchemas\\n    dataSchemas\\n    frontendPreviews\\n    likes\\n    dislikes\\n    isPaidOnly\\n    status\\n    boundTopicId\\n    enableTestMode\\n    metaData\\n    enableRunCode\\n    enableSubmit\\n    envInfo\\n    isLiked\\n    nextChallengePairs\\n    libraryUrl\\n    hints\\n    codeSnippets {\\n      code\\n      lang\\n      langSlug\\n    }\\n    jsonExampleTestcases\\n    exampleTestcases\\n    sampleTestCase\\n    hasFrontendPreview\\n    editorType\\n    featuredContests {\\n      titleSlug\\n      titleCn\\n      title\\n    }\\n  }\\n}\\n    \",\n" +
+            "    \"variables\": {\n" +
+            "        \"titleSlug\": \"%s\"\n" +
+            "    },\n" +
+            "    \"operationName\": \"questionDetail\"\n" +
+            "}";
+
+    public static String getQueryQuestionInfo(String titleSlug) {
+        return String.format(queryQuestionInfo,titleSlug);
+    }
+
+    private static final String submitDetailString = "{\"query\":\"\\n    query submissionDetails($submissionId: ID!) {\\n  submissionDetail(submissionId: $submissionId) {\\n    code\\n    timestamp\\n    statusDisplay\\n    isMine\\n    runtimeDisplay: runtime\\n    memoryDisplay: memory\\n    memory: rawMemory\\n    lang\\n    langVerboseName\\n    question {\\n      questionId\\n      titleSlug\\n      hasFrontendPreview\\n    }\\n    user {\\n      realName\\n      userAvatar\\n      userSlug\\n    }\\n    runtimePercentile\\n    memoryPercentile\\n    submissionComment {\\n      flagType\\n    }\\n    passedTestCaseCnt\\n    totalTestCaseCnt\\n    fullCodeOutput\\n    testDescriptions\\n    testInfo\\n    testBodies\\n    stdOutput\\n    ... on GeneralSubmissionNode {\\n      outputDetail {\\n        codeOutput\\n        expectedOutput\\n        input\\n        compileError\\n        runtimeError\\n        lastTestcase\\n      }\\n    }\\n    ... on ContestSubmissionNode {\\n      outputDetail {\\n        codeOutput\\n        expectedOutput\\n        input\\n        compileError\\n        runtimeError\\n        lastTestcase\\n      }\\n    }\\n  }\\n}\\n    \",\"variables\":{\"submissionId\":\"%s\"},\"operationName\":\"submissionDetails\"}";
+    public static String querySubmitStatus(String submissionId) {
+        return String.format(submitDetailString,submissionId);
+    }
+
+
+
     public static void main(String[] args) {
         System.out.println(userStatusStr);
     }
+
 
 
 }

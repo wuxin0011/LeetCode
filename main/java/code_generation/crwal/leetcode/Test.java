@@ -3,6 +3,7 @@ package code_generation.crwal.leetcode;
 import code_generation.crwal.request.Request;
 import code_generation.utils.IoUtil;
 import code_generation.utils.StringUtils;
+import leetcode.contest.weekly.w_400.w_474.A;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -299,7 +300,13 @@ public class Test {
 //        testContest452C();
 
         // 测试构造函数
-        testparse1();
+        // testparse1();
+
+        // 测试提交结果
+        // testSubmitResult();
+
+        // 测试提交代码
+        testSubmitCode();
     }
 
     private static void getProblemsTitle() {
@@ -473,6 +480,20 @@ public class Test {
             System.out.println("\n\nend = >" + methodStr.substring(i));
         }
         System.out.println("cur = " + sb);
+    }
+
+
+    static void testSubmitResult(){
+        String submission_id = "683068868";
+        String submit_status = BuildUrl.querySubmitResult(submission_id);
+        System.out.println(submit_status);
+        if(StringUtils.kmpSearch(submit_status,"statusDisplay")!=-1 && StringUtils.kmpSearch(submit_status,"Accepted")!=-1){
+            System.out.println("AC!");
+        }
+    }
+
+    static void testSubmitCode(){
+        LCSubmit.submit(A.class);
     }
 
 

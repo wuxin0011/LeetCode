@@ -1,3 +1,15 @@
+## 🏆 第 474 场周赛
+- [ ] [找出缺失的元素](https://leetcode.cn/contest/weekly-contest-474/problems/find-missing-elements)
+ [🎈代码](w_400/w_474/A.java)
+- [ ] [一次替换后的三元素最大乘积](https://leetcode.cn/contest/weekly-contest-474/problems/maximum-product-of-three-elements-after-one-replacement)
+ [🎈代码](w_400/w_474/B.java)
+- [ ] [完成所有送货任务的最少时间](https://leetcode.cn/contest/weekly-contest-474/problems/minimum-time-to-complete-all-deliveries)
+ [🎈代码](w_400/w_474/C.java)
+- [ ] [大于目标字符串的最小字典序回文排列](https://leetcode.cn/contest/weekly-contest-474/problems/lexicographically-smallest-palindromic-permutation-greater-than-target)
+ [🎈代码](w_400/w_474/D.java)
+
+
+
 
 
 ## 🏆 第 473 场周赛

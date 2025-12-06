@@ -8,6 +8,7 @@ import java.net.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * @author: wuxin0011
@@ -237,7 +238,25 @@ public class BuildUrl {
             titleSlug = split[1];
         }
         String[] split = titleSlug.split("/");
-        return split[0];
+        titleSlug = split[0];
+        if(StringUtils.kmpSearch(titleSlug,">")!=-1){
+            titleSlug = titleSlug.substring(0,StringUtils.kmpSearch(titleSlug,">"));
+        }
+        if(StringUtils.kmpSearch(titleSlug,"<")!=-1){
+            titleSlug = titleSlug.substring(0,StringUtils.kmpSearch(titleSlug,"<"));
+        }
+
+        titleSlug = titleSlug.replace("\"","");
+        titleSlug = titleSlug.replace("<","");
+        titleSlug = titleSlug.replace(">","");
+        titleSlug = titleSlug.replace("'","");
+        titleSlug = titleSlug.replace("(","");
+        titleSlug = titleSlug.replace(")","");
+        titleSlug = titleSlug.replace(",","");
+        titleSlug = titleSlug.replace("\\","");
+        titleSlug = titleSlug.replace("，","");
+        titleSlug = titleSlug.replace("。","");
+        return titleSlug;
     }
 
 
@@ -296,4 +315,56 @@ public class BuildUrl {
         }
 
     }
+
+
+    public static String buildSubmitUrl(String titleTlug){
+        return LC_PROBLEM_PREFIX + "/" + titleTlug +  "/submit";
+    }
+
+
+    /**
+     * 2025-12-06
+     * 提交代码接口
+     * @param code 代码内容
+     * @param questionId questionId
+     * @param titleSlug titleSlug
+     * @return submitId
+     */
+    public static String submitCode(String code,String questionId,String titleSlug){
+        if(StringUtils.isEmpty(code)){
+            throw new RuntimeException("submit code not allowed null !");
+        }
+        if(StringUtils.isEmpty(titleSlug)){
+            throw new RuntimeException("cannot not get problem titleSlug !");
+        }
+        if(StringUtils.isEmpty(questionId)){
+            throw new RuntimeException("cannot not get problem submit id !");
+        }
+        String url = String.format("%s/%s/submit/",LC_PROBLEM_PREFIX,titleSlug);
+        try{Thread.sleep(3000);}catch (Exception ignored){}
+        code = StringUtils.escapeForJson(code);
+        String submitInfo = LCJsonTemplate.submitCode(questionId,code);
+//        System.out.println("**************************************************************");
+//        System.out.println(submitInfo);
+//        System.out.println("**************************************************************");
+        return request.requestPost(url,Request.applicationJSON,submitInfo,null);
+    }
+
+
+    /**
+     * 2025-12-06
+     * 查询提交结果
+     * @param submitID submitID
+     * @return 返回一个json字符串 如果ac了 会有 {statusDisplay : "Accepted"} 如果失败 {},如果还在测试中会返回一个待续中...
+     */
+    public static String querySubmitResult(String submitID){
+        return request.requestPost(graphql,LCJsonTemplate.querySubmitStatus(submitID));
+    }
+
+    public static String queryQuestionInfo(String titleSlug){
+        return request.requestPost(graphql,LCJsonTemplate.getQueryQuestionInfo(titleSlug));
+    }
+
+
+
 }
