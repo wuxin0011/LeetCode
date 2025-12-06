@@ -1,0 +1,15 @@
+baba
+abba
+baab
+
+baba
+bbaa
+""
+
+abc
+abb
+""
+
+aac
+abb
+aca
