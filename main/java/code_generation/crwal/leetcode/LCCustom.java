@@ -232,9 +232,54 @@ public abstract class LCCustom implements CustomProblem {
                     if (u.startsWith(BuildUrl.LC_CLASS_THEME_PREFIX)) {
                         return u.replace(BuildUrl.LC_CLASS_THEME_PREFIX, BuildUrl.LC_PROBLEM_PREFIX);
                     }
-//                    System.out.println(Arrays.toString(u.split("problems")));
+                    StringBuilder sb = new StringBuilder();
+                    for(char c : u.toCharArray()){
+                        if(c == '>'||c=='<')break;
+                        if(0 < c && c <= Byte.MAX_VALUE){
+                            sb.append(c);
+                        }
+                    }
+                    u = sb.toString();
                     String[] sss = u.split("problems");
                     return BuildUrl.LC_PROBLEM_PREFIX + sss[sss.length - 1] ;
+                }).
+                collect(Collectors.toList());
+    }
+
+    public static List<String> matchLeetCodeUrlsAndContest(String s) {
+        if (StringUtils.isEmpty(s)) {
+            return Collections.emptyList();
+        }
+        List<String> urls = StringUtils.matchUrls(s);
+        return urls.stream().filter(
+                        url -> {
+                            if (StringUtils.isEmpty(url)) {
+                                return false;
+                            }
+                            if (url.startsWith(BuildUrl.LC_PROBLEM_PREFIX)) {
+                                return true;
+                            }
+                            if (url.startsWith(BuildUrl.LC_WEEKLY_CONTEST_PREFIX)) {
+                                return true;
+                            }
+                            if (url.startsWith(BuildUrl.LC_CLASS_THEME_PREFIX)) {
+                                return true;
+                            }
+                            return url.startsWith(BuildUrl.LC_BI_WEEKLY_CONTEST_PREFIX);
+                        }
+                ).map(u -> {
+                    if (u.startsWith(BuildUrl.LC_CLASS_THEME_PREFIX)) {
+                        return u.replace(BuildUrl.LC_CLASS_THEME_PREFIX, BuildUrl.LC_PROBLEM_PREFIX);
+                    }
+                    StringBuilder sb = new StringBuilder();
+                    for(char c : u.toCharArray()){
+                        if(c == '>'||c=='<')break;
+                        if(c=='\"')continue;
+                        if(0 < c && c <= Byte.MAX_VALUE){
+                            sb.append(c);
+                        }
+                    }
+                    return StringUtils.ingoreString(sb.toString());
                 }).
                 collect(Collectors.toList());
     }

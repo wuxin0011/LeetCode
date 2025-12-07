@@ -2,6 +2,7 @@ package code_generation.utils;
 
 
 import code_generation.contest.ParseCodeInfo;
+import code_generation.crwal.leetcode.LCCustom;
 import code_generation.crwal.leetcode.LCSubmit;
 import code_generation.proxy.TestData;
 
@@ -520,12 +521,16 @@ public class IoUtil {
 
         if (errorTimes.size() == 0 && exceptionTime == -1 && newObj) {
             System.out.println("Accepted!");
-            System.out.println("\nSubmit remotely ? (y|yes) ");
-            Scanner sc = new Scanner(System.in);
-            String next = sc.next();
-            if("y".equals(next.toLowerCase()) || "yes".equals(next.toLowerCase())){
-                LCSubmit.submit(runClass);
+            List<String> urls = LCCustom.matchLeetCodeUrls(IoUtil.readContent(String.format("%s%s.java", IoUtil.buildAbsolutePath(runClass), runClass.getSimpleName())));
+            if(!urls.isEmpty()){
+                System.out.println("\nSubmit remotely ? (y|yes) ");
+                Scanner sc = new Scanner(System.in);
+                String next = sc.next();
+                if("y".equals(next.toLowerCase()) || "yes".equals(next.toLowerCase())){
+                    LCSubmit.submit(runClass);
+                }
             }
+
         } else {
 //            for (int error : errorTimes) {
 //                System.out.println("compare " + error + " is Error ,place check your program");

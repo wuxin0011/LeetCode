@@ -17,13 +17,25 @@ import java.util.Scanner;
 public class LCSubmit {
 
 
-    private static final boolean is_show_submit_code = true;
-    private static final boolean is_auto_submit = false;
+    /**
+     * 是否预览代码
+     */
+    private static final boolean is_show_submit_code = false;
+
+    /**
+     * 是否自动提交
+     */
+    private static final boolean is_auto_submit = true;
+
+    /**
+     * 如果题目链接为周赛url是否提交到周赛？
+     */
+    public static final boolean is_contest_url_to_submit_contest = true;
 
     public static void submit(Class<?> c) {
         String javaFilePath = String.format("%s%s.java", IoUtil.buildAbsolutePath(c), c.getSimpleName());
         String code = filterSubmitCode(c, IoUtil.readContent(javaFilePath));
-        List<String> urls = LCCustom.matchLeetCodeUrls(code);
+        List<String> urls = LCCustom.matchLeetCodeUrlsAndContest(code);
         if (urls.isEmpty()) {
             throw new RuntimeException("cannot not problem submit url!");
         }
@@ -40,8 +52,8 @@ public class LCSubmit {
                 return;
             }
         }
-
-        String titleSlug = BuildUrl.buildTitleSlug(urls.get(0));
+        String problemUrl = urls.get(0);
+        String titleSlug = BuildUrl.buildTitleSlug(problemUrl);
         String questionId = null;
         // 查询题目ID
         for (int __ = 0; __ < 10; __++) {
@@ -49,13 +61,19 @@ public class LCSubmit {
             if (!StringUtils.isEmpty(questionId)) break;
             ExceptionUtils.sleep(Math.max(1, new Random().nextInt(5)));
         }
-        String result = BuildUrl.submitCode(code, questionId, titleSlug);
+        String result = BuildUrl.submitCode(code, questionId, titleSlug,problemUrl);
         ExceptionUtils.sleep(5);
         String submission_id = getId(result, "submission_id");
         if (StringUtils.isEmpty(submission_id)) {
             throw new RuntimeException("Submit Fail !");
         }
-        System.out.printf("\nclick link views details: %s/submissions/detail/%s\n", BuildUrl.LC_PREFIX, submission_id);
+        if(is_contest_url_to_submit_contest && (problemUrl.startsWith(BuildUrl.LC_WEEKLY_CONTEST_PREFIX) || problemUrl.startsWith(BuildUrl.LC_BI_WEEKLY_CONTEST_PREFIX))){
+            System.out.printf("\nclick link views details: %s/submissions/%s\n", problemUrl, submission_id);
+        }else{
+            System.out.printf("\nclick link views details: %s/submissions/detail/%s\n", BuildUrl.LC_PREFIX, submission_id);
+        }
+
+
         // 返回一个提交结果 包含 submission_id
         // 这里尝试休眠10次
         // 防止有些题目测试时间过长而拿不到数据

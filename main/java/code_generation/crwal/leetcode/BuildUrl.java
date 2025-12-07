@@ -330,7 +330,7 @@ public class BuildUrl {
      * @param titleSlug titleSlug
      * @return submitId
      */
-    public static String submitCode(String code,String questionId,String titleSlug){
+    public static String submitCode(String code,String questionId,String titleSlug,String problemUrl){
         if(StringUtils.isEmpty(code)){
             throw new RuntimeException("submit code not allowed null !");
         }
@@ -340,8 +340,12 @@ public class BuildUrl {
         if(StringUtils.isEmpty(questionId)){
             throw new RuntimeException("cannot not get problem submit id !");
         }
-        String url = String.format("%s/%s/submit/",LC_PROBLEM_PREFIX,titleSlug);
-        try{Thread.sleep(3000);}catch (Exception ignored){}
+        String url = null;
+        if(LCSubmit.is_contest_url_to_submit_contest && (problemUrl.startsWith(LC_WEEKLY_CONTEST_PREFIX) || problemUrl.startsWith(LC_BI_WEEKLY_CONTEST_PREFIX))){
+            url = problemUrl.replace(LC_PREFIX + "/contest",LC_PREFIX + "/contest" + "/api") + "/submit/";
+        }else{
+            url = String.format("%s/%s/submit/",LC_PROBLEM_PREFIX,titleSlug);
+        }
         code = StringUtils.escapeForJson(code);
         String submitInfo = LCJsonTemplate.submitCode(questionId,code);
 //        System.out.println("**************************************************************");

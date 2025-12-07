@@ -92,7 +92,7 @@
           // console.log(ans)
           console.table(ans)
       </code>
-  
+
   </pre>
 
 </details>
@@ -109,7 +109,7 @@
 
 ## 📘 更新日志
 
-
+- 2025/12/07 添加ac后代码提交功能
 - 2024/6/10 添加`@TestCaseGroup` 注解 用于根据需要测试哪一组数据 [See](./main/java/code_generation/annotation/TestCaseGroup.java)
 - 2024/3/27 基本完成自动案例功能
 - 2024/3/19 破坏性调整目录结构，新增代码`template`自动生成
