@@ -4,11 +4,8 @@ import code_generation.utils.CustomColor;
 import code_generation.utils.ExceptionUtils;
 import code_generation.utils.IoUtil;
 import code_generation.utils.StringUtils;
-import leetcode.contest.weekly.w_400.w_473.A;
 
-import java.util.List;
-import java.util.Random;
-import java.util.Scanner;
+import java.util.*;
 
 /**
  * @author: wuxin0011
@@ -32,9 +29,25 @@ public class LCSubmit {
      */
     public static final boolean is_contest_url_to_submit_contest = true;
 
+
+    /**
+     * 是否删除注释
+     */
+    public static final boolean is_del_comment = true;
+
+
+    /**
+     * 是否删除注释
+     */
+    public static final boolean is_add_comment = false;
+
     public static void submit(Class<?> c) {
         String javaFilePath = String.format("%s%s.java", IoUtil.buildAbsolutePath(c), c.getSimpleName());
-        String code = filterSubmitCode(c, IoUtil.readContent(javaFilePath));
+        String code = IoUtil.readContent(javaFilePath);
+        code = code.replace(String.format("public class %s", c.getSimpleName()), "public class Solution");
+        if (is_add_comment) {
+            code = filterSubmitCode(code);
+        }
         List<String> urls = LCCustom.matchLeetCodeUrlsAndContest(code);
         if (urls.isEmpty()) {
             throw new RuntimeException("cannot not problem submit url!");
@@ -52,6 +65,12 @@ public class LCSubmit {
                 return;
             }
         }
+        if (is_del_comment) {
+            code = delComment(code);
+        }
+        if (StringUtils.kmpSearch(code, "IoUtil.testUtil") != -1) {
+            code = addComment(code, "IoUtil.testUtil");
+        }
         String problemUrl = urls.get(0);
         String titleSlug = BuildUrl.buildTitleSlug(problemUrl);
         String questionId = null;
@@ -61,7 +80,7 @@ public class LCSubmit {
             if (!StringUtils.isEmpty(questionId)) break;
             ExceptionUtils.sleep(Math.max(1, new Random().nextInt(5)));
         }
-        String result = BuildUrl.submitCode(code, questionId, titleSlug,problemUrl);
+        String result = BuildUrl.submitCode(code, questionId, titleSlug, problemUrl);
         ExceptionUtils.sleep(5);
         String submission_id = getId(result, "submission_id");
         if (StringUtils.isEmpty(submission_id)) {
@@ -93,8 +112,7 @@ public class LCSubmit {
 
     public static final String GITHUB = "https://github.com/wuxin0011/leetcode";
 
-    private static String filterSubmitCode(Class<?> c, String code) {
-        code = code.replace(String.format("public class %s", c.getSimpleName()), "public class Solution");
+    private static String filterSubmitCode(String code) {
         code = addComment(code, "package");
         code = addComment(code, "import");
         code = addComment(code, "IoUtil.testUtil");
@@ -124,13 +142,9 @@ public class LCSubmit {
                         }
                     }
                 }
-
-
             }
             return sb.toString();
         }
-
-
         return code;
     }
 
@@ -153,11 +167,99 @@ public class LCSubmit {
         return cur.toString();
     }
 
+    private static final String[] delTarget = {"//", "package", "import", "IoUtil.testUtil", "System.out"};
 
-    public static void main(String[] args) {
-        Class c = A.class;
-        System.out.println(filterSubmitCode(c, IoUtil.readContent(String.format("%s%s.java", IoUtil.buildAbsolutePath(c), c.getSimpleName()))));
+    public static String delComment(String code) {
+        if (StringUtils.kmpSearch(code, "public static void main") != -1) {
+            StringBuilder sb = new StringBuilder();
+            int t = StringUtils.kmpSearch(code, "public static void main");
+            int j = -1;
+            for (int i = t, deep = 0; i < code.length(); i++) {
+                char cc = code.charAt(i);
+                if (cc == '{') {
+                    deep++;
+                } else if (cc == '}') {
+                    deep--;
+                    if (deep == 0) {
+                        j = i;
+                        break;
+                    }
+                }
+            }
+            for (int i = 0; j > t && i < code.length(); i++) {
+                if (t <= i && i <= j) {
+                    continue;
+                }
+                sb.append(code.charAt(i));
+            }
+            if(!StringUtils.isEmpty(sb.toString())){
+                code = sb.toString();
+            }
+        }
+        char[] a = code.toCharArray();
+        StringBuilder sb = new StringBuilder();
+        List<String> needAddImport = new ArrayList<>();
+        List<Integer> delIds = new ArrayList<>();
+        for (String pattern : delTarget) {
+            List<Integer> ids = StringUtils.kmpSearchList(code, pattern);
+            if ("import".equals(pattern)) {
+                // 防误删除
+                for (int p : ids) {
+                    StringBuilder cur = new StringBuilder();
+                    for (int j = p; j < a.length; j++) {
+                        cur.append(a[j]);
+                        if (a[j] == '\n') {
+                            break;
+                        }
+                    }
+                    if (StringUtils.kmpSearch(cur.toString(), "import java") != -1) {
+                        needAddImport.add(cur.toString());
+                    }
+                }
+            }
+            delIds.addAll(ids);
+        }
+        Collections.sort(delIds);
+        int n = a.length;
+        for (int i = 0, j = 0; i < n; i++) {
+            if (a[i] == '/' && i + 1 < n && a[i + 1] == '/') {
+                while (i < n && a[i] != '\n') i++;
+                i++;
+            }
+            if (j < delIds.size() && i == delIds.get(j)) {
+                while (i < n && a[i] != '\n') i++;
+                i++;
+                j++;
+            }
+            if (a[i] == '/' && i + 1 < n && a[i + 1] == '*') {
+                i += 2;
+                while (i + 1 < n) {
+                    if (a[i] == '*' && a[i + 1] == '/') {
+                        i += 2;
+                        break;
+                    }
+                    i++;
+                }
+            }
+            if (i < n) {
+                sb.append(a[i]);
+            }
+        }
+        code = sb.toString();
+        int j = StringUtils.kmpSearch(code, "public class Solution");
+        if (j != -1) {
+            code = code.substring(j);
+        }
+        if (!needAddImport.isEmpty()) {
+            StringBuilder temp = new StringBuilder();
+            for (String needImportString : needAddImport) {
+                temp.append(needImportString);
+            }
+            temp.append("\n\n\n");
+            code = temp + code;
+        }
+        code = code.replace(" import","import");
+        return code;
     }
-
 
 }
