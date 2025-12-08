@@ -5,7 +5,10 @@ import code_generation.utils.ExceptionUtils;
 import code_generation.utils.IoUtil;
 import code_generation.utils.StringUtils;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+import java.util.Scanner;
 
 /**
  * @author: wuxin0011
@@ -67,6 +70,8 @@ public class LCSubmit {
         }
         if (is_del_comment) {
             code = delComment(code);
+            System.out.println(code);
+            return;
         }
         if (StringUtils.kmpSearch(code, "IoUtil.testUtil") != -1) {
             code = addComment(code, "IoUtil.testUtil");
@@ -170,8 +175,28 @@ public class LCSubmit {
     private static final String[] delTarget = {"//", "package", "import", "IoUtil.testUtil", "System.out"};
 
     public static String delComment(String code) {
+
+        List<String> needAddImport = new ArrayList<>();
+        char[] a = code.toCharArray();
+        // 防止误删 java内部包文件
+        if (StringUtils.kmpSearch(code, "import") != -1) {
+            List<Integer> ids = StringUtils.kmpSearchList(code, "import");
+            for (int p : ids) {
+                StringBuilder cur = new StringBuilder();
+                for (int j = p; j < a.length; j++) {
+                    cur.append(a[j]);
+                    if (a[j] == '\n') {
+                        break;
+                    }
+                }
+                if (StringUtils.kmpSearch(cur.toString(), "import java") != -1) {
+                    needAddImport.add(cur.toString());
+                }
+            }
+        }
+        // 删除main函数
         if (StringUtils.kmpSearch(code, "public static void main") != -1) {
-            StringBuilder sb = new StringBuilder();
+            StringBuilder temp = new StringBuilder();
             int t = StringUtils.kmpSearch(code, "public static void main");
             int j = -1;
             for (int i = t, deep = 0; i < code.length(); i++) {
@@ -190,46 +215,41 @@ public class LCSubmit {
                 if (t <= i && i <= j) {
                     continue;
                 }
-                sb.append(code.charAt(i));
+                temp.append(code.charAt(i));
             }
-            if(!StringUtils.isEmpty(sb.toString())){
-                code = sb.toString();
+            if (!StringUtils.isEmpty(temp.toString())) {
+                code = temp.toString();
             }
         }
-        char[] a = code.toCharArray();
-        StringBuilder sb = new StringBuilder();
-        List<String> needAddImport = new ArrayList<>();
-        List<Integer> delIds = new ArrayList<>();
-        for (String pattern : delTarget) {
-            List<Integer> ids = StringUtils.kmpSearchList(code, pattern);
-            if ("import".equals(pattern)) {
-                // 防误删除
-                for (int p : ids) {
-                    StringBuilder cur = new StringBuilder();
-                    for (int j = p; j < a.length; j++) {
-                        cur.append(a[j]);
-                        if (a[j] == '\n') {
-                            break;
-                        }
-                    }
-                    if (StringUtils.kmpSearch(cur.toString(), "import java") != -1) {
-                        needAddImport.add(cur.toString());
+        // 只需要提交部分
+        if (StringUtils.kmpSearch(code, "public class Solution") != -1) {
+            int p = StringUtils.kmpSearch(code, "public class Solution");
+            String tempCode = code.substring(p);
+            int deep = 0;
+            StringBuilder tempBuf = new StringBuilder();
+            for (int i = 0,ban = 0; i < tempCode.length(); i++) {
+                char cc = tempCode.charAt(i);
+                if(ban == 0){
+                    tempBuf.append(cc);
+                }
+                if (cc == '{') deep++;
+                if (cc == '}') {
+                    deep--;
+                    if(deep == 0){
+                        ban = 1;
                     }
                 }
             }
-            delIds.addAll(ids);
+            code = deep == 0 ? tempCode : tempBuf.toString();
         }
-        Collections.sort(delIds);
+        a = code.toCharArray();
         int n = a.length;
-        for (int i = 0, j = 0; i < n; i++) {
+        StringBuilder sb = new StringBuilder();
+        // 去掉注释等信息
+        for (int i = 0; i < n; i++) {
             if (a[i] == '/' && i + 1 < n && a[i + 1] == '/') {
                 while (i < n && a[i] != '\n') i++;
                 i++;
-            }
-            if (j < delIds.size() && i == delIds.get(j)) {
-                while (i < n && a[i] != '\n') i++;
-                i++;
-                j++;
             }
             if (a[i] == '/' && i + 1 < n && a[i + 1] == '*') {
                 i += 2;
@@ -245,10 +265,8 @@ public class LCSubmit {
                 sb.append(a[i]);
             }
         }
-        code = sb.toString();
-        int j = StringUtils.kmpSearch(code, "public class Solution");
-        if (j != -1) {
-            code = code.substring(j);
+        if (!StringUtils.isEmpty(sb.toString())) {
+            code = sb.toString();
         }
         if (!needAddImport.isEmpty()) {
             StringBuilder temp = new StringBuilder();
@@ -258,7 +276,7 @@ public class LCSubmit {
             temp.append("\n\n\n");
             code = temp + code;
         }
-        code = code.replace(" import","import");
+        code = code.replace(" import", "import");
         return code;
     }
 
