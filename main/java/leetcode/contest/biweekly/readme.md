@@ -1,3 +1,15 @@
+## 🏆 第 162 场双周赛
+- [ ] [最早完成陆地和水上游乐设施的时间 I](https://leetcode.cn/contest/biweekly-contest-162/problems/earliest-finish-time-for-land-and-water-rides-i)
+ [🎈代码](bi_100/bi_162/A.java)
+- [ ] [使数组平衡的最少移除数目](https://leetcode.cn/contest/biweekly-contest-162/problems/minimum-removals-to-balance-array)
+ [🎈代码](bi_100/bi_162/B.java)
+- [ ] [最早完成陆地和水上游乐设施的时间 II](https://leetcode.cn/contest/biweekly-contest-162/problems/earliest-finish-time-for-land-and-water-rides-ii)
+ [🎈代码](bi_100/bi_162/C.java)
+- [ ] [查询超过阈值频率最高元素](https://leetcode.cn/contest/biweekly-contest-162/problems/threshold-majority-queries)
+ [🎈代码](bi_100/bi_162/D.java)
+
+
+
 ## 🏆 第 171 场双周赛
 - [ ] [完全质数](https://leetcode.cn/contest/biweekly-contest-171/problems/complete-prime-number)
  [🎈代码](bi_100/bi_171/A.java)
