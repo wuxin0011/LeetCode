@@ -2,6 +2,7 @@
 # filter file
 *.iml
 *.html
+*.exe
 
 # filter folder
 out

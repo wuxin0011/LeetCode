@@ -6,6 +6,7 @@ import java.util.Random;
 /**
  * 测试通过
  * https://www.luogu.com.cn/record/222398355
+ * c++ ： https://www.luogu.com.cn/record/253331966
  *
  * @author: wuxin0011
  * @Description:

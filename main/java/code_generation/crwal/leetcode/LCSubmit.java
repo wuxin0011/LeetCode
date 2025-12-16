@@ -70,8 +70,6 @@ public class LCSubmit {
         }
         if (is_del_comment) {
             code = delComment(code);
-            System.out.println(code);
-            return;
         }
         if (StringUtils.kmpSearch(code, "IoUtil.testUtil") != -1) {
             code = addComment(code, "IoUtil.testUtil");
