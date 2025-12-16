@@ -192,8 +192,7 @@ public class Config {
         }
         // if cookies.txt not exist create it
         IoUtil.createFile(configPath + cookieFile);
-        System.out.println("place config your cookie in cookies.txt or !" + Constant.headers + ".properties file !");
-        return "";
+        throw new RuntimeException("place config your cookie in : ! " +  (configPath + cookieFile));
     }
 
 
