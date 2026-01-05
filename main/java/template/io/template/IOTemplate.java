@@ -108,7 +108,11 @@ public class IOTemplate {
             }
         }
 
-        boolean isDebug = true;
+        static boolean isDebug = true;
+
+        static {
+            isDebug = System.getenv("__IS_DEBUG__") != null;
+        }
 
         public void dbg(Object... args) {
             if (!isDebug) {

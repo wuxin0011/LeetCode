@@ -84,10 +84,10 @@ public class StringUtils {
     // https://leetcode.cn/problems/verify-preorder-serialization-of-a-binary-tree/submissions/
     // 由于 # 这个符号与之前设计符号冲突了，加入特殊情况判断
     public static boolean isIgnore(char c, char st) {
-        if (st == '#' && isIgnoreStrict(c)) {
+        if (isIgnoreStrict(c)) {
             return true;
         }
-        return st != '#' && isIgnore(c);
+        return isIgnore(c);
     }
 
     public static boolean isIgnoreStrict(char c) {
@@ -99,6 +99,7 @@ public class StringUtils {
             return true;
         }
         for (char c1 : chars) {
+            if(c1=='#')continue;
             if (c1 == c) {
                 return true;
             }
