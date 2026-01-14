@@ -7,15 +7,15 @@ import java.util.List;
  * @author: wuxin0011
  * @Description:
  */
-public class UnionIdx {
+        public class UnionIdx {
 
 
-    // 和数组下标相关的并查集
-    // @see https://leetcode.cn/problems/smallest-string-with-swaps/
-    // @see https://leetcode.cn/problems/lexicographically-smallest-equivalent-string
-    public static class Union<T> {
-        int[] fa;
-        int[] s;
+            // 和数组下标相关的并查集
+            // @see https://leetcode.cn/problems/smallest-string-with-swaps/
+            // @see https://leetcode.cn/problems/lexicographically-smallest-equivalent-string
+            public static class Union<T> {
+                int[] fa;
+                int[] s;
         int size;
         List[] ids;
         boolean[] vis;
