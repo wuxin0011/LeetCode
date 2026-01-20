@@ -6,220 +6,275 @@ package template.segment;
  */
 public class SegmentTemplate {
 
+    static class Info_template {
 
-    /***************************************线段树模板开始**************************************/
+        // 线段树模板开始
+        static class Info {
+            long a = 0;
 
-    // 自定义实现操作
-    @FunctionalInterface
-    public interface Operation {
-        Node op(Node x, Node y);
-    }
+            Info() {
 
-    // 维护的信息
-    public static class Node {
-        /*维护值*/
-        long val;
-        Node(long initial) {
-            this.val = initial;
-        }
-    }
+            }
 
-    // 如果是求和注意 updateLazy 和 addLazy 两处逻辑
-    // 注意下标和原始数组对应关系 + 1
-    public static class Segment {
-
-        int n;
-        long initial;
-        Operation operation;
-        int[] left, right;
-        Node[] nodes;
-        int cnt;
-
-        boolean isOffset = true; // 是否以[1,n] 作为区间查询
-
-        /**
-         * @param n         查询范围 开辟的空间大小[4*n] 与二叉树版的n不同，这里n是数组大小
-         * @param initial   默认初始值
-         * @param operation 操作
-         */
-        public Segment(int n, long initial, Operation operation) {
-            this.n = n;
-            this.initial = initial;
-            this.operation = operation;
-            this.left = new int[n << 1];
-            this.right = new int[n << 1];
-            this.nodes = new Node[n << 2];
-            // 如果不调用 build 需要初始化
-            // Arrays.setAll(nodes, i -> new Node(initial));
-            this.cnt = 1;
+            Info(long x) {
+                this.a = x;
+            }
         }
 
-        // 如果使用静态方式需要clear
-        public void clear() {
-            for (int i = 0; i <= cnt; i++) {
-                left[i] = right[i] = 0;
-                if (nodes[i] != null) {
-                    nodes[i].val = initial;
+
+        static Info e(){
+            return new Info();
+        }
+
+        static Info op(Info l, Info r) {
+            Info info = new Info();
+            info.a = Math.max(l.a, r.a);
+            return info;
+        }
+
+        // 线段树二分函数
+        static boolean check0(Info i, Info t) {
+            return false;
+        }
+
+        public static class Segment {
+            Info[] infos, a;
+            int n;
+
+            public Segment(int n) {
+                this.n = n;
+                this.initInfo();
+            }
+
+            private void initInfo() {
+                this.infos = new Info[n << 2];
+                for (int i = 0; i < (n << 2); i++) {
+                    infos[i] = e();
+                }
+                this.build(0, n - 1, 1);
+            }
+
+            public Segment(Info[] a) {
+                this.a = a;
+                this.n = a.length;
+                this.initInfo();
+            }
+
+            private void build(int l, int r, int i) {
+                if (l == r) {
+                    infos[i] = a == null ? new Info() : a[l];
                 } else {
-                    nodes[i] = new Node(initial);
+                    int mid = l + ((r - l) >> 1);
+                    build(l, mid, i << 1);
+                    build(mid + 1, r, i << 1 | 1);
+                    up(i);
                 }
             }
-            cnt = 1;
-        }
 
-
-        private void updateLazy(int i, int l, int r, int v) {
-            // max|min
-            nodes[i].val = v;
-            // sums
-            // nodes[i].val = (long) v * (r - l + 1);
-        }
-
-        private void addLazy(int i, int l, int r, int v) {
-            // max|min
-            nodes[i].val += v;
-            // sums
-            // nodes[i].val += (long) v * (r - l + 1);
-        }
-
-        private void up(int i, int l, int r) {
-            nodes[i] = operation.op(nodes[left[i]], nodes[right[i]]);
-        }
-
-        private void addLeftSon(int i) {
-            if (left[i] == 0) {
-                left[i] = ++cnt;
-                nodes[left[i]] = new Node(initial);
+            public void up(int i) {
+                infos[i] = op(infos[i << 1], infos[i << 1 | 1]);
             }
-        }
 
-        private void addRightSon(int i) {
-            if (right[i] == 0) {
-                right[i] = ++cnt;
-                nodes[right[i]] = new Node(initial);
+            public Info query(int ql, int qr, int l, int r, int i) {
+                if (ql <= l && r <= qr) {
+                    return infos[i];
+                } else {
+                    int mid = l + ((r - l) >> 1);
+                    Info info = e();
+                    if (ql <= mid) {
+                        info = op(info, query(ql, qr, l, mid, i << 1));
+                    }
+                    if (qr > mid) {
+                        info = op(info, query(ql, qr, mid + 1, r, i << 1 | 1));
+                    }
+                    return info;
+                }
             }
-        }
 
-
-        private void update(int ql, int qr, int v, int l, int r, int i) {
-            if (ql <= l && r <= qr) {
-                 updateLazy(i, l, r, v);
-            } else {
-                int mid = l + ((r - l) >> 1);
-                if (ql <= mid) {
-                    addLeftSon(i);
-                    update(ql, qr, v, l, mid, left[i]);
+            public void update(int ql, Info x, int l, int r, int i) {
+                if (l == r) {
+                    infos[i] = x;
+                } else {
+                    int mid = l + ((r - l) >> 1);
+                    if (ql <= mid) {
+                        update(ql, x, l, mid, i << 1);
+                    } else {
+                        update(ql, x, mid + 1, r, i << 1 | 1);
+                    }
+                    up(i);
                 }
-                if (qr > mid) {
-                    addRightSon(i);
-                    update(ql, qr, v, mid + 1, r, right[i]);
-                }
-                up(i, l, r);
             }
-        }
 
-
-        private void add(int ql, int qr, int v, int l, int r, int i) {
-            if (ql <= l && r <= qr) {
-                addLazy(i, l, r, v);
-            } else {
-                int mid = l + ((r - l) >> 1);
-                if (ql <= mid) {
-                    addLeftSon(i);
-                    add(ql, qr, v, l, mid, left[i]);
-                }
-                if (qr > mid) {
-                    addRightSon(i);
-                    add(ql, qr, v, mid + 1, r, right[i]);
-                }
-                up(i, l, r);
-            }
-        }
-
-
-        private Node query(int ql, int qr, int l, int r, int i) {
-            if (ql <= l && r <= qr) {
-                return nodes[i];
-            } else {
-                int mid = l + ((r - l) >> 1);
-                Node temp = new Node(initial);
-                if (ql <= mid) {
-                    if (left[i] != 0) {
-                        temp = operation.op(temp, query(ql, qr, l, mid, left[i]));
+            public void add(int ql, Info x, int l, int r, int i) {
+                if (l == r) {
+                    infos[i] = op(infos[i], x);
+                } else {
+                    int mid = l + ((r - l) >> 1);
+                    if (ql <= mid) {
+                        update(ql, x, l, mid, i << 1);
+                    } else {
+                        update(ql, x, mid + 1, r, i << 1 | 1);
                     }
                 }
-                if (qr > mid) {
-                    if (right[i] != 0) {
-                        temp = operation.op(temp, query(ql, qr, mid + 1, r, right[i]));
-                    }
-                }
-                return temp;
             }
-        }
 
-
-        public void build(int l, int r, int i, int[] array) {
-            if (l == r) {
-                // 如果传入数组不是从1开始,需要-1 new Node(array[l - 1])
-                nodes[i] = new Node(array[l]);
-            } else {
+            public int findFirst(int ql, int qr, Info info, int l, int r, int i) {
+                if (l > qr || r < ql || !check0(infos[i], info)) return -1;
+                if (l == r) return l;
                 int mid = l + ((r - l) >> 1);
-                if (mid - l + 1 > 0) {
-                    addLeftSon(i);
-                    build(l, mid, left[i], array);
+                if (ql <= mid) {
+                    int p = findFirst(ql, qr, info, l, mid, i << 1);
+                    if (p != -1) return p;
                 }
-                if (r - mid > 0) {
-                    addRightSon(i);
-                    build(mid + 1, r, right[i], array);
+                return findFirst(ql, qr, info, mid + 1, r, i << 1 | 1);
+            }
+
+            public int findLast(int ql, int qr, Info info, int l, int r, int i) {
+                if (l > qr || r < ql || !check0(infos[i], info)) return -1;
+                if (l == r) return l;
+                int mid = l + ((r - l) >> 1);
+                if (qr > mid) {
+                    int p = findLast(ql, qr, info, mid + 1, r, i << 1 | 1);
+                    if (p != -1) return p;
                 }
-                up(i, l, r);
+                return findLast(ql, qr, info, l, mid, i << 1);
             }
         }
 
-        public Node query(int ql, int qr) {
-            return query(ql, qr, isOffset ? 1 : 0, isOffset ? n : n - 1, 1);
-        }
-
-        public void add(int ql, int qr, int v) {
-            add(ql, qr, v, isOffset ? 1 : 0, isOffset ? n : n - 1, 1);
-        }
-
-        public void update(int ql, int qr, int v) {
-            update(ql, qr, v, isOffset ? 1 : 0, isOffset ? n : n - 1, 1);
-        }
-
-        // 线段树二分 查询第一个
-        // 查询区间 [L,R] 符合条件的第一个
-        public int findFirst(int L,int R, int val, int l, int r, int i) {
-            if (r < L || l > R || nodes[i] == null || nodes[i].val < val)
-                return -1;
-            if (l == r) {
-                return l;
-            }
-            int mid = l + ((r - l) >> 1);
-            if (L <= mid) {
-                int p = findFirst(L, R,val, l, mid, left[i]);
-                if (p >= 0) return p;
-            }
-            return findFirst(L,R, val, mid + 1, r, right[i]);
-        }
-
-        // 线段树二分 查询最后一个
-        // 查询区间 [L,R] 符合条件的最后一个
-        public int findLast(int L,int R, int val, int l, int r, int i) {
-            if (r < L || l > R || nodes[i] == null || nodes[i].val < val)
-                return -1;
-            if (l == r) {
-                return l;
-            }
-            int mid = l + ((r - l) >> 1);
-            if (L <= mid) {
-                int p = findLast(L,R, val, mid + 1, r, right[i]) ;
-                if (p >= 0) return p;
-            }
-            return findLast(L, R,val, l, mid, left[i]);
-        }
+        // 线段树模板结束
     }
 
-    /***************************************线段树模板结束**************************************/
+
+    // 不需要维护更多信息版本 效率更高
+    static class Long_template {
+
+        // 线段树模板开始
+        static long op(long l, long r) {
+            return Math.max(l, r);
+        }
+
+        static long e() {
+            return 0;
+        }
+
+        // 线段树二分函数
+        static boolean check0(long i, long t) {
+            return false;
+        }
+
+        public static class Segment {
+            long[] infos, a;
+            int n;
+
+            public Segment(int n) {
+                this.n = n;
+                this.initInfo();
+            }
+
+            private void initInfo() {
+                this.infos = new long[n << 2];
+                for (int i = 0; i < (n << 2); i++) {
+                    infos[i] = e();
+                }
+                this.build(0, n - 1, 1);
+            }
+
+            public Segment(long[] a) {
+                this.a = a;
+                this.n = a.length;
+                this.initInfo();
+            }
+
+            private void build(int l, int r, int i) {
+                if (l == r) {
+                    infos[i] = a == null ? e() : a[l];
+                } else {
+                    int mid = l + ((r - l) >> 1);
+                    build(l, mid, i << 1);
+                    build(mid + 1, r, i << 1 | 1);
+                    up(i);
+                }
+            }
+
+            public void up(int i) {
+                infos[i] = op(infos[i << 1], infos[i << 1 | 1]);
+            }
+
+            public long query(int ql, int qr, int l, int r, int i) {
+                if (ql <= l && r <= qr) {
+                    return infos[i];
+                } else {
+                    int mid = l + ((r - l) >> 1);
+                    long info = e();
+                    if (ql <= mid) {
+                        info = op(info, query(ql, qr, l, mid, i << 1));
+                    }
+                    if (qr > mid) {
+                        info = op(info, query(ql, qr, mid + 1, r, i << 1 | 1));
+                    }
+                    return info;
+                }
+            }
+
+            public void update(int ql, long x, int l, int r, int i) {
+                if (l == r) {
+                    infos[i] = x;
+                } else {
+                    int mid = l + ((r - l) >> 1);
+                    if (ql <= mid) {
+                        update(ql, x, l, mid, i << 1);
+                    } else {
+                        update(ql, x, mid + 1, r, i << 1 | 1);
+                    }
+                    up(i);
+                }
+            }
+
+            public void add(int ql, long x, int l, int r, int i) {
+                if (l == r) {
+                    infos[i] = op(infos[i], x);
+                } else {
+                    int mid = l + ((r - l) >> 1);
+                    if (ql <= mid) {
+                        update(ql, x, l, mid, i << 1);
+                    } else {
+                        update(ql, x, mid + 1, r, i << 1 | 1);
+                    }
+                }
+            }
+
+            public int findFirst(int ql, int qr, long info, int l, int r, int i) {
+                if (l > qr || r < ql || !check0(infos[i], info))
+                    return -1;
+                if (l == r)
+                    return l;
+                int mid = l + ((r - l) >> 1);
+                if (ql <= mid) {
+                    int p = findFirst(ql, qr, info, l, mid, i << 1);
+                    if (p != -1)
+                        return p;
+                }
+                return findFirst(ql, qr, info, mid + 1, r, i << 1 | 1);
+            }
+
+            public int findLast(int ql, int qr, long info, int l, int r, int i) {
+                if (l > qr || r < ql || !check0(infos[i], info))
+                    return -1;
+                if (l == r)
+                    return l;
+                int mid = l + ((r - l) >> 1);
+                if (qr > mid) {
+                    int p = findLast(ql, qr, info, mid + 1, r, i << 1 | 1);
+                    if (p != -1)
+                        return p;
+                }
+                return findLast(ql, qr, info, l, mid, i << 1);
+            }
+        }
+
+        // 线段树模板结束
+
+    }
+
+
 }

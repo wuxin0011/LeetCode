@@ -1,8 +1,10 @@
 ### 线段树
 
-- [基本线段树](./LazySegmentTemplate.java) 基本线段树 功能单一 维护区间最值|求和等信息
+- [单点修改](./SegmentTemplate.java) 
+- [懒更新 信息综合](./LazySegmentTemplate.java) 
+- [懒更新 信息综合](./LazySegmentInfo.java)
+- [动态开点线段树——数组](./DynamicOPSegmentTreeBTreeArrayTemplate.java) `作用同上` 使用函数式接口传入 操作类型 以及查询的初始时 和 线段树大小 ~
 - [动态开点线段树——二叉树](./DynamicOPSegmentTreeBTreeTemplate.java) `作用同上` 使用函数式接口传入 操作类型 以及查询的初始时 和 线段树大小 ~ 
-- [动态开点线段树——数组](./DynamicOPSegmentTreeBTreeArrayTemplate.java) `作用同上` 使用函数式接口传入 操作类型 以及查询的初始时 和 线段树大小 ~ 
 - [线段树区间合并](./SegmentUnionTemplate.java) 线段树处理区间合并问题
 
 
