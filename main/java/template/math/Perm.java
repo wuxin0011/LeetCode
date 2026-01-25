@@ -18,17 +18,22 @@ public class Perm {
      * isRepeat // 是否允许重复的排列
      */
     static class Permutations {
+
+
+        // 全排列返回一个 index 数组集合
         public static List<List<Integer>> permutations(int n) {
             int[] ids = new int[n];
             for(int i = 0;i < n;i++) ids[i] = i;
             return permutations(ids);
         }
+        // 全排列返回一个 a 数组结果的集合
         public static List<List<Integer>> permutations(int... a) {
             return permutations(false, a);
         }
 
         /**
          * 返回全排列
+         * https://leetcode.cn/problems/7p8L0Z/submissions/694011246/
          *
          * @param isRepeat 是否去重
          * @param a        数组
@@ -57,6 +62,31 @@ public class Perm {
                 if ((mask >> i & 1) == 0) {
                     path.set(size, a[i]);
                     nextPermsDfs(mask | 1 << i, a, isRepeat, path, size + 1, ans);
+                }
+            }
+        }
+
+
+        /**
+         *
+         * 测试url: https://leetcode.cn/problems/VvJkup/submissions/694009486/
+         * @param ans ans
+         * @param path 记录路径
+         * @param lt 目标数组
+         * @param mask 记录下标是否标记
+         * @param count 全排列多少 即选择多少个
+         * @param <T> T
+         */
+        public static <T> void permutations(List<List<T>> ans,List<T> path,List<T> lt,int mask,int count) {
+            if(Integer.bitCount(mask) == count) {
+                ans.add(new ArrayList<>(path));
+            }else{
+                for(int i = 0;i < lt.size();i++) {
+                    if((mask>>i&1)==0) {
+                        path.add(lt.get(i));
+                        permutations(ans,path,lt,mask|1<<i,count);
+                        path.remove(path.size() - 1);
+                    }
                 }
             }
         }
