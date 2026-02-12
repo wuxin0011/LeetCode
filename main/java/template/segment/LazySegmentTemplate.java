@@ -46,6 +46,11 @@ public class LazySegmentTemplate {
             this.addv = new long[n << 2];
             this.updv = new long[n << 2];
             this.visupd = new boolean[n << 2];
+            for (int i = 0; i < (n << 2); i++) {
+                updv[i] = e();
+                infos[i] = e();
+                addv[i] = e();
+            }
             this.build(0, n - 1, 1);
         }
 
