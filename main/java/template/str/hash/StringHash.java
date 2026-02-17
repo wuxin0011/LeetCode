@@ -49,7 +49,7 @@ class StringHash {
     }
     public long get(int l, int r, boolean isRev) {
         if (isRev) {
-            return (rev_h[n - l] - rev_h[n - r - 1] * p[(n - l) - (n - r) + 1] % mod + mod) % mod;
+            return (rev_h[n - l] - rev_h[n - r - 1] * p[r - l + 1] % mod + mod) % mod;
         } else {
             return (h[r + 1] - h[l] * p[r - l + 1] % mod + mod) % mod;
         }

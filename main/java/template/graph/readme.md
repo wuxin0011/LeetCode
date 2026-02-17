@@ -297,6 +297,8 @@ int main() {
 [ac记录🍵](https://www.luogu.com.cn/record/257503662)
 
 ```cpp
+// https://leetcode.cn/problems/palindromic-path-queries-in-a-tree/submissions/698826298/
+// https://github.com/wuxin0011/LeetCode/blob/main/main/java/template/graph/readme.md
 #include <bits/stdc++.h>
 using namespace std;
 #ifdef __IS_LEETCODE__
@@ -314,22 +316,52 @@ using ll = long long;
 
 constexpr int inf = 1e9,N = 1e5 + 100,mod = 1e9 + 7;
 
+// 树链剖分模板开始
+
 int head[N],to[N<<1],nxt[N<<1],we[N<<1],cnt,dfncnt,dfn[N],sz[N],son[N],pa[N],a[N],seg[N],deep[N],top[N];
 
-// https://www.luogu.com.cn/record/list?user=1591164
-// ----------------------------------------seg
 
-ll maxs[N<<2],sums[N<<2];
 int n,opcnt;
 
+
+
+// seg
+
+struct Info {
+    int x;
+
+    Info() {
+        x = 0;
+    }
+
+    Info(int c) {
+        x = 0;
+        x |= 1 << c;
+    }
+
+
+    Info operator+(const Info& o) const {
+        Info info {};
+        // for(int i = 0;i<26;i++){
+        //     int v0 = x >> i & 1;
+        //     int v1 = o.x >> i & 1;
+        //     if(v0==v1)continue;
+        //     info.x |= 1 << i;
+        // }
+        info.x = o.x ^ x;
+        return info;
+    }
+
+
+} infos[N<<2];
+
 void up(int i) {
-    sums[i] = sums[i << 1] + sums[i << 1 | 1];
-    maxs[i] = max(maxs[i<<1],maxs[i<<1|1]);
+    infos[i] = infos[i<<1] + infos[i<<1|1];
 }
 
 void build(int l,int r,int i) {
     if(l==r){
-        maxs[i] = sums[i] = a[seg[l]];
+        infos[i] = Info{a[seg[l]]};
     }else{
         int mid = l + ((r - l)>>1);
         build(l,mid,i<<1);
@@ -340,56 +372,41 @@ void build(int l,int r,int i) {
 
 
 
-void update(int ql,int qr,ll x,int l,int r,int i) {
-    if(ql<=l&&r<=qr){
-        maxs[i] = sums[i] = x;
+void update(int ql,int qr,Info info,int l,int r,int i) {
+    if(l==r){
+        infos[i] =  info;
     }else{
         int mid = l + ((r - l)>>1);
         if(ql<=mid){
-            update(ql,qr,x,l,mid,i<<1);
+            update(ql,qr,info,l,mid,i<<1);
         }
         if(qr>mid){
-            update(ql,qr,x,mid+1,r,i<<1|1);
+            update(ql,qr,info,mid+1,r,i<<1|1);
         }
         up(i);
     }
 }
 
-ll query(int ql,int qr,int l,int r,int i) {
+Info query(int ql,int qr,int l,int r,int i) {
     if(ql<=l&&r<=qr){
-        return sums[i];
+        return infos[i];
     }else{
         int mid = l + ((r - l)>>1);
-        ll ans = 0;
+        Info ans {};
         if(ql<=mid){
-            ans += query(ql,qr,l,mid,i<<1);
+            ans = ans + query(ql,qr,l,mid,i<<1);
         }
         if(qr>mid){
-            ans += query(ql,qr,mid+1,r,i<<1|1);
+            ans = ans + query(ql,qr,mid+1,r,i<<1|1);
         }
         return ans;
     }
 }
 
 
-ll query_max(int ql,int qr,int l,int r,int i) {
-    if(ql<=l&&r<=qr){
-        return maxs[i];
-    }else{
-        int mid = l + ((r - l)>>1);
-        ll ans = -1e9;
-        if(ql<=mid){
-            ans = max(ans,query_max(ql,qr,l,mid,i<<1));
-        }
-        if(qr>mid){
-            ans = max(ans,query_max(ql,qr,mid+1,r,i<<1|1));
-        }
-        return ans;
-    }
-}
 
 
-// ----------------------------------------seg
+// seg end
 
 
 
@@ -400,6 +417,9 @@ void clear(int n) {
         head[i]=0;
         dfn[i] = 0;
         son[i] = 0;
+    }
+    for(int i = 0;i < (n<<2);i++) {
+        infos[i] = {};
     }
     cnt=0;
     dfncnt=0;
@@ -447,81 +467,86 @@ void dfs2(int u,int t) {
 }
 
 
-ll pathsums(int u,int v) {
-    ll ans = 0;
+
+int lca(int u,int v) {
     while(top[u] != top[v]){
         if(deep[top[u]] <= deep[top[v]]){
-            ans += query(dfn[top[v]],dfn[v],1,n,1);
             v = pa[top[v]];
         }else{
-            ans += query(dfn[top[u]],dfn[u],1,n,1);
             u = pa[top[u]];
         }
     }
-    ans += query(min(dfn[u],dfn[v]),max(dfn[u],dfn[v]),1,n,1);
-    return ans;
+    return deep[u] < deep[v] ? u : v;
 }
 
-ll pathmax(int u,int v) {
-    ll ans = -1e9;
+int dis(int u,int v) {
+    return deep[u] + deep[v] - 2*deep[lca(u,v)];
+}
+
+Info pathQuery(int u,int v) {
+    Info ans {};
     while(top[u] != top[v]){
         if(deep[top[u]] <= deep[top[v]]){
-            ans = max(ans,query_max(dfn[top[v]],dfn[v],1,n,1));
+            ans = ans + query(dfn[top[v]],dfn[v],1,n,1);
             v = pa[top[v]];
         }else{
-            ans = max(ans,query_max(dfn[top[u]],dfn[u],1,n,1));
+            ans = ans + query(dfn[top[u]],dfn[u],1,n,1);
             u = pa[top[u]];
         }
     }
-    ans = max(ans,query_max(min(dfn[u],dfn[v]),max(dfn[u],dfn[v]),1,n,1));
+    ans = ans + query(min(dfn[u],dfn[v]),max(dfn[u],dfn[v]),1,n,1);
     return ans;
 }
 
-void solve() { 
-    cin >> n;
-    clear(n);
-    for(int i = 1;i<n;i++){
-        int u,v;
-        cin>>u>>v;
-        addEdge(u,v,0);
-        addEdge(v,u,0);
-    }
-    for(int i = 1;i<=n;i++){
-         cin >> a[i];
-    }
-    dfs1(1,0,1);
-    dfs2(1,0);
-    build(1,n,1);
-    cin >> opcnt;
-    while(opcnt>0){
-        opcnt--;
-        string op;
-        cin >> op;
-        int x,y;
-        cin >> x >> y;
-        // debug(op,x,y);
-        if(op=="CHANGE"){
-            // debug("change",x,y);
-            update(dfn[x],dfn[x],y,1,n,1);
-        }else if(op=="QMAX"){
-            cout << pathmax(x,y) << "\n";
-        }else if(op=="QSUM") {
-            cout << pathsums(x,y) << "\n";
+
+void pathUpdate(int u,int v,Info info) {
+    while(top[u] != top[v]){
+        if(deep[top[u]] <= deep[top[v]]){
+            update(dfn[top[v]],dfn[v],info,1,n,1);
+            v = pa[top[v]];
+        }else{
+            update(dfn[top[u]],dfn[u],info,1,n,1);
+            u = pa[top[u]];
         }
     }
-    
+    update(min(dfn[u],dfn[v]),max(dfn[u],dfn[v]),info,1,n,1);
 }
 
 
 
-int main() {
-    ios::sync_with_stdio(0);
-    cin.tie(0);
-    int tt = 1;
-    // cin >> tt;
-    while(tt--)solve();
-    return 0;
-}
+
+
+// 树链剖分模板结束
+
+
+
+
+
+
+
+
+// 下面为基本步骤
+
+// 初始化操作 建图
+// n = n0;
+// clear(n);
+// for (int i = 0; i < edges.size(); i++) {
+//     int u = edges[i][0], v = edges[i][1];
+//     u++, v++;
+//     addEdge(u, v, 0);
+//     addEdge(v, u, 0);
+// }
+// for (int i = 1; i <= s.size(); i++) {
+//     a[i] = s[i - 1] - 'a';
+// }
+// dfs1(1, 0, 1);
+// dfs2(1, 0);
+// build(1, n, 1);
+
+// op操作
+// pathQuery(u,v)
+// pathUpdate(u,v,Info{})
+
 
 ```
 
