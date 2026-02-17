@@ -1,0 +1,11 @@
+3
+[[0,1],[1,2]]
+aac
+[query02,update1b,query02]
+[true,false]
+
+4
+[[0,1],[0,2],[0,3]]
+abca
+[query12,update0b,query23,update3a,query13]
+[false,false,true]

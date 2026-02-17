@@ -9,5 +9,6 @@
 
 
 
-提交链接板子
-- [音乐会门票](https://leetcode.cn/problems/booking-concert-tickets-in-groups/submissions/613366603/) 线段树二分 + 区间最值 + 区间修改
+相关题目
+- [音乐会门票](https://leetcode.cn/problems/booking-concert-tickets-in-groups/submissions/613366603/) `线段树二分 + 区间最值 + 区间修改`
+- [P1972 HH 的项链](https://www.luogu.com.cn/record/262800102) `离线查询 + 线段树`

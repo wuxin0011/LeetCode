@@ -1,3 +1,15 @@
+## 🏆 第 176 场双周赛
+- [ ] [带权单词映射](https://leetcode.cn/contest/biweekly-contest-176/problems/weighted-word-mapping)
+ [🎈代码](bi_100/bi_176/A.java)
+- [ ] [前缀连接组的数目](https://leetcode.cn/contest/biweekly-contest-176/problems/number-of-prefix-connected-groups)
+ [🎈代码](bi_100/bi_176/B.java)
+- [ ] [打家劫舍 V](https://leetcode.cn/contest/biweekly-contest-176/problems/house-robber-v)
+ [🎈代码](bi_100/bi_176/C.java)
+- [ ] [查询树上回文路径](https://leetcode.cn/contest/biweekly-contest-176/problems/palindromic-path-queries-in-a-tree)
+ [🎈代码](bi_100/bi_176/D.java)
+
+
+
 ## 🏆 第 162 场双周赛
 - [ ] [最早完成陆地和水上游乐设施的时间 I](https://leetcode.cn/contest/biweekly-contest-162/problems/earliest-finish-time-for-land-and-water-rides-i)
  [🎈代码](bi_100/bi_162/A.java)

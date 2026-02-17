@@ -15,6 +15,7 @@ public class StringHashMod {
 
     /**
      * @link <a href="https://leetcode.cn/problems/find-the-index-of-the-first-occurrence-in-a-string/submissions/574426236/">测试结果</a>
+     * @link <a href="https://leetcode.cn/problems/a7VOhD/submissions/699092498/">附带回文检查使用方式</a>
      */
 
 
@@ -35,13 +36,9 @@ public class StringHashMod {
             }
         }
 
-        // [L,R)
+        // [L,R]
         long get(int l, int r) {
-            long ans = hash[r - 1];
-            if (l > 0) {
-                ans = (ans - hash[l - 1] * pow[r - l]);
-            }
-            return ans;
+            return hash[r] - (l > 0 ? hash[l - 1] * pow[r - l + 1] : 0);
         }
     }
 
@@ -51,9 +48,9 @@ public class StringHashMod {
         private static final long BASE = (long) (1e9 + 7) + new Random().nextInt((int) 1e8);
         private static final long MOD = (long)(1e9 + 7);
 
-        static int MAXN = (int) (1e5 + 1), n;
+        static int MAXN = (int) (2e5 + 1), strlen;
         static long[] power = new long[MAXN + 2], pre = new long[MAXN + 2], suf = null;
-        static char[] chars, reverseChars;
+        static char[] chars = new char[MAXN], reverseChars = new char[MAXN];
 
 
         static {
@@ -63,38 +60,30 @@ public class StringHashMod {
             }
         }
 
-        static void reverseString(char[] a) {
-            int l = 0, r = a.length - 1;
-            while (l < r) {
-                char t = a[l];
-                a[l] = a[r];
-                a[r] = t;
-                r--;
-                l++;
-            }
-        }
 
         // 默认不检查回文的
-        private static void calcHash(char[] a) {
-            calcHash(a, false);
+        private static void initHash(char[] a) {
+            initHash(a, false);
         }
         // 是否构建检查回文的
-        private static void calcHash(char[] a, boolean reverse) {
-            chars = a;
-            n = a.length;
-            heapCalcHash(pre, a);
+        private static void initHash(char[] a, boolean reverse) {
+            strlen = a.length;
+            System.arraycopy(a, 0, chars, 0, strlen);
+            heapCalcHash(pre, chars);
             if (reverse) {
-                reverseString(a);
+                for (int i = 0; i < strlen; i++) {
+                    reverseChars[i] = a[strlen - i - 1];
+                }
                 if (suf == null) {
                     suf = new long[MAXN + 2];
                 }
-                heapCalcHash(suf, a);
+                heapCalcHash(suf, reverseChars);
             }
         }
 
 
         private static void heapCalcHash(long[] h, char[] chs) {
-            for (int i = 0; i < n; i++) {
+            for (int i = 0; i < strlen; i++) {
                 h[i + 1] = (h[i] * BASE + chs[i]) % MOD;
             }
         }
@@ -115,7 +104,7 @@ public class StringHashMod {
         // 检查[l,r]是否是回文
         static boolean isPalindromeString(int l, int r) {
             long preHash = getHash(pre, l, r);
-            long subHash = getHash(suf, n - r - 1, n - l - 1);
+            long subHash = getHash(suf, strlen - r - 1, strlen - l - 1);
             return preHash == subHash;
         }
     }
@@ -125,15 +114,15 @@ public class StringHashMod {
 
     /**
      * @link <a title="测试链接" href="https://leetcode.cn/problems/palindromic-substrings/submissions/575085385/">提交测试</a>
+     * @link <a title="测试链接" href="https://leetcode.cn/problems/a7VOhD/submissions/699089760/">提交测试</a>
      */
     static class StringHash3 {
-        private static final long BASE = (long)(1e9 + 7) + new Random().nextInt((int) 1e8);
-        private static final long MOD = (long)1e9 + 7;
+        private static final long BASE = (long) (1e9 + 7) + new Random().nextInt((int) 1e8);
+        private static final long MOD = (long) 1e9 + 7;
 
-        static int MAXN = (int) (1e5 + 1), n;
+        static int MAXN = (int) (2e5 + 100), strlen;
         static int[] power = new int[MAXN + 2], pre = new int[MAXN + 2], suf = null;
-        static char[] chars, reverseChars;
-
+        static char[] chars = new char[MAXN], reverseChars = new char[MAXN];
 
         static {
             power[0] = 1;
@@ -142,38 +131,28 @@ public class StringHashMod {
             }
         }
 
-        static void reverseString(char[] a) {
-            int l = 0, r = a.length - 1;
-            while (l < r) {
-                char t = a[l];
-                a[l] = a[r];
-                a[r] = t;
-                r--;
-                l++;
-            }
+        private static void initHash(char[] a) {
+            initHash(a, false);
         }
 
-        private static void calcHash(char[] a) {
-            calcHash(a, false);
-        }
-
-
-        public static void heapCalcHash(int[] h, char[] chs) {
-            for (int i = 0; i < n; i++) {
-                h[i + 1] = (int) ((h[i] * 1L * BASE + chs[i]) % MOD);
-            }
-        }
-
-        public static void calcHash(char[] a, boolean reverse) {
-            chars = a;
-            n = a.length;
-            heapCalcHash(pre, a);
+        public static void initHash(char[] a, boolean reverse) {
+            strlen = a.length;
+            System.arraycopy(a, 0, chars, 0, strlen);
+            heapCalcHash(pre, chars);
             if (reverse) {
-                reverseString(a);
+                for (int i = 0; i < strlen; i++) {
+                    reverseChars[i] = a[strlen - i - 1];
+                }
                 if (suf == null) {
                     suf = new int[MAXN + 2];
                 }
-                heapCalcHash(suf, a);
+                heapCalcHash(suf, reverseChars);
+            }
+        }
+
+        public static void heapCalcHash(int[] h, char[] chs) {
+            for (int i = 0; i < strlen; i++) {
+                h[i + 1] = (int) ((h[i] * 1L * BASE + chs[i]) % MOD);
             }
         }
 
@@ -181,17 +160,15 @@ public class StringHashMod {
             return (int) (((hash[r + 1] - hash[l] * 1L * power[r - l + 1]) % MOD + MOD) % MOD);
         }
 
-
         // 获取 [l,r] 的 hash
         public static int getHash(int l, int r) {
             return getHash(pre, l, r);
         }
 
-
         // 检查[l,r]是否是回文
         public static boolean isPalindromeString(int l, int r) {
             int preHash = getHash(pre, l, r);
-            int subHash = getHash(suf, n - r - 1, n - l - 1);
+            int subHash = getHash(suf, strlen - r - 1, strlen - l - 1);
             return preHash == subHash;
         }
     }
@@ -211,7 +188,7 @@ public class StringHashMod {
         next:
         for (int T = 100; T > 0; T--) {
             String s = new String(RandomArrayUtils.randomCharArray(100, (int) 1e4));
-            StringHash2.calcHash(s.toCharArray(), true);
+            StringHash2.initHash(s.toCharArray(), true);
             long c1 = 0, c2 = 0;
             time++;
 
@@ -253,7 +230,7 @@ public class StringHashMod {
         next:
         for (int T = 100; T > 0; T--) {
             String s = new String(RandomArrayUtils.randomCharArray(100, (int) 1e4));
-            StringHash3.calcHash(s.toCharArray(), true);
+            StringHash3.initHash(s.toCharArray(), true);
             long c1 = 0, c2 = 0;
             time++;
 

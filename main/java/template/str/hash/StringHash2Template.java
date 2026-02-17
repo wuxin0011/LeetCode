@@ -18,24 +18,22 @@ public class StringHash2Template {
     public static class StringHashPalindrome {
         StringHash stringHash1, stringHash2;
         int n;
-        public StringHashPalindrome(char[] chars) {
-            this.build(chars);
-        }
-        private void build(char[] array) {
-            int[] a = new int[array.length];
+        public StringHashPalindrome(char[] array) {
+            char[] a = new char[array.length];
             for(int i = 0;i < array.length;i++) {
                 a[i] = array[i];
             }
             this.n = a.length;
-            int[] b = new int[n];
+            char[] b = new char[n];
             for (int i = 0; i < n; i++) {
                 b[i] = a[n - i - 1];
             }
             this.stringHash1 = new StringHash(a);
             this.stringHash2 = new StringHash(b);
         }
-
-
+        public long get(int l,int r){
+            return  stringHash1.get(l,r);
+        }
         // query [l,r]  isPalindrome
         public boolean isPalindromeString(int l, int r) {
             return stringHash1.get(l, r) == stringHash2.get(n - r - 1, n - l - 1);
@@ -58,15 +56,6 @@ public class StringHash2Template {
             for(int i = 0;i < chars.length;i++) {
                 a[i] = chars[i];
             }
-            this.build(a);
-        }
-        public StringHash(int[] chars) {
-            this.build(chars);
-        }
-
-
-
-        private void build(int[] a){
             this.n = a.length;
             this.array = a;
             powBase1 = new int[n];
@@ -208,7 +197,7 @@ public class StringHash2Template {
             time++;
             StringHashPalindrome hash = new StringHashPalindrome(s.toCharArray());
 
-            StringHashMod.StringHash3.calcHash(s.toCharArray(),true);
+            StringHashMod.StringHash3.initHash(s.toCharArray(),true);
 
             for (int i = 0; i < s.length(); i++) {
                 for (int j = i + 1; j < s.length(); j++) {
