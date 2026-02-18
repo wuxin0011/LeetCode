@@ -17,7 +17,7 @@ public class C {
     }
     private static final int MOD = (int)1e9 + 7; 
 
-    public long rob(int[] nums, int[] colors) {            
+        public long rob(int[] nums, int[] colors) {            
 
         return 0; 
 	}

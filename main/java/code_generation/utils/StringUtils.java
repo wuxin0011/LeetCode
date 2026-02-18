@@ -78,7 +78,7 @@ public class StringUtils {
 
 
     public static boolean isIgnore(char c) {
-        return c == '\r' || c == '\n' || c == '\t' || c == '\b' || c == '\f' || c == '\0' || c == '\\' || c == ' ' || c == '\'' || c == '\"';
+        return c == '\r' || c == '\n' || c == '\t' || c == '\b' || c == '\f' || c == '\0' || c == '\\'  || c == '\'' || c == '\"';
     }
 
     // https://leetcode.cn/problems/verify-preorder-serialization-of-a-binary-tree/submissions/
@@ -109,6 +109,16 @@ public class StringUtils {
 
 
     public static String replaceIgnoreContent(String s) {
+        // fix bi 176 contest ok
+        // 删除前面的空格
+        char[] a = s.toCharArray();
+        int i = 0;
+        for(;a.length > 1 && i < a.length && a[i] == ' ';i++){
+
+        }
+        if(i != 0) {
+            s = new String(a, i, a.length - i);
+        }
         if (isEmpty(s)) {
             return "\"\"";
         }
@@ -135,7 +145,7 @@ public class StringUtils {
         s = s.replace("&quot;", "");
         s = s.replace("&nbsp;", "");
         s = s.replace(":", "");
-        s = s.replace(" ", "");
+//        s = s.replace(" ", "");
         s = s.replace("<", "").replace(">", "");
         if (isEmpty(s)) {
             return "\"\"";

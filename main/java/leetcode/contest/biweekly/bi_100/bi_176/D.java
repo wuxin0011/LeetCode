@@ -17,7 +17,7 @@ public class D {
     }
     private static final int MOD = (int)1e9 + 7; 
 
-    public List<Boolean> palindromePath(int n, int[][] edges, String s, String[] queries) {            
+        public List<Boolean> palindromePath(int n, int[][] edges, String s, String[] queries) {            
 
         return null; 
 	}

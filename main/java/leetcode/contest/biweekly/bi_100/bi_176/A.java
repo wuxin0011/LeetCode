@@ -17,7 +17,7 @@ public class A {
     }
     private static final int MOD = (int)1e9 + 7; 
 
-    public String mapWordWeights(String[] words, int[] weights) {            
+        public String mapWordWeights(String[] words, int[] weights) {            
 
         return null; 
 	}

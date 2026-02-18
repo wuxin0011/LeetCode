@@ -17,7 +17,7 @@ public class B {
     }
     private static final int MOD = (int)1e9 + 7; 
 
-    public int prefixConnected(String[] words, int k) {            
+        public int prefixConnected(String[] words, int k) {            
 
         return 0; 
 	}
