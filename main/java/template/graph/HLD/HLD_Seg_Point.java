@@ -1,76 +1,19 @@
-package leetcode.contest.biweekly.bi_100.bi_176;
+package template.graph.HLD;
 
-import code_generation.utils.IoUtil;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
- * https://leetcode.cn/problems/palindromic-path-queries-in-a-tree/submissions/700598503/
  *
- * @author: agitated-curranfnd
+ * 参考链接 https://leetcode.cn/problems/palindromic-path-queries-in-a-tree/submissions/700598503/
+ * 树链剖分 与 线段树结合 单点修改
+ * @author: wuxin0011
  * @Description:
- * @url: <a href="https://leetcode.cn/contest/biweekly-contest-176/problems/palindromic-path-queries-in-a-tree">查询树上回文路径</a>
- * @title: 查询树上回文路径
  */
-//@TestCaseGroup(start = 1,end = 0x3fff,use = true)
-public class D {
-
-    public static void main(String[] args) {
-        IoUtil.testUtil(D.class, "palindromePath", "D.txt");
-    }
-
-    private static final int MOD = (int) 1e9 + 7;
+public class HLD_Seg_Point {
 
 
-    private int[] parseQuery(String s) {
-        String[] parts = s.split(" ");
-        if (parts[0].startsWith("q")) {
-            int u = Integer.parseInt(parts[1]) + 1;
-            int v = Integer.parseInt(parts[2]) + 1;
-            return new int[]{u, v, 0};
-        } else {
-            int id = Integer.parseInt(parts[1]) + 1;
-            int charVal = parts[2].charAt(0) - 'a';
-            return new int[]{id, charVal, 1};
-        }
-    }
+    // 树链剖分模板开始
 
-    public List<Boolean> palindromePath(int n, int[][] edges, String s, String[] queries) {
-        HLD hld = new HLD(n);
-        for (int[] edge : edges) {
-            int u = edge[0] + 1;
-            int v = edge[1] + 1;
-            hld.addEdge(u, v, 0);
-            hld.addEdge(v, u, 0);
-        }
 
-        int[] values = new int[n + 1];
-        for (int i = 1; i <= n; i++) {
-            values[i] = s.charAt(i - 1) - 'a';
-        }
-        hld.build(1, values);
-
-        List<Boolean> result = new ArrayList<>();
-
-        for (String query : queries) {
-            int[] parsed = parseQuery(query);
-            if (parsed[2] == 0) {
-                Info info = hld.pathQuery(parsed[0], parsed[1]);
-                result.add(Integer.bitCount(info.x) <= 1);
-            } else {
-                int id = parsed[0];
-                int v = parsed[1];
-                if (hld.a[id] != v) {
-                    hld.pathUpdate(id, id, new Info(v));
-                    hld.a[id] = v;
-                }
-
-            }
-        }
-
-        return result;
-    }
 
     static Info op(Info l, Info r) {
         Info info = new Info();
@@ -78,9 +21,11 @@ public class D {
         return info;
     }
 
+
     static Info e() {
         return new Info();
     }
+
 
     static class Info {
         int x;
@@ -90,7 +35,7 @@ public class D {
         }
 
         public Info(int c) {
-            this.x = 1 << c;
+            this.x = c;
         }
 
     }
@@ -120,7 +65,7 @@ public class D {
         }
 
         private void up(int i) {
-            tree[i] = op(tree[i * 2], (tree[i * 2 + 1]));
+            tree[i] = op(tree[i * 2],(tree[i * 2 + 1]));
         }
 
         public void update(int ql, int qr, Info info, int l, int r, int i) {
@@ -145,10 +90,10 @@ public class D {
             int mid = l + (r - l) / 2;
             Info ans = new Info();
             if (ql <= mid) {
-                ans = op(ans, query(ql, qr, l, mid, i * 2));
+                ans = op(ans,query(ql, qr, l, mid, i * 2));
             }
             if (qr > mid) {
-                ans = op(ans, query(ql, qr, mid + 1, r, i * 2 + 1));
+                ans = op(ans,query(ql, qr, mid + 1, r, i * 2 + 1));
             }
             return ans;
         }
@@ -238,14 +183,14 @@ public class D {
             Info ans = new Info();
             while (top[u] != top[v]) {
                 if (deep[top[u]] <= deep[top[v]]) {
-                    ans = op(ans, segTree.query(dfn[top[v]], dfn[v], 1, n, 1));
+                    ans = op(ans,segTree.query(dfn[top[v]], dfn[v], 1, n, 1));
                     v = pa[top[v]];
                 } else {
-                    ans = op(ans, segTree.query(dfn[top[u]], dfn[u], 1, n, 1));
+                    ans = op(ans,segTree.query(dfn[top[u]], dfn[u], 1, n, 1));
                     u = pa[top[u]];
                 }
             }
-            ans = op(ans, segTree.query(Math.min(dfn[u], dfn[v]), Math.max(dfn[u], dfn[v]), 1, n, 1));
+            ans = op(ans,segTree.query(Math.min(dfn[u], dfn[v]), Math.max(dfn[u], dfn[v]), 1, n, 1));
             return ans;
         }
 
@@ -262,6 +207,7 @@ public class D {
             segTree.update(Math.min(dfn[u], dfn[v]), Math.max(dfn[u], dfn[v]), info, 1, n, 1);
         }
 
+
         public int lca(int u, int v) {
             while (top[u] != top[v]) {
                 if (deep[top[u]] <= deep[top[v]]) {
@@ -275,5 +221,4 @@ public class D {
     }
 
     // 树链剖分模板结束
-
 }
