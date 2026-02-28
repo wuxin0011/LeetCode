@@ -1254,3 +1254,214 @@ public:
 };
 ```
 
+分块模板2
+
+类似于势能线段树,修改次数不会很多
+
+[小橙的异或和 ](https://ac.nowcoder.com/acm/contest/128675/F)
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+#ifdef __IS_LEETCODE__
+#include "D://template_code//leetcode.cpp"
+#endif
+
+#ifdef __IS_LOCAL__
+#include "D://template_code//debug.cpp"
+using namespace dbg;
+#else
+#define debug(...) ((void)0)
+#endif
+
+// init array start ===================================
+template <typename T, size_t N>
+void mst(T (&arr)[N], const T& value, size_t size = N) {size = std::min(size, N);for (size_t i = 0; i < size; ++i) arr[i] = value;}
+template <typename T, size_t N, typename... Args>
+void mst(T (&arr)[N],const typename std::remove_all_extents<T>::type& value,size_t first_dim, Args... dims) {first_dim = std::min(first_dim, N);for (size_t i = 0; i < first_dim; ++i) mst(arr[i], value, dims...);}
+// init array end ===================================
+
+
+#define F(i, s, e, t)  for (int(i) = (s); (t) >= 1 ? ((i) <= (e)) : ((i) >= (e)); (i) += (t))
+#define all(v) (v).begin(), (v).end()
+#define lower(a, x) std::lower_bound((a).begin(), (a).end(), x) - (a).begin()
+#define upper(a, x) std::upper_bound((a).begin(), (a).end(), x) - (a).begin()
+#define len(x) int((x).size())
+#define pb push_back
+#define qb pop_back
+#define pf push_front
+#define qf pop_front
+#define rnq(a) do {std::sort((a).begin(), (a).end());(a).erase(std::unique((a).begin(), (a).end()),(a).end());} while (0)
+
+using ll = long long;
+using ull = unsigned long long;
+using pll = std::pair<ll, ll>;
+using pii = std::pair<int, int>;
+using vi = std::vector<int>;
+using vll = std::vector<ll>;
+using vvi = std::vector<vi>;
+constexpr ll  linf = 1e18;
+constexpr int inf = 1e9,mod = 1e9 + 7;
+
+
+
+constexpr int N = 2e5 + 1000;
+
+int bi[N],bl[N],br[N],a[N];
+int n,q,blen,bcount;
+
+// 补充添加部分开始
+int bmx[N],sums[N];
+// 补充添加部分结束
+
+
+void init(){
+    bcount = max(1,int(sqrt(n)) + 1);
+    blen = (n + bcount - 1)  / bcount;
+    for(int i = 0;i < n;i++) {
+        bi[i] = i / blen;
+    }
+
+    for(int b = 0;b < bcount;b++) {
+        bl[b] = b * blen;
+        br[b] = min(n - 1,(b + 1) * blen - 1);
+        if(br[b]==n-1)break;
+    }
+
+    // cout << " block \n";
+    // for(int i = 0;i < bcount ;i++) {
+    //     if(i>0&&bl[i]==0)break;
+    //     cout << "["<<bl[i] << "," << br[i] << "]\n";
+    // }
+
+    // 补充添加部分开始
+    for(int b = 0;b < bcount;b++) {
+        sums[b] = 0;
+        bmx[b] = 0;
+        for(int i = bl[b];i <= br[b];i++){
+            sums[b] ^= a[i];
+            bmx[b] = max(bmx[b],a[i]);
+        }
+    }
+
+    // 补充添加部分结束
+}
+
+// 查询一个块
+int queryBlock(int b) {
+    return sums[b];
+}
+
+
+// 更新一个块
+void updateBlock(int b) {
+    bmx[b] = 0;
+    sums[b] = 0;
+    for(int i = bl[b];i<=br[b];i++) {
+        sums[b] ^= a[i];
+        bmx[b] = max(bmx[b],a[i]);        
+    }
+}
+
+
+
+void update(int l,int r) {
+    if(bi[l]==bi[r]) {
+        if(bmx[bi[r]]==0)return;
+        for(int i = l;i<=r;i++) {
+            a[i] /= i - l + 1;
+        }
+        updateBlock(bi[r]);
+    }else {
+        for(int i = l;i<=br[bi[l]];i++){
+            a[i] /= i - l + 1;
+        }
+        updateBlock(bi[l]);
+        for(int b = bi[l] + 1;b < bi[r];b++) {
+            if(bmx[b]==0)continue;
+            for(int i = bl[b];i<=br[b];i++) {
+                a[i] /= i - l + 1;
+            }
+            updateBlock(b);
+        }
+        if(bi[r] > bi[l]) {
+            for(int i = bl[bi[r]];i<=r;i++) {
+                a[i] /= i - l + 1;
+            }
+            updateBlock(bi[r]);
+        }
+    }
+    
+}
+
+
+
+
+int query(int l,int r) {
+    int ans = 0;
+    if(bi[l]==bi[r]) {
+        if(bmx[bi[r]]==0)return 0;
+        for(int i = l;i<=r;i++) {
+            ans ^= a[i];
+        }
+    }else {
+        for(int i = l;i<=br[bi[l]];i++) {
+            ans ^= a[i];
+        }
+        for(int b = bi[l] + 1;b < bi[r];b++) {
+            ans ^= sums[b];
+        }
+        if(bi[r] > bi[l]) {
+            for(int i = bl[bi[r]];i<=r;i++) {
+                ans ^= a[i];
+            }
+        }
+    }
+    return ans;
+}
+
+
+
+void clear(int n) {
+    for(int i = 0;i < n + 1;i++) {
+        bi[i] = bl[i] = br[i] = sums[i] = bmx[i] = 0;
+    }
+}
+
+void solve(){
+    cin >> n >> q;
+    clear(n);
+
+
+    for(int i = 0;i < n;i++) {
+        cin >> a[i];
+    }
+   
+    init();
+    // for(int i  = 0;i<n;i++) {
+    //     cout << a[i] << " \n"[i == n - 1];
+    // }
+    for(int i = 0;i < q;i++) {
+        int op,l,r;
+        cin >> op;
+        if(op == 1) {
+            cin >> l >> r;
+            l--,r--;
+            // debug(l,r);
+            update(l,r);
+        }else{
+            l = 0,r = n - 1;
+            cout << query(l,r) << "\n";
+        }
+    }
+
+}
+
+int main() {
+    ios::sync_with_stdio(0);
+    cin.tie(0);
+    int tt = 1;
+    // cin >> tt;
+    while(tt--)solve();
+    return 0;
+}
+```
