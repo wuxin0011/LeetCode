@@ -13,6 +13,7 @@
   - [LCA-Tarjan](./LCA_Tarjan_Template.java) 
 - [树的重心](./GraphCenter.java)
 - [树链剖分](#)
+
 - [网络费用流](./Max_Min_Flow.java)
 ## 换根 DP
 
@@ -972,6 +973,20 @@ int main() {
 }
 
 ```
+
+
+
+
+
+
+
+## 静态点分治
+
+静态点分支又称为重心分治，从重心遍历类似于数组上中点分治递归
+
+- [P2634 [国家集训队] 聪聪可可](https://www.luogu.com.cn/problem/P2634) [AC链接🍵](https://www.luogu.com.cn/record/265022227)
+- [P3806 【模板】点分治 ](https://www.luogu.com.cn/problem/P3806) [AC链接🍵](https://www.luogu.com.cn/record/266482941) [bitset优化🍵](https://www.luogu.com.cn/record/266482832)
+
 
 
 

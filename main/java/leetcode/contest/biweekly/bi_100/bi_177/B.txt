@@ -1,0 +1,11 @@
+abca
+3
+abc
+
+aabca
+2
+abca
+
+yybyzybz
+2
+ybzybz
