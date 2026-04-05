@@ -4,7 +4,7 @@ import code_generation.utils.IoUtil;
 import code_generation.annotation.TestCaseGroup;
 import java.util.*;
 /**
- * @author: agitated-curranfnd
+ * @author: qitongwei
  * @Description:
  * @url:   <a href="https://leetcode.cn/contest/biweekly-contest-177/problems/sum-of-k-digit-numbers-in-a-range">给定范围内 K 位数字之和</a>
  * @title: 给定范围内 K 位数字之和
@@ -17,7 +17,8 @@ public class D {
     }
     private static final int MOD = (int)1e9 + 7; 
 
-        public int sumOfNumbers(int l, int r, int k) {            
+    
+    public int sumOfNumbers(int l, int r, int k) {            
 
         return 0; 
 	}

@@ -4,7 +4,7 @@ import code_generation.utils.IoUtil;
 import code_generation.annotation.TestCaseGroup;
 import java.util.*;
 /**
- * @author: agitated-curranfnd
+ * @author: qitongwei
  * @Description:
  * @url:   <a href="https://leetcode.cn/contest/biweekly-contest-177/problems/smallest-pair-with-different-frequencies">不同频率的最小数对</a>
  * @title: 不同频率的最小数对
@@ -17,9 +17,10 @@ public class A {
     }
     private static final int MOD = (int)1e9 + 7; 
 
-        public int[] minDistinctFreqPair(int[] nums) {            
+    
+    public int[] minDistinctFreqPair(int[] nums) {            
 
-         
+        return null; 
 	}
 
   

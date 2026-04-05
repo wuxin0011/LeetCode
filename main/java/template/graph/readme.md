@@ -982,14 +982,18 @@ int main() {
 
 ## 静态点分治
 
-静态点分支又称为重心分治，从重心遍历类似于数组上中点分治递归
+静态点分治又称为重心分治，从重心遍历类似于数组上中点分治递归，通过从重心开始遍历时间复杂度可达到nlogn
+
+### 距离权值相关
 
 - [P2634 [国家集训队] 聪聪可可](https://www.luogu.com.cn/problem/P2634) [AC链接🍵](https://www.luogu.com.cn/record/265022227)
 - [P3806 【模板】点分治 ](https://www.luogu.com.cn/problem/P3806) [AC链接🍵](https://www.luogu.com.cn/record/266482941) [bitset优化🍵](https://www.luogu.com.cn/record/266482832)
 
+- [p4149 距离为k的最少边](https://www.luogu.com.cn/problem/P4149) [AC链接🍵](https://www.luogu.com.cn/record/266515540) **小范围暴力dp**
 
+### 容斥
 
-
+- [距离小于k的点对数量](https://www.luogu.com.cn/problem/P4178) [AC链接🍵](https://www.luogu.com.cn/record/267733879) **关键说明统计跨过u的距离中存在不跨过u的子树**
 
 
 

@@ -371,6 +371,15 @@ public class StringUtils {
         while (ans != null && ans.size() > 0 && "\n".equals(ans.get(ans.size() - 1))) {
             ans.remove(ans.size() - 1);
         }
+        List<String> temp = new ArrayList<>();
+        for (String s : ans) {
+            int p = 0;
+            while (p < s.length() && s.charAt(p) == ' ') p++;
+            temp.add((p == s.length() ? " " : s.substring(p)));
+        }
+        for(int i = 0;i<ans.size();i++){
+            ans.set(i,temp.get(i));
+        }
     }
 
 

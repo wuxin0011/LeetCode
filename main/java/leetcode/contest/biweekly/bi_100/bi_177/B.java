@@ -4,7 +4,7 @@ import code_generation.utils.IoUtil;
 import code_generation.annotation.TestCaseGroup;
 import java.util.*;
 /**
- * @author: agitated-curranfnd
+ * @author: qitongwei
  * @Description:
  * @url:   <a href="https://leetcode.cn/contest/biweekly-contest-177/problems/merge-close-characters">合并靠近字符</a>
  * @title: 合并靠近字符
@@ -17,7 +17,8 @@ public class B {
     }
     private static final int MOD = (int)1e9 + 7; 
 
-        public String mergeCharacters(String s, int k) {            
+    
+    public String mergeCharacters(String s, int k) {            
 
         return null; 
 	}

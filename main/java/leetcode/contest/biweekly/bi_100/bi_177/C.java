@@ -4,7 +4,7 @@ import code_generation.utils.IoUtil;
 import code_generation.annotation.TestCaseGroup;
 import java.util.*;
 /**
- * @author: agitated-curranfnd
+ * @author: qitongwei
  * @Description:
  * @url:   <a href="https://leetcode.cn/contest/biweekly-contest-177/problems/minimum-operations-to-make-array-parity-alternating">使数组奇偶交替的最少操作</a>
  * @title: 使数组奇偶交替的最少操作
@@ -17,9 +17,10 @@ public class C {
     }
     private static final int MOD = (int)1e9 + 7; 
 
-        public int[] makeParityAlternating(int[] nums) {            
+    
+    public int[] makeParityAlternating(int[] nums) {            
 
-         
+        return null; 
 	}
 
   
