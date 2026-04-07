@@ -206,6 +206,7 @@ public class IoUtil {
                 for (int i = 0; i < names.length; i++) {
                     names[i] = StringUtils.ingoreString(names[i]);
                 }
+
             } else if (t % 3 == 2) {
                 args = ReflectUtils.parseConstrunctorClassString(s);
             } else if (t % 3 == 0) {
@@ -215,7 +216,9 @@ public class IoUtil {
 
             // 每三行内容为一组 需要填充调用的方法名，填入结果 以及期望结果
             if (t % 3 == 0) {
-
+                StringUtils.handlerResult(names);
+                StringUtils.handlerResult(args);
+                StringUtils.handlerResult(expect);
                 Object obj = null;
                 int a = 0, b = 0, deep = 0;
 

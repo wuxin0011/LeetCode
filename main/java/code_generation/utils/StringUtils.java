@@ -381,6 +381,14 @@ public class StringUtils {
             ans.set(i,temp.get(i));
         }
     }
+    public static void handlerResult(String[] ans) {
+        List<String> temp = new ArrayList<>();
+        for(String s : ans) temp.add(s);
+        handlerResult(temp);
+        for(int i = 0;i<temp.size();i++){
+            ans[i]=temp.get(i);
+        }
+    }
 
 
     public static String getMethodName(String codeContent) {
