@@ -5,7 +5,7 @@ import code_generation.enums.Difficulty;
 import code_generation.enums.Tag;
 import code_generation.proxy.InvocationHandlerMethodTime;
 import code_generation.proxy.LogarithmicDevice;
-import code_generation.utils.NumberUtils;
+import leetcode.base.array.sort.NumberUtils;
 
 import java.util.Arrays;
 import java.util.Random;

@@ -1,6 +1,9 @@
-package code_generation.utils;
+package leetcode.base.array.sort;
 
-import leetcode.base.array.sort.ArraySort;
+/**
+ * @author: wuxin0011
+ * @Description:
+ */
 
 import java.util.Arrays;
 import java.util.Random;
@@ -12,13 +15,6 @@ import java.util.Random;
  * @Description:
  */
 public class NumberUtils {
-
-
-    public static void main(String[] args) {
-        for (int i = 0; i < 10; i++) {
-            System.out.println(Arrays.toString(getInt()));
-        }
-    }
 
     public static int[] getInt() {
         return getInt(1000, 10);

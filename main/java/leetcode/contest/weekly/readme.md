@@ -10,6 +10,18 @@
 
 
 
+## 🏆 第 496 场周赛
+- [ ] [镜像频次距离](https://leetcode.cn/contest/weekly-contest-496/problems/mirror-frequency-distance)
+ [🎈代码](w_400/w_496/A.java)
+- [ ] [可由多种立方和构造的整数](https://leetcode.cn/contest/weekly-contest-496/problems/integers-with-multiple-sum-of-two-cubes)
+ [🎈代码](w_400/w_496/B.java)
+- [ ] [最大化特殊下标数目的最少增加次数](https://leetcode.cn/contest/weekly-contest-496/problems/minimum-increase-to-maximize-special-indices)
+ [🎈代码](w_400/w_496/C.java)
+- [ ] [产生至少 K 个峰值的最少操作次数](https://leetcode.cn/contest/weekly-contest-496/problems/minimum-operations-to-achieve-at-least-k-peaks)
+ [🎈代码](w_400/w_496/D.java)
+
+
+
 ## 🏆 第 474 场周赛
 - [ ] [找出缺失的元素](https://leetcode.cn/contest/weekly-contest-474/problems/find-missing-elements)
  [🎈代码](w_400/w_474/A.java)

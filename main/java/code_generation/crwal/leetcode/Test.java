@@ -3,7 +3,6 @@ package code_generation.crwal.leetcode;
 import code_generation.crwal.request.Request;
 import code_generation.utils.IoUtil;
 import code_generation.utils.StringUtils;
-import leetcode.contest.weekly.w_400.w_474.A;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -306,7 +305,7 @@ public class Test {
         // testSubmitResult();
 
         // 测试提交代码
-        testSubmitCode();
+//        testSubmitCode();
     }
 
     private static void getProblemsTitle() {
@@ -492,9 +491,7 @@ public class Test {
         }
     }
 
-    static void testSubmitCode(){
-        LCSubmit.submit(A.class);
-    }
+
 
 
 }

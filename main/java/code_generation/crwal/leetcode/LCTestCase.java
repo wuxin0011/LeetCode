@@ -118,7 +118,9 @@ public class LCTestCase implements TestCase {
     }
 
     public static void parseInputTestCase(String s, List<String> ans) {
-        s = StringUtils.replaceIgnoreContent(s);
+        for(int __ = 0;__ < 4;__++) {
+            s = StringUtils.replaceIgnoreContent(s);
+        }
         s = s.replace("\\n", "");
         StringBuilder sb = null;
         int deep = 0;
