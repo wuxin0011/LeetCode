@@ -167,6 +167,10 @@ public class ReflectUtils {
             return null;
         }
         input = toString(input);
+        if(!(type.contains("String")||type.contains("char")||type.contains("Char"))) {
+            input = input.replace(" ","");
+            input = StringUtils.ingoreString(input);
+        }
         try {
             switch (type) {
                 case "int":
