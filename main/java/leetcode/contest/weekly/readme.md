@@ -1,3 +1,15 @@
+## 🏆 第 497 场周赛
+- [ ] [统计每个顶点的度](https://leetcode.cn/contest/weekly-contest-497/problems/find-the-degree-of-each-vertex)
+ [🎈代码](w_400/w_497/A.java)
+- [ ] [三角形的内角度数](https://leetcode.cn/contest/weekly-contest-497/problems/angles-of-a-triangle)
+ [🎈代码](w_400/w_497/B.java)
+- [ ] [一次交换后的最长平衡子串](https://leetcode.cn/contest/weekly-contest-497/problems/longest-balanced-substring-after-one-swap)
+ [🎈代码](w_400/w_497/C.java)
+- [ ] [好子序列查询](https://leetcode.cn/contest/weekly-contest-497/problems/good-subsequence-queries)
+ [🎈代码](w_400/w_497/D.java)
+
+
+
 
 
 ## 🏆 第 496 场周赛

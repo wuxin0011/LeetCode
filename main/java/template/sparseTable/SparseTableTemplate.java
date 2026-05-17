@@ -18,9 +18,16 @@ public class SparseTableTemplate {
         private int st[][] ,LOG[],n;
         private final Operation op;
 
-        public SparseTable(int[] array, Operation op) {
+        private int initial;
+
+        public SparseTable(int[] array) {
+            this(array,(a,b)->a >= b ? a : b,Integer.MIN_VALUE);
+        }
+
+        public SparseTable(int[] array, Operation op,int initial) {
             this.op = op;
             this.n = array.length;
+            this.initial = initial;
             LOG = new int[n + 10];
             for (int i = 2; i <= n; i++) {
                 LOG[i] = LOG[i / 2] + 1;
@@ -39,9 +46,9 @@ public class SparseTableTemplate {
 
         // [l,r]
         public int query(int l, int r) {
-            if (l > r || r - l + 1 > n) {
-                throw new RuntimeException("OUT");
-            }
+            l = Math.max(0,l);
+            r = Math.min(n - 1,r);
+            if(l>r)return initial;
             int len = r - l + 1;
             int j = LOG[len];
             return op.op(st[l][j], st[r - (1 << j) + 1][j]);
