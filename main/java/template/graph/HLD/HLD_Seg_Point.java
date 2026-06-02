@@ -3,7 +3,8 @@ package template.graph.HLD;
 
 /**
  *
- * 参考链接 https://leetcode.cn/problems/palindromic-path-queries-in-a-tree/submissions/700598503/
+ * 参考链接 点权相关： https://leetcode.cn/problems/palindromic-path-queries-in-a-tree/submissions/700598503/
+ * 参考链接 边权相关:  https://leetcode.cn/problems/shortest-path-in-a-weighted-tree/submissions/728810319/
  * 树链剖分 与 线段树结合 单点修改
  * @author: wuxin0011
  * @Description:
@@ -100,14 +101,14 @@ public class HLD_Seg_Point {
     }
 
     static class HLD {
-        private int n;
-        private int[] head, to, nxt, we;
+        public int n;
+        public int[] head, to, nxt, we;
         private int cnt;
 
-        private int[] dfn, sz, son, pa, a, seg, deep, top;
-        private int dfncnt;
+        public int[] dfn, sz, son, pa, a, seg, deep, top;
+        public int dfncnt;
 
-        private Segment segTree;
+        public Segment segTree;
 
         public HLD(int n) {
             this.n = n;
