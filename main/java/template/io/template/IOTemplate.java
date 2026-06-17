@@ -111,7 +111,7 @@ public class IOTemplate {
         static boolean isDebug = true;
 
         static {
-            isDebug = System.getenv("__IS_DEBUG__") != null;
+            // isDebug = System.getenv("__IS_DEBUG__") != null;
         }
 
         public void dbg(Object... args) {
@@ -139,60 +139,15 @@ public class IOTemplate {
             println(argsStringIndex + (argsStringIndex.length() != 0 ? " = " : "") + str);
         }
 
-        public int[] readIntArray() {
-            long[] temp = readLongArray();
-            if (temp == null) {
-                return null;
-            }
-            int[] ints = new int[temp.length];
-            for (int i = 0; i < temp.length; i++) {
-                if (temp[i] < Integer.MIN_VALUE || temp[i] > Integer.MAX_VALUE) {
-                    throw new RuntimeException("overflow int type");
-                }
-                ints[i] = (int) temp[i];
-            }
-            return ints;
+        public int[] readIntArray(int n) {
+            int[] temp0 = new int[n];
+            for(int i = 0;i<n;i++)temp0[i]=read();
+            return temp0;
         }
-
-        public long[] LONG_ARRAY = null;
-
-        public long[] readLongArray() {
-            if (LONG_ARRAY == null) {
-                LONG_ARRAY = new long[MAX_N];
-            }
-            int size = 0;
-            while (true) {
-                try {
-                    int f = 1;
-                    long x = 0;
-                    int c = br.read();
-                    if (c == -1) {
-                        break;
-                    }
-                    while (c < '0' || c > '9') {
-                        if (c == '-') {
-                            f = -1;
-                        }
-                        c = br.read();
-                    }
-                    while (c >= '0' && c <= '9') {
-                        x = x * 10 + (c - '0');
-                        c = br.read();
-                    }
-                    LONG_ARRAY[size++] = x * f;
-                    if (c == '\n' || c == -1) {
-                        break;
-                    }
-                } catch (Exception E) {
-                    return null;
-                }
-            }
-            if (size == 0) {
-                return null;
-            }
-            long[] temp = new long[size];
-            System.arraycopy(LONG_ARRAY, 0, temp, 0, size);
-            return temp;
+        public long[] readLongArray(int n) {
+            long[] temp0 = new long[n];
+            for(int i = 0;i<n;i++)temp0[i]=readLong();
+            return temp0;
         }
 
         public String[] STRING_ARRAY = null;
@@ -218,7 +173,7 @@ public class IOTemplate {
                         return null;
                     }
                     int currentSize = 0;
-                    while (x != ' ' && x != ',' && !ignore(x)) {
+                    while (x != -1 && (x != ' ' && x != ',' && !ignore(x))) {
                         CHAR_ARRAY[currentSize++] = (char) x;
                         x = br.read();
                     }
@@ -291,7 +246,7 @@ public class IOTemplate {
                     x = br.read();
                 }
                 int currentSize = 0;
-                while (line ? (x == ' ' || (x == ',') || !ignore(x)) : (x != ' ' && !ignore(x))) {
+                while ((line ? (x == ' ' || (x == ',') || !ignore(x)) : (x != ' ' && !ignore(x)))) {
                     CHAR_ARRAY[currentSize++] = (char) x;
                     x = br.read();
                 }
