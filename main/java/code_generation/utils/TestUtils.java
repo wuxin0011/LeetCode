@@ -470,7 +470,13 @@ public class TestUtils {
 
                 case "List":
                 case "ArrayList":
-                    return deepEqual((ArrayList<Object>) result, (ArrayList<Object>) expect, isStrict);
+                    // return deepEqual((ArrayList<Object>) result, (ArrayList<Object>) expect, isStrict);
+                    // 2026-06-29 修复高版本报错问题
+                    @SuppressWarnings("unchecked")
+                    ArrayList<Object> resultList = new ArrayList<>((List<Object>) result);
+                    @SuppressWarnings("unchecked")
+                    ArrayList<Object> expectList = new ArrayList<>((List<Object>) expect);
+                    return deepEqual(resultList, expectList, isStrict);
                 default:
                     boolean t = expect != null && expect.equals(result);
                     boolean isArray = expect != null && expect.getClass().getSimpleName().contains("[]");
