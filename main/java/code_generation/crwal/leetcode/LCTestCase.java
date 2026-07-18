@@ -256,6 +256,9 @@ public class LCTestCase implements TestCase {
         if (StringUtils.isEmpty(examples)) {
             return ans;
         } else {
+            examples = examples.replace("\\t","")
+                    .replace("\\r","")
+                    .replace("\\f","");
             List<Integer> leftIds = StringUtils.kmpSearchList(examples, "[");
             List<Integer> rightIdx = StringUtils.kmpSearchList(examples, "]");
             if (!leftIds.isEmpty() && !rightIdx.isEmpty() && leftIds.size() <= rightIdx.size()) {

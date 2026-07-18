@@ -523,7 +523,7 @@ public class IoUtil {
         }
 
         if (errorTimes.size() == 0 && exceptionTime == -1 && newObj) {
-            System.out.println("Accepted!");
+             System.out.println("Accepted!");
             // 如果需要开启远程提交功能 请打开注释
             /*
             List<String> urls = LCCustom.matchLeetCodeUrls(IoUtil.readContent(String.format("%s%s.java", IoUtil.buildAbsolutePath(runClass), runClass.getSimpleName())));

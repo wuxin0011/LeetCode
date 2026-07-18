@@ -1,3 +1,15 @@
+## 🏆 第 187 场双周赛
+- [ ] [重新排列字符串以避免字符对](https://leetcode.cn/contest/biweekly-contest-187/problems/rearrange-string-to-avoid-character-pair)
+ [🎈代码](bi_100/bi_187/A.java)
+- [ ] [交替数列的最大元素](https://leetcode.cn/contest/biweekly-contest-187/problems/maximum-value-of-an-alternating-sequence)
+ [🎈代码](bi_100/bi_187/B.java)
+- [ ] [划分数组的最少相邻交换次数](https://leetcode.cn/contest/biweekly-contest-187/problems/minimum-adjacent-swaps-to-partition-array)
+ [🎈代码](bi_100/bi_187/C.java)
+- [ ] [转换字符串的最小成本 III](https://leetcode.cn/contest/biweekly-contest-187/problems/minimum-cost-to-convert-string-iii)
+ [🎈代码](bi_100/bi_187/D.java)
+
+
+
 ## 🏆 第 183 场双周赛
 - [ ] [将 0 移到末尾的最少交换次数](https://leetcode.cn/contest/biweekly-contest-183/problems/minimum-swaps-to-move-zeros-to-end)
  [🎈代码](bi_100/bi_183/A.java)

@@ -1,0 +1,14 @@
+aabc
+a
+c
+cbaa
+
+dcab
+d
+b
+cabd
+
+axe
+o
+x
+axe
