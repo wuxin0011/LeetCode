@@ -118,7 +118,7 @@ public class LCTestCase implements TestCase {
     }
 
     public static void parseInputTestCase(String s, List<String> ans) {
-        for(int __ = 0;__ < 4;__++) {
+        for (int __ = 0; __ < 4; __++) {
             s = StringUtils.replaceIgnoreContent(s);
         }
         s = s.replace("\\n", "");
@@ -256,16 +256,13 @@ public class LCTestCase implements TestCase {
         if (StringUtils.isEmpty(examples)) {
             return ans;
         } else {
-            examples = examples.replace("\\t","")
-                    .replace("\\r","")
-                    .replace("\\f","");
+            examples = handlerExampleBug2026(examples);
             List<Integer> leftIds = StringUtils.kmpSearchList(examples, "[");
             List<Integer> rightIdx = StringUtils.kmpSearchList(examples, "]");
             if (!leftIds.isEmpty() && !rightIdx.isEmpty() && leftIds.size() <= rightIdx.size()) {
                 examples = examples.substring((Integer) leftIds.get(0) + 1, (Integer) rightIdx.get(leftIds.size() - 1));
                 int d = 0;
                 StringBuilder cur = new StringBuilder();
-
                 for (int i = 0; i < examples.length(); ++i) {
                     char c = examples.charAt(i);
                     if (!StringUtils.isIgnoreStrict(c)) {
@@ -298,11 +295,10 @@ public class LCTestCase implements TestCase {
                                 }
                                 break;
                             case 'n':
-                                if (i > 0 && examples.charAt(i - 1) == '\\') {
+                                if (i > 1 && examples.charAt(i - 1) == '\\') {
                                     if (!StringUtils.isEmpty(cur.toString())) {
                                         ans.add(cur.toString());
                                     }
-
                                     cur = new StringBuilder();
                                 } else {
                                     cur.append(c);
@@ -323,6 +319,57 @@ public class LCTestCase implements TestCase {
                 return ans;
             }
         }
+    }
+
+    // https://leetcode.cn/contest/biweekly-contest-187
+    // https://leetcode.cn/contest/weekly-contest-511/problems/minimum-number-of-string-groups-through-transformations
+    public static String handlerExampleBug2026(String example) {
+        StringBuilder sb = new StringBuilder();
+        int n = example.length();
+        char[] a = example.toCharArray();
+        final char T = '\\';
+        for (int i = 0; i < n; i++) {
+            char c = a[i];
+            if(c == T) {
+                if(i + 2 < n && (a[i + 1] == 'r')&&
+                        (a[i + 2] == T || a[i + 2] == ',' || a[i + 2] == '[' || a[i + 2] == ']')
+                ) {
+                    i++;
+                    continue;
+                }
+                if(i + 1 < n) {
+                    // -> \nxxxxx\
+                    if(a[i + 1] == 'n') {
+                        int st = i;
+                        boolean ok = true;
+                        for(i++;i < n && a[i] != T;i++){
+                            if(a[i] == '[' || a[i] == ']' || a[i] == ',') {
+                                ok = false;
+                                break;
+                            }
+                            if('0' <= a[i] && a[i] <= '9') {
+                                ok = false;
+                                break;
+                            }
+                        }
+                        if(ok && i - st > 2 && i < n && a[i] == T) {
+                            for(i = st + 1;i < n && a[i] != T;i++){
+                                sb.append(a[i]);
+                            }
+                        }else{
+                            i = st;
+                            sb.append(a[i]);
+                        }
+                    }else {
+                        sb.append(a[i]);
+                    }
+                }
+
+            }else{
+                sb.append(c);
+            }
+        }
+        return sb.toString();
     }
 
     public static List<String> _2025NewHandlerOutPut(String jsonStr) {
@@ -366,19 +413,19 @@ public class LCTestCase implements TestCase {
         int n = Math.min(startIds.size(), endIds.size());
         TreeSet<Integer> treeSet = new TreeSet<>(endIds);
         int[][] group = new int[n][2];
-        for(int i = 0;i < n;i++){
+        for (int i = 0; i < n; i++) {
             group[i][0] = startIds.get(i);
             Integer key = treeSet.ceiling(startIds.get(i));
-            if(key != null) {
+            if (key != null) {
                 group[i][1] = key;
                 treeSet.remove(key);
-            }else{
+            } else {
                 throw new RuntimeException("parse Exception");
             }
         }
         startIds = new ArrayList<>();
         endIds = new ArrayList<>();
-        for(int i = 0;i < n;i++) {
+        for (int i = 0; i < n; i++) {
             startIds.add(group[i][0]);
             endIds.add(group[i][1]);
         }
