@@ -1,0 +1,8 @@
+[
+1
+
+tgwz,zwntg]
+3
+
+[abc,cab,bac,acb,bca,cba]
+5

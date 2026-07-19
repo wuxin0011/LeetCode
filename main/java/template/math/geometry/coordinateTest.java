@@ -12,6 +12,12 @@ public class coordinateTest {
         return 1L*(p1[1]-p2[1])*(p3[0]-p2[0])==1L*(p3[1]-p2[1])*(p1[0]-p2[0]);
     }
 
+    // p3位于线段的位置
+    public static int calc(int[] p1, int[] p2, int[] p3) {
+        long val = 1L*(p2[0] - p1[0]) * (p3[1] - p1[1]) - 1L*(p2[1] - p1[1]) * (p3[0] - p1[0]);
+        return val == 0 ? 0 : (val < 0 ? -1 : 1);
+    }
+
 
     // 判断 两条线平行
     // 方法一 向量点乘

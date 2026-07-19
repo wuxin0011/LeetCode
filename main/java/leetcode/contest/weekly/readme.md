@@ -1,3 +1,15 @@
+## 🏆 第 511 场周赛
+- [ ] [偶数次骑士移动](https://leetcode.cn/contest/weekly-contest-511/problems/even-number-of-knight-moves)
+ [🎈代码](w_500/w_511/A.java)
+- [ ] [统计二叉树中支配节点的数量](https://leetcode.cn/contest/weekly-contest-511/problems/count-dominant-nodes-in-a-binary-tree)
+ [🎈代码](w_500/w_511/B.java)
+- [ ] [使用子序列排序转换二进制字符串](https://leetcode.cn/contest/weekly-contest-511/problems/transform-binary-string-using-subsequence-sort)
+ [🎈代码](w_500/w_511/C.java)
+- [ ] [字符串变换后的最少分组数](https://leetcode.cn/contest/weekly-contest-511/problems/minimum-number-of-string-groups-through-transformations)
+ [🎈代码](w_500/w_511/D.java)
+
+
+
 ## 🏆 第 497 场周赛
 - [ ] [统计每个顶点的度](https://leetcode.cn/contest/weekly-contest-497/problems/find-the-degree-of-each-vertex)
  [🎈代码](w_400/w_497/A.java)
